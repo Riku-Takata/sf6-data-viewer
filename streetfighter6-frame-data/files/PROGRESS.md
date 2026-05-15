@@ -9,13 +9,17 @@
 
 **Milestone**: M1 - 基盤データ統合とコア検索
 **Phase**: Phase 1 - SuperCombo データの取り込み
-**現在のタスク**: Task 1-1 - 新スキーマ設計
+**現在のタスク**: Task 1-3 - 正規化ビューの検証
 
 ## 📊 全体進捗
 
 - [x] Layer 1: データ収集パイプライン (完了)
 - [ ] **M1: 基盤データ統合とコア検索** (← 今ここ)
-  - [ ] Phase 1: SuperCombo データの取り込み (0/4 タスク)
+  - [ ] Phase 1: SuperCombo データの取り込み (2/4 タスク完了)
+    - [x] Task 1-1: 新スキーマ設計 ✅
+    - [x] Task 1-2: スキーマ適用とインポート実行 ✅ (2118件/30キャラ)
+    - [ ] Task 1-3: 正規化ビューの検証 (← 次)
+    - [ ] Task 1-4: CAPCOM ↔ SuperCombo マッピング
   - [ ] Phase 2: システム文書の取り込み (0/4 タスク)
   - [ ] Phase 3: LLM統合 (0/4 タスク)
   - [ ] Phase 4: CLI統合と動作確認 (0/3 タスク)
@@ -24,13 +28,32 @@
 
 ## 🚀 次にやること
 
-**最優先**: Task 1-1 の新スキーマ設計
-- SuperCombo データを格納する `sc_moves` テーブルの構造を決める
-- Claude と一緒に SQL ファイル `sf6_engine_schema_v2.sql` を作る
+**最優先**: Task 1-3 — 正規化ビューの検証
 
-**所要時間目安**: 2時間
+確認内容:
+- `sc_move_normalized` で Sagat 5HP のフレーム値が正しく抽出されているか
+- パース失敗 (NULL) の行がないか確認
+- unified_moves ビューで CAPCOM + SC の結合が通常技で成立しているか
+
+**所要時間目安**: 1時間 (Task 1-4 と合わせて進められる)
 
 ## 📝 直近のセッションログ
+
+### 2026-05-15
+- Task 1-2 完了: Supabase スキーマ適用 + 全2118件インポート (30キャラ、エラー0)
+  - service_role key を .env に追加 (get_write_client() で書き込み)
+  - JSON 内の重複 (chara, input) 172件を事前除去して対応
+  - Sagat 2HK: startup=11, block_adv=-12, hit_adv='KD +29', atk_range=1.91 を確認
+- Task 1-1 完了: `sf6_engine_schema_v2.sql` 作成
+  - `char_slug_map` テーブル (30キャラ、要 capcom_slug 検証)
+  - `sc_moves` テーブル (SuperCombo 全フィールド対応)
+  - `sc_move_normalized` ビュー (数値抽出・KD判定)
+  - `capcom_to_numpad()` 関数 (通常技18パターン実装済み)
+  - `unified_moves` ビュー (CAPCOM + SC LEFT JOIN)
+- `scripts/html_strip.py` をエンジン配下に配置
+- `importers/supercombo.py` 作成 (dry-run 2290件エラーなし確認済み)
+- `requirements.txt` に `google-generativeai` 追加 (Phase 3 準備)
+- 発見: SuperCombo JSON は dict 型 (chara名 → 技リスト)、moveType は 'ground_normal'/'air_normal' 等
 
 ### 2026-04-26
 - Layer 1 が完成 (Lambda デプロイ済み、自動稼働中)

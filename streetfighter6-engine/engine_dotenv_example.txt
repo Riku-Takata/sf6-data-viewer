@@ -1,4 +1,5 @@
 # Supabase credentials
 # コピーして .env を作成し、実値を記入してください
 SUPABASE_URL=https://xxxxxxxx.supabase.co
-SUPABASE_ANON_KEY=eyJ...
+SUPABASE_ANON_KEY=eyJ...   # Dashboard → Settings → API → anon key (読み取り用)
+SUPABASE_SERVICE_KEY=eyJ... # Dashboard → Settings → API → service_role key (書き込み用)

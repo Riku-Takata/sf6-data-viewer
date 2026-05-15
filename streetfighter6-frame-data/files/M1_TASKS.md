@@ -17,20 +17,26 @@
 既に手元に `supercombo_sf6_2026-04-26.json` (3.7MB, 2290技) がある。
 これを Supabase に取り込む。
 
-### Task 1-1: 新スキーマ設計 (2時間)
-- [ ] SuperCombo データを格納するテーブル設計を確定
+### Task 1-1: 新スキーマ設計 (2時間) ✅ 2026-05-15 完了
+- [x] SuperCombo データを格納するテーブル設計を確定
   - `sc_moves` テーブル (SuperCombo の SF6_FrameData 1行に対応)
   - 主要カラム: `chara`, `move_id`, `input`, `name`, `move_type`, 数値系, 解説系
-- [ ] HTMLストリップ済みの正規化ビュー `sc_move_normalized` の設計
-- [ ] `move_normalized` (CAPCOM) と `sc_move_normalized` を結合する `unified_move_view` の設計
-- [ ] スキーマSQLファイル作成
+  - 実際の JSON フィールド名に対応: `hitAdv` → `hit_adv`, `blockAdv` → `block_adv`
+- [x] HTMLストリップ済みの正規化ビュー `sc_move_normalized` の設計
+- [x] `move_normalized` (CAPCOM) と `sc_move_normalized` を結合する `unified_moves` ビューの設計
+- [x] スキーマSQLファイル作成: `streetfighter6-engine/sql/sf6_engine_schema_v2.sql`
+- [x] `capcom_to_numpad()` 関数実装 (通常技18パターン)
+- [x] `importers/supercombo.py` 作成 (dry-run 2290件動作確認済み)
+- ⚠ 要確認: `char_slug_map` の `capcom_slug` を `characters` テーブルと照合すること
 
-### Task 1-2: スキーマ適用と SuperCombo データインポート (3時間)
-- [ ] Supabase SQL Editor で新スキーマ適用
-- [ ] JSON → Supabase へインポートする Python スクリプト作成
-- [ ] HTMLゴミ (例: `<span style="color: #b70c0b;">'''-5'''</span>`) を剥がすパース処理
-- [ ] 全2290技の取り込み実行
-- [ ] サンプルクエリで取り込みが正しいか検証
+### Task 1-2: スキーマ適用と SuperCombo データインポート (3時間) ✅ 2026-05-15 完了
+- [x] Supabase SQL Editor で新スキーマ適用
+- [x] JSON → Supabase へインポートする Python スクリプト作成 (`importers/supercombo.py`)
+- [x] HTMLゴミ除去 (`scripts/html_strip.py` 適用済み)
+- [x] 全2118件の取り込み実行 (2290件 - 重複172件 = 2118件、30キャラ)
+- [x] サンプルクエリで取り込みが正しいか検証 (Sagat 2HK / 5HP 確認済み)
+- 発見: JSON内に同一 (chara, input) の重複エントリが172件 → 後出し優先で除去
+- 発見: 書き込みには SUPABASE_SERVICE_KEY (service_role) が必要 → .env に追加済み
 
 ### Task 1-3: 正規化ビューの実装 (3時間)
 - [ ] `sc_move_normalized` ビュー作成 (HTMLストリップ + 数値抽出)
