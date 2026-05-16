@@ -4,3 +4,5 @@ __pycache__/
 .env
 .pytest_cache/
 .mypy_cache/
+docs/*.json
+tests/*_results.json

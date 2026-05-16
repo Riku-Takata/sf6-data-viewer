@@ -58,6 +58,16 @@ SCRAPE_DELAY_SEC = 3.0
 HTTP_TIMEOUT = 30
 BUCKET = os.environ.get("SUPABASE_BUCKET", "sf6-html-archive")
 
+# 全キャラのスラッグを明示的に保持する。
+# discover_character_slugs() がHTMLから取得できなかった場合のフォールバック用。
+# EventBridge以外からの手動実行時に force_slugs 指定がない場合にも使用する。
+ALL_KNOWN_SLUGS: list[str] = [
+    "aki", "gouki_akuma", "alex", "blanka", "cammy", "chunli", "cviper",
+    "deejay", "dhalsim", "ed", "ehonda", "elena", "guile", "ingrid",
+    "jamie", "jp", "juri", "ken", "kimberly", "lily", "luke", "mai",
+    "manon", "marisa", "vega_mbison", "rashid", "ryu", "sagat", "terry", "zangief",
+]
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -145,7 +155,11 @@ def extract_latest_patch_date(html: str) -> date | None:
 # --- ② スクレイプ: キャラ一覧と frame ページのパース ----------------------
 
 def discover_character_slugs(html: str) -> list[str]:
-    """任意の frame ページHTMLから全キャラのslugを抽出."""
+    """任意の frame ページHTMLから全キャラのslugを抽出。
+
+    HTMLナビゲーションから見つかったスラッグに ALL_KNOWN_SLUGS をマージする。
+    JavaScriptレンダリングや動的ロードでナビゲーションに現れないキャラを補完する。
+    """
     soup = BeautifulSoup(html, "html.parser")
     slugs: list[str] = []
     for a in soup.select('a[href*="/character/"][href$="/frame"]'):
@@ -153,6 +167,13 @@ def discover_character_slugs(html: str) -> list[str]:
         m = re.search(r"/character/([^/]+)/frame", href)
         if m and m.group(1) not in slugs:
             slugs.append(m.group(1))
+
+    # HTML から取得できなかったキャラを既知リストで補完
+    for known in ALL_KNOWN_SLUGS:
+        if known not in slugs:
+            slugs.append(known)
+            logger.info(f"discover: added '{known}' from ALL_KNOWN_SLUGS (not found in HTML nav)")
+
     return slugs
 
 
@@ -321,20 +342,33 @@ def bulk_upsert_character_data(
         .eq("character_slug", character_slug).execute()
     name_to_id: dict[str, int] = {r["move_name"]: r["id"] for r in res.data}
 
-    # ② 新規movesをバルクINSERT (差分のみ)
-    new_rows = [
+    # ② moves を UPSERT (初回は INSERT、再スクレイプ時は DO NOTHING)
+    # INSERT ではなく UPSERT を使うことで、部分的な前回スクレイプ残骸があっても安全に実行できる。
+    # 同一 move_name が複数パースされる場合があるため、後出し優先で重複排除する。
+    seen_names: dict[str, MoveRow] = {}
+    for mv in moves:
+        seen_names[mv.move_name] = mv  # 後出し優先
+    unique_moves = list(seen_names.values())
+
+    all_move_rows = [
         {
             "character_slug": character_slug,
             "section": mv.section,
             "move_name": mv.move_name,
             "first_seen_patch_id": patch_id,
         }
-        for mv in moves if mv.move_name not in name_to_id
+        for mv in unique_moves
     ]
-    if new_rows:
-        ins = sb.table("moves").insert(new_rows).execute()
+    if all_move_rows:
+        ins = sb.table("moves").upsert(
+            all_move_rows,
+            on_conflict="character_slug,move_name",
+        ).execute()
         for r in ins.data:
             name_to_id[r["move_name"]] = r["id"]
+
+    # snapshot rows も重複排除済みの unique_moves を使う
+    moves = unique_moves
 
     # ③ snapshotsをバルクUPSERT
     snapshot_rows = [
@@ -461,10 +495,82 @@ def scrape_all_characters(sb: Client, patch_id: int) -> tuple[int, list[str]]:
     return succeeded, errors
 
 
+def scrape_specific_characters(sb: Client, patch_id: int, slugs: list[str]) -> tuple[int, list[str]]:
+    """指定したスラッグのみスクレイプする。
+
+    force_slugs イベントや補完スクレイプ時に使用。
+    既存の patch_id に対して upsert するため、既存データは上書きされる。
+    """
+    session = requests.Session()
+    succeeded = 0
+    errors: list[str] = []
+
+    for i, slug in enumerate(slugs, start=1):
+        char_start = time.monotonic()
+        try:
+            t0 = time.monotonic()
+            html = fetch(f"{CAPCOM_BASE}/{slug}/frame", session=session)
+            logger.info(f"  [{i}/{len(slugs)}] {slug}: fetched ({time.monotonic()-t0:.1f}s, {len(html)//1024}KB)")
+
+            upsert_character(sb, slug, display_name_ja=slug)
+            raw_uri = rotate_and_store_html(sb, slug, html)
+            moves, vitality = parse_frame_page(html)
+            logger.info(f"      parsed: {len(moves)} moves, HP={vitality}")
+            bulk_upsert_character_data(sb, slug, patch_id, moves, vitality, raw_uri)
+
+            succeeded += 1
+            logger.info(f"  [{i}/{len(slugs)}] {slug}: OK ({time.monotonic()-char_start:.1f}s)")
+        except Exception as e:  # noqa: BLE001
+            logger.exception(f"  [{i}/{len(slugs)}] {slug} FAILED: {e}")
+            errors.append(slug)
+
+        if i < len(slugs):
+            time.sleep(SCRAPE_DELAY_SEC)
+
+    return succeeded, errors
+
+
 def lambda_handler(event, context):  # noqa: ARG001
     sb = supabase_client()
 
-    # ① 検知
+    # force_slugs: 指定スラッグを強制スクレイプ (パッチ変更なしでも実行)
+    # 使用例: {"force_slugs": ["cammy", "guile", "ingrid", "ken"]}
+    force_slugs: list[str] | None = event.get("force_slugs") if isinstance(event, dict) else None
+    if force_slugs:
+        logger.info(f"force_slugs mode: {force_slugs}")
+        # 最新の既知 patch_id を使用
+        known_dates = get_known_patch_dates(sb)
+        if not known_dates:
+            return {"status": "error", "error": "no known patches in DB"}
+        latest_date = max(known_dates)
+        patch_res = sb.table("patches").select("id").eq(
+            "capcom_updated_date", latest_date.isoformat()
+        ).limit(1).execute()
+        patch_id = patch_res.data[0]["id"]
+        logger.info(f"using patch_id={patch_id} (date={latest_date})")
+
+        run_id = insert_scrape_run(sb, "scraping",
+                                   detected_date=latest_date.isoformat(),
+                                   error_message=f"force_slugs: {force_slugs}")
+        try:
+            succeeded, errors = scrape_specific_characters(sb, patch_id, force_slugs)
+            status = "success"
+            update_scrape_run(sb, run_id, status=status, patch_id=patch_id,
+                              characters_scraped=succeeded,
+                              error_message=("partial errors: " + ",".join(errors)) if errors else None)
+            return {
+                "status": status,
+                "mode": "force_slugs",
+                "patch_date": latest_date.isoformat(),
+                "characters_scraped": succeeded,
+                "errors": errors,
+            }
+        except Exception as e:  # noqa: BLE001
+            logger.exception("force_slugs scrape failed")
+            update_scrape_run(sb, run_id, status="error", error_message=str(e))
+            return {"status": "error", "run_id": run_id, "error": str(e)}
+
+    # ① 通常フロー: パッチ検知
     session = requests.Session()
     try:
         bc_html = fetch(BATTLE_CHANGE_URL, session=session)
@@ -487,12 +593,12 @@ def lambda_handler(event, context):  # noqa: ARG001
         update_scrape_run(sb, run_id, status="no_change")
         return {"status": "no_change", "patch_date": latest.isoformat()}
 
-    # ② 新パッチ → スクレイプ実行
+    # ② 新パッチ → 全キャラスクレイプ
     run_id = insert_scrape_run(sb, "scraping", detected_date=latest.isoformat())
     try:
         patch_id = upsert_patch(sb, latest)
         succeeded, errors = scrape_all_characters(sb, patch_id)
-        status = "success" if not errors else "success"  # 部分失敗も success として記録
+        status = "success"
         update_scrape_run(sb, run_id,
                           status=status,
                           patch_id=patch_id,

@@ -1,4 +1,6 @@
 supabase==2.10.0
 python-dotenv==1.0.1
 click==8.1.7
-google-generativeai>=0.8.0
+httpx>=0.27.0
+# Gemini 利用時のみ必要 (LLM_PROVIDER=gemini の場合)
+# google-generativeai>=0.8.0

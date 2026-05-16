@@ -246,22 +246,23 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 -- ============================================================
 -- 5. unified_moves: CAPCOM + SuperCombo 統合ビュー
 --
--- CAPCOM の move_normalized を基準に SuperCombo を LEFT JOIN。
--- 通常技のみ SuperCombo データが結合される (capcom_to_numpad が非 NULL の行)。
--- 必殺技・SA は CAPCOM 側のみ (sc_* カラムは NULL)。
+-- Part A: CAPCOM データあり (26キャラ) → move_normalized LEFT JOIN sc_move_normalized
+-- Part B: CAPCOM データなし (4キャラ: cammy/guile/ingrid/ken) → sc_move_normalized のみ
 --
--- 前提: move_normalized ビューが Layer 1 で作成済みであること。
+-- Part B は Layer 1 スクレイプ漏れの暫定対応。
+-- CAPCOM データ取込後は自動的に Part A に切り替わる (重複しないよう WHERE で除外)。
 -- ============================================================
 CREATE OR REPLACE VIEW unified_moves
 WITH (security_invoker = true) AS
+
+-- Part A: CAPCOM + SC 統合 (move_normalized を基準)
 SELECT
-  -- === 識別キー ===
   c.character_slug,
   c.move_name,
   c.section,
-  capcom_to_numpad(c.move_name)  AS sc_input_key,  -- SC側の検索キー (通常技のみ非NULL)
+  capcom_to_numpad(c.move_name)  AS sc_input_key,
 
-  -- === CAPCOM フレームデータ ===
+  -- CAPCOM フレームデータ
   c.startup_int          AS c_startup,
   c.active_first         AS c_active_first,
   c.active_last          AS c_active_last,
@@ -283,7 +284,7 @@ SELECT
   c.raw_note             AS c_raw_note,
   c.patch_date,
 
-  -- === SuperCombo フレームデータ (通常技のみ結合、それ以外は NULL) ===
+  -- SuperCombo フレームデータ (通常技のみ結合)
   sc.startup_f           AS sc_startup,
   sc.active_f            AS sc_active,
   sc.recovery_f          AS sc_recovery,
@@ -297,7 +298,6 @@ SELECT
   sc.damage              AS sc_damage_raw,
   sc.notes               AS sc_notes,
 
-  -- === データ存在フラグ ===
   (sc.id IS NOT NULL)    AS has_sc_data
 
 FROM move_normalized c
@@ -305,7 +305,61 @@ LEFT JOIN char_slug_map csm
   ON csm.capcom_slug = c.character_slug
 LEFT JOIN sc_move_normalized sc
   ON sc.chara = csm.sc_chara
-  AND sc.input = capcom_to_numpad(c.move_name);
+  AND sc.input = capcom_to_numpad(c.move_name)
+
+UNION ALL
+
+-- Part B: SC のみ (CAPCOMデータ未取込キャラの暫定対応)
+-- CAPCOM データが取り込まれたキャラは自動的に Part A に移行するため重複しない
+SELECT
+  csm.capcom_slug        AS character_slug,
+  sc.name                AS move_name,
+  sc.move_type           AS section,      -- CAPCOMのsectionは不明のためmove_typeで代替
+  sc.input               AS sc_input_key,
+
+  -- CAPCOM フレームデータ (すべて NULL)
+  NULL::int              AS c_startup,
+  NULL::int              AS c_active_first,
+  NULL::int              AS c_active_last,
+  NULL::int              AS c_recovery,
+  NULL::int              AS c_on_block,
+  NULL::bool             AS c_on_block_is_range,
+  NULL::int              AS c_on_hit,
+  NULL::bool             AS c_on_hit_is_knockdown,
+  NULL::int              AS c_damage,
+  NULL::bool             AS cancellable_chain,
+  NULL::bool             AS cancellable_sa1,
+  NULL::bool             AS cancellable_sa2,
+  NULL::bool             AS cancellable_sa3,
+  NULL::bool             AS has_conditional_note,
+  NULL::text             AS c_raw_startup,
+  NULL::text             AS c_raw_on_block,
+  NULL::text             AS c_raw_on_hit,
+  NULL::text             AS c_raw_damage,
+  NULL::text             AS c_raw_note,
+  NULL::date             AS patch_date,
+
+  -- SuperCombo フレームデータ
+  sc.startup_f           AS sc_startup,
+  sc.active_f            AS sc_active,
+  sc.recovery_f          AS sc_recovery,
+  sc.block_adv_f         AS sc_block_adv,
+  sc.hit_adv_f           AS sc_hit_adv,
+  sc.hit_is_knockdown    AS sc_hit_is_knockdown,
+  sc.punish_adv_f        AS sc_punish_adv,
+  sc.perf_parry_adv_f    AS sc_perf_parry_adv,
+  sc.atk_range_n         AS sc_atk_range,
+  sc.invuln              AS sc_invuln,
+  sc.damage              AS sc_damage_raw,
+  sc.notes               AS sc_notes,
+
+  true                   AS has_sc_data
+
+FROM sc_move_normalized sc
+JOIN char_slug_map csm ON csm.sc_chara = sc.chara
+WHERE csm.capcom_slug NOT IN (
+  SELECT DISTINCT character_slug FROM move_normalized
+);
 
 -- ============================================================
 -- RLS ポリシー: public read (個人利用のため)

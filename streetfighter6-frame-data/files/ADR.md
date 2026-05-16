@@ -322,3 +322,103 @@ SuperCombo Wiki の Cargo API は通常のPython requests では Cloudflare に�
 ### Alternatives considered
 - **GitHub Issues**: 個人プロジェクトには重すぎる
 - **記憶に頼る**: 1週間空くと忘れる
+
+---
+
+## ADR-013: LLM バックエンドを Ollama + Gemma に変更
+
+**Date**: 2026-05-15
+**Status**: Active (ADR-007 を部分的に Supersede)
+
+### Context
+
+当初 Gemini Flash API (ADR-007) を採用していたが、以下の方針変更が生じた:
+- ローカル LLM (Gemma) を使いたい
+- コストをゼロに近づけたい
+- 将来的には AWS 上でセルフホストしたい
+
+### Decision
+
+- **プライマリ LLM**: Ollama + Gemma4:e2b (ローカル / EC2 Spot)
+  - Gemma 4 Edge 2B: 7.2GB, 128K context, ~10GB RAM 必要
+  - RAM が少ない場合のフォールバック: Gemma3:4b (2.5GB, ~4GB RAM)
+- **埋め込みモデル**: nomic-embed-text (768次元, Ollama 経由)
+- **コード設計**: LLMProvider 抽象化を維持し、`LLM_PROVIDER=gemini` で Gemini に戻せる
+- **デプロイ戦略**: フェーズ別
+  - 開発: `localhost:11434` (コスト$0、Mac の Ollama、Mac RAM 16GB+ 推奨)
+  - 本番: AWS EC2 Spot **t4g.xlarge** (16GB RAM) ← Gemma4:e2b の最低限
+
+### Consequences
+
+- **コスト**: ローカル実行で推論コスト$0。EC2 Spot t4g.xlarge (~$0.04/hr) で月$3〜8程度
+- **レスポンス速度**: Gemma4:e2b で CPU 推論 10〜30秒/クエリ (対戦準備には十分)
+- **品質**: Gemini Flash より劣る可能性があるが、Intent Parser + RAG の組み合わせで補う
+- **EC2 設定**: Ollama のポート (11434) はセキュリティグループで sf6_engine 実行元のみ許可
+
+### AWS EC2 セットアップ手順 (参照用)
+
+```bash
+# 1. EC2 t4g.xlarge (ARM64 Ubuntu 22.04) を起動
+#    インスタンスタイプ: t4g.xlarge (16GB RAM, 4 vCPU) Spot推奨
+#    ※ Gemma4:e2b は ~10GB RAM 必要。t4g.large (8GB) では動作しない可能性大
+#    セキュリティグループ: ポート22(SSH), 11434(Ollama)を自分のIPのみ許可
+
+# 2. Ollama インストール (ARM64)
+curl -fsSL https://ollama.ai/install.sh | sh
+sudo systemctl enable ollama
+sudo systemctl start ollama
+
+# 3. モデルダウンロード
+ollama pull gemma3:4b          # ~2.5GB
+ollama pull nomic-embed-text   # ~274MB
+
+# 4. 外部からアクセス可能にする
+sudo systemctl edit ollama --force << 'EOF'
+[Service]
+Environment="OLLAMA_HOST=0.0.0.0"
+EOF
+sudo systemctl restart ollama
+
+# 5. sf6_engine の .env を更新
+# OLLAMA_BASE_URL=http://<ec2-ip>:11434
+```
+
+### Alternatives considered
+
+- **Gemini Flash API**: 個人利用なら実質無料だが、API依存でネット必須
+
+---
+
+## ADR-014: 必殺技マッピング方針
+
+**Date**: 2026-05-15
+**Status**: Active
+
+### Context
+
+M1 では通常技18パターンのみ対応。必殺技・SA の質問 (タイガーショット等) には
+「データなし」と返していた。M2 で必殺技にも対応する。
+
+### Decision
+
+- **Option C 採用**: `sc_moves.name` フィールドで ILIKE 部分一致検索
+  - SuperCombo の `name` フィールドは英語 (Tiger Shot, Shoryuken 等)
+  - 日本語技名 → 英語技名のマッピングテーブルを実装
+  - 一致した名前の最初の1件 (最も一般的な強ボタン) を返す
+- Intent Parser に `move_name` フィールドを追加 (特殊技名を格納)
+- 日本語→英語マッピング: 約30件の主要必殺技をハードコード
+
+### Consequences
+
+- 「タイガーショット」→ High Tiger Shot (236MP) のデータを返せる
+- 完全マッピングではないが、主要技はカバー
+- 技名の表記ゆれ (タイガーアッパー / 昇竜拳タイプ等) は ILIKE で吸収
+- 必殺技の CAPCOM データは M2 段階では未取込 → SC データのみで回答
+
+### Alternatives considered
+
+- **Option A (手動マッピングテーブル)**: 全技を手動登録 → 作業量大でスコープアウト
+- **Option B (LLM変換)**: Gemma に技名変換させる → 信頼性低い
+- **AWS Bedrock**: Gemma 未対応、Nova Micro でも月$0.5程度 (zero cost ではない)
+- **AWS Lambda + 量子化モデル**: コールドスタート 30秒以上で実用的でない
+- **Groq 無料枠**: Gemma 対応だが AWS ではない。フォールバックとして検討可

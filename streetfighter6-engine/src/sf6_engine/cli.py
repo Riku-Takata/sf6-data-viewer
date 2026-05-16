@@ -2,15 +2,17 @@
 Logic Engine の CLI エントリポイント.
 
 使い方:
-  python -m sf6_engine.cli lookup <character> <move_name>
+  python -m sf6_engine.cli ask "サガットの2HKの発生は?"
+  python -m sf6_engine.cli lookup sagat "立ち弱P（タイガージャブ）"
 
 例:
-  python -m sf6_engine.cli lookup sagat "立ち弱P（タイガージャブ）"
-  python -m sf6_engine.cli lookup sagat "タイガージャブ"   # 部分一致でも引ける
-  python -m sf6_engine.cli lookup sagat "2HK"              # 部分一致候補リスト
+  python -m sf6_engine.cli ask "ドライブインパクトって何?"
+  python -m sf6_engine.cli ask "ガイルの2HKガードして反撃できる?" -v
+  python -m sf6_engine.cli lookup sagat "2HK"
 """
 from __future__ import annotations
 
+import asyncio
 import json
 
 import click
@@ -107,6 +109,54 @@ def _raw(v) -> str:
     if v is None or v == "":
         return ""
     return f"(元値: {v})"
+
+
+@cli.command()
+@click.argument("question")
+@click.option("--verbose", "-v", is_flag=True, help="Intent と参照データも表示する")
+@click.option("--provider", default=None, help="LLM プロバイダー (ollama/gemini)")
+def ask(question: str, verbose: bool, provider: str | None):
+    """自然言語で SF6 の質問をする。
+
+    例:\n
+      python -m sf6_engine.cli ask "サガットの2HKの発生は?"\n
+      python -m sf6_engine.cli ask "ドライブインパクトって何?" -v
+    """
+    asyncio.run(_ask(question, verbose, provider))
+
+
+async def _ask(question: str, verbose: bool, provider_name: str | None) -> None:
+    from sf6_engine.factory import create_provider
+    from sf6_engine.intent_parser import parse_intent
+    from sf6_engine.rag_builder import build_context, generate_answer
+
+    provider = create_provider(provider_name)
+
+    if not await provider.is_available():
+        click.secho(
+            "❌ Ollama が起動していません。`ollama serve` を実行してください。",
+            fg="red",
+        )
+        return
+
+    # Step 1: Intent 解析
+    intent = await parse_intent(question, provider)
+    if verbose:
+        click.secho("\n[Intent]", fg="cyan", bold=True)
+        click.echo(f"  {json.dumps(intent, ensure_ascii=False)}")
+
+    # Step 2: RAG コンテキスト構築 (provider を渡してベクトル検索を有効化)
+    context = await build_context(intent, provider)
+    if verbose:
+        click.secho("\n[参照データ]", fg="cyan", bold=True)
+        for line in context.splitlines():
+            click.echo(f"  {line}")
+
+    # Step 3: 最終回答生成
+    if verbose:
+        click.secho("\n[回答]", fg="green", bold=True)
+    answer = await generate_answer(question, context, provider)
+    click.echo(answer)
 
 
 if __name__ == "__main__":
