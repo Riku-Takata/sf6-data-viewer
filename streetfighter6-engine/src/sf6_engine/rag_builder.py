@@ -9,6 +9,7 @@ Phase 2 (文書取込) 完了後は doc_chunks からもコンテキストを追
 from __future__ import annotations
 
 import logging
+import re
 from typing import Any
 
 from sf6_engine.db import get_client
@@ -298,6 +299,133 @@ def _sign_str(val) -> str:
     if s.lstrip('-').isdigit() and not s.startswith('-') and not s.startswith('+'):
         return f'+{s}'
     return s
+
+
+def _parse_frame_value(val) -> int | None:
+    """'+8', '+8F', '8', 8 などを int に変換。KD/HKD を含む場合は None。"""
+    if val is None:
+        return None
+    s = str(val)
+    if 'KD' in s or 'HKD' in s:
+        return None
+    m = re.search(r'([+-]?\d+)', s)
+    return int(m.group(1)) if m else None
+
+
+# コンボ繋がり検索に含める move_type
+_COMBO_USEFUL_TYPES = frozenset({
+    'ground_normal', 'Special', 'special', 'Super', 'super', 'throw',
+})
+
+
+def _find_combo_follow_ups(
+    chara: str,
+    max_startup: int,
+    exclude_input: str | None = None,
+    include_special: bool = True,
+) -> list[dict]:
+    """指定フレーム以内の発生を持つ技を検索してコンボ候補を返す。
+
+    Args:
+        chara:          capcom_slug ('sagat') または SC chara 名 ('Sagat')。
+        max_startup:    この発生F 以内の技を返す (コンボの有利F = このvalueのはず)。
+        exclude_input:  除外するinput (始動技自身を除く)。
+        include_special: 必殺技・SAを含めるか。
+
+    Returns:
+        list[dict]: startup_f の大きい順 (高ダメージ技を優先) にソートされた技リスト。
+    """
+    sb = get_client()
+
+    # capcom_slug → sc_chara
+    map_res = sb.table('char_slug_map').select('sc_chara').eq('capcom_slug', chara.lower()).execute()
+    if not map_res.data:
+        # SC chara 名でそのまま試みる
+        sc_chara = chara
+    else:
+        sc_chara = map_res.data[0]['sc_chara']
+
+    res = sb.table('sc_move_normalized').select(
+        'input,name,move_type,startup_f,'
+        'block_adv_f,hit_adv_f,hit_is_knockdown,'
+        'punish_adv_f,atk_range_n,damage,notes'
+    ).eq('chara', sc_chara).lte('startup_f', max_startup).not_.is_('startup_f', 'null').execute()
+
+    results = []
+    for r in res.data:
+        mt = r.get('move_type', '')
+        if mt not in _COMBO_USEFUL_TYPES:
+            continue
+        if r.get('input') == exclude_input:
+            continue
+        if not include_special and mt in ('Special', 'special', 'Super', 'super'):
+            continue
+        results.append(r)
+
+    # ソート: KD優先 → startup大きい順 (重い技ほど威力が高い)
+    def sort_key(r):
+        is_kd = 1 if r.get('hit_is_knockdown') else 0
+        st    = r.get('startup_f', 0) or 0
+        return (-is_kd, -st)
+
+    return sorted(results, key=sort_key)[:10]
+
+
+def _fmt_combo_route(
+    source_input: str,
+    source_name: str,
+    adv_f: int,
+    follow_ups: list[dict],
+    scenario_label: str,
+) -> str:
+    """コンボルートを LLM 用コンテキストテキストに変換する。
+
+    「なぜ繋がるか」の推論根拠 (adv_f ≥ startup_f) を明示することで
+    LLM がコンテキストを正しく解釈できるようにする。
+    """
+    lines = [
+        f"【コンボルート分析: {source_input} ({source_name})】",
+        f"  {scenario_label}後の有利フレーム: +{adv_f}F",
+        f"  ← 発生 {adv_f}F 以内の技は確定でコンボになります",
+        "",
+        "  繋がる技 (発生順):",
+    ]
+
+    ground  = [r for r in follow_ups if r.get('move_type') in ('ground_normal',)]
+    special = [r for r in follow_ups if r.get('move_type') in ('Special','special','Super','super')]
+    throws  = [r for r in follow_ups if r.get('move_type') == 'throw']
+
+    def fmt_row(r, prefix=''):
+        inp    = r.get('input', '?')
+        name   = r.get('name') or '不明'
+        st     = r.get('startup_f', '?')
+        is_kd  = r.get('hit_is_knockdown', False)
+        hit    = r.get('hit_adv_f')
+        hit_str = ('KD' if is_kd else (_sign_str(hit) + 'F' if hit is not None else '?'))
+        pa     = r.get('punish_adv_f')
+        pa_str = f' (パニカン時: +{pa}F)' if pa else ''
+        return f"  {prefix}✅ {inp:10s} 発生{st}F │ {name} │ ヒット時: {hit_str}{pa_str}"
+
+    if ground:
+        lines.append("  [通常技]")
+        for r in ground:
+            lines.append(fmt_row(r))
+    if special:
+        lines.append("  [必殺技・SA]")
+        for r in special:
+            lines.append(fmt_row(r))
+    if throws:
+        lines.append("  [投げ]")
+        for r in throws:
+            lines.append(fmt_row(r))
+
+    if not (ground or special or throws):
+        lines.append("  (該当技なし)")
+
+    lines.append("")
+    lines.append(f"  ※ 推論根拠: {scenario_label}後の有利{adv_f}F ≥ 各技の発生F → コンボ確定")
+
+    return '\n'.join(lines)
 
 
 def _fetch_move(chara: str, sc_input: str) -> dict | None:
@@ -598,20 +726,67 @@ async def build_context(intent: dict, provider=None) -> str:
 
     sections: list[str] = []
 
-    # --- combo_info: キャンセル・コンボ情報 ---
+    # --- combo_info: キャンセル・コンボ情報 + 繋がり技の自動計算 ---
     if intent_type == "combo_info" and chara and inp:
         combo_row = _fetch_combo_data(chara, inp)
         if combo_row:
+            # 1. 基本コンボ情報
             sections.append(_fmt_combo_context(chara, combo_row))
+
+            # 2. DRキャンセル後のコンボルート計算
+            after_dr = _parse_frame_value(combo_row.get('after_dr_hit'))
+            if after_dr and after_dr > 0:
+                follow_ups_dr = _find_combo_follow_ups(chara, after_dr, exclude_input=inp)
+                if follow_ups_dr:
+                    sections.append(_fmt_combo_route(
+                        inp, combo_row.get('name', ''), after_dr, follow_ups_dr,
+                        'DRキャンセル'
+                    ))
+
+            # 3. 通常ヒット後のリンクコンボ (有利が大きいものだけ)
+            hit_adv = _parse_frame_value(combo_row.get('hit_adv'))
+            if hit_adv and hit_adv >= 3:
+                # hit_adv - 1 で厳密なリンク計算 (フレームの猶予)
+                link_threshold = hit_adv - 1
+                follow_ups_hit = _find_combo_follow_ups(
+                    chara, link_threshold, exclude_input=inp, include_special=False
+                )
+                if follow_ups_hit:
+                    sections.append(_fmt_combo_route(
+                        inp, combo_row.get('name', ''), hit_adv, follow_ups_hit,
+                        '通常ヒット'
+                    ))
+
+            # 4. パニカン時のコンボルート (有利が大幅に増える場合)
+            pc_adv_raw = combo_row.get('hit_adv', '')
+            # パニカン時は hit_adv + 4F (SF6 のルール)
+            base_adv = _parse_frame_value(pc_adv_raw)
+            if base_adv is not None:
+                pc_adv = base_adv + 4
+                if pc_adv >= 6:  # パニカンで繋がる範囲が広がる場合のみ表示
+                    pc_ups = _find_combo_follow_ups(chara, pc_adv - 1, exclude_input=inp)
+                    if pc_ups and len(pc_ups) > len(follow_ups_dr if after_dr else []):
+                        sections.append(_fmt_combo_route(
+                            inp, combo_row.get('name', ''), pc_adv, pc_ups,
+                            'パニッシュカウンター時'
+                        ))
         else:
             sections.append(f"⚠ {chara} の {inp} のコンボデータが見つかりません。")
     elif intent_type == "combo_info" and chara and move_name:
-        # 必殺技のコンボ情報 (move_name で検索)
         sc_row = _fetch_move_by_name(chara, move_name)
         if sc_row:
-            combo_row = _fetch_combo_data(chara, sc_row.get('input', ''))
+            actual_input = sc_row.get('input', '')
+            combo_row = _fetch_combo_data(chara, actual_input)
             if combo_row:
                 sections.append(_fmt_combo_context(chara, combo_row))
+                after_dr = _parse_frame_value(combo_row.get('after_dr_hit'))
+                if after_dr and after_dr > 0:
+                    follow_ups = _find_combo_follow_ups(chara, after_dr, exclude_input=actual_input)
+                    if follow_ups:
+                        sections.append(_fmt_combo_route(
+                            actual_input, combo_row.get('name', ''), after_dr,
+                            follow_ups, 'DRキャンセル'
+                        ))
     elif intent_type == "combo_info" and not chara:
         sections.append("[コンボ情報: キャラ名と技名を指定してください。]")
 
@@ -760,9 +935,13 @@ ANSWER_SYSTEM = """\
 6. 「コンボ解説:」や「解説:」フィールドが英語であっても、その内容に基づいて日本語で回答すること。
    英語で書かれているからといって「データに含まれていません」と言ってはいけない。
 7. 「キャンセル:」フィールドは技のキャンセル可否を示す — 直接引用して回答すること。
-8. 実戦的なアドバイスは、解説テキスト (解説:) がある場合のみ行う
-9. ハルシネーション厳禁: 根拠のない数値や技名を生成しない
-10. 回答は簡潔に (3〜6文程度)
+8. 【コンボルート分析】セクションがある場合:
+   - 「繋がる技」リストの ✅ 項目を実際のコンボ候補として回答すること
+   - 「※ 推論根拠」の内容を説明に含め、なぜ繋がるかを明示すること
+   - 特にKD (ノックダウン) する技があれば、それを最も推奨として挙げること
+9. 実戦的なアドバイスは、解説テキスト (解説:) がある場合のみ行う
+10. ハルシネーション厳禁: 根拠のない数値や技名を生成しない
+11. 回答は構造的に (コンボルートには番号や箇条書きを使う)
 """
 
 ANSWER_TEMPLATE = """\
