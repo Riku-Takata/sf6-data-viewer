@@ -726,6 +726,24 @@ async def build_context(intent: dict, provider=None) -> str:
 
     sections: list[str] = []
 
+    # --- max_combo: ビームサーチで最大ダメージコンボを計算 ---
+    if intent_type == "max_combo" and chara and inp:
+        try:
+            from sf6_engine.combo_engine import compute_max_combo
+            result = compute_max_combo(chara, inp, use_dr=True, drive_bars=6)
+            if result:
+                sections.append(result.format_context())
+                # doc_chunks からDrive Rush のゲームシステム情報も追加
+                if provider:
+                    dr_chunks = await _search_docs("Drive Rush cancel mechanics cost", provider, threshold=0.5, count=1)
+                    if dr_chunks:
+                        sections.append(_fmt_doc_chunk(dr_chunks[0]))
+            else:
+                sections.append(f"⚠ {chara} の {inp} からのコンボルートが見つかりませんでした。")
+        except Exception as e:
+            logger.error(f"max_combo error: {e}")
+            sections.append(f"⚠ コンボ計算中にエラーが発生しました: {e}")
+
     # --- combo_info: キャンセル・コンボ情報 + 繋がり技の自動計算 ---
     if intent_type == "combo_info" and chara and inp:
         combo_row = _fetch_combo_data(chara, inp)

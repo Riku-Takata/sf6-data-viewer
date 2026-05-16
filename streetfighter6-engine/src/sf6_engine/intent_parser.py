@@ -60,7 +60,8 @@ INTENT_SCHEMA = {
                 "compare_moves",    # 技の比較
                 "explain_concept",  # ゲームシステム説明
                 "punish_check",     # 反撃確認
-                "combo_info",       # コンボ情報
+                "combo_info",       # コンボ情報 (キャンセル先・DR後フレーム)
+                "max_combo",        # 最大コンボ計算 (ダメージ最大のコンボルート)
                 "general_question", # その他
             ],
         },
@@ -133,6 +134,7 @@ SYSTEM_PROMPT = """\
 - 「ドライブインパクトとは?」「バーンアウトって何?」→ explain_concept
 - 「〜ガードして反撃できる?」「〜は確定反撃?」→ punish_check
 - 「〜からコンボある?」「〜始動は?」「〜の後に何が繋がる?」「〜をDRキャンセルすると?」「コンボ後の有利は?」「ノックダウン後は?」→ combo_info
+- 「〜からの最大コンボは?」「〜始動の最大ダメージは?」「最大コンボを教えて」「〜から何が最も繋がる?」「フルコンボは?」「BnB コンボは?」→ max_combo
 - 上記に当てはまらない → general_question
 
 ## フィールド名のマッピング (field パラメータ)
