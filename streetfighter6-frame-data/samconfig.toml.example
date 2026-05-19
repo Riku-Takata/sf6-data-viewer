@@ -1,0 +1,20 @@
+version = 0.1
+
+# このファイルをコピーして samconfig.toml を作成してください。
+# samconfig.toml はメールアドレスを含むため .gitignore に登録されています。
+#
+#   cp samconfig.toml.example samconfig.toml
+#   # samconfig.toml の NotificationEmail を自分のメールアドレスに書き換える
+
+[default.deploy.parameters]
+stack_name = "sf6-frame-scraper"
+resolve_s3 = true
+s3_prefix = "sf6-frame-scraper"
+region = "ap-northeast-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "SupabaseSecretName=\"sf6-frame-scraper/supabase\" SupabaseBucket=\"sf6-html-archive\""
+image_repositories = []
+
+[default.global.parameters]
+region = "ap-northeast-1"

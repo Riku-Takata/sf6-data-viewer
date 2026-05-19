@@ -57,6 +57,8 @@ DEFAULT_HEADERS = {
 SCRAPE_DELAY_SEC = 3.0
 HTTP_TIMEOUT = 30
 BUCKET = os.environ.get("SUPABASE_BUCKET", "sf6-html-archive")
+SNS_TOPIC_ARN = os.environ.get("SNS_TOPIC_ARN", "")
+NOTIFICATION_EMAIL_SSM_PATH = os.environ.get("NOTIFICATION_EMAIL_SSM_PATH", "/sf6/notification-email")
 
 # 全キャラのスラッグを明示的に保持する。
 # discover_character_slugs() がHTMLから取得できなかった場合のフォールバック用。
@@ -398,7 +400,100 @@ def update_scrape_run(sb: Client, run_id: int, **kwargs) -> None:
     }).eq("id", run_id).execute()
 
 
-# --- ④ Supabase Storage: 生HTMLのローテーション保管 ----------------------
+# --- ④ SNS: パッチ検知通知 -----------------------------------------------
+
+def _get_notification_email() -> str | None:
+    """SSM Parameter Store から通知先メールアドレスを取得する。
+
+    パラメータが存在しない / 権限なし / 空の場合は None を返す。
+    メールアドレスはコード・設定ファイルには一切書かず SSM のみで管理する。
+    """
+    import boto3  # noqa: PLC0415
+    region = os.environ.get("AWS_REGION", "ap-northeast-1")
+    ssm = boto3.client("ssm", region_name=region)
+    try:
+        resp = ssm.get_parameter(Name=NOTIFICATION_EMAIL_SSM_PATH)
+        email = resp["Parameter"]["Value"].strip()
+        return email if email else None
+    except Exception as e:  # noqa: BLE001
+        logger.info(f"SSM get_parameter skipped ({NOTIFICATION_EMAIL_SSM_PATH}): {e}")
+        return None
+
+
+def _ensure_email_subscribed(sns_client, topic_arn: str, email: str) -> None:
+    """メールアドレスがまだ SNS サブスクライブされていなければ登録する。
+
+    既登録 (PendingConfirmation / Confirmed) の場合は何もしない。
+    初回登録時は確認メールが届くので承認が必要。
+    """
+    try:
+        resp = sns_client.list_subscriptions_by_topic(TopicArn=topic_arn)
+        for sub in resp.get("Subscriptions", []):
+            if sub.get("Protocol") == "email" and sub.get("Endpoint") == email:
+                logger.info(f"SNS subscription already exists for {email}")
+                return
+        sns_client.subscribe(TopicArn=topic_arn, Protocol="email", Endpoint=email)
+        logger.info(f"SNS subscription created for {email} (confirmation email sent)")
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"SNS subscribe failed (non-fatal): {e}")
+
+
+def notify_patch_detected(patch_date: date, characters_scraped: int, errors: list[str]) -> None:
+    """新パッチ検知時に SNS 経由でメール通知を送信する。
+
+    - SNS_TOPIC_ARN 未設定 → スキップ
+    - SSM にメールアドレスがなければ → トピックには publish するが購読者なしで終わる
+    - 通知失敗はログのみ、Lambda 全体はエラーにしない
+    """
+    if not SNS_TOPIC_ARN:
+        logger.info("SNS_TOPIC_ARN not set, skipping notification")
+        return
+
+    import boto3  # noqa: PLC0415
+    region = os.environ.get("AWS_REGION", "ap-northeast-1")
+    sns = boto3.client("sns", region_name=region)
+
+    # SSM からメールを取得して未登録なら購読登録
+    email = _get_notification_email()
+    if email:
+        _ensure_email_subscribed(sns, SNS_TOPIC_ARN, email)
+
+    error_line = f"\n⚠️  エラーが発生したキャラ: {', '.join(errors)}" if errors else ""
+    message = f"""\
+🎮 SF6 新パッチを検知しました
+
+パッチ日付 : {patch_date}
+取得キャラ数: {characters_scraped} キャラ{error_line}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+【対応が必要です】SuperCombo データの手動更新
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. ブラウザで SuperCombo Wiki を開く
+   https://wiki.supercombo.gg/w/Street_Fighter_6
+
+2. F12 → コンソール に以下のスクリプトを実行してフレームデータ JSON をダウンロード
+   (streetfighter6-engine/docs/ 内の fetch_supercombo_docs.js を参照)
+
+3. ダウンロードした JSON を Supabase にインポート
+   python -m sf6_engine.importers.supercombo <downloaded_file.json>
+
+4. ゲームシステム文書も必要に応じて更新
+   (Gauges / Movement / Offense / Defense ページに変更があった場合)
+"""
+
+    try:
+        sns.publish(
+            TopicArn=SNS_TOPIC_ARN,
+            Subject=f"[SF6] 新パッチ検知: {patch_date} — SuperCombo 手動更新が必要です",
+            Message=message,
+        )
+        logger.info(f"SNS notification sent for patch {patch_date}")
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"SNS notification failed (non-fatal): {e}")
+
+
+# --- ⑤ Supabase Storage: 生HTMLのローテーション保管 ----------------------
 
 def rotate_and_store_html(sb: Client, slug: str, html: str) -> str:
     """current/{slug}.html → previous/{slug}.html にローテーションし、新しいHTMLを保存.
@@ -604,6 +699,8 @@ def lambda_handler(event, context):  # noqa: ARG001
                           patch_id=patch_id,
                           characters_scraped=succeeded,
                           error_message=("partial errors: " + ",".join(errors)) if errors else None)
+        # SNS で開発者にパッチ検知を通知 (SuperCombo 手動更新の促し)
+        notify_patch_detected(latest, succeeded, errors)
         return {
             "status": status,
             "patch_date": latest.isoformat(),

@@ -11,6 +11,10 @@ Parameters:
     Type: String
     Default: sf6-html-archive
     Description: Supabase Storage bucket name for raw HTML archives
+  NotificationEmailSsmPath:
+    Type: String
+    Default: /sf6/notification-email
+    Description: SSM Parameter Store path for notification email (git に含まない値は SSM で管理)
 
 Globals:
   Function:
@@ -32,6 +36,8 @@ Resources:
         Variables:
           SUPABASE_SECRET_NAME: !Ref SupabaseSecretName
           SUPABASE_BUCKET: !Ref SupabaseBucket
+          SNS_TOPIC_ARN: !Ref PatchNotificationTopic
+          NOTIFICATION_EMAIL_SSM_PATH: !Ref NotificationEmailSsmPath
       Policies:
         # Secrets Manager から Supabase 認証情報を読む権限
         - Statement:
@@ -40,6 +46,22 @@ Resources:
                 - secretsmanager:GetSecretValue
               Resource:
                 - !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:${SupabaseSecretName}-*
+        # SNS パッチ通知の送信 + メールサブスクリプション登録
+        - Statement:
+            - Effect: Allow
+              Action:
+                - sns:Publish
+                - sns:Subscribe
+                - sns:ListSubscriptionsByTopic
+              Resource:
+                - !Ref PatchNotificationTopic
+        # SSM からメールアドレスを読み取る権限
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameter
+              Resource:
+                - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${NotificationEmailSsmPath}
       Events:
         DailyDetection:
           Type: Schedule
@@ -47,6 +69,14 @@ Resources:
             Schedule: cron(0 18 * * ? *)  # 毎日 18:00 UTC = 03:00 JST
             Name: sf6-frame-daily-detection
             Description: Check CAPCOM battle_change page once per day
+
+  # SNS トピック: 新パッチ検知時にメール通知
+  # サブスクリプション (メールアドレス) は Lambda が SSM から読み取って動的登録する
+  PatchNotificationTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: sf6-patch-notification
+      DisplayName: SF6 Patch Alert
 
   # CloudWatch ログ保持期間 (コスト管理)
   ScraperFunctionLogGroup:
@@ -63,3 +93,6 @@ Outputs:
   SecretName:
     Value: !Ref SupabaseSecretName
     Description: Make sure this secret exists in Secrets Manager before invoking
+  PatchNotificationTopicArn:
+    Value: !Ref PatchNotificationTopic
+    Description: SNS topic ARN for SF6 patch notifications

@@ -6,3 +6,5 @@ __pycache__/
 .mypy_cache/
 .aws-sam
 aws-cli.txt
+# SAM デプロイ設定 (メールアドレス等の個人情報を含む)
+samconfig.toml
