@@ -34,6 +34,18 @@ _JP_MOVE_TO_EN: dict[str, str] = {
     'タイガーバニッシャー': 'Tiger Vanquisher',
     'タイガーネクサス': 'Tiger Nexus',
     'サベージタイガー': 'Savage Tiger',
+    'タイガーモノリス': 'Tiger Monolith',
+    'モノリス': 'Tiger Monolith',
+    'ノヴァタイガー': 'Nova Tiger',
+    'ノヴァ': 'Nova Tiger',
+    'グリーディタイガー': 'Greedy Tiger',
+    'グリード': 'Greedy Tiger',
+    'マイティタイガー': 'Mighty Tiger',
+    'マイト': 'Mighty Tiger',
+    'ステップハイキック': 'Step High Kick',
+    'ステハイ': 'Step High Kick',
+    'ステップローキック': 'Step Low Kick',
+    'ステロー': 'Step Low Kick',
     # リュウ
     '波動拳': 'Hadoken',
     '昇竜拳': 'Shoryuken',
@@ -93,19 +105,89 @@ def _sort_by_type(rows: list[dict]) -> list[dict]:
     return sorted(rows, key=priority)
 
 
-def _fetch_move_by_name(chara: str, move_name: str) -> dict | None:
+# 強度語 → 入力キー候補 (K系とP系の両方を持つ)
+_STRENGTH_TO_KEYS: dict[str, tuple[str, ...]] = {
+    '弱':    ('LK', 'LP'),
+    '中':    ('MK', 'MP'),
+    '強':    ('HK', 'HP'),
+    'weak':  ('LK', 'LP'),
+    'light': ('LK', 'LP'),
+    'medium':('MK', 'MP'),
+    'mid':   ('MK', 'MP'),
+    'heavy': ('HK', 'HP'),
+    'hard':  ('HK', 'HP'),
+}
+# 後方互換用 (単一キー版)
+_STRENGTH_INPUT_KEY = {k: v[0] for k, v in _STRENGTH_TO_KEYS.items()}
+
+
+def _pick_variant(rows: list[dict], raw_query: str, move_name: str = '') -> dict:
+    """複数の同名バリアント (弱/中/強) から raw_query のヒントで最適なものを返す。
+
+    「中迅雷脚の弱派生」のように別の強度語が混在する場合、技名の直前にある
+    強度語を優先する。技名の直前に見つからない場合は全文検索へフォールバック。
+    """
+    # JP技名キーワードを raw_query から生成 (JP_MOVE_TO_EN の逆引き)
+    # move_name が英語の場合、対応する日本語名を探す
+    jp_keywords: list[str] = []
+    for jp, en in _JP_MOVE_TO_EN.items():
+        if en.lower() in move_name.lower() or move_name.lower() in en.lower():
+            jp_keywords.append(jp)
+    # move_name 自体が日本語の場合も追加
+    if move_name and not jp_keywords:
+        jp_keywords.append(move_name)
+
+    # OD (オーバードライブ) 検索: ボタン2個押し (KK/PP/LPMP/LPHP 等)
+    # 注: Python3では CJK文字が \w とみなされるため \bOD\b は日本語境界でマッチしない
+    #     → ASCII境界専用パターンを使用
+    if re.search(r'(?<![A-Za-z0-9])OD(?![A-Za-z0-9])|オーバードライブ', raw_query):
+        for r in rows:
+            inp = r.get('input', '')
+            if any(x in inp for x in ('KK', 'PP', 'LPMP', 'LPHP', 'MPHP')):
+                return r
+
+    def _match_strength(input_str: str, jp_strength: str) -> bool:
+        """強度語に対応する入力キー候補 (K系+P系) のいずれかが input に含まれるか。"""
+        keys = _STRENGTH_TO_KEYS.get(jp_strength, ())
+        return any(k in input_str.upper() for k in keys)
+
+    # 技名直前の強度語を優先検索
+    for kw in jp_keywords:
+        idx = raw_query.find(kw)
+        if idx > 0:
+            preceding = raw_query[max(0, idx - 2):idx]  # 直前2文字
+            for jp_s in _STRENGTH_TO_KEYS:
+                if jp_s in preceding:
+                    for r in rows:
+                        if _match_strength(r.get('input', ''), jp_s):
+                            return r
+
+    # フォールバック: クエリ全文から強度語を検索
+    for jp_s in _STRENGTH_TO_KEYS:
+        if jp_s in raw_query:
+            for r in rows:
+                if _match_strength(r.get('input', ''), jp_s):
+                    return r
+
+    return rows[0]
+
+
+_SPECIAL_MOVE_TYPES = ['Special', 'special', 'Super', 'super']
+
+
+def _fetch_move_by_name(chara: str, move_name: str, raw_query: str = '') -> dict | None:
     """必殺技・SA 名で sc_move_normalized を検索する。
 
-    検索優先度:
-    1. 日本語→英語マッピングで変換した英語名で ILIKE 検索
-    2. 元の move_name (英語 or 日本語) でそのまま ILIKE 検索
-    3. move_name の各単語で部分検索
+    検索順序 (ハードコーディングを排除して汎用化):
+    1. Special/Super タイプに絞って move_name を直接 ILIKE 検索
+    2. move_name を単語分割して各単語で Special/Super 検索
+    3. _JP_MOVE_TO_EN マッピング経由 (日本語→英語フォールバック)
+    4. タイプ不問で全移動技から検索 (コマンド通常技・throw なども拾う)
 
-    複数ヒット時は Special > Super の優先度でソートして最初の1件を返す。
+    複数ヒット時は raw_query の弱/中/強ヒントで最適なバリアントを選択する。
     """
     sb = get_client()
 
-    # CharSlugMap 経由で sc_chara を取得
     map_res = sb.table('char_slug_map').select('sc_chara').eq('capcom_slug', chara.lower()).execute()
     if not map_res.data:
         map_res = sb.table('char_slug_map').select('sc_chara').ilike('sc_chara', f'%{chara}%').execute()
@@ -114,37 +196,67 @@ def _fetch_move_by_name(chara: str, move_name: str) -> dict | None:
         return None
     sc_chara = map_res.data[0]['sc_chara']
 
-    def do_search(keyword: str) -> list[dict]:
+    def search_special(keyword: str) -> list[dict]:
+        """Special/Super タイプのみを name ILIKE で検索。"""
+        if not keyword or len(keyword) < 2:
+            return []
+        res = sb.table('sc_move_normalized').select(_SC_MOVE_SELECT).eq(
+            'chara', sc_chara
+        ).ilike('name', f'%{keyword}%').in_('move_type', _SPECIAL_MOVE_TYPES).execute()
+        return res.data or []
+
+    def search_all(keyword: str) -> list[dict]:
+        """タイプ不問で name ILIKE 検索 (コマンド通常技・throw など向け)。"""
+        if not keyword or len(keyword) < 2:
+            return []
         res = sb.table('sc_move_normalized').select(_SC_MOVE_SELECT).eq(
             'chara', sc_chara
         ).ilike('name', f'%{keyword}%').execute()
         return res.data or []
 
-    # 1. 日本語→英語マッピング
+    # 1. 直接検索 (LLM が英語名を出力した場合はここで解決)
+    rows = search_special(move_name)
+    if rows:
+        return _pick_variant(_sort_by_type(rows), raw_query, move_name)
+
+    # 2. 単語分割検索 ("Tiger Uppercut" → ["Tiger","Uppercut"] で各単語を試す)
+    for word in move_name.split():
+        if len(word) >= 3:
+            rows = search_special(word)
+            if rows:
+                return _pick_variant(_sort_by_type(rows), raw_query, move_name)
+
+    # 3. JP→EN マッピング (LLM が日本語名を出力したときのフォールバック)
     en_keyword = _JP_MOVE_TO_EN.get(move_name)
     if en_keyword:
-        rows = do_search(en_keyword)
+        rows = search_special(en_keyword)
         if rows:
-            return _sort_by_type(rows)[0]
-
-    # 2. move_name そのまま (モデルが英語で出した場合)
-    rows = do_search(move_name)
-    if rows:
-        return _sort_by_type(rows)[0]
-
-    # 3. 逆引き: JP_MOVE_TO_EN のvalue と部分一致
+            return _pick_variant(_sort_by_type(rows), raw_query, move_name)
     for jp, en in _JP_MOVE_TO_EN.items():
         if jp in move_name or move_name in jp:
-            rows = do_search(en)
+            rows = search_special(en)
             if rows:
-                return _sort_by_type(rows)[0]
+                return _pick_variant(_sort_by_type(rows), raw_query, move_name)
 
-    # 4. move_name を空白で分割して各単語で検索
+    # 4. タイプ不問 (コマンド通常技・Tiger Monolith 等も拾う)
+    rows = search_all(move_name)
+    if rows:
+        return _pick_variant(_sort_by_type(rows), raw_query, move_name)
     for word in move_name.split():
-        if len(word) >= 4:  # 短すぎる単語はスキップ
-            rows = do_search(word)
+        if len(word) >= 3:
+            rows = search_all(word)
             if rows:
-                return _sort_by_type(rows)[0]
+                return _pick_variant(_sort_by_type(rows), raw_query, move_name)
+
+    # 5. raw_query からの JP→EN 逆引き (LLM が誤訳した場合のリカバリー)
+    #    例: 「瞬獄殺」を「Instant Kill」と訳した場合、クエリ中の「瞬獄殺」→「Shun Goku Satsu」で再検索
+    if raw_query:
+        for jp, en in _JP_MOVE_TO_EN.items():
+            if jp in raw_query:
+                rows = search_special(en)
+                if rows:
+                    logger.info(f"JP→EN recovery: '{jp}' → '{en}' for move_name='{move_name}'")
+                    return _pick_variant(_sort_by_type(rows), raw_query, en)
 
     logger.info(f"{sc_chara} の '{move_name}' にヒットなし")
     return None
@@ -229,7 +341,7 @@ def _fetch_combo_data(chara: str, sc_input: str) -> dict | None:
     res = sb.table('sc_moves').select(
         'input,name,move_type,'
         'startup,active,recovery,'
-        'hit_adv,block_adv,'
+        'hit_adv,block_adv,punish_adv,'
         'cancel,'
         'dr_cancel_hit,dr_cancel_blk,'
         'after_dr_hit,after_dr_blk,'
@@ -726,6 +838,48 @@ async def build_context(intent: dict, provider=None) -> str:
 
     sections: list[str] = []
 
+    # --- setplay_analysis: KD後・有利フレーム後の起き攻め択を計算 ---
+    if intent_type == "setplay_analysis" and chara:
+        raw_row: dict | None = None
+        actual_inp = inp
+
+        if inp:
+            raw_row = _fetch_combo_data(chara, inp)
+        elif move_name:
+            norm_row = _fetch_move_by_name(chara, move_name, raw_query=intent.get("raw_query",""))
+            if norm_row:
+                actual_inp = norm_row.get('input', '')
+                raw_row = _fetch_combo_data(chara, actual_inp)
+
+        if raw_row and actual_inp:
+            hit_adv_raw    = raw_row.get('hit_adv')
+            punish_adv_raw = raw_row.get('punish_adv')
+            mv_name        = raw_row.get('name') or actual_inp
+
+            # 技の基本データもコンテキストに追加
+            sections.append(_fmt_combo_context(chara, raw_row))
+
+            # パニカン時のセットプレイ (punish_adv が KD でヒットと異なる場合)
+            from sf6_engine.setplay_engine import compute_setplay, format_setplay_context
+
+            # 通常ヒット後セットプレイ
+            scenarios_hit = compute_setplay(chara, actual_inp, mv_name, hit_adv_raw)
+            if scenarios_hit:
+                sections.append(format_setplay_context(actual_inp, mv_name, hit_adv_raw, scenarios_hit))
+
+            # パニカン時が通常ヒットと異なる場合は別途表示
+            if punish_adv_raw and punish_adv_raw != hit_adv_raw:
+                scenarios_pc = compute_setplay(chara, actual_inp, mv_name, punish_adv_raw)
+                if scenarios_pc:
+                    pc_ctx = format_setplay_context(actual_inp, mv_name, punish_adv_raw, scenarios_pc)
+                    sections.append(f"【パニッシュカウンター時のセットプレイ】\n{pc_ctx}")
+        else:
+            name_disp = inp or move_name or '(技名不明)'
+            sections.append(
+                f"⚠ {chara} の {name_disp} のセットプレイデータが見つかりませんでした。"
+                f"通常技は numpad 表記 (例: 623HP)、必殺技は正式名で入力してください。"
+            )
+
     # --- max_combo: ビームサーチで最大ダメージコンボを計算 ---
     if intent_type == "max_combo" and chara and inp:
         try:
@@ -791,12 +945,14 @@ async def build_context(intent: dict, provider=None) -> str:
         else:
             sections.append(f"⚠ {chara} の {inp} のコンボデータが見つかりません。")
     elif intent_type == "combo_info" and chara and move_name:
-        sc_row = _fetch_move_by_name(chara, move_name)
+        sc_row = _fetch_move_by_name(chara, move_name, raw_query=intent.get("raw_query",""))
         if sc_row:
             actual_input = sc_row.get('input', '')
             combo_row = _fetch_combo_data(chara, actual_input)
             if combo_row:
                 sections.append(_fmt_combo_context(chara, combo_row))
+
+                # DRキャンセル後のコンボ
                 after_dr = _parse_frame_value(combo_row.get('after_dr_hit'))
                 if after_dr and after_dr > 0:
                     follow_ups = _find_combo_follow_ups(chara, after_dr, exclude_input=actual_input)
@@ -805,12 +961,69 @@ async def build_context(intent: dict, provider=None) -> str:
                             actual_input, combo_row.get('name', ''), after_dr,
                             follow_ups, 'DRキャンセル'
                         ))
+
+                # 通常ヒット後のリンク
+                hit_adv_val = _parse_frame_value(combo_row.get('hit_adv'))
+                if hit_adv_val and hit_adv_val >= 3:
+                    follow_ups_hit = _find_combo_follow_ups(
+                        chara, hit_adv_val - 1, exclude_input=actual_input, include_special=True
+                    )
+                    if follow_ups_hit:
+                        sections.append(_fmt_combo_route(
+                            actual_input, combo_row.get('name', ''), hit_adv_val,
+                            follow_ups_hit, '通常ヒット'
+                        ))
+
+                # 派生技の表示 (常に表示。割り込み判定は派生キーワードがある場合のみ計算)
+                rq = intent.get("raw_query", "")
+                _show_gap = any(kw in rq for kw in ['派生', '割り込', '連携', 'follow', 'blockstring', 'block string'])
+                if True:  # 常に派生技を確認する
+                    import re as _re
+                    base_inp = _re.sub(r'[LMH]([KP])', r'\1', actual_input)
+                    map_r = get_client().table('char_slug_map').select('sc_chara').eq('capcom_slug', chara.lower()).execute()
+                    sc_chara_val = map_r.data[0]['sc_chara'] if map_r.data else chara
+                    follow_res = get_client().table('sc_moves').select(
+                        'input,name,startup,hit_adv,block_adv,notes'
+                    ).eq('chara', sc_chara_val).ilike('input', f'{base_inp}~%').execute()
+                    if follow_res.data:
+                        blk_adv_f = sc_row.get('block_adv_f')
+                        hit_adv_f_v = sc_row.get('hit_adv_f')
+                        heading = "【派生技フレームデータと割り込み判定】" if _show_gap else "【派生技フレームデータ】"
+                        lines = [heading]
+                        for fr in follow_res.data:
+                            raw_st = fr.get('startup', '')
+                            st_m = re.search(r'\d+', str(raw_st))
+                            st_f = int(st_m.group()) if st_m else None
+                            lines.append(
+                                f"  {fr['input']} ({fr.get('name','?')}): "
+                                f"発生{fr.get('startup','?')}F "
+                                f"ヒット時{fr.get('hit_adv','?')} "
+                                f"ガード時{fr.get('block_adv','?')}"
+                            )
+                            if _show_gap and st_f is not None:
+                                if hit_adv_f_v is not None and hit_adv_f_v > 0:
+                                    gap_hit = st_f - hit_adv_f_v
+                                    lines.append(f"    → ヒット後の隙間: {gap_hit}F" + (
+                                        " (確定連携)" if gap_hit <= 0 else
+                                        f" (発生{gap_hit}F以下で割り込み可 / カウンターヒットに注意)" if gap_hit <= 4 else
+                                        f" (発生{gap_hit}F以下で割り込み可)"
+                                    ))
+                                if blk_adv_f is not None and blk_adv_f < 0:
+                                    gap_blk = abs(blk_adv_f) - st_f
+                                    lines.append(f"    → ガード後の隙間: {gap_blk}F" + (
+                                        " (真の連携 / 割り込み不可)" if gap_blk <= 0 else
+                                        " (3F以下のため事実上割り込み不可)" if gap_blk <= 3 else
+                                        f" (発生{gap_blk}F以下で割り込み可)"
+                                    ))
+                            if fr.get('notes'):
+                                lines.append(f"    解説: {fr['notes'][:150]}")
+                        sections.append('\n'.join(lines))
     elif intent_type == "combo_info" and not chara:
         sections.append("[コンボ情報: キャラ名と技名を指定してください。]")
 
     # --- lookup_move / punish_check: 必殺技名検索 (input が None の場合) ---
     if intent_type in ("lookup_move", "punish_check") and chara and not inp and move_name:
-        row = _fetch_move_by_name(chara, move_name)
+        row = _fetch_move_by_name(chara, move_name, raw_query=intent.get("raw_query",""))
         if row:
             sections.append(_fmt_sc_move(row))
             if intent_type == "punish_check":
@@ -826,6 +1039,68 @@ async def build_context(intent: dict, provider=None) -> str:
                             f"【反撃判定】ガード時 {_sign(blk)}F → "
                             f"ガードした側が不利のため反撃はできません。"
                         )
+                # 派生技の追加フレームデータ (割り込み判断に必要)
+                rq = intent.get("raw_query", "")
+                if any(kw in rq for kw in ['派生', 'フォロー', '割り込', '繋ぎ', 'follow']):
+                    sc_inp = row.get('input', '')
+                    if sc_inp:
+                        import re as _re
+                        # '236MK' → '236K' のように強度修飾子を除去してベース入力を取得
+                        base_inp = _re.sub(r'[LMH]([KP])', r'\1', sc_inp)
+                        map_r = get_client().table('char_slug_map').select('sc_chara').eq('capcom_slug', chara.lower()).execute()
+                        sc_chara_val = map_r.data[0]['sc_chara'] if map_r.data else chara
+                        # ベース入力の派生技を検索 (236K~% で 236K~6LK/MK/HK をキャッチ)
+                        follow_res = get_client().table('sc_moves').select(
+                            'input,name,startup,hit_adv,block_adv,notes'
+                        ).eq('chara', sc_chara_val).ilike('input', f'{base_inp}~%').execute()
+                        if follow_res.data:
+                            hit_adv_f  = row.get('hit_adv_f')
+                            block_adv_f = row.get('block_adv_f')
+                            lines = ["【派生技フレームデータと割り込み判定】"]
+                            for fr in follow_res.data:
+                                raw_st = fr.get('startup', '')
+                                st_m = re.search(r'\d+', str(raw_st))
+                                st_f = int(st_m.group()) if st_m else None
+                                lines.append(
+                                    f"  {fr['input']} ({fr.get('name','?')}): "
+                                    f"発生{fr.get('startup','?')}F "
+                                    f"ヒット時{fr.get('hit_adv','?')} "
+                                    f"ガード時{fr.get('block_adv','?')}"
+                                )
+                                if st_f is not None:
+                                    # ヒット後の隙間計算
+                                    if hit_adv_f is not None and hit_adv_f > 0:
+                                        gap_hit = st_f - hit_adv_f
+                                        if gap_hit <= 0:
+                                            lines.append(f"    → ヒット後: 相手は行動できない (確定連携)")
+                                        elif gap_hit <= 3:
+                                            lines.append(
+                                                f"    → ヒット後の隙間: {gap_hit}F "
+                                                f"(最速技でも当てられない or カウンターヒット確定)"
+                                            )
+                                        else:
+                                            lines.append(
+                                                f"    → ヒット後の隙間: {gap_hit}F "
+                                                f"(発生{gap_hit}F以下の技で割り込み可能)"
+                                            )
+                                    # ガード後の隙間計算
+                                    if block_adv_f is not None and block_adv_f < 0:
+                                        gap_blk = abs(block_adv_f) - st_f
+                                        if gap_blk <= 0:
+                                            lines.append(f"    → ガード後: 真の連携 (割り込み不可)")
+                                        elif gap_blk <= 3:
+                                            lines.append(
+                                                f"    → ガード後の隙間: {gap_blk}F "
+                                                f"(3F以下のため事実上割り込み不可)"
+                                            )
+                                        else:
+                                            lines.append(
+                                                f"    → ガード後の隙間: {gap_blk}F "
+                                                f"(発生{gap_blk}F以下の技で割り込み可能)"
+                                            )
+                                if fr.get('notes'):
+                                    lines.append(f"    解説: {fr['notes'][:150]}")
+                            sections.append('\n'.join(lines))
         else:
             sections.append(
                 f"⚠ {chara} の '{move_name}' のデータが見つかりませんでした。"
@@ -873,11 +1148,11 @@ async def build_context(intent: dict, provider=None) -> str:
                 f"通常技 (立ち/しゃがみ/ジャンプ + 弱/中/強 + P/K) のみ対応しています。"
                 f"必殺技・SAのデータは M2 以降で対応予定です。"
             )
-    elif intent_type == "punish_check" and chara and not inp:
-        # 特殊技 (input が特定できない) の場合
+    elif intent_type == "punish_check" and chara and not inp and not move_name:
+        # 技名も input も特定できない場合のみエラー表示
         sections.append(
-            f"⚠ {chara} の指定された技 (必殺技と思われる) のデータは M1 段階では未対応です。"
-            f"通常技 18パターン (立ち/しゃがみ/ジャンプ + 弱/中/強 + P/K) のみ参照可能です。"
+            f"⚠ {chara} の指定された技のデータが見つかりませんでした。"
+            f"技名または numpad 表記 (例: 2HK, 623HP) で指定してください。"
         )
 
     # --- compare_moves: 2つ目の技 (通常技) ---
@@ -960,6 +1235,17 @@ ANSWER_SYSTEM = """\
 9. 実戦的なアドバイスは、解説テキスト (解説:) がある場合のみ行う
 10. ハルシネーション厳禁: 根拠のない数値や技名を生成しない
 11. 回答は構造的に (コンボルートには番号や箇条書きを使う)
+12. 【派生技フレームデータ】セクションと「反撃判定」が両方ある場合 (割り込み・フレームトラップ判定):
+    - 親技のヒット有利 (+N) と派生技の発生F を使って「隙間」を計算する
+    - 隙間 = 派生発生F − ヒット有利 (正数なら相手が行動できるフレーム数)
+    - 派生技の notes に "counter-hit any opponent button" があれば「割り込めばカウンターヒットを食らう」と回答する
+    - ガード時の計算: 隙間 = |ガード不利| − 派生発生F (0以下なら真の連携、割り込み不可)
+    - ヒット時・ガード時の両方について言及し、「押せるが〜」「割り込み不可」を明確に述べること
+13. 【セットプレイ分析】セクションがある場合:
+    - 各アクション (前ステップ等) ごとの残り有利Fと択を箇条書きで示すこと
+    - 「推論根拠」の計算式 (KD有利F − アクションF = 残りF) を説明に含めること
+    - 投げ択と打撃択の両方について言及し、起き攻めの「択」として整理すること
+    - KD後と通常ヒット後で異なる場合は区別して回答すること
 """
 
 ANSWER_TEMPLATE = """\

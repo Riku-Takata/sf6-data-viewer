@@ -22,16 +22,43 @@ import re
 
 from sf6_engine.llm_provider import LLMProvider
 
-# 特殊技・必殺技の日本語キーワード。
-# クエリにこれらが含まれているのに numpad 表記が明示されていない場合は input を除去する。
+# 通常技を示す単語パターン (これを含む技名は通常技と判定)
+_NORMAL_MOVE_INDICATORS = re.compile(
+    r'パンチ|キック'
+    r'|(?:弱|中|強)[PpKk]'     # 弱P, 中K など
+    r'|[LMH][KP](?:\s|$|~)'    # LP, MK, HK など
+    r'|(?:立|屈|しゃがみ|ジャンプ|空中).*(?:弱|中|強)'
+)
+
+# 特定の必殺技キーワード (既知のものを明示的にマーク — フォールバック用に残す)
 _SPECIAL_MOVE_KEYWORDS = re.compile(
     r'波動拳|昇竜拳|竜巻|ソニックブーム|サマーソルト|フラッシュキック'
     r'|タイガーショット|タイガーアッパー|タイガーニー|タイガーキャノン'
     r'|百裂拳|気功拳|鳳翼扇|気功掌|スピニングバードキック'
     r'|スクリューパイルドライバー|スパイラルアロー|キャノンストライク'
     r'|ガンスモーク|メテオストライク|クラッシュカウンター'
+    r'|迅雷脚|疾風迅雷脚|龍尾脚|疾風|迅雷'
     r'|必殺技|スーパーアーツ|SA[123]'
 )
+
+# 日本語略称 → numpad 変換テーブル (LLM が変換できなかった場合のフォールバック)
+_JP_ABBREV_TO_NUMPAD: dict[str, str] = {
+    # しゃがみ系 (長い表記を先に)
+    'しゃがみ弱P': '2LP', 'しゃがみ中P': '2MP', 'しゃがみ強P': '2HP',
+    'しゃがみ弱K': '2LK', 'しゃがみ中K': '2MK', 'しゃがみ強K': '2HK',
+    '屈弱P': '2LP',  '屈中P': '2MP',  '屈強P': '2HP',
+    '屈弱K': '2LK',  '屈中K': '2MK',  '屈強K': '2HK',
+    # 立ち系
+    '立ち弱P': '5LP', '立ち中P': '5MP', '立ち強P': '5HP',
+    '立ち弱K': '5LK', '立ち中K': '5MK', '立ち強K': '5HK',
+    '立弱P': '5LP',  '立中P': '5MP',  '立強P': '5HP',
+    '立弱K': '5LK',  '立中K': '5MK',  '立強K': '5HK',
+    # ジャンプ系
+    'ジャンプ弱P': 'j.LP', 'ジャンプ中P': 'j.MP', 'ジャンプ強P': 'j.HP',
+    'ジャンプ弱K': 'j.LK', 'ジャンプ中K': 'j.MK', 'ジャンプ強K': 'j.HK',
+    '空中弱P': 'j.LP',    '空中中P': 'j.MP',    '空中強P': 'j.HP',
+    '空中弱K': 'j.LK',    '空中中K': 'j.MK',    '空中強K': 'j.HK',
+}
 
 # クエリ中に numpad 表記が明示的に書かれているかを検出するパターン
 _NUMPAD_EXPLICIT = re.compile(
@@ -62,6 +89,7 @@ INTENT_SCHEMA = {
                 "punish_check",     # 反撃確認
                 "combo_info",       # コンボ情報 (キャンセル先・DR後フレーム)
                 "max_combo",        # 最大コンボ計算 (ダメージ最大のコンボルート)
+                "setplay_analysis", # セットプレイ・起き攻め分析 (KD後の択計算)
                 "general_question", # その他
             ],
         },
@@ -120,12 +148,28 @@ SYSTEM_PROMPT = """\
 - C.ヴァイパー → C.Viper
 
 ## 技入力の正規化 (日本語 → numpad 表記)
-- 立ち弱P → 5LP, 立ち中P → 5MP, 立ち強P → 5HP
-- 立ち弱K → 5LK, 立ち中K → 5MK, 立ち強K → 5HK
-- しゃがみ弱P → 2LP, しゃがみ中P → 2MP, しゃがみ強P → 2HP
-- しゃがみ弱K → 2LK, しゃがみ中K → 2MK, しゃがみ強K → 2HK
-- ジャンプ弱P → j.LP, ジャンプ中P → j.MP, ジャンプ強P → j.HP
-- ジャンプ弱K → j.LK, ジャンプ中K → j.MK, ジャンプ強K → j.HK
+以下の表記はすべて同じ技を指す。略称・省略形もすべて正しく変換すること。
+
+しゃがみ弱P / 屈弱P / 屈LP → 2LP
+しゃがみ中P / 屈中P / 屈MP → 2MP
+しゃがみ強P / 屈強P / 屈HP → 2HP
+しゃがみ弱K / 屈弱K / 屈LK → 2LK
+しゃがみ中K / 屈中K / 屈MK → 2MK
+しゃがみ強K / 屈強K / 屈HK → 2HK
+
+立ち弱P / 立弱P / 立LP → 5LP
+立ち中P / 立中P / 立MP → 5MP
+立ち強P / 立強P / 立HP → 5HP
+立ち弱K / 立弱K / 立LK → 5LK
+立ち中K / 立中K / 立MK → 5MK
+立ち強K / 立強K / 立HK → 5HK
+
+ジャンプ弱P / 空中弱P / J弱P → j.LP
+ジャンプ中P / 空中中P / J中P → j.MP
+ジャンプ強P / 空中強P / J強P → j.HP
+ジャンプ弱K / 空中弱K / J弱K → j.LK
+ジャンプ中K / 空中中K / J中K → j.MK
+ジャンプ強K / 空中強K / J強K → j.HK
 
 ## インテント判定ルール
 - 「〜の発生は?」「〜のフレームは?」「〜のリーチは?」→ lookup_move
@@ -135,6 +179,8 @@ SYSTEM_PROMPT = """\
 - 「〜ガードして反撃できる?」「〜は確定反撃?」→ punish_check
 - 「〜からコンボある?」「〜始動は?」「〜の後に何が繋がる?」「〜をDRキャンセルすると?」「コンボ後の有利は?」「ノックダウン後は?」→ combo_info
 - 「〜からの最大コンボは?」「〜始動の最大ダメージは?」「最大コンボを教えて」「〜から何が最も繋がる?」「フルコンボは?」「BnB コンボは?」→ max_combo
+- 「〜ガードして反撃できる?」「〜は確定反撃?」「〜の弱派生前は割り込める?」「〜の派生は真の連携?」「〜は割り込める?」「〜はブロックストリング?」→ punish_check
+- 「〜のKD後は?」「〜ヒット後の起き攻めは?」「〜からセットプレイは?」「〜の後に前ステップしたら?」「〜の択は?」「ノックダウン後の攻め方は?」「〜でKDした後は?」→ setplay_analysis
 - 上記に当てはまらない → general_question
 
 ## フィールド名のマッピング (field パラメータ)
@@ -148,12 +194,14 @@ SYSTEM_PROMPT = """\
 
 ## 技入力 (input フィールド) の設定ルール ★最重要★
 - input フィールドに設定できるのは上記「通常技18パターン」に該当する技のみ
+- 以下の場合に input を設定する:
+  - 「5HP」「2HK」「j.MK」等の numpad 表記が質問文中に含まれる場合
+  - 「屈弱P」「立中P」「屈強K」等の上記略称・省略形が含まれる場合
 - 以下の技名は input フィールドに設定してはならない (省略すること):
   - 波動拳、昇竜拳、竜巻旋風脚、足刀蹴り → input 省略
   - タイガーショット、タイガーアッパーカット → input 省略
   - ソニックブーム、サマーソルトキック → input 省略
   - その他すべての必殺技・SA 名 → input 省略
-- 「5HP」「2HK」「j.MK」等の numpad 表記が質問文中に明示されている場合のみ input に設定する
 
 ## 必殺技・SA の技名 (move_name フィールドを使う)
 - 必殺技・SA の技名は input ではなく move_name フィールドに設定する
@@ -165,6 +213,9 @@ SYSTEM_PROMPT = """\
 - 「タイガーショットのデータは?」→ {"intent_type": "lookup_move", "chara": "Sagat", "move_name": "Tiger Shot"}
 - 「竜巻旋風脚のフレームは?」→ {"intent_type": "lookup_move", "chara": "Ryu", "move_name": "Tatsumaki Senpu-kyaku"}
 - 「サガットの5HPのリーチは?」→ {"intent_type": "lookup_move", "chara": "Sagat", "input": "5HP"}
+- 「ケンの中迅雷脚のフレームは?」→ {"intent_type": "lookup_move", "chara": "Ken", "move_name": "Jinrai Kick"}
+- 「ケンの迅雷脚の弱派生は?」→ {"intent_type": "combo_info", "chara": "Ken", "move_name": "Jinrai Kick"}
+- 「ケンの迅雷脚の弱派生前は割り込める?」→ {"intent_type": "punish_check", "chara": "Ken", "move_name": "Jinrai Kick"}
 
 ## 悪い例 (絶対にやらないこと)
 - 「波動拳のガード硬直は?」→ input: "5HP" ← これは間違い (波動拳≠5HP)
@@ -210,12 +261,24 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
 
     # --- ポストプロセス検証 ---
 
-    # (1) 特殊技名があるのに numpad が設定されている場合は除去
-    if result.get("input") and _SPECIAL_MOVE_KEYWORDS.search(query):
-        if not _NUMPAD_EXPLICIT.search(query):
+    # (1) 必殺技と判定される場合に input の誤設定を除去
+    # 判定基準 (いずれか):
+    #   a) クエリに既知の必殺技キーワードが含まれる
+    #   b) move_name が設定されており、通常技ワード (パンチ/キック等) を含まない
+    #      → LLM が任意の必殺技名を move_name に入れた場合に汎用的に対応
+    if result.get("input") and not _NUMPAD_EXPLICIT.search(query):
+        move_name_val = result.get("move_name", "")
+        is_special_context = (
+            _SPECIAL_MOVE_KEYWORDS.search(query)
+            or (
+                move_name_val
+                and not _NORMAL_MOVE_INDICATORS.search(move_name_val)
+            )
+        )
+        if is_special_context:
             logger.info(
-                f"Removed incorrect input mapping '{result['input']}' "
-                f"(special move keyword detected in query, no explicit numpad notation)"
+                f"Removed incorrect input '{result['input']}' "
+                f"(special move context: move_name='{move_name_val}')"
             )
             result.pop("input", None)
 
@@ -226,6 +289,68 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
             extracted = m.group(1)
             result["input"] = extracted
             logger.info(f"Extracted input '{extracted}' from raw query")
+
+    # (3) 日本語略称テーブルで確定変換 (LLM の誤変換を上書き)
+    # 略称は一意に numpad に対応するので LLM の推測より優先する
+    if not _SPECIAL_MOVE_KEYWORDS.search(query):
+        for jp, numpad in _JP_ABBREV_TO_NUMPAD.items():
+            if jp in query:
+                if result.get("input") != numpad:
+                    logger.info(
+                        f"JP abbrev override: '{jp}' → '{numpad}'"
+                        + (f" (LLM was: {result['input']})" if result.get("input") else "")
+                    )
+                    result["input"] = numpad
+                break
+
+    # (4a) _SPECIAL_MOVE_KEYWORDS に一致する日本語技名がクエリにあり move_name 未設定 → JP→EN変換して設定
+    if not result.get("move_name") and not result.get("input"):
+        # _JP_ABBREV_TO_NUMPAD と同様に, 既知の JP技名 → 英語技名マッピングを逆引き
+        # import は _JP_MOVE_TO_EN を参照 (rag_builder の import は循環参照になるため直接定義)
+        _JP_SPECIAL_NAMES = {
+            '波動拳': 'Hadoken', '昇竜拳': 'Shoryuken', '竜巻旋風脚': 'Tatsumaki',
+            '竜巻': 'Tatsumaki', 'ソニックブーム': 'Sonic Boom',
+            'サマーソルトキック': 'Somersault Kick', 'サマーソルト': 'Somersault',
+            'タイガーショット': 'Tiger Shot', 'タイガーアッパーカット': 'Tiger Uppercut',
+            'タイガーアッパー': 'Tiger Uppercut', 'タイガーニークラッシュ': 'Tiger Knee Crush',
+            'タイガーニー': 'Tiger Knee Crush', 'タイガーネクサス': 'Tiger Nexus',
+            'タイガーキャノン': 'Tiger Cannon', 'サベージタイガー': 'Savage Tiger',
+            'ノヴァ': 'Nova Tiger', 'グリード': 'Greedy Tiger', 'マイト': 'Mighty Tiger',
+            'モノリス': 'Tiger Monolith', 'ステハイ': 'Step High Kick',
+            'ステロー': 'Step Low Kick',
+            '迅雷脚': 'Jinrai Kick', '疾風迅雷脚': 'Shippu Jinrai-kyaku',
+            '龍尾脚': 'Dragonlash Kick',
+            '百裂拳': 'Hyakuretsu', 'スピニングバードキック': 'Spinning Bird Kick',
+            '気功掌': 'Kikosho', '鳳翼扇': 'Kikosho',
+            'スクリューパイルドライバー': 'Screw Pile Driver',
+            'スパイラルアロー': 'Spiral Arrow', 'キャノンスパイク': 'Cannon Spike',
+            '瞬獄殺': 'Shun Goku Satsu',
+        }
+        for jp, en in _JP_SPECIAL_NAMES.items():
+            if jp in query:
+                result["move_name"] = en
+                logger.info(f"JP special name extracted: '{jp}' → '{en}'")
+                break
+
+    # (4) 英語の技名がクエリに含まれて move_name 未設定の場合は抽出
+    # 「ルークのFlash Knuckleから…」のように日本語文中に英語技名が埋め込まれたケース
+    if not result.get("move_name") and not result.get("input"):
+        # 大文字始まりの英単語が2語以上連続 → 技名候補 (例: "Flash Knuckle", "Rising Uppercut")
+        # ただしキャラ名は除外
+        _CHAR_NAMES = {
+            'Ryu', 'Ken', 'Guile', 'Luke', 'Sagat', 'Cammy', 'Chun', 'Li',
+            'Zangief', 'Blanka', 'Dhalsim', 'Akuma', 'Juri', 'Marisa',
+            'Jamie', 'Kimberly', 'Lily', 'Manon', 'Rashid', 'Dee', 'Jay',
+            'Ed', 'Terry', 'Mai', 'Elena', 'Ingrid', 'Alex', 'Bison',
+            'Viper', 'Honda', 'JP', 'Street', 'Fighter',
+        }
+        en_move_pattern = re.compile(r'(?<![A-Za-z])([A-Z][a-z]{1,}(?:\s+[A-Z][a-z]{1,})+)(?![A-Za-z])')
+        for m in en_move_pattern.finditer(query):
+            words = m.group(1).split()
+            if not any(w in _CHAR_NAMES for w in words):
+                result["move_name"] = m.group(1)
+                logger.info(f"Extracted English move name: '{m.group(1)}'")
+                break
 
     logger.debug(f"Intent parsed: {result}")
     return result
