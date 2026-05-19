@@ -421,4 +421,77 @@ M1 では通常技18パターンのみ対応。必殺技・SA の質問 (タイ�
 - **Option B (LLM変換)**: Gemma に技名変換させる → 信頼性低い
 - **AWS Bedrock**: Gemma 未対応、Nova Micro でも月$0.5程度 (zero cost ではない)
 - **AWS Lambda + 量子化モデル**: コールドスタート 30秒以上で実用的でない
+
+---
+
+## ADR-015: 必殺技検索をハードコーディングから DB 直接検索に移行
+
+**Date**: 2026-05-19
+**Status**: Active (ADR-014 を部分的に Supersede)
+
+### Context
+
+ADR-014 で採用した `_JP_MOVE_TO_EN` 約30件の日本語→英語マッピングテーブルは、
+未登録の技 (Tiger Monolith, Nova Tiger, Jinrai Kick 等) でデータが取れない問題があった。
+また、新キャラ追加のたびに手動でマッピングを更新する必要があった。
+
+### Decision
+
+- `_fetch_move_by_name()` の検索順序を以下に変更:
+  1. **Special/Super タイプに絞って `sc_move_normalized.name ILIKE` 直接検索** (メイン)
+  2. 単語分割して各単語で Special/Super 検索
+  3. `_JP_MOVE_TO_EN` マッピング経由 (日本語技名フォールバック)
+  4. タイプ不問で全技から検索 (コマンド通常技等)
+  5. `raw_query` から `_JP_MOVE_TO_EN` を逆引き (LLM 誤訳リカバリー)
+- `_pick_variant()` に強度修飾子の判別を追加:
+  - 弱/中/強 → LP/LK, MP/MK, HP/HK (P系とK系の両方)
+  - OD → KK/PP/LPMP 等のダブルボタン入力
+  - 技名の直前にある強度語を優先 (「弱派生の弱」誤マッチ対策)
+
+### Consequences
+
+- 全30キャラの全必殺技が自動的に検索可能 (新キャラ追加時も対応不要)
+- LLM が英語技名を正しく出力した場合、マッピングテーブル不要
+- `_JP_MOVE_TO_EN` は LLM 誤訳 (瞬獄殺→Instant Kill 等) のリカバリーとして残す
+
+### Alternatives considered
+
+- **完全廃止**: `_JP_MOVE_TO_EN` を削除すると LLM 誤訳時に全滅するためフォールバックとして存続
+
+---
+
+## ADR-016: SNS + SSM による Layer 1 パッチ通知設計
+
+**Date**: 2026-05-19
+**Status**: Active
+
+### Context
+
+CAPCOM 公式でパッチ検知後、SuperCombo Wiki のデータ (必殺技フレーム等) も手動更新が必要。
+しかし現状は Lambda の CloudWatch Logs を能動的に確認しなければ気づけなかった。
+
+また、通知先メールアドレスをコード・設定ファイルに含めると git で公開されてしまう。
+
+### Decision
+
+- **通知手段**: AWS SNS (email プロトコル)
+- **メール管理**: AWS SSM Parameter Store `/sf6/notification-email` に保存
+  - コード・samconfig.toml いずれにもメールアドレスを書かない
+- **サブスクリプション登録**: Lambda 実行時に SSM からメールを取得して動的登録
+  - `_ensure_email_subscribed()`: 既登録チェック後に `sns:Subscribe` 発行
+  - 初回のみ確認メールが届く (以降は自動)
+- **通知失敗はエラーにしない**: `logger.warning` のみ、Lambda 全体はエラー扱いしない
+- **samconfig.toml を .gitignore に追加**: `samconfig.toml.example` を git 管理用雛形として追加
+
+### Consequences
+
+- パッチ検知 → メール通知 → SuperCombo 手動更新という運用フローが確立
+- メールアドレスは AWS SSM のみで管理 → git への個人情報漏洩なし
+- SNS_TOPIC_ARN が空の場合は通知をスキップ (ローカル開発時に影響なし)
+
+### Alternatives considered
+
+- **メールを samconfig.toml に書く**: 簡単だが git に公開されるリスク
+- **SNS サブスクリプションを CloudFormation で管理**: テンプレートにメールが含まれる → 却下
+- **Slack Webhook**: 個人プロジェクトなので email で十分
 - **Groq 無料枠**: Gemma 対応だが AWS ではない。フォールバックとして検討可

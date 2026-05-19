@@ -7,8 +7,8 @@
 
 ## 🎯 現在のフェーズ
 
-**Milestone**: M3 - セットプレイ推論 **実装中 (2026-05-18)**
-**前フェーズ**: M2 完了 (2026-05-16)
+**Milestone**: M3 完了 + Layer 1 パッチ通知 **✅ 完了 (2026-05-19)**
+**次**: M4 候補 — AWS 完全移行 (Bedrock LLM / Lambda CLI) または追加精度向上
 
 ## 📊 全体進捗
 
@@ -33,27 +33,49 @@
   - [x] Phase A: ゲームシステム文書の取り込み (4/4 タスク完了)
   - [x] Phase B: 必殺技マッピング (3/3 タスク完了)
   - [x] Phase C: 精度チューニング (2/2 タスク完了)
-- [x] **M3: セットプレイ推論 ✅ 実装完了 (2026-05-18)**
-  - [x] setplay_engine.py 新規作成 (KD有利パーサー・アクションコスト計算・択列挙)
-  - [x] intent_parser.py: setplay_analysis intent 追加
-  - [x] rag_builder.py: setplay_analysis ハンドラ追加・JP技名マッピング補完
-  - [x] 統合テスト: 強アパカ KD+27→前ステップ→+4F ✅ 計算一致
+- [x] **M3: セットプレイ推論 + 必殺技汎用検索 ✅ 完了 (2026-05-19)**
+  - [x] setplay_engine.py: KD有利パーサー・前ステップF 全キャラ動的取得 (doc_chunks)
+  - [x] 必殺技検索の汎用化: _JP_MOVE_TO_EN ハードコーディング廃止、DB直接 ILIKE 検索
+  - [x] 強度修飾子 (弱/中/強/OD/P系) の自動判別 (_pick_variant 改善)
+  - [x] 派生技割り込み判定: フレームギャップ自動計算・コンテキスト提示
+  - [x] intent_parser 汎用化: JP特殊技名自動抽出・英語技名自動抽出・OD対応
+  - [x] 全キャラテスト: 30/30 ✅ (30キャラ × 複数 intent_type)
+- [x] **Layer 1 パッチ通知 ✅ デプロイ済み (2026-05-19)**
+  - [x] SNS トピック `sf6-patch-notification` 作成・デプロイ
+  - [x] SSM Parameter Store `/sf6/notification-email` でメール管理 (コードに個人情報なし)
+  - [x] samconfig.toml を .gitignore 追加 + samconfig.toml.example 作成
+  - [x] ARCHITECTURE.md 作成 (Mermaid 構成図・フロー図・コスト比較表)
 
 ## 🚀 次にやること
 
-**M3 セットプレイ推論 実装完了 🎉**
+**M3 + Layer 1 通知 完了 🎉🎉🎉**
 
-対応クエリ例:
-- "サガットの強タイガーアッパーカットのKD後の起き攻めは?" → 前ステップ後+4F等を計算
-- "モノリスのセットプレイは?" → KD+34から各行動の択を列挙
-- "Nova TigerのKD後は?" → KD+62から前ステップ×2後+16Fを計算
+現在の対応範囲:
+- フレームデータ照会・確定反撃 (全30キャラ / 通常技・必殺技・SA)
+- コンボ接続検証・最大コンボ計算 (ビームサーチ)
+- セットプレイ (KD後の起き攻め択計算、全キャラダッシュF対応)
+- 派生技の割り込み判定 (フレームギャップ自動計算)
+- パッチ検知時のメール通知 (AWS SNS + SSM)
 
-次候補:
-- セットプレイへのカスタムアクション入力 (例: "中ニー空振り後は?")
-- 統合テストにsetplay_analysisを追加
-- 他キャラのセットプレイ対応
+**M4 候補 (優先度順):**
+1. **AWS 完全移行** — Bedrock Gemma3 + Lambda/API Gateway で CLI をクラウド化
+   - BedrockProvider 実装 (LLMProvider 抽象化済みなので 1ファイル追加)
+   - SNS 確認メールの承認 (初回パッチ検知時)
+2. **統合テスト拡充** — setplay_analysis / punish_check + 派生 を 20問追加
+3. **Web UI** — Slack Bot or 簡易 Web フロントエンド
 
 ## 📝 直近のセッションログ
+
+### 2026-05-19 ★ M3 完了 + Layer 1 パッチ通知デプロイ
+- **必殺技の汎用検索対応**: _fetch_move_by_name を DB 直接 ILIKE に刷新、_JP_MOVE_TO_EN はフォールバックのみ
+- **強度修飾子判別**: _pick_variant に OD(KK/PP)・P系(LP/MP/HP)対応、「弱派生の弱」誤マッチ修正
+- **派生技割り込み判定**: combo_info + move_name で `input~%` 派生を自動取得、ギャップ計算
+- **intent_parser 汎用化**: JP特殊技名→move_name自動抽出、英語技名 (日本語文中) 自動抽出
+- **全キャラテスト**: 30問 30/30 達成 (30キャラ × punish_check / lookup_move / setplay)
+- **Layer 1 SNS通知**: lambda_function.py に notify_patch_detected() 追加、SSM からメール動的取得
+- **セキュリティ**: samconfig.toml → .gitignore、メールアドレスは SSM のみ管理
+- **デプロイ**: sam build && sam deploy → UPDATE_COMPLETE、SNS arn / SSM パラメータ作成済み
+- **ARCHITECTURE.md 作成**: docs/ に Mermaid 構成図 + LLM コスト比較表
 
 ### 2026-05-18 ★ M3 セットプレイ推論 実装
 - setplay_engine.py 新規作成: KD有利パーサー・アクションコスト計算・択列挙
@@ -136,8 +158,11 @@
 
 - Layer 1 のスクレイパーは EventBridge で毎日 03:00 JST に自動稼働中
 - SuperCombo の最新データ (2026-04-26版) は手元にダウンロード済み
-- マッピング作業は通常技 → 必殺技/SA の順で段階的に
-- M1 の妥協ポイントを忘れない: 必殺技マッピングは M2、サガットだけ解説整備でOK
+- SNS 通知: 次回パッチ検知時に確認メールが届く → 「Confirm subscription」を承認すること
+- AWS デプロイ用 IAM ユーザー: sf6-deployer (SNS・SSM 権限を追加済み)
+- samconfig.toml はローカルのみ (.gitignore 済み)、雛形は samconfig.toml.example
+- LLM 移行候補: Bedrock Gemma3 12B ≈ $2.70/月 (2,000クエリ), EC2 は常時起動で割高
+- 前ステップF は doc_chunks の Forward/Back Dashing テーブルから全キャラ動的取得 (lru_cache)
 
 ---
 
