@@ -47,11 +47,18 @@ class OllamaProvider(LLMProvider):
         base_url: str = "http://localhost:11434",
         embed_model: str = "nomic-embed-text",
         timeout: float = 120.0,
+        temperature: float = 0.0,
     ) -> None:
         self.model = model
         self.base_url = base_url.rstrip("/")
         self.embed_model = embed_model
         self.timeout = timeout
+        # 事実参照QAでは再現性が精度に直結するため温度0を既定にする
+        # (Ollama デフォルトの 0.8 では intent 分類や転記が実行ごとにブレる)
+        self.temperature = temperature
+        # 全 API 呼び出しの実測トークン数を累積 (Ollama が応答に含める値)
+        from sf6_engine.token_usage import UsageTracker
+        self.usage = UsageTracker()
 
     async def generate(self, prompt: str, system: str = "") -> LLMResponse:
         """Ollama の /api/generate エンドポイントでテキスト生成。"""
@@ -59,6 +66,7 @@ class OllamaProvider(LLMProvider):
             "model": self.model,
             "prompt": prompt,
             "stream": False,
+            "options": {"temperature": self.temperature},
         }
         if system:
             payload["system"] = system
@@ -68,6 +76,7 @@ class OllamaProvider(LLMProvider):
             resp.raise_for_status()
             data = resp.json()
 
+        self.usage.record(data.get("prompt_eval_count"), data.get("eval_count"))
         return LLMResponse(
             text=data["response"],
             usage={
@@ -97,6 +106,7 @@ class OllamaProvider(LLMProvider):
             "system": full_system,
             "format": "json",
             "stream": False,
+            "options": {"temperature": self.temperature},
         }
 
         async with httpx.AsyncClient(timeout=self.timeout) as client:
@@ -104,6 +114,7 @@ class OllamaProvider(LLMProvider):
             resp.raise_for_status()
             data = resp.json()
 
+        self.usage.record(data.get("prompt_eval_count"), data.get("eval_count"))
         raw = data["response"].strip()
         try:
             return json.loads(raw)
@@ -129,6 +140,7 @@ class OllamaProvider(LLMProvider):
         embeddings = data.get("embeddings")
         if not embeddings:
             raise ValueError("Ollama embed API からベクトルが返りませんでした")
+        self.usage.record(data.get("prompt_eval_count"), 0)
         return embeddings[0]
 
     async def is_available(self) -> bool:

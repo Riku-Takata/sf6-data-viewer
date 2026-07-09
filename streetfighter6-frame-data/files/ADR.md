@@ -495,3 +495,118 @@ CAPCOM 公式でパッチ検知後、SuperCombo Wiki のデータ (必殺技フ�
 - **SNS サブスクリプションを CloudFormation で管理**: テンプレートにメールが含まれる → 却下
 - **Slack Webhook**: 個人プロジェクトなので email で十分
 - **Groq 無料枠**: Gemma 対応だが AWS ではない。フォールバックとして検討可
+
+---
+
+## ADR-017: 実装済み機能を AWS リモート MCP サーバとして切り出す
+
+**Date**: 2026-06-08
+**Status**: Active
+
+### Context
+
+当初は Bot 構築まで一気に進める計画だったが、すでに実装完了している
+2 領域 — (1) Layer 1 の「CAPCOM 更新検知 → RDB 保存」、(2) M1〜M3 の
+「フレームデータから技相性・確定反撃・コンボ・セットプレイに回答」— を、
+いったん MCP (Model Context Protocol) サーバとして切り出して再利用可能にする。
+
+現状の回答パイプラインは `parse_intent (LLM) → build_context (DB) →
+generate_answer (LLM)` の 3 段で、Ollama/Gemini をサーバ内部に抱えている。
+
+### Decision
+
+- **LLM 段をサーバから外す**: `intent_parser` と `generate_answer` は MCP サーバに
+  含めない。自然言語の解釈と回答生成はホスト側 LLM (Claude Desktop / 将来の Bot)
+  が担う。MCP サーバは決定論的なロジック層のみを公開する。
+  - 公開ツール: `lookup_move` / `check_punish` / `compute_setplay` /
+    `analyze_combo` / `list_moves` / `search_system_docs` / `get_patch_status`
+  - Resources: キャラ一覧・技一覧 (hallucination 抑制)
+  - 既存の `handlers.lookup` / `combo_engine` / `setplay_engine` は LLM 非依存の
+    ため薄くラップするのみ。
+- **稼働先**: 最初から AWS リモート。API Gateway (HTTP API + トークン認証) →
+  Lambda 上で FastMCP を stateless Streamable HTTP として公開。Layer 1 の
+  SAM/IAM 資産を流用。
+- **RDB**: Supabase (Postgres + pgvector) を維持。MCP サーバは読み取り専用。
+  接続情報は SSM Parameter Store で管理 (ADR-016 のパターン踏襲)。
+- **埋め込み**: `search_system_docs` の埋め込みを Ollama `nomic-embed-text` から
+  Bedrock `amazon.titan-embed-text-v2:0` (ap-northeast-1) へ移行。
+  - 次元が 768 → 1024 に変わるため、`doc_chunks` に `embedding_titan vector(1024)`
+    を新設し 72 チャンクを再埋め込み (既存カラムは破壊しない)。
+  - Lambda 実行ロールに `bedrock:InvokeModel` を追加。
+- **Layer 1 は不変**: スクレイプ・書き込み・SNS 通知は別 Lambda のまま。
+
+### Consequences
+
+- Ollama 常時起動が不要になり、intent 誤分類リスクも消える (推論はホスト LLM)。
+- どこからでも / 将来の Bot から MCP ツールとして呼び出し可能。
+- 埋め込みモデル差し替えにより doc_chunks の再埋め込みが必要 (72 件のみ、軽微)。
+- ベンダーロックを避けつつ AWS に集約 (Bedrock + Lambda + API GW + SSM)。
+
+### Alternatives considered
+
+- **ローカル stdio MCP**: Ollama 不要・ゼロコストだが Bot/リモート用途に届かない。
+  → 将来必要なら同一 FastMCP コードを stdio transport でも併用可能。
+- **LLM 段ごと MCP に内包**: 現行パイプラインをそのまま 1 ツール化する案。
+  Ollama/Bedrock 依存と誤分類が残り、MCP の分業メリットを失うため却下。
+- **RDB を AWS RDS/Aurora へ移行**: AWS 完結になるが月 $15〜40 のコスト発生。
+  Supabase は実体が Postgres+pgvector で無料運用中のため現状維持。
+- **Titan v2 を dimensions=768 で出力**: 既存カラム流用可だが再埋め込みは
+  どのみち必須。次元混在を避けるため新カラム方式を採用。
+
+---
+
+## ADR-018: 必殺技の日本語名解決を DB 結合 + 対話学習に移行
+
+**Date**: 2026-07-07
+**Status**: Active (ADR-014/015 を部分的に Supersede)
+
+### Context
+
+必殺技の日本語名解決は `_JP_MOVE_TO_EN` / `_JP_SPECIAL_NAMES` のハードコード表に
+依存しており、サガット約20件 vs 他キャラ0〜数件という偏りがあった。LLM (gemma4)
+が日本語技名を正しい英語名に翻訳できない場合、これらのキャラでは解決に失敗する。
+
+調査の結果、CAPCOM 側 (`move_normalized`) には全30キャラの必殺技/SA の
+**公式日本語名** (強度prefix付き) が既に格納されており、欠けていたのは
+「CAPCOM 日本語名 ⇔ SC input」の結合だけと判明 (unified_moves は通常技のみ
+`capcom_to_numpad()` で結合)。
+
+### Decision
+
+1. **special_move_map テーブル新設**: CAPCOM 日本語技名 ⇔ SC input の対応表 (883件)。
+   - 生成: `scripts/match_specials.py` — フレームシグネチャ (発生/ガード硬直/KD) の
+     自動照合 + 強度prefix制約。曖昧・不一致は MANUAL_OVERRIDES (約120件) で確定。
+   - recovery は照合に使わない (着地硬直のカウント方法が CAPCOM/SC で異なる)。
+   - SC 側が旧パッチ数値の場合があるため、厳格一致→緩和一致の2パス方式。
+   - 未対応 217件 (条件付き強化版等) は結合なしのまま許容。
+2. **検索順序の変更** (`_fetch_move_by_name`): ステップ0 として special_move_map の
+   日本語名 containment 検索を最優先に。LLM の翻訳を経由せず全キャラで一様に解決。
+   `_JP_MOVE_TO_EN` は LLM 誤訳リカバリーの最終フォールバックとして残すが、
+   今後の拡張は不要 (load-bearing でなくなった)。
+3. **move_aliases テーブル + 対話学習ループ**: コミュニティ略称 (アパカ、フリッカー等、
+   公式名でない呼び名) は Discord bot が聞き返しで学習する。
+   - 技名未解決 + キャラ特定済み → 「コマンドを教えてください」と聞き返し
+   - 返信のコマンドを MCP `register_move_alias` で実在検証 → 強度prefix を剥がして
+     ファミリー単位で UPSERT → 復唱確認 → 元質問に即答
+   - 強度解決は既存 `_pick_variant` に委ねる (1回の学習で弱/中/強/OD 全対応)
+4. **MCP 読み取り専用ポリシーの限定緩和** (ADR-017 の例外): `register_move_alias`
+   のみ move_aliases テーブルへ書き込み可。Lambda は SSM `/sf6/supabase-service-key`
+   から service key を取得 (未設定なら登録ツールのみエラー、読み取り系は不変)。
+
+### Consequences
+
+- 公式日本語名 (ロン・ポワン、マネージュ・ドレ等) が全30キャラで LLM 翻訳なしに解決
+- ハードコード表の拡張メンテが不要になり、略称は運用中に自動で蓄積
+- 学習エイリアスは Supabase に保存されるため CLI / 他 MCP クライアントでも共有
+- Discord は複数人が触れるため、コマンド実在検証 + 復唱で誤登録を抑止
+- special_move_map は CAPCOM 技名の完全一致キーなので、パッチで技名が変わった場合は
+  match_specials.py の再実行が必要 (頻度は低い)
+
+### Alternatives considered
+
+- **コマンド表記を主インターフェースにする**: ユーザーは技名で聞くのが自然。
+  コマンドは補助経路 (既存実装) に留める。
+- **bot が Supabase に直接書き込み**: bot の依存が増え、MCP dogfooding の趣旨に反する。
+- **bot ローカルにエイリアス保存**: 学習成果が bot ホストに閉じ、移行時に失われる。
+- **カタカナ⇔英語の自動翻字マッチング**: 信頼性が低い。フレームシグネチャ照合の方が
+  データに基づく分、誤対応をレビューで捕捉しやすい。

@@ -1,0 +1,8051 @@
+{
+  "aki": {
+    "sc_chara": "A.K.I.",
+    "capcom_families": {
+      "凶襲突": [
+        "弱 凶襲突",
+        "中 凶襲突",
+        "強 凶襲突",
+        "OD 凶襲突"
+      ],
+      "悪鬼蛇行": [
+        "悪鬼蛇行"
+      ],
+      "死屍累々": [
+        "SA1 死屍累々"
+      ],
+      "猛毒牙": [
+        "猛毒牙"
+      ],
+      "睚眦": [
+        "SA3 睚眦",
+        "CA 睚眦"
+      ],
+      "紫泡撒": [
+        "紫泡撒"
+      ],
+      "紫泡泉": [
+        "紫泡泉"
+      ],
+      "紫煙砲": [
+        "紫煙砲",
+        "OD 紫煙砲"
+      ],
+      "紫煙裂爪": [
+        "SA2 紫煙裂爪"
+      ],
+      "紫煙追": [
+        "紫煙追",
+        "OD 紫煙追",
+        "紫煙追 （炸裂）",
+        "OD 紫煙追 （炸裂）"
+      ],
+      "蛇軽功": [
+        "弱 蛇軽功",
+        "中 蛇軽功",
+        "強 蛇軽功",
+        "OD 蛇軽功"
+      ],
+      "蛇連咬": [
+        "蛇連咬"
+      ],
+      "蛇頭鞭": [
+        "弱 蛇頭鞭",
+        "中 蛇頭鞭",
+        "強 蛇頭鞭",
+        "OD 蛇頭鞭"
+      ],
+      "雁字搦": [
+        "雁字搦"
+      ]
+    },
+    "sc_families": {
+      "Claws of Ya Zi": [
+        {
+          "input": "236236P",
+          "name": "Claws of Ya Zi",
+          "type": "Super"
+        }
+      ],
+      "Cruel Fate": [
+        {
+          "input": "214HK",
+          "name": "Cruel Fate",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Cruel Fate",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Cruel Fate",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Cruel Fate",
+          "type": "Special"
+        }
+      ],
+      "Deadly Implication": [
+        {
+          "input": "236236K",
+          "name": "Deadly Implication",
+          "type": "Super"
+        }
+      ],
+      "Entrapment": [
+        {
+          "input": "2PP~LPLK",
+          "name": "Entrapment",
+          "type": "Special"
+        }
+      ],
+      "Heel Strike": [
+        {
+          "input": "2PP~K",
+          "name": "Heel Strike",
+          "type": "Special"
+        }
+      ],
+      "Nightshade Chaser (Burst)": [
+        {
+          "input": "214LP~6P",
+          "name": "Nightshade Chaser (Burst)",
+          "type": "Special"
+        },
+        {
+          "input": "214PP~6P",
+          "name": "Nightshade Chaser (Burst)",
+          "type": "Special"
+        }
+      ],
+      "Nightshade Pulse": [
+        {
+          "input": "214LP",
+          "name": "Nightshade Pulse",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Nightshade Pulse",
+          "type": "Special"
+        }
+      ],
+      "Orchid Spring": [
+        {
+          "input": "214MP",
+          "name": "Orchid Spring",
+          "type": "Special"
+        }
+      ],
+      "Serpent Lash": [
+        {
+          "input": "236HP",
+          "name": "Serpent Lash",
+          "type": "Special"
+        },
+        {
+          "input": "236LP",
+          "name": "Serpent Lash",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Serpent Lash",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Serpent Lash",
+          "type": "Special"
+        }
+      ],
+      "Sinister Slide": [
+        {
+          "input": "2PP",
+          "name": "Sinister Slide",
+          "type": "Special"
+        }
+      ],
+      "Sinister Slide Exit": [
+        {
+          "input": "2PP~8",
+          "name": "Sinister Slide Exit",
+          "type": "Special"
+        }
+      ],
+      "Snake Step": [
+        {
+          "input": "236HK",
+          "name": "Snake Step",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Snake Step",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Snake Step",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Snake Step",
+          "type": "Special"
+        }
+      ],
+      "Tainted Talons": [
+        {
+          "input": "214214P",
+          "name": "Tainted Talons",
+          "type": "Super"
+        }
+      ],
+      "Toxic Wreath": [
+        {
+          "input": "214HP",
+          "name": "Toxic Wreath",
+          "type": "Special"
+        }
+      ],
+      "Venomous Fang": [
+        {
+          "input": "2PP~P",
+          "name": "Venomous Fang",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "alex": {
+    "sc_chara": "Alex",
+    "capcom_families": {
+      "エアニースマッシュ": [
+        "弱 エアニースマッシュ",
+        "中 エアニースマッシュ",
+        "強 エアニースマッシュ",
+        "OD エアニースマッシュ"
+      ],
+      "オメガウィングバスター": [
+        "SA2 オメガウィングバスター"
+      ],
+      "スレッジクロスハンマー": [
+        "SA2 スレッジクロスハンマー"
+      ],
+      "ハイパーボム": [
+        "ハイパーボム"
+      ],
+      "パワードロップ": [
+        "パワードロップ",
+        "OD パワードロップ"
+      ],
+      "パワーボム": [
+        "弱 パワーボム",
+        "中 パワーボム",
+        "強 パワーボム",
+        "OD パワーボム"
+      ],
+      "ファイナルキャプチュード": [
+        "SA3 ファイナルキャプチュード",
+        "CA ファイナルキャプチュード"
+      ],
+      "フラッシュアックス": [
+        "弱 フラッシュアックス",
+        "中 フラッシュアックス"
+      ],
+      "フラッシュチョップ": [
+        "フラッシュチョップ",
+        "OD フラッシュチョップ"
+      ],
+      "レイジングスピアー": [
+        "SA1 レイジングスピアー"
+      ]
+    },
+    "sc_families": {
+      "Aerial Knee Smash": [
+        {
+          "input": "623HK",
+          "name": "Aerial Knee Smash",
+          "type": "Special"
+        },
+        {
+          "input": "623KK",
+          "name": "Aerial Knee Smash",
+          "type": "Special"
+        },
+        {
+          "input": "623LK",
+          "name": "Aerial Knee Smash",
+          "type": "Special"
+        },
+        {
+          "input": "623MK",
+          "name": "Aerial Knee Smash",
+          "type": "Special"
+        }
+      ],
+      "Air Stampede": [
+        {
+          "input": "2PP~MK",
+          "name": "Air Stampede",
+          "type": "Special"
+        }
+      ],
+      "Dangerous Armbar (Spiral DDT)": [
+        {
+          "input": "2PP~2LPLK",
+          "name": "Dangerous Armbar (Spiral DDT)",
+          "type": "Special"
+        }
+      ],
+      "Exit Prowler Stance": [
+        {
+          "input": "2PP~8",
+          "name": "Exit Prowler Stance",
+          "type": "Special"
+        }
+      ],
+      "Flash Axe": [
+        {
+          "input": "236LP",
+          "name": "Flash Axe",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Flash Axe",
+          "type": "Special"
+        }
+      ],
+      "Flash Chop": [
+        {
+          "input": "236HP",
+          "name": "Flash Chop",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Flash Chop",
+          "type": "Special"
+        }
+      ],
+      "Heavy Lariat": [
+        {
+          "input": "2PP~HP",
+          "name": "Heavy Lariat",
+          "type": "Special"
+        }
+      ],
+      "Heavy Lariat (Hold)": [
+        {
+          "input": "2PP~[HP]",
+          "name": "Heavy Lariat (Hold)",
+          "type": "Special"
+        }
+      ],
+      "Hyper Bomb": [
+        {
+          "input": "63214PP~6 Backturn",
+          "name": "OD Hyper Bomb",
+          "type": "Special"
+        }
+      ],
+      "Hyper Takedown (Death Valley Bomb)": [
+        {
+          "input": "2PP~LPLK",
+          "name": "Hyper Takedown (Death Valley Bomb)",
+          "type": "Special"
+        }
+      ],
+      "Low Retreat": [
+        {
+          "input": "2PP~4",
+          "name": "Low Retreat",
+          "type": "Special"
+        }
+      ],
+      "Low Rush": [
+        {
+          "input": "2PP~6",
+          "name": "Low Rush",
+          "type": "Special"
+        }
+      ],
+      "Omega Wing Buster": [
+        {
+          "input": "PP (SA2)",
+          "name": "Omega Wing Buster",
+          "type": "Super"
+        }
+      ],
+      "Palm Jab": [
+        {
+          "input": "2PP~LP",
+          "name": "Palm Jab",
+          "type": "Special"
+        }
+      ],
+      "Power Bomb": [
+        {
+          "input": "63214HP",
+          "name": "Power Bomb",
+          "type": "Special"
+        },
+        {
+          "input": "63214LP",
+          "name": "Power Bomb",
+          "type": "Special"
+        },
+        {
+          "input": "63214MP",
+          "name": "Power Bomb",
+          "type": "Special"
+        },
+        {
+          "input": "63214PP",
+          "name": "Power Bomb",
+          "type": "Special"
+        }
+      ],
+      "Power Drop": [
+        {
+          "input": "63214P Backturn",
+          "name": "Power Drop",
+          "type": "Special"
+        },
+        {
+          "input": "63214PP Backturn",
+          "name": "Power Drop",
+          "type": "Special"
+        }
+      ],
+      "Prowler Stance": [
+        {
+          "input": "2PP",
+          "name": "Prowler Stance",
+          "type": "Special"
+        }
+      ],
+      "Raging Spear": [
+        {
+          "input": "236236K",
+          "name": "Raging Spear",
+          "type": "Super"
+        }
+      ],
+      "Shoulder Launcher (Falling Moon)": [
+        {
+          "input": "2PP~MP",
+          "name": "Shoulder Launcher (Falling Moon)",
+          "type": "Special"
+        }
+      ],
+      "Slashing Elbow": [
+        {
+          "input": "2PP~6P",
+          "name": "Slashing Elbow",
+          "type": "Special"
+        }
+      ],
+      "Sledgecross Hammer": [
+        {
+          "input": "214214P",
+          "name": "Sledgecross Hammer",
+          "type": "Super"
+        }
+      ],
+      "Sweep Combination 1 (Flying Suplex)": [
+        {
+          "input": "2PP~HK",
+          "name": "Sweep Combination 1 (Flying Suplex)",
+          "type": "Special"
+        }
+      ],
+      "Sweep Combination 2 (Flying Suplex)": [
+        {
+          "input": "2PP~HK~HK",
+          "name": "Sweep Combination 2 (Flying Suplex)",
+          "type": "Special"
+        }
+      ],
+      "Tactical Hop": [
+        {
+          "input": "2PP~LK",
+          "name": "Tactical Hop",
+          "type": "Special"
+        }
+      ],
+      "The Final Prison (CA)": [
+        {
+          "input": "236236P",
+          "name": "The Final Prison (CA)",
+          "type": "Super"
+        }
+      ]
+    }
+  },
+  "blanka": {
+    "sc_chara": "Blanka",
+    "capcom_families": {
+      "【ライトニングビースト】 OD エリアルローリング": [
+        "【ライトニングビースト】 OD エリアルローリング"
+      ],
+      "【ライトニングビースト】 OD バックステップローリング": [
+        "【ライトニングビースト】 OD バックステップローリング"
+      ],
+      "【ライトニングビースト】 OD バーチカルローリング": [
+        "【ライトニングビースト】 OD バーチカルローリング"
+      ],
+      "【ライトニングビースト】 OD ローリングアタック": [
+        "【ライトニングビースト】 OD ローリングアタック"
+      ],
+      "【ライトニングビースト】 SA1 シャウトオブアース": [
+        "【ライトニングビースト】 SA1 シャウトオブアース"
+      ],
+      "【ライトニングビースト】 エレクトリックサンダー": [
+        "【ライトニングビースト】 エレクトリックサンダー"
+      ],
+      "【ライトニングビースト】 中 エリアルローリング": [
+        "【ライトニングビースト】 中 エリアルローリング"
+      ],
+      "【ライトニングビースト】 中 バックステップローリング": [
+        "【ライトニングビースト】 中 バックステップローリング"
+      ],
+      "【ライトニングビースト】 中 バーチカルローリング": [
+        "【ライトニングビースト】 中 バーチカルローリング"
+      ],
+      "【ライトニングビースト】 中 ローリングアタック": [
+        "【ライトニングビースト】 中 ローリングアタック"
+      ],
+      "【ライトニングビースト】 弱 エリアルローリング": [
+        "【ライトニングビースト】 弱 エリアルローリング"
+      ],
+      "【ライトニングビースト】 弱 バックステップローリング": [
+        "【ライトニングビースト】 弱 バックステップローリング"
+      ],
+      "【ライトニングビースト】 弱 バーチカルローリング": [
+        "【ライトニングビースト】 弱 バーチカルローリング"
+      ],
+      "【ライトニングビースト】 弱 ローリングアタック": [
+        "【ライトニングビースト】 弱 ローリングアタック"
+      ],
+      "【ライトニングビースト】 強 エリアルローリング": [
+        "【ライトニングビースト】 強 エリアルローリング"
+      ],
+      "【ライトニングビースト】 強 バックステップローリング": [
+        "【ライトニングビースト】 強 バックステップローリング"
+      ],
+      "【ライトニングビースト】 強 バーチカルローリング": [
+        "【ライトニングビースト】 強 バーチカルローリング"
+      ],
+      "【ライトニングビースト】 強 ローリングアタック": [
+        "【ライトニングビースト】 強 ローリングアタック"
+      ],
+      "【ライトニングビースト】OD エレクトリックサンダー": [
+        "【ライトニングビースト】OD エレクトリックサンダー"
+      ],
+      "エリアルローリング": [
+        "弱 エリアルローリング",
+        "中 エリアルローリング",
+        "強 エリアルローリング",
+        "OD エリアルローリング"
+      ],
+      "エレクトリックサンダー": [
+        "エレクトリックサンダー",
+        "OD エレクトリックサンダー"
+      ],
+      "グランドシェイブキャノンボール": [
+        "SA3 グランドシェイブキャノンボール",
+        "CA グランドシェイブキャノンボール"
+      ],
+      "シャウトオブアース": [
+        "SA1 シャウトオブアース"
+      ],
+      "バックステップローリング": [
+        "弱 バックステップローリング",
+        "中 バックステップローリング",
+        "強 バックステップローリング",
+        "OD バックステップローリング"
+      ],
+      "バーチカルローリング": [
+        "弱 バーチカルローリング",
+        "中 バーチカルローリング",
+        "強 バーチカルローリング",
+        "OD バーチカルローリング"
+      ],
+      "ブランカちゃん爆弾": [
+        "ブランカちゃん爆弾",
+        "ブランカちゃん爆弾（射出）",
+        "OD ブランカちゃん爆弾（射出）"
+      ],
+      "ライトニングビースト": [
+        "SA2 ライトニングビースト"
+      ],
+      "ローリングアタック": [
+        "弱 ローリングアタック",
+        "中 ローリングアタック",
+        "強 ローリングアタック",
+        "OD ローリングアタック"
+      ],
+      "ローリングキャノン": [
+        "ローリングキャノン"
+      ],
+      "ワイルドハント": [
+        "弱 ワイルドハント",
+        "中 ワイルドハント",
+        "強 ワイルドハント",
+        "OD ワイルドハント"
+      ]
+    },
+    "sc_families": {
+      "Aerial Rolling Attack (SA2)": [
+        {
+          "input": "j.[4]6P",
+          "name": "Aerial Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "j.[4]6PP",
+          "name": "Aerial Rolling Attack (SA2)",
+          "type": "special"
+        }
+      ],
+      "Backstep Rolling Attack (SA2)": [
+        {
+          "input": "63214HK",
+          "name": "Backstep Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "63214KK",
+          "name": "Backstep Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "63214LK",
+          "name": "Backstep Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "63214MK",
+          "name": "Backstep Rolling Attack (SA2)",
+          "type": "special"
+        }
+      ],
+      "Blanka-chan Bomb": [
+        {
+          "input": "22P",
+          "name": "Blanka-chan Bomb",
+          "type": "special"
+        }
+      ],
+      "Blanka-chan Bomb (Charge)": [
+        {
+          "input": "22P~214P",
+          "name": "Blanka-chan Bomb (Charge)",
+          "type": "special"
+        }
+      ],
+      "Blanka-chan Bomb (OD Charge)": [
+        {
+          "input": "22P~214PP",
+          "name": "Blanka-chan Bomb (OD Charge)",
+          "type": "special"
+        }
+      ],
+      "Blanka-chan Bomb (SA1 Charge)": [
+        {
+          "input": "22P~236236P",
+          "name": "Blanka-chan Bomb (SA1 Charge)",
+          "type": "special"
+        }
+      ],
+      "Coward Crouch": [
+        {
+          "input": "2PP",
+          "name": "Coward Crouch",
+          "type": "special"
+        }
+      ],
+      "Electric Thunder": [
+        {
+          "input": "214P",
+          "name": "Electric Thunder",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Electric Thunder",
+          "type": "special"
+        }
+      ],
+      "Ground Shave Cannonball (CA)": [
+        {
+          "input": "236236K",
+          "name": "Ground Shave Cannonball (CA)",
+          "type": "super"
+        }
+      ],
+      "Lightning Beast": [
+        {
+          "input": "214214P",
+          "name": "Lightning Beast",
+          "type": "super"
+        }
+      ],
+      "Raid Jump": [
+        {
+          "input": "2PP~K",
+          "name": "Raid Jump",
+          "type": "special"
+        }
+      ],
+      "Rolling Attack (SA2)": [
+        {
+          "input": "[4]6LP",
+          "name": "Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "[4]6HP",
+          "name": "Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "[4]6MP",
+          "name": "Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "[4]6PP",
+          "name": "Rolling Attack (SA2)",
+          "type": "special"
+        }
+      ],
+      "Rolling Cannon": [
+        {
+          "input": "Any Direction + P (during SA2)",
+          "name": "Rolling Cannon",
+          "type": "super"
+        }
+      ],
+      "Shout of Earth": [
+        {
+          "input": "236236P",
+          "name": "Shout of Earth",
+          "type": "super"
+        }
+      ],
+      "Surprise Back Hop": [
+        {
+          "input": "4KKK",
+          "name": "Surprise Back Hop",
+          "type": "special"
+        }
+      ],
+      "Surprise Forward Hop": [
+        {
+          "input": "6KKK",
+          "name": "Surprise Forward Hop",
+          "type": "special"
+        }
+      ],
+      "Vertical Rolling Attack (SA2)": [
+        {
+          "input": "[2]8HK",
+          "name": "Vertical Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "[2]8KK",
+          "name": "Vertical Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "[2]8LK",
+          "name": "Vertical Rolling Attack (SA2)",
+          "type": "special"
+        },
+        {
+          "input": "[2]8MK",
+          "name": "Vertical Rolling Attack (SA2)",
+          "type": "special"
+        }
+      ],
+      "Wild Hunt": [
+        {
+          "input": "236LK",
+          "name": "Wild Hunt",
+          "type": "special"
+        },
+        {
+          "input": "236HK",
+          "name": "Wild Hunt",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Wild Hunt",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Wild Hunt",
+          "type": "special"
+        }
+      ],
+      "Wild Lift": [
+        {
+          "input": "2PP~P",
+          "name": "Wild Lift",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "cammy": {
+    "sc_chara": "Cammy",
+    "capcom_families": {
+      "アクセルスピンナックル": [
+        "弱 アクセルスピンナックル",
+        "中 アクセルスピンナックル",
+        "強 アクセルスピンナックル",
+        "OD アクセルスピンナックル"
+      ],
+      "エアキラービースピン": [
+        "SA2 エアキラービースピン"
+      ],
+      "キャノンストライク": [
+        "キャノンストライク",
+        "OD キャノンストライク",
+        "キャノンストライク（ホールド）"
+      ],
+      "キャノンスパイク": [
+        "弱 キャノンスパイク",
+        "中 キャノンスパイク",
+        "強 キャノンスパイク",
+        "強 キャノンスパイク（ホールド）",
+        "OD キャノンスパイク"
+      ],
+      "キラービースピン": [
+        "SA2 キラービースピン"
+      ],
+      "サイレントステップ": [
+        "サイレントステップ",
+        "サイレントステップ（ホールド）",
+        "OD サイレントステップ"
+      ],
+      "スパイラルアロー": [
+        "弱 スパイラルアロー",
+        "中 スパイラルアロー",
+        "強 スパイラルアロー",
+        "強 スパイラルアロー（ホールド）",
+        "OD スパイラルアロー"
+      ],
+      "スピンドライブスマッシャー": [
+        "SA1 スピンドライブスマッシャー"
+      ],
+      "デルタレッドアサルト": [
+        "SA3 デルタレッドアサルト",
+        "CA デルタレッドアサルト"
+      ],
+      "フェイタルレッグツイスター": [
+        "フェイタルレッグツイスター",
+        "フェイタルレッグツイスター（ホールド）",
+        "OD フェイタルレッグツイスター"
+      ],
+      "フーリガンコンビネーション": [
+        "フーリガンコンビネーション",
+        "フーリガンコンビネーション（ホールド）",
+        "OD フーリガンコンビネーション"
+      ],
+      "リバースエッジ": [
+        "リバースエッジ",
+        "リバースエッジ（ホールド）",
+        "OD リバースエッジ"
+      ],
+      "レイザーエッジスライサー": [
+        "レイザーエッジスライサー",
+        "レイザーエッジスライサー（ホールド）",
+        "OD レイザーエッジスライサー"
+      ]
+    },
+    "sc_families": {
+      "Aerial Killer Bee Spin": [
+        {
+          "input": "j.214214P",
+          "name": "Aerial Killer Bee Spin",
+          "type": "super"
+        }
+      ],
+      "Cannon Spike": [
+        {
+          "input": "623HK",
+          "name": "Cannon Spike",
+          "type": "special"
+        },
+        {
+          "input": "623[HK]",
+          "name": "Cannon Spike",
+          "type": "special"
+        },
+        {
+          "input": "623KK",
+          "name": "Cannon Spike",
+          "type": "special"
+        },
+        {
+          "input": "623LK",
+          "name": "Cannon Spike",
+          "type": "special"
+        },
+        {
+          "input": "623MK",
+          "name": "Cannon Spike",
+          "type": "special"
+        }
+      ],
+      "Cannon Strike": [
+        {
+          "input": "j.214K",
+          "name": "Cannon Strike",
+          "type": "special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "Cannon Strike",
+          "type": "special"
+        }
+      ],
+      "Delta Red Assault (CA)": [
+        {
+          "input": "236236P",
+          "name": "Delta Red Assault (CA)",
+          "type": "super"
+        }
+      ],
+      "Fatal Leg Twister": [
+        {
+          "input": "236PP~LPLK",
+          "name": "Fatal Leg Twister",
+          "type": "special"
+        },
+        {
+          "input": "236[HP]~LPLK",
+          "name": "Fatal Leg Twister",
+          "type": "special"
+        },
+        {
+          "input": "236P~LPLK",
+          "name": "Fatal Leg Twister",
+          "type": "special"
+        }
+      ],
+      "Hooligan Cannon Strike": [
+        {
+          "input": "236[HP]~K",
+          "name": "Hooligan Cannon Strike",
+          "type": "special"
+        },
+        {
+          "input": "236PP~K",
+          "name": "Hooligan Cannon Strike",
+          "type": "special"
+        },
+        {
+          "input": "236P~K",
+          "name": "Hooligan Cannon Strike",
+          "type": "special"
+        }
+      ],
+      "Hooligan Combination": [
+        {
+          "input": "236[HP]",
+          "name": "Hooligan Combination",
+          "type": "special"
+        },
+        {
+          "input": "236P",
+          "name": "Hooligan Combination",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Hooligan Combination",
+          "type": "special"
+        }
+      ],
+      "Killer Bee Spin": [
+        {
+          "input": "214214P",
+          "name": "Killer Bee Spin",
+          "type": "super"
+        }
+      ],
+      "Quick Spin Knuckle": [
+        {
+          "input": "214HP",
+          "name": "Quick Spin Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "Quick Spin Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "Quick Spin Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Quick Spin Knuckle",
+          "type": "special"
+        }
+      ],
+      "Razor's Edge Slicer": [
+        {
+          "input": "236[HP]~No Input",
+          "name": "Razor's Edge Slicer",
+          "type": "special"
+        },
+        {
+          "input": "236PP~No Input",
+          "name": "Razor's Edge Slicer",
+          "type": "special"
+        },
+        {
+          "input": "236P~No Input",
+          "name": "Razor's Edge Slicer",
+          "type": "special"
+        }
+      ],
+      "Reverse Edge": [
+        {
+          "input": "236[HP]~2K",
+          "name": "Reverse Edge",
+          "type": "special"
+        },
+        {
+          "input": "236PP~2K",
+          "name": "Reverse Edge",
+          "type": "special"
+        },
+        {
+          "input": "236P~2K",
+          "name": "Reverse Edge",
+          "type": "special"
+        }
+      ],
+      "Silent Step": [
+        {
+          "input": "236[HP]~P",
+          "name": "Silent Step",
+          "type": "special"
+        },
+        {
+          "input": "236PP~P",
+          "name": "Silent Step",
+          "type": "special"
+        },
+        {
+          "input": "236P~P",
+          "name": "Silent Step",
+          "type": "special"
+        }
+      ],
+      "Spin Drive Smasher": [
+        {
+          "input": "236236K",
+          "name": "Spin Drive Smasher",
+          "type": "super"
+        }
+      ],
+      "Spiral Arrow": [
+        {
+          "input": "236HK",
+          "name": "Spiral Arrow",
+          "type": "special"
+        },
+        {
+          "input": "236[HK]",
+          "name": "Spiral Arrow",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Spiral Arrow",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "Spiral Arrow",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Spiral Arrow",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "chunli": {
+    "sc_chara": "Chun-Li",
+    "capcom_families": {
+      "スピニングバードキック": [
+        "弱 スピニングバードキック",
+        "中 スピニングバードキック",
+        "強 スピニングバードキック",
+        "OD スピニングバードキック"
+      ],
+      "天昇脚": [
+        "弱 天昇脚",
+        "中 天昇脚",
+        "強 天昇脚",
+        "OD 天昇脚"
+      ],
+      "気功拳": [
+        "弱 気功拳",
+        "中 気功拳",
+        "強 気功拳",
+        "OD 気功拳"
+      ],
+      "気功掌": [
+        "SA1 気功掌"
+      ],
+      "百裂脚": [
+        "弱 百裂脚",
+        "中 百裂脚",
+        "強 百裂脚",
+        "OD 百裂脚"
+      ],
+      "百裂連脚": [
+        "百裂連脚"
+      ],
+      "空中気功掌": [
+        "SA1 空中気功掌"
+      ],
+      "空中百裂脚": [
+        "弱 空中百裂脚",
+        "中 空中百裂脚",
+        "強 空中百裂脚",
+        "OD 空中百裂脚"
+      ],
+      "蒼天乱華": [
+        "SA3 蒼天乱華",
+        "CA 蒼天乱華"
+      ],
+      "覇山蹴": [
+        "弱 覇山蹴",
+        "中 覇山蹴",
+        "強 覇山蹴",
+        "OD 覇山蹴"
+      ],
+      "鳳翼扇": [
+        "SA2 鳳翼扇"
+      ]
+    },
+    "sc_families": {
+      "Aerial Hundred Lightning Kicks": [
+        {
+          "input": "j.236HK",
+          "name": "Aerial Hundred Lightning Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "j.236KK",
+          "name": "Aerial Hundred Lightning Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "j.236LK",
+          "name": "Aerial Hundred Lightning Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "j.236MK",
+          "name": "Aerial Hundred Lightning Kicks",
+          "type": "Special"
+        }
+      ],
+      "Aerial Kikosho": [
+        {
+          "input": "j.236236P",
+          "name": "Aerial Kikosho",
+          "type": "Super"
+        }
+      ],
+      "Hazanshu": [
+        {
+          "input": "214HK",
+          "name": "Hazanshu",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Hazanshu",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Hazanshu",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Hazanshu",
+          "type": "Special"
+        }
+      ],
+      "Hoyoku-sen": [
+        {
+          "input": "236236K",
+          "name": "Hoyoku-sen",
+          "type": "Super"
+        }
+      ],
+      "Hundred Lightning Kicks": [
+        {
+          "input": "236HK",
+          "name": "Hundred Lightning Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Hundred Lightning Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Hundred Lightning Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Hundred Lightning Kicks",
+          "type": "Special"
+        }
+      ],
+      "Kikoken": [
+        {
+          "input": "[4]6HP",
+          "name": "Kikoken",
+          "type": "Special"
+        },
+        {
+          "input": "[4]6LP",
+          "name": "Kikoken",
+          "type": "Special"
+        },
+        {
+          "input": "[4]6MP",
+          "name": "Kikoken",
+          "type": "Special"
+        },
+        {
+          "input": "[4]6PP",
+          "name": "Kikoken",
+          "type": "Special"
+        }
+      ],
+      "Kikosho": [
+        {
+          "input": "236236P",
+          "name": "Kikosho",
+          "type": "Super"
+        }
+      ],
+      "Lightning Kick Barrage": [
+        {
+          "input": "236KK~KK",
+          "name": "Lightning Kick Barrage",
+          "type": "Special"
+        }
+      ],
+      "Soten Ranka (CA)": [
+        {
+          "input": "214214K",
+          "name": "Soten Ranka (CA)",
+          "type": "Super"
+        }
+      ],
+      "Spinning Bird Kick": [
+        {
+          "input": "[2]8HK",
+          "name": "Spinning Bird Kick",
+          "type": "Special"
+        },
+        {
+          "input": "[2]8KK",
+          "name": "Spinning Bird Kick",
+          "type": "Special"
+        },
+        {
+          "input": "[2]8LK",
+          "name": "Spinning Bird Kick",
+          "type": "Special"
+        },
+        {
+          "input": "[2]8MK",
+          "name": "Spinning Bird Kick",
+          "type": "Special"
+        }
+      ],
+      "Tensho Kicks": [
+        {
+          "input": "22HK",
+          "name": "Tensho Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "22KK",
+          "name": "Tensho Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "22LK",
+          "name": "Tensho Kicks",
+          "type": "Special"
+        },
+        {
+          "input": "22MK",
+          "name": "Tensho Kicks",
+          "type": "Special"
+        }
+      ],
+      "Wall Jump": [
+        {
+          "input": "9 (against wall)",
+          "name": "Wall Jump",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "cviper": {
+    "sc_chara": "C.Viper",
+    "capcom_families": {
+      "[サンダースラップ]フェイント": [
+        "[サンダースラップ]フェイント"
+      ],
+      "[セイスモハンマー]フェイント": [
+        "[セイスモハンマー]フェイント"
+      ],
+      "[セービングフォース]前方ステップ": [
+        "[セービングフォース]前方ステップ"
+      ],
+      "アンラックリジェクター": [
+        "SA3 アンラックリジェクター",
+        "CA アンラックリジェクター"
+      ],
+      "サンダースラップ": [
+        "弱 サンダースラップ",
+        "中 サンダースラップ",
+        "強 サンダースラップ",
+        "OD サンダースラップ"
+      ],
+      "セイスモハンマー": [
+        "弱 セイスモハンマー",
+        "中 セイスモハンマー",
+        "強 セイスモハンマー",
+        "OD セイスモハンマー"
+      ],
+      "セービングフォース(Lv1)": [
+        "セービングフォース(Lv1)",
+        "OD セービングフォース(Lv1)"
+      ],
+      "セービングフォース(Lv2)": [
+        "セービングフォース(Lv2)",
+        "OD セービングフォース(Lv2)"
+      ],
+      "セービングフォース(Lv3)": [
+        "セービングフォース(Lv3)",
+        "OD セービングフォース(Lv3)"
+      ],
+      "ダブルバーン": [
+        "ダブルバーン"
+      ],
+      "チェイスナックル": [
+        "チェイスナックル"
+      ],
+      "トレースコンビネーション": [
+        "弱 トレースコンビネーション",
+        "中 トレースコンビネーション",
+        "強 トレースコンビネーション"
+      ],
+      "バウンサーステップ": [
+        "SA1 バウンサーステップ"
+      ],
+      "バーニングキック": [
+        "弱 バーニングキック",
+        "中 バーニングキック",
+        "強 バーニングキック",
+        "OD バーニングキック"
+      ],
+      "ミッションオーバー": [
+        "SA2 ミッションオーバー"
+      ],
+      "空中バーニングキック": [
+        "弱 空中バーニングキック",
+        "中 空中バーニングキック",
+        "強 空中バーニングキック",
+        "OD 空中バーニングキック"
+      ]
+    },
+    "sc_families": {
+      "Aerial Burning Kick": [
+        {
+          "input": "j.236HK",
+          "name": "Aerial Burning Kick",
+          "type": "Special"
+        },
+        {
+          "input": "j.236KK",
+          "name": "Aerial Burning Kick",
+          "type": "Special"
+        },
+        {
+          "input": "j.236LK",
+          "name": "Aerial Burning Kick",
+          "type": "Special"
+        },
+        {
+          "input": "j.236MK",
+          "name": "Aerial Burning Kick",
+          "type": "Special"
+        }
+      ],
+      "Burning Kick": [
+        {
+          "input": "236HK",
+          "name": "Burning Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Burning Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Burning Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Burning Kick",
+          "type": "Special"
+        }
+      ],
+      "Double Burn": [
+        {
+          "input": "236K~KK",
+          "name": "Double Burn",
+          "type": "Special"
+        }
+      ],
+      "Focus Force (Lv.1)": [
+        {
+          "input": "214K",
+          "name": "Focus Force (Lv.1)",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Focus Force (Lv.1)",
+          "type": "Special"
+        }
+      ],
+      "Focus Force (Lv.2)": [
+        {
+          "input": "214{KK}",
+          "name": "Focus Force (Lv.2)",
+          "type": "Special"
+        },
+        {
+          "input": "214{K}",
+          "name": "Focus Force (Lv.2)",
+          "type": "Special"
+        }
+      ],
+      "Focus Force (Lv.3)": [
+        {
+          "input": "214[KK]",
+          "name": "Focus Force (Lv.3)",
+          "type": "Special"
+        },
+        {
+          "input": "214[K]",
+          "name": "Focus Force (Lv.3)",
+          "type": "Special"
+        }
+      ],
+      "Hard Luck Rejector (CA)": [
+        {
+          "input": "214214K",
+          "name": "Hard Luck Rejector (CA)",
+          "type": "Super"
+        }
+      ],
+      "High Jump": [
+        {
+          "input": "2~8",
+          "name": "High Jump",
+          "type": "Special"
+        }
+      ],
+      "Knuckled Pursuit": [
+        {
+          "input": "236K~PP",
+          "name": "Knuckled Pursuit",
+          "type": "Special"
+        }
+      ],
+      "Limit Decoupler": [
+        {
+          "input": "236236K",
+          "name": "Limit Decoupler",
+          "type": "Super"
+        }
+      ],
+      "Mission Complete": [
+        {
+          "input": "214214P",
+          "name": "Mission Complete",
+          "type": "Super"
+        }
+      ],
+      "Seismic Hammer": [
+        {
+          "input": "623P",
+          "name": "Seismic Hammer",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Seismic Hammer",
+          "type": "Special"
+        }
+      ],
+      "Seismic Hammer Feint": [
+        {
+          "input": "623P~K",
+          "name": "Seismic Hammer Feint",
+          "type": "Special"
+        }
+      ],
+      "Thunder Dash": [
+        {
+          "input": "214MP",
+          "name": "Thunder Dash",
+          "type": "Special"
+        },
+        {
+          "input": "214HP",
+          "name": "Thunder Dash",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Thunder Dash",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Thunder Dash",
+          "type": "Special"
+        }
+      ],
+      "Thunder Dash Feint": [
+        {
+          "input": "214P~K",
+          "name": "Thunder Dash Feint",
+          "type": "Special"
+        }
+      ],
+      "Tracer Combination": [
+        {
+          "input": "214MP~6PP",
+          "name": "Tracer Combination",
+          "type": "Special"
+        },
+        {
+          "input": "214HP~6PP",
+          "name": "Tracer Combination",
+          "type": "Special"
+        },
+        {
+          "input": "214LP~6PP",
+          "name": "Tracer Combination",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "deejay": {
+    "sc_chara": "Dee_Jay",
+    "capcom_families": {
+      "SA2 サンライズフェスティバル": [
+        "（失敗版） SA2 サンライズフェスティバル （2段目）",
+        "（失敗版） SA2 サンライズフェスティバル （3段目）",
+        "（失敗版） SA2 サンライズフェスティバル （4段目）",
+        "（失敗版） SA2 サンライズフェスティバル （5段目）",
+        "（失敗版） SA2 サンライズフェスティバル （6段目）",
+        "（失敗版） SA2 サンライズフェスティバル （7段目）"
+      ],
+      "アンコールビート": [
+        "SA2 アンコールビート （マーベラス）",
+        "SA2 アンコールビート （マキシマム）"
+      ],
+      "エアスラッシャー": [
+        "弱 エアスラッシャー",
+        "中 エアスラッシャー",
+        "強 エアスラッシャー",
+        "OD エアスラッシャー"
+      ],
+      "エアスラッシャー （射出)": [
+        "OD エアスラッシャー （射出)"
+      ],
+      "クイックローリングソバット": [
+        "クイックローリングソバット"
+      ],
+      "クライマックスブロー": [
+        "SA2 クライマックスブロー （マーベラス）",
+        "SA2 クライマックスブロー （マキシマム）"
+      ],
+      "グレイテストソバット": [
+        "SA1 グレイテストソバット"
+      ],
+      "サタデーナイト": [
+        "SA3 サタデーナイト",
+        "CA サタデーナイト"
+      ],
+      "サンライズフェスティバル・マキシマム": [
+        "SA2 サンライズフェスティバル・マキシマム",
+        "SA2 サンライズフェスティバル・マキシマム （2段目）",
+        "SA2 サンライズフェスティバル・マキシマム （3段目）",
+        "SA2 サンライズフェスティバル・マキシマム （4段目）",
+        "SA2 サンライズフェスティバル・マキシマム （5段目）",
+        "SA2 サンライズフェスティバル・マキシマム （6段目）",
+        "SA2 サンライズフェスティバル・マキシマム （7段目）"
+      ],
+      "サンライズフェスティバル・マーベラス": [
+        "SA2 サンライズフェスティバル・マーベラス",
+        "SA2 サンライズフェスティバル・マーベラス （2段目）",
+        "SA2 サンライズフェスティバル・マーベラス （3段目）",
+        "SA2 サンライズフェスティバル・マーベラス （4段目）",
+        "SA2 サンライズフェスティバル・マーベラス （5段目）",
+        "SA2 サンライズフェスティバル・マーベラス （6段目）",
+        "SA2 サンライズフェスティバル・マーベラス （7段目）"
+      ],
+      "サンライズフェスティバル・ライト": [
+        "SA2 サンライズフェスティバル・ライト",
+        "SA2 サンライズフェスティバル・ライト （2段目）",
+        "SA2 サンライズフェスティバル・ライト （3段目）",
+        "SA2 サンライズフェスティバル・ライト （4段目）",
+        "SA2 サンライズフェスティバル・ライト （5段目）",
+        "SA2 サンライズフェスティバル・ライト （6段目）",
+        "SA2 サンライズフェスティバル・ライト （7段目）"
+      ],
+      "ジャグリンスウェイ": [
+        "ジャグリンスウェイ",
+        "OD ジャグリンスウェイ"
+      ],
+      "ジャグリンステップ": [
+        "ジャグリンステップ",
+        "OD ジャグリンステップ"
+      ],
+      "ジャックナイフマキシマム": [
+        "弱 ジャックナイフマキシマム",
+        "中 ジャックナイフマキシマム",
+        "強 ジャックナイフマキシマム",
+        "OD ジャックナイフマキシマム"
+      ],
+      "ジョスクール": [
+        "ジョスクール",
+        "OD ジョスクール"
+      ],
+      "ダブルローリングソバット": [
+        "ダブルローリングソバット",
+        "OD ダブルローリングソバット"
+      ],
+      "ファンキースライサー": [
+        "ファンキースライサー",
+        "OD ファンキースライサー"
+      ],
+      "フェイクロールステップ": [
+        "フェイクロールステップ"
+      ],
+      "マキシマムストライク": [
+        "マキシマムストライク",
+        "OD マキシマムストライク"
+      ],
+      "マシンガンアッパー": [
+        "弱 マシンガンアッパー",
+        "中 マシンガンアッパー",
+        "強 マシンガンアッパー",
+        "OD マシンガンアッパー"
+      ],
+      "ワニングムーン": [
+        "ワニングムーン",
+        "OD ワニングムーン"
+      ]
+    },
+    "sc_families": {
+      "+HK (Marvelous Hit 6)": [
+        {
+          "input": "~HK (6)",
+          "name": "+HK (Marvelous Hit 6)",
+          "type": "super"
+        }
+      ],
+      "+HP (Marvelous Hit 3)": [
+        {
+          "input": "~HP (3)",
+          "name": "+HP (Marvelous Hit 3)",
+          "type": "super"
+        }
+      ],
+      "+LK (Marvelous Hit 4)": [
+        {
+          "input": "~LK (4)",
+          "name": "+LK (Marvelous Hit 4)",
+          "type": "super"
+        }
+      ],
+      "+LP (Marvelous Hit 1)": [
+        {
+          "input": "~LP (1)",
+          "name": "+LP (Marvelous Hit 1)",
+          "type": "super"
+        }
+      ],
+      "+MK (Marvelous Hit 5)": [
+        {
+          "input": "~MK (5)",
+          "name": "+MK (Marvelous Hit 5)",
+          "type": "super"
+        }
+      ],
+      "+MP (Marvelous Hit 2)": [
+        {
+          "input": "~MP (2)",
+          "name": "+MP (Marvelous Hit 2)",
+          "type": "super"
+        }
+      ],
+      "Air Slasher": [
+        {
+          "input": "[4]6HP",
+          "name": "Air Slasher",
+          "type": "special"
+        },
+        {
+          "input": "[4]6LP",
+          "name": "Air Slasher",
+          "type": "special"
+        },
+        {
+          "input": "[4]6MP",
+          "name": "Air Slasher",
+          "type": "special"
+        },
+        {
+          "input": "[4]6PP",
+          "name": "Air Slasher",
+          "type": "special"
+        }
+      ],
+      "Climactic Strike": [
+        {
+          "input": "~HP (End)",
+          "name": "Climactic Strike",
+          "type": "super"
+        }
+      ],
+      "Double Rolling Sobat": [
+        {
+          "input": "236HK",
+          "name": "Double Rolling Sobat",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Double Rolling Sobat",
+          "type": "special"
+        }
+      ],
+      "Encore Beat": [
+        {
+          "input": "~HK (End)",
+          "name": "Encore Beat",
+          "type": "super"
+        }
+      ],
+      "Funky Slicer": [
+        {
+          "input": "214KK~LK",
+          "name": "Funky Slicer",
+          "type": "special"
+        },
+        {
+          "input": "214K~LK",
+          "name": "Funky Slicer",
+          "type": "special"
+        }
+      ],
+      "Headliner Sunrise Festival": [
+        {
+          "input": "236236HP",
+          "name": "Headliner Sunrise Festival",
+          "type": "super"
+        }
+      ],
+      "Jackknife Maximum": [
+        {
+          "input": "[2]8HK",
+          "name": "Jackknife Maximum",
+          "type": "special"
+        },
+        {
+          "input": "[2]8KK",
+          "name": "Jackknife Maximum",
+          "type": "special"
+        },
+        {
+          "input": "[2]8LK",
+          "name": "Jackknife Maximum",
+          "type": "special"
+        },
+        {
+          "input": "[2]8MK",
+          "name": "Jackknife Maximum",
+          "type": "special"
+        }
+      ],
+      "Juggling Dash": [
+        {
+          "input": "214KK~6P",
+          "name": "Juggling Dash",
+          "type": "special"
+        },
+        {
+          "input": "214K~6P",
+          "name": "Juggling Dash",
+          "type": "special"
+        }
+      ],
+      "Juggling Sway": [
+        {
+          "input": "214K~6P~4P",
+          "name": "Juggling Sway",
+          "type": "special"
+        },
+        {
+          "input": "214KK~6P~4P",
+          "name": "Juggling Sway",
+          "type": "special"
+        }
+      ],
+      "Jus Cool": [
+        {
+          "input": "214K",
+          "name": "Jus Cool",
+          "type": "special"
+        },
+        {
+          "input": "214KK",
+          "name": "Jus Cool",
+          "type": "special"
+        }
+      ],
+      "Lowkey Sunrise Festival": [
+        {
+          "input": "236236LP",
+          "name": "Lowkey Sunrise Festival",
+          "type": "super"
+        }
+      ],
+      "Machine Gun Uppercut": [
+        {
+          "input": "214HP",
+          "name": "Machine Gun Uppercut",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Machine Gun Uppercut",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "Machine Gun Uppercut",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "Machine Gun Uppercut",
+          "type": "special"
+        }
+      ],
+      "Marvelous Sunrise Festival": [
+        {
+          "input": "236236MP",
+          "name": "Marvelous Sunrise Festival",
+          "type": "super"
+        }
+      ],
+      "Maximum Strike": [
+        {
+          "input": "214KK~HK",
+          "name": "Maximum Strike",
+          "type": "special"
+        },
+        {
+          "input": "214K~HK",
+          "name": "Maximum Strike",
+          "type": "special"
+        }
+      ],
+      "Quick Rolling Sobat": [
+        {
+          "input": "236MK",
+          "name": "Quick Rolling Sobat",
+          "type": "special"
+        }
+      ],
+      "Roll Through Feint": [
+        {
+          "input": "236LK",
+          "name": "Roll Through Feint",
+          "type": "special"
+        }
+      ],
+      "Speedy Maracas (2+ Bars)": [
+        {
+          "input": "22PP",
+          "name": "Speedy Maracas (2+ Bars)",
+          "type": "special"
+        }
+      ],
+      "The Greatest Sobat": [
+        {
+          "input": "236236K",
+          "name": "The Greatest Sobat",
+          "type": "super"
+        }
+      ],
+      "Waning Moon": [
+        {
+          "input": "214KK~MK",
+          "name": "Waning Moon",
+          "type": "special"
+        },
+        {
+          "input": "214K~MK",
+          "name": "Waning Moon",
+          "type": "special"
+        }
+      ],
+      "Weekend Pleasure (CA)": [
+        {
+          "input": "214214P",
+          "name": "Weekend Pleasure (CA)",
+          "type": "super"
+        }
+      ]
+    }
+  },
+  "dhalsim": {
+    "sc_chara": "Dhalsim",
+    "capcom_families": {
+      "K ヨガテレポート": [
+        "K ヨガテレポート（前方）"
+      ],
+      "K 空中ヨガテレポート": [
+        "K 空中ヨガテレポート（前方）",
+        "K 空中ヨガテレポート（後方）"
+      ],
+      "P ヨガテレポート": [
+        "P ヨガテレポート（前方）"
+      ],
+      "P 空中ヨガテレポート": [
+        "P 空中ヨガテレポート（前方）",
+        "P 空中ヨガテレポート（後方）"
+      ],
+      "ヨガアーチ": [
+        "弱 ヨガアーチ",
+        "中 ヨガアーチ",
+        "強 ヨガアーチ"
+      ],
+      "ヨガコメット": [
+        "弱 ヨガコメット",
+        "中 ヨガコメット",
+        "強 ヨガコメット",
+        "OD ヨガコメット"
+      ],
+      "ヨガサンバースト": [
+        "SA2 ヨガサンバースト（Lv1）",
+        "SA2 ヨガサンバースト（Lv2）",
+        "SA2 ヨガサンバースト（Lv3）"
+      ],
+      "ヨガテレポート": [
+        "ヨガテレポート（後方）"
+      ],
+      "ヨガファイア": [
+        "弱 ヨガファイア",
+        "弱 ヨガファイア（ホールド）",
+        "中 ヨガファイア",
+        "中 ヨガファイア（ホールド）",
+        "強 ヨガファイア",
+        "強 ヨガファイア（ホールド）"
+      ],
+      "ヨガフレイム": [
+        "弱 ヨガフレイム",
+        "中 ヨガフレイム",
+        "強 ヨガフレイム",
+        "OD ヨガフレイム"
+      ],
+      "ヨガフロート": [
+        "ヨガフロート（その場）",
+        "ヨガフロート（前方）"
+      ],
+      "ヨガブラスト": [
+        "弱 ヨガブラスト",
+        "中 ヨガブラスト",
+        "強 ヨガブラスト",
+        "OD ヨガブラスト"
+      ],
+      "ヨガマーシレス": [
+        "SA3 ヨガマーシレス",
+        "CA ヨガマーシレス"
+      ],
+      "中 ヨガアーチ": [
+        "OD 中 ヨガアーチ"
+      ],
+      "中 ヨガインフェルノ": [
+        "SA1 中 ヨガインフェルノ"
+      ],
+      "中 ヨガファイア": [
+        "OD 中 ヨガファイア"
+      ],
+      "弱 ヨガアーチ": [
+        "OD 弱 ヨガアーチ"
+      ],
+      "弱 ヨガインフェルノ": [
+        "SA1 弱 ヨガインフェルノ"
+      ],
+      "弱 ヨガファイア": [
+        "OD 弱 ヨガファイア"
+      ],
+      "強 ヨガアーチ": [
+        "OD 強 ヨガアーチ"
+      ],
+      "強 ヨガインフェルノ": [
+        "SA1 強 ヨガインフェルノ"
+      ],
+      "強 ヨガファイア": [
+        "OD 強 ヨガファイア"
+      ],
+      "空中ヨガフロート": [
+        "空中ヨガフロート"
+      ]
+    },
+    "sc_families": {
+      "Aerial Yoga Float": [
+        {
+          "input": "j.2KK",
+          "name": "Aerial Yoga Float",
+          "type": "special"
+        }
+      ],
+      "Aerial Yoga Teleport": [
+        {
+          "input": "4 or 6 + j.PPP/j.KKK",
+          "name": "Aerial Yoga Teleport",
+          "type": "special"
+        }
+      ],
+      "Merciless Yoga (CA)": [
+        {
+          "input": "236236K",
+          "name": "Merciless Yoga (CA)",
+          "type": "super"
+        }
+      ],
+      "Yoga Arch": [
+        {
+          "input": "236LK",
+          "name": "Yoga Arch",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Yoga Arch",
+          "type": "special"
+        }
+      ],
+      "Yoga Blast": [
+        {
+          "input": "63214HK",
+          "name": "Yoga Blast",
+          "type": "special"
+        },
+        {
+          "input": "63214KK",
+          "name": "Yoga Blast",
+          "type": "special"
+        },
+        {
+          "input": "63214LK",
+          "name": "Yoga Blast",
+          "type": "special"
+        },
+        {
+          "input": "63214MK",
+          "name": "Yoga Blast",
+          "type": "special"
+        }
+      ],
+      "Yoga Comet": [
+        {
+          "input": "j.63214LP",
+          "name": "Yoga Comet",
+          "type": "special"
+        },
+        {
+          "input": "j.63214PP",
+          "name": "Yoga Comet",
+          "type": "special"
+        }
+      ],
+      "Yoga Fire": [
+        {
+          "input": "236P",
+          "name": "Yoga Fire",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Yoga Fire",
+          "type": "special"
+        }
+      ],
+      "Yoga Fire (hold)": [
+        {
+          "input": "236[P]",
+          "name": "Yoga Fire (hold)",
+          "type": "special"
+        }
+      ],
+      "Yoga Flame": [
+        {
+          "input": "63214HP",
+          "name": "Yoga Flame",
+          "type": "special"
+        },
+        {
+          "input": "63214LP",
+          "name": "Yoga Flame",
+          "type": "special"
+        },
+        {
+          "input": "63214MP",
+          "name": "Yoga Flame",
+          "type": "special"
+        },
+        {
+          "input": "63214PP",
+          "name": "Yoga Flame",
+          "type": "special"
+        }
+      ],
+      "Yoga Float": [
+        {
+          "input": "2KK or 3KK",
+          "name": "Yoga Float",
+          "type": "special"
+        }
+      ],
+      "Yoga Inferno": [
+        {
+          "input": "236236HP",
+          "name": "Yoga Inferno",
+          "type": "super"
+        },
+        {
+          "input": "236236LP",
+          "name": "Yoga Inferno",
+          "type": "super"
+        },
+        {
+          "input": "236236MP",
+          "name": "Yoga Inferno",
+          "type": "super"
+        }
+      ],
+      "Yoga Sunburst": [
+        {
+          "input": "214214K",
+          "name": "Yoga Sunburst",
+          "type": "super"
+        },
+        {
+          "input": "214214[K]",
+          "name": "Yoga Sunburst",
+          "type": "super"
+        },
+        {
+          "input": "214214{K}",
+          "name": "Yoga Sunburst",
+          "type": "super"
+        }
+      ],
+      "Yoga Teleport": [
+        {
+          "input": "4 or 6 + PPP/KKK",
+          "name": "Yoga Teleport",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "ed": {
+    "sc_chara": "Ed",
+    "capcom_families": {
+      "キルスイッチ・チェイス": [
+        "キルスイッチ・チェイス"
+      ],
+      "キルスイッチ・ブレイク": [
+        "キルスイッチ・ブレイク"
+      ],
+      "キルステップ": [
+        "キルステップ（前方）",
+        "キルステップ（後方）"
+      ],
+      "サイコアッパー": [
+        "弱 サイコアッパー",
+        "中 サイコアッパー",
+        "強 サイコアッパー",
+        "OD サイコアッパー"
+      ],
+      "サイコキャノン": [
+        "SA2 サイコキャノン"
+      ],
+      "サイコシュート": [
+        "弱 サイコシュート",
+        "中 サイコシュート",
+        "強 サイコシュート"
+      ],
+      "サイコストーム": [
+        "SA1 サイコストーム"
+      ],
+      "サイコスパーク": [
+        "サイコスパーク",
+        "OD サイコスパーク"
+      ],
+      "サイコチェンバー": [
+        "SA3 サイコチェンバー",
+        "CA サイコチェンバー"
+      ],
+      "サイコフリッカー": [
+        "弱 サイコフリッカー",
+        "弱 サイコフリッカー（ホールド）",
+        "中 サイコフリッカー",
+        "中 サイコフリッカー（ホールド）",
+        "強 サイコフリッカー",
+        "強 サイコフリッカー（ホールド）",
+        "OD サイコフリッカー"
+      ],
+      "サイコブリッツ": [
+        "弱 サイコブリッツ",
+        "中 サイコブリッツ",
+        "強 サイコブリッツ",
+        "OD サイコブリッツ"
+      ],
+      "中 サイコシュート": [
+        "OD 中 サイコシュート"
+      ],
+      "弱 サイコシュート": [
+        "OD 弱 サイコシュート"
+      ],
+      "強 サイコシュート": [
+        "OD 強 サイコシュート"
+      ]
+    },
+    "sc_families": {
+      "Kill Rush (Backward)": [
+        {
+          "input": "4KK",
+          "name": "Kill Rush (Backward)",
+          "type": "Special"
+        }
+      ],
+      "Kill Rush (Forward)": [
+        {
+          "input": "5/6KK",
+          "name": "Kill Rush (Forward)",
+          "type": "Special"
+        }
+      ],
+      "Kill Switch Break": [
+        {
+          "input": "5/6KK~6P",
+          "name": "Kill Switch Break",
+          "type": "Special"
+        }
+      ],
+      "Kill Switch Chaser": [
+        {
+          "input": "5/6KK~dl.6P",
+          "name": "Kill Switch Chaser",
+          "type": "Special"
+        }
+      ],
+      "Psycho Blitz": [
+        {
+          "input": "214HP",
+          "name": "Psycho Blitz",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Psycho Blitz",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Psycho Blitz",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Psycho Blitz",
+          "type": "Special"
+        }
+      ],
+      "Psycho Cannon": [
+        {
+          "input": "214214P",
+          "name": "Psycho Cannon",
+          "type": "Super"
+        }
+      ],
+      "Psycho Chamber (CA)": [
+        {
+          "input": "236236P",
+          "name": "Psycho Chamber (CA)",
+          "type": "Super"
+        }
+      ],
+      "Psycho Flicker": [
+        {
+          "input": "236HK",
+          "name": "Psycho Flicker",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Psycho Flicker",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Psycho Flicker",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Psycho Flicker",
+          "type": "Special"
+        }
+      ],
+      "Psycho Flicker (Hold)": [
+        {
+          "input": "236[HK]",
+          "name": "Psycho Flicker (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[LK]",
+          "name": "Psycho Flicker (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[MK]",
+          "name": "Psycho Flicker (Hold)",
+          "type": "Special"
+        }
+      ],
+      "Psycho Shoot": [
+        {
+          "input": "236PP~6P",
+          "name": "Psycho Shoot",
+          "type": "Special"
+        },
+        {
+          "input": "236P~6P",
+          "name": "Psycho Shoot",
+          "type": "Special"
+        }
+      ],
+      "Psycho Spark": [
+        {
+          "input": "236PP",
+          "name": "Psycho Spark",
+          "type": "Special"
+        },
+        {
+          "input": "236P",
+          "name": "Psycho Spark",
+          "type": "Special"
+        }
+      ],
+      "Psycho Storm": [
+        {
+          "input": "236236K",
+          "name": "Psycho Storm",
+          "type": "Super"
+        }
+      ],
+      "Psycho Uppercut": [
+        {
+          "input": "623HP",
+          "name": "Psycho Uppercut",
+          "type": "Special"
+        },
+        {
+          "input": "623LP",
+          "name": "Psycho Uppercut",
+          "type": "Special"
+        },
+        {
+          "input": "623MP",
+          "name": "Psycho Uppercut",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Psycho Uppercut",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "ehonda": {
+    "sc_chara": "E.Honda",
+    "capcom_families": {
+      "[肩屋入り]OD 百裂張り手": [
+        "[肩屋入り]OD 百裂張り手"
+      ],
+      "[肩屋入り]中 百裂張り手": [
+        "[肩屋入り]中 百裂張り手"
+      ],
+      "[肩屋入り]弱 百裂張り手": [
+        "[肩屋入り]弱 百裂張り手"
+      ],
+      "[肩屋入り]強 百裂張り手": [
+        "[肩屋入り]強 百裂張り手"
+      ],
+      "スーパー百貫落とし": [
+        "弱 スーパー百貫落とし",
+        "中 スーパー百貫落とし",
+        "強 スーパー百貫落とし",
+        "OD スーパー百貫落とし"
+      ],
+      "スーパー頭突き": [
+        "弱 スーパー頭突き",
+        "中 スーパー頭突き",
+        "強 スーパー頭突き",
+        "OD スーパー頭突き"
+      ],
+      "スーパー鬼無双": [
+        "SA2 スーパー鬼無双"
+      ],
+      "千秋楽": [
+        "SA3 千秋楽",
+        "CA 千秋楽"
+      ],
+      "大砲": [
+        "大砲",
+        "OD 大砲"
+      ],
+      "大銀杏投げ": [
+        "弱 大銀杏投げ",
+        "中 大銀杏投げ",
+        "強 大銀杏投げ",
+        "OD 大銀杏投げ"
+      ],
+      "猫だまし": [
+        "猫だまし"
+      ],
+      "発揮爆砕": [
+        "SA1 発揮爆砕"
+      ],
+      "百裂張り手": [
+        "弱 百裂張り手",
+        "中 百裂張り手",
+        "強 百裂張り手",
+        "OD 百裂張り手"
+      ],
+      "相撲ステップ": [
+        "相撲ステップ",
+        "OD 相撲ステップ"
+      ],
+      "肩屋入り": [
+        "肩屋入り"
+      ],
+      "鉄砲": [
+        "鉄砲（１段目）",
+        "鉄砲（２段目）",
+        "OD 鉄砲（１段目）",
+        "OD 鉄砲（２段目）"
+      ]
+    },
+    "sc_families": {
+      "Hundred Hand Slap": [
+        {
+          "input": "214HP",
+          "name": "Hundred Hand Slap",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "Hundred Hand Slap",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "Hundred Hand Slap",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Hundred Hand Slap",
+          "type": "special"
+        }
+      ],
+      "Neko Damashi": [
+        {
+          "input": "22P",
+          "name": "Neko Damashi",
+          "type": "special"
+        }
+      ],
+      "Oicho Throw": [
+        {
+          "input": "63214HK",
+          "name": "Oicho Throw",
+          "type": "special"
+        },
+        {
+          "input": "63214KK",
+          "name": "Oicho Throw",
+          "type": "special"
+        },
+        {
+          "input": "63214LK",
+          "name": "Oicho Throw",
+          "type": "special"
+        },
+        {
+          "input": "63214MK",
+          "name": "Oicho Throw",
+          "type": "special"
+        }
+      ],
+      "Show of Force": [
+        {
+          "input": "236236P",
+          "name": "Show of Force",
+          "type": "super"
+        }
+      ],
+      "Sumo Dash": [
+        {
+          "input": "236K",
+          "name": "Sumo Dash",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Sumo Dash",
+          "type": "special"
+        }
+      ],
+      "Sumo Headbutt": [
+        {
+          "input": "[4]6HP",
+          "name": "Sumo Headbutt",
+          "type": "special"
+        },
+        {
+          "input": "[4]6LP",
+          "name": "Sumo Headbutt",
+          "type": "special"
+        },
+        {
+          "input": "[4]6MP",
+          "name": "Sumo Headbutt",
+          "type": "special"
+        },
+        {
+          "input": "[4]6PP",
+          "name": "Sumo Headbutt",
+          "type": "special"
+        }
+      ],
+      "Sumo Smash": [
+        {
+          "input": "[2]8LK",
+          "name": "Sumo Smash",
+          "type": "special"
+        },
+        {
+          "input": "[2]8MK",
+          "name": "Sumo Smash",
+          "type": "special"
+        },
+        {
+          "input": "[2]8KK",
+          "name": "Sumo Smash",
+          "type": "special"
+        },
+        {
+          "input": "[2]8HK",
+          "name": "Sumo Smash",
+          "type": "special"
+        }
+      ],
+      "Sumo Spirit": [
+        {
+          "input": "22K",
+          "name": "Sumo Spirit",
+          "type": "special"
+        }
+      ],
+      "Taiho Cannon Lift": [
+        {
+          "input": "236KK~2P",
+          "name": "Taiho Cannon Lift",
+          "type": "special"
+        },
+        {
+          "input": "236K~2P",
+          "name": "Taiho Cannon Lift",
+          "type": "special"
+        }
+      ],
+      "Teppo Triple Slap 1": [
+        {
+          "input": "236KK~P",
+          "name": "Teppo Triple Slap 1",
+          "type": "special"
+        },
+        {
+          "input": "236K~P",
+          "name": "Teppo Triple Slap 1",
+          "type": "special"
+        }
+      ],
+      "Teppo Triple Slap 2": [
+        {
+          "input": "236KK~P~P",
+          "name": "Teppo Triple Slap 2",
+          "type": "special"
+        },
+        {
+          "input": "236K~P~P",
+          "name": "Teppo Triple Slap 2",
+          "type": "special"
+        }
+      ],
+      "The Final Bout (CA)": [
+        {
+          "input": "214214P",
+          "name": "The Final Bout (CA)",
+          "type": "super"
+        }
+      ],
+      "Ultimate Killer Head Ram": [
+        {
+          "input": "[4]646K",
+          "name": "Ultimate Killer Head Ram",
+          "type": "super"
+        }
+      ]
+    }
+  },
+  "elena": {
+    "sc_chara": "Elena",
+    "capcom_families": {
+      "[強化版]ハーベストサークル": [
+        "[強化版]ハーベストサークル"
+      ],
+      "[強化版]マレットスマッシュ": [
+        "[強化版]マレットスマッシュ"
+      ],
+      "[強化版]レオパードスナップ": [
+        "[強化版]レオパードスナップ"
+      ],
+      "グラスランドソング": [
+        "SA3 グラスランドソング",
+        "CA グラスランドソング"
+      ],
+      "スクラッチホイール": [
+        "弱 スクラッチホイール",
+        "中 スクラッチホイール",
+        "強 スクラッチホイール",
+        "OD スクラッチホイール"
+      ],
+      "スピンサイズ": [
+        "弱 スピンサイズ",
+        "中 スピンサイズ",
+        "強スピンサイズ",
+        "OD スピンサイズ"
+      ],
+      "ハーベストサークル": [
+        "ハーベストサークル"
+      ],
+      "マレットスマッシュ": [
+        "マレットスマッシュ"
+      ],
+      "ミーティアボレー": [
+        "SA1 ミーティアボレー"
+      ],
+      "ムーングライド": [
+        "弱 ムーングライド（1段目）",
+        "中 ムーングライド（1段目）",
+        "強 ムーングライド（1段目）",
+        "ムーングライド（2段目）",
+        "OD ムーングライド（1段目）",
+        "OD ムーングライド（2段目）"
+      ],
+      "ライノホーン": [
+        "弱 ライノホーン",
+        "中 ライノホーン",
+        "強 ライノホーン",
+        "OD ライノホーン"
+      ],
+      "リンクシング": [
+        "弱 リンクシング",
+        "中 リンクシング",
+        "強 リンクシング",
+        "ODリンクシング"
+      ],
+      "リンクスワール": [
+        "弱 リンクスワール",
+        "中 リンクスワール",
+        "強 リンクスワール",
+        "OD リンクスワール"
+      ],
+      "リヴァイブダンス": [
+        "SA2リヴァイブダンス"
+      ],
+      "レオパードスナップ": [
+        "レオパードスナップ"
+      ]
+    },
+    "sc_families": {
+      "Harvest Circle": [
+        {
+          "input": "236P~6MK",
+          "name": "Harvest Circle",
+          "type": "Special"
+        },
+        {
+          "input": "236PP~6MK or 236P~6P~6MK",
+          "name": "Harvest Circle",
+          "type": "Special"
+        }
+      ],
+      "Leopard Snap": [
+        {
+          "input": "236PP~6LK or 236P~6P~6LK",
+          "name": "Leopard Snap",
+          "type": "Special"
+        },
+        {
+          "input": "236P~6LK",
+          "name": "Leopard Snap",
+          "type": "Special"
+        }
+      ],
+      "Lynx Song": [
+        {
+          "input": "236HP",
+          "name": "Lynx Song",
+          "type": "Special"
+        },
+        {
+          "input": "236LP",
+          "name": "Lynx Song",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Lynx Song",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Lynx Song",
+          "type": "Special"
+        }
+      ],
+      "Lynx Whirl": [
+        {
+          "input": "236P~6MP",
+          "name": "Lynx Whirl",
+          "type": "Special"
+        },
+        {
+          "input": "236PP~6P",
+          "name": "Lynx Whirl",
+          "type": "Special"
+        },
+        {
+          "input": "236P~6HP",
+          "name": "Lynx Whirl",
+          "type": "Special"
+        },
+        {
+          "input": "236P~6LP",
+          "name": "Lynx Whirl",
+          "type": "Special"
+        }
+      ],
+      "Mallet Smash": [
+        {
+          "input": "236PP~6HK or 236P~6P~6HK",
+          "name": "Mallet Smash",
+          "type": "Special"
+        },
+        {
+          "input": "236P~6HK",
+          "name": "Mallet Smash",
+          "type": "Special"
+        }
+      ],
+      "Meteor Volley": [
+        {
+          "input": "236236K",
+          "name": "Meteor Volley",
+          "type": "Super"
+        }
+      ],
+      "Moon Glider": [
+        {
+          "input": "214HP",
+          "name": "Moon Glider",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Moon Glider",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Moon Glider",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Moon Glider",
+          "type": "Special"
+        }
+      ],
+      "Moon Glider Follow-up": [
+        {
+          "input": "214PP~6P",
+          "name": "Moon Glider Follow-up",
+          "type": "Special"
+        },
+        {
+          "input": "214P~6P",
+          "name": "Moon Glider Follow-up",
+          "type": "Special"
+        }
+      ],
+      "Revival Dance": [
+        {
+          "input": "236236P",
+          "name": "Revival Dance",
+          "type": "Super"
+        }
+      ],
+      "Revival Dance (Healing)": [
+        {
+          "input": "236236P~[2]",
+          "name": "Revival Dance (Healing)",
+          "type": "Super"
+        }
+      ],
+      "Rhino Horn": [
+        {
+          "input": "236HK",
+          "name": "Rhino Horn",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Rhino Horn",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Rhino Horn",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Rhino Horn",
+          "type": "Special"
+        }
+      ],
+      "Scratch Wheel": [
+        {
+          "input": "623HK",
+          "name": "Scratch Wheel",
+          "type": "Special"
+        },
+        {
+          "input": "623KK",
+          "name": "Scratch Wheel",
+          "type": "Special"
+        },
+        {
+          "input": "623LK",
+          "name": "Scratch Wheel",
+          "type": "Special"
+        },
+        {
+          "input": "623MK",
+          "name": "Scratch Wheel",
+          "type": "Special"
+        }
+      ],
+      "Song of the Grasslands (CA)": [
+        {
+          "input": "214214K",
+          "name": "Song of the Grasslands (CA)",
+          "type": "Super"
+        }
+      ],
+      "Spinning Scythe": [
+        {
+          "input": "214HK",
+          "name": "Spinning Scythe",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Spinning Scythe",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Spinning Scythe",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Spinning Scythe",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "gouki_akuma": {
+    "sc_chara": "Akuma",
+    "capcom_families": {
+      "天魔豪斬空": [
+        "SA1 天魔豪斬空"
+      ],
+      "崩天劫火": [
+        "SA2 崩天劫火"
+      ],
+      "斬空波動拳": [
+        "弱 斬空波動拳",
+        "中 斬空波動拳",
+        "強 斬空波動拳",
+        "OD 斬空波動拳"
+      ],
+      "朧": [
+        "朧"
+      ],
+      "滅殺豪波動": [
+        "SA1 滅殺豪波動"
+      ],
+      "百鬼潜影": [
+        "百鬼潜影"
+      ],
+      "百鬼襲": [
+        "弱 百鬼襲",
+        "中 百鬼襲",
+        "強 百鬼襲",
+        "OD 百鬼襲"
+      ],
+      "百鬼豪刃": [
+        "百鬼豪刃"
+      ],
+      "百鬼豪斬": [
+        "百鬼豪斬"
+      ],
+      "百鬼豪斬空": [
+        "百鬼豪斬空"
+      ],
+      "百鬼豪螺旋": [
+        "百鬼豪螺旋"
+      ],
+      "百鬼豪衝": [
+        "百鬼豪衝"
+      ],
+      "瞬獄殺": [
+        "CA 瞬獄殺"
+      ],
+      "禍坏": [
+        "SA3 禍坏",
+        "CA 禍坏"
+      ],
+      "空中竜巻斬空脚": [
+        "空中竜巻斬空脚",
+        "OD 空中竜巻斬空脚"
+      ],
+      "竜巻斬空脚": [
+        "弱 竜巻斬空脚",
+        "中 竜巻斬空脚",
+        "強 竜巻斬空脚",
+        "OD 竜巻斬空脚"
+      ],
+      "豪昇龍拳": [
+        "弱 豪昇龍拳",
+        "中 豪昇龍拳",
+        "強 豪昇龍拳",
+        "OD 豪昇龍拳"
+      ],
+      "豪波動拳": [
+        "OD 豪波動拳",
+        "OD 豪波動拳（ホールド）"
+      ],
+      "豪波動拳(Lv1)": [
+        "弱 豪波動拳(Lv1)",
+        "中 豪波動拳(Lv1)",
+        "強 豪波動拳(Lv1)"
+      ],
+      "豪波動拳(Lv2)": [
+        "弱 豪波動拳(Lv2)",
+        "中 豪波動拳(Lv2)",
+        "強 豪波動拳(Lv2)"
+      ],
+      "豪波動拳(Lv3)": [
+        "弱 豪波動拳(Lv3)",
+        "中 豪波動拳(Lv3)",
+        "強 豪波動拳(Lv3)"
+      ],
+      "金剛灼火": [
+        "弱 金剛灼火（1段目）",
+        "弱 金剛灼火（2段目）",
+        "中 金剛灼火（1段目）",
+        "中 金剛灼火（2段目）",
+        "強 金剛灼火（1段目）",
+        "強 金剛灼火（2段目）",
+        "OD 金剛灼火（1段目）",
+        "OD 金剛灼火（2段目）"
+      ],
+      "阿修羅閃空": [
+        "阿修羅閃空（前方）",
+        "阿修羅閃空（後方）"
+      ]
+    },
+    "sc_families": {
+      "Adamant Flame": [
+        {
+          "input": "214HP",
+          "name": "Adamant Flame",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Adamant Flame",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Adamant Flame",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Adamant Flame",
+          "type": "Special"
+        }
+      ],
+      "Adamant Flame Follow-Up": [
+        {
+          "input": "214HP~6P",
+          "name": "Adamant Flame Follow-Up",
+          "type": "Special"
+        },
+        {
+          "input": "214LP~6P",
+          "name": "Adamant Flame Follow-Up",
+          "type": "Special"
+        },
+        {
+          "input": "214MP~6P",
+          "name": "Adamant Flame Follow-Up",
+          "type": "Special"
+        },
+        {
+          "input": "214PP~6P",
+          "name": "Adamant Flame Follow-Up",
+          "type": "Special"
+        }
+      ],
+      "Aerial Tatsumaki Zanku-Kyaku": [
+        {
+          "input": "j.214K",
+          "name": "Aerial Tatsumaki Zanku-Kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "Aerial Tatsumaki Zanku-Kyaku",
+          "type": "Special"
+        }
+      ],
+      "Ashura Senku (Backward)": [
+        {
+          "input": "4KKK",
+          "name": "Ashura Senku (Backward)",
+          "type": "Special"
+        }
+      ],
+      "Ashura Senku (Forward)": [
+        {
+          "input": "6KKK",
+          "name": "Ashura Senku (Forward)",
+          "type": "Special"
+        }
+      ],
+      "Demon Blade Kick": [
+        {
+          "input": "236KK~K",
+          "name": "Demon Blade Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236K~K",
+          "name": "Demon Blade Kick",
+          "type": "Special"
+        }
+      ],
+      "Demon Gou Rasen": [
+        {
+          "input": "236KK~j.214K",
+          "name": "Demon Gou Rasen",
+          "type": "Special"
+        }
+      ],
+      "Demon Gou Zanku": [
+        {
+          "input": "236KK~j.236P",
+          "name": "Demon Gou Zanku",
+          "type": "Special"
+        }
+      ],
+      "Demon Guillotine": [
+        {
+          "input": "236KK~P",
+          "name": "Demon Guillotine",
+          "type": "Special"
+        },
+        {
+          "input": "236K~P",
+          "name": "Demon Guillotine",
+          "type": "Special"
+        }
+      ],
+      "Demon Low Slash": [
+        {
+          "input": "236KK~No Input",
+          "name": "Demon Low Slash",
+          "type": "Special"
+        },
+        {
+          "input": "236K~No Input",
+          "name": "Demon Low Slash",
+          "type": "Special"
+        }
+      ],
+      "Demon Raid": [
+        {
+          "input": "236K",
+          "name": "Demon Raid",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Demon Raid",
+          "type": "Special"
+        }
+      ],
+      "Demon Swoop": [
+        {
+          "input": "236KK~[2]",
+          "name": "Demon Swoop",
+          "type": "Special"
+        },
+        {
+          "input": "236K~[2]",
+          "name": "Demon Swoop",
+          "type": "Special"
+        }
+      ],
+      "Double Zanku Hadoken": [
+        {
+          "input": "j.214PP",
+          "name": "Double Zanku Hadoken",
+          "type": "Special"
+        }
+      ],
+      "Empyrean’s End": [
+        {
+          "input": "214214P",
+          "name": "Empyrean’s End",
+          "type": "Super"
+        }
+      ],
+      "Gou Hadoken": [
+        {
+          "input": "236HP",
+          "name": "Gou Hadoken",
+          "type": "Special"
+        },
+        {
+          "input": "236LP",
+          "name": "Gou Hadoken",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Gou Hadoken",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Gou Hadoken",
+          "type": "Special"
+        }
+      ],
+      "Gou Hadoken Lv.2": [
+        {
+          "input": "236{P}",
+          "name": "Gou Hadoken Lv.2",
+          "type": "Special"
+        },
+        {
+          "input": "236[PP]",
+          "name": "OD Gou Hadoken Lv.2",
+          "type": "Special"
+        }
+      ],
+      "Gou Hadoken Lv.3": [
+        {
+          "input": "236[P]",
+          "name": "Gou Hadoken Lv.3",
+          "type": "Special"
+        }
+      ],
+      "Gou Shoryuken": [
+        {
+          "input": "623HP",
+          "name": "Gou Shoryuken",
+          "type": "Special"
+        },
+        {
+          "input": "623LP",
+          "name": "Gou Shoryuken",
+          "type": "Special"
+        },
+        {
+          "input": "623MP",
+          "name": "Gou Shoryuken",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Gou Shoryuken",
+          "type": "Special"
+        }
+      ],
+      "Kongou-Kokuretsuzan": [
+        {
+          "input": "22PPP",
+          "name": "Kongou-Kokuretsuzan",
+          "type": "Super"
+        }
+      ],
+      "Messatsu Gohado": [
+        {
+          "input": "236236P",
+          "name": "Messatsu Gohado",
+          "type": "Super"
+        }
+      ],
+      "Misogi": [
+        {
+          "input": "214214K",
+          "name": "Misogi",
+          "type": "Super"
+        }
+      ],
+      "Oboro Throw": [
+        {
+          "input": "6KKK~LPLK",
+          "name": "Oboro Throw",
+          "type": "Special"
+        }
+      ],
+      "Shun Goku Satsu (CA)": [
+        {
+          "input": "LP~LP~6LK~HP",
+          "name": "Shun Goku Satsu (CA)",
+          "type": "Super"
+        }
+      ],
+      "Sip of Calamity (CA)": [
+        {
+          "input": "236236K",
+          "name": "Sip of Calamity (CA)",
+          "type": "Super"
+        }
+      ],
+      "Tatsumaki Zanku-Kyaku": [
+        {
+          "input": "214HK",
+          "name": "Tatsumaki Zanku-Kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Tatsumaki Zanku-Kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Tatsumaki Zanku-Kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Tatsumaki Zanku-Kyaku",
+          "type": "Special"
+        }
+      ],
+      "Tenma Gozanku": [
+        {
+          "input": "j.236236K",
+          "name": "Tenma Gozanku",
+          "type": "Super"
+        }
+      ],
+      "Zanku Hadoken": [
+        {
+          "input": "j.236P",
+          "name": "Zanku Hadoken",
+          "type": "Special"
+        },
+        {
+          "input": "j.236PP",
+          "name": "Zanku Hadoken",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "guile": {
+    "sc_chara": "Guile",
+    "capcom_families": {
+      "【ジャスト】 中 サマーソルトキック": [
+        "【ジャスト】 中 サマーソルトキック"
+      ],
+      "【ジャスト】 中 ソニックブーム": [
+        "【ジャスト】 中 ソニックブーム"
+      ],
+      "【ジャスト】 弱 サマーソルトキック": [
+        "【ジャスト】 弱 サマーソルトキック"
+      ],
+      "【ジャスト】 弱 ソニックブーム": [
+        "【ジャスト】 弱 ソニックブーム"
+      ],
+      "【ジャスト】 強 サマーソルトキック": [
+        "【ジャスト】 強 サマーソルトキック"
+      ],
+      "【ジャスト】 強 ソニックブーム": [
+        "【ジャスト】 強 ソニックブーム"
+      ],
+      "【ジャスト】中 ソニッククロス": [
+        "【ジャスト】中 ソニッククロス"
+      ],
+      "【ジャスト】弱 ソニッククロス": [
+        "【ジャスト】弱 ソニッククロス"
+      ],
+      "【ジャスト】強 ソニッククロス": [
+        "【ジャスト】強 ソニッククロス"
+      ],
+      "クロスファイアサマーソルト": [
+        "SA3 クロスファイアサマーソルト",
+        "CA クロスファイアサマーソルト"
+      ],
+      "サマーソルトキック": [
+        "弱 サマーソルトキック",
+        "中 サマーソルトキック",
+        "強 サマーソルトキック",
+        "OD サマーソルトキック"
+      ],
+      "ソニッククロス": [
+        "弱 ソニッククロス",
+        "中 ソニッククロス",
+        "強 ソニッククロス"
+      ],
+      "ソニッククロス１": [
+        "OD ソニッククロス１"
+      ],
+      "ソニッククロス２": [
+        "OD ソニッククロス２"
+      ],
+      "ソニックハリケーン": [
+        "SA1 ソニックハリケーン （上）",
+        "SA1 ソニックハリケーン （横）"
+      ],
+      "ソニックブレイク": [
+        "ソニックブレイク （単発）",
+        "ソニックブレイク （派生）",
+        "OD ソニックブレイク"
+      ],
+      "ソニックブレイド": [
+        "弱 ソニックブレイド",
+        "中 ソニックブレイド",
+        "強 ソニックブレイド"
+      ],
+      "ソニックブーム": [
+        "弱 ソニックブーム",
+        "中 ソニックブーム",
+        "強 ソニックブーム",
+        "OD ソニックブーム"
+      ],
+      "ソリッドパンチャー": [
+        "SA2 ソリッドパンチャー"
+      ],
+      "中 ソニックブレイド": [
+        "OD 中 ソニックブレイド"
+      ],
+      "弱 ソニックブレイド": [
+        "OD 弱 ソニックブレイド"
+      ],
+      "強 ソニックブレイド": [
+        "OD 強 ソニックブレイド"
+      ]
+    },
+    "sc_families": {
+      "Crossfire Somersault (CA)": [
+        {
+          "input": "[4]646K",
+          "name": "Crossfire Somersault (CA)",
+          "type": "super"
+        }
+      ],
+      "Solid Puncher": [
+        {
+          "input": "214214P",
+          "name": "Solid Puncher",
+          "type": "super"
+        }
+      ],
+      "Somersault Kick": [
+        {
+          "input": "[2]8HK",
+          "name": "Somersault Kick",
+          "type": "special"
+        },
+        {
+          "input": "[2]8KK",
+          "name": "Somersault Kick",
+          "type": "special"
+        },
+        {
+          "input": "[2]8LK",
+          "name": "Somersault Kick",
+          "type": "special"
+        },
+        {
+          "input": "[2]8MK",
+          "name": "Somersault Kick",
+          "type": "special"
+        }
+      ],
+      "Sonic Blade": [
+        {
+          "input": "214HP",
+          "name": "Sonic Blade",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "Sonic Blade",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "Sonic Blade",
+          "type": "special"
+        }
+      ],
+      "Sonic Boom": [
+        {
+          "input": "[4]6HP",
+          "name": "Sonic Boom",
+          "type": "special"
+        },
+        {
+          "input": "[4]6LP",
+          "name": "Sonic Boom",
+          "type": "special"
+        },
+        {
+          "input": "[4]6MP",
+          "name": "Sonic Boom",
+          "type": "special"
+        },
+        {
+          "input": "[4]6PP",
+          "name": "Sonic Boom",
+          "type": "special"
+        }
+      ],
+      "Sonic Break": [
+        {
+          "input": "PP",
+          "name": "Sonic Break",
+          "type": "special"
+        }
+      ],
+      "Sonic Break (follow-up)": [
+        {
+          "input": "[4]6PP~P",
+          "name": "OD Sonic Break (follow-up)",
+          "type": "special"
+        },
+        {
+          "input": "[4]6P~P",
+          "name": "Sonic Break (follow-up)",
+          "type": "special"
+        }
+      ],
+      "Sonic Cross": [
+        {
+          "input": "214PP",
+          "name": "Sonic Cross",
+          "type": "special"
+        },
+        {
+          "input": "214PP ~ 6P",
+          "name": "Sonic Cross",
+          "type": "special"
+        },
+        {
+          "input": "214PP ~ 6PP",
+          "name": "Sonic Cross",
+          "type": "special"
+        },
+        {
+          "input": "214P ~ 6P",
+          "name": "Sonic Cross",
+          "type": "special"
+        },
+        {
+          "input": "214P ~ 6PP",
+          "name": "Sonic Cross",
+          "type": "special"
+        }
+      ],
+      "Sonic Hurricane": [
+        {
+          "input": "[4]646HP",
+          "name": "Sonic Hurricane",
+          "type": "super"
+        },
+        {
+          "input": "[4]646P",
+          "name": "Sonic Hurricane",
+          "type": "super"
+        }
+      ]
+    }
+  },
+  "ingrid": {
+    "sc_chara": "Ingrid",
+    "capcom_families": {
+      "コズミックレイ": [
+        "SA3 コズミックレイ",
+        "CA コズミックレイ"
+      ],
+      "サンオーダー(Lv1)": [
+        "SA2 サンオーダー(Lv1)"
+      ],
+      "サンオーダー(Lv2)": [
+        "SA2 サンオーダー(Lv2)"
+      ],
+      "サンオーダー(Lv3)": [
+        "SA2 サンオーダー(Lv3)"
+      ],
+      "サンシャイン(Lv1)": [
+        "SA1 サンシャイン(Lv1)"
+      ],
+      "サンシャイン(Lv2)": [
+        "SA1 サンシャイン(Lv2)"
+      ],
+      "サンシャイン(Lv3)": [
+        "SA1 サンシャイン(Lv3)"
+      ],
+      "サンシュート": [
+        "弱 サンシュート",
+        "中 サンシュート",
+        "強 サンシュート"
+      ],
+      "サンバニッシュ(上方)": [
+        "サンバニッシュ(上方)"
+      ],
+      "サンバニッシュ(前方)": [
+        "サンバニッシュ(前方)"
+      ],
+      "サンバニッシュ(後方)": [
+        "サンバニッシュ(後方)"
+      ],
+      "サンフレア": [
+        "弱 サンフレア"
+      ],
+      "サンフレア(Lv1)": [
+        "サンフレア(Lv1)",
+        "OD サンフレア(Lv1)"
+      ],
+      "サンフレア(Lv2)": [
+        "サンフレア(Lv2)",
+        "OD サンフレア(Lv2)"
+      ],
+      "サンフレア(Lv3)": [
+        "サンフレア(Lv3)",
+        "OD サンフレア(Lv3)"
+      ],
+      "サンライズ": [
+        "弱 サンライズ",
+        "中 サンライズ",
+        "強 サンライズ",
+        "OD サンライズ"
+      ],
+      "サンヴェール": [
+        "サンヴェール",
+        "OD サンヴェール"
+      ],
+      "ソーラーフレア": [
+        "弱ソーラーフレア"
+      ],
+      "ソーラーフレア(Lv1)": [
+        "ソーラーフレア(Lv1)",
+        "OD ソーラーフレア(Lv1)"
+      ],
+      "ソーラーフレア(Lv2)": [
+        "ソーラーフレア(Lv2)",
+        "OD ソーラーフレア(Lv2)"
+      ],
+      "ソーラーフレア(Lv3)": [
+        "ソーラーフレア(Lv3)",
+        "OD ソーラーフレア(Lv3)"
+      ],
+      "中 サンシュート": [
+        "OD 中 サンシュート"
+      ],
+      "弱 サンシュート": [
+        "OD 弱 サンシュート"
+      ],
+      "強 サンシュート": [
+        "OD 強 サンシュート"
+      ]
+    },
+    "sc_families": {
+      "Cosmic Ray (CA)": [
+        {
+          "input": "236236P",
+          "name": "Cosmic Ray (CA)",
+          "type": "Super"
+        }
+      ],
+      "Order of the Sun": [
+        {
+          "input": "214214P",
+          "name": "Order of the Sun",
+          "type": "Super"
+        }
+      ],
+      "Order of the Sun (Enhanced)": [
+        {
+          "input": "214214[P]",
+          "name": "Order of the Sun (Enhanced)",
+          "type": "Super"
+        }
+      ],
+      "Shining Sun": [
+        {
+          "input": "236236K",
+          "name": "Shining Sun",
+          "type": "Super"
+        }
+      ],
+      "Shining Sun (Enhanced)": [
+        {
+          "input": "236236[K]",
+          "name": "Shining Sun (Enhanced)",
+          "type": "Super"
+        }
+      ],
+      "Solar Burst": [
+        {
+          "input": "j.236PP",
+          "name": "Solar Burst",
+          "type": "Special"
+        },
+        {
+          "input": "j.236LP",
+          "name": "Solar Burst",
+          "type": "Special"
+        },
+        {
+          "input": "j.236MP",
+          "name": "Solar Burst",
+          "type": "Special"
+        },
+        {
+          "input": "j.236HP",
+          "name": "Solar Burst",
+          "type": "Special"
+        }
+      ],
+      "Sun Flare": [
+        {
+          "input": "214LP (HOLD OK)",
+          "name": "Sun Flare",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Sun Flare",
+          "type": "Special"
+        }
+      ],
+      "Sun Flare (Enhanced)": [
+        {
+          "input": "214PP",
+          "name": "Sun Flare (Enhanced)",
+          "type": "Special"
+        },
+        {
+          "input": "214HP",
+          "name": "Sun Flare (Enhanced)",
+          "type": "Special"
+        }
+      ],
+      "Sun Rise": [
+        {
+          "input": "236LK",
+          "name": "Sun Rise",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Sun Rise",
+          "type": "Special"
+        },
+        {
+          "input": "236HK",
+          "name": "Sun Rise",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Sun Rise",
+          "type": "Special"
+        }
+      ],
+      "Sun Shot": [
+        {
+          "input": "236LP",
+          "name": "Sun Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Sun Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Sun Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236HP",
+          "name": "Sun Shot",
+          "type": "Special"
+        }
+      ],
+      "Sun Shot (Hold)": [
+        {
+          "input": "236[LP]",
+          "name": "Sun Shot (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[MP]",
+          "name": "Sun Shot (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[PP]",
+          "name": "Sun Shot (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[HP]",
+          "name": "Sun Shot (Hold)",
+          "type": "Special"
+        }
+      ],
+      "Sun Veil": [
+        {
+          "input": "22K",
+          "name": "Sun Veil",
+          "type": "Special"
+        },
+        {
+          "input": "22KK",
+          "name": "Sun Veil",
+          "type": "Special"
+        }
+      ],
+      "Vanishing Sun (Back)": [
+        {
+          "input": "4KKK",
+          "name": "Vanishing Sun (Back)",
+          "type": "Special"
+        }
+      ],
+      "Vanishing Sun (Down)": [
+        {
+          "input": "2KKK",
+          "name": "Vanishing Sun (Down)",
+          "type": "Special"
+        }
+      ],
+      "Vanishing Sun (Forward)": [
+        {
+          "input": "6KKK",
+          "name": "Vanishing Sun (Forward)",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "jamie": {
+    "sc_chara": "Jamie",
+    "capcom_families": {
+      "[酔いレベル4]OD 流酔拳": [
+        "[酔いレベル4]OD 流酔拳（1段目）",
+        "[酔いレベル4]OD 流酔拳（2段目）",
+        "[酔いレベル4]OD 流酔拳（3段目）"
+      ],
+      "[酔いレベル4]中 流酔拳": [
+        "[酔いレベル4]中 流酔拳（1段目）"
+      ],
+      "[酔いレベル4]弱 流酔拳": [
+        "[酔いレベル4]弱 流酔拳（1段目）"
+      ],
+      "[酔いレベル4]強 流酔拳": [
+        "[酔いレベル4]強 流酔拳（1段目）"
+      ],
+      "[酔いレベル4]流酔拳": [
+        "[酔いレベル4]流酔拳（2段目）",
+        "[酔いレベル4]流酔拳（3段目）"
+      ],
+      "張弓腿": [
+        "弱 張弓腿",
+        "中 張弓腿",
+        "強 張弓腿",
+        "OD 張弓腿"
+      ],
+      "月牙叉炮": [
+        "SA3 月牙叉炮",
+        "CA 月牙叉炮"
+      ],
+      "武麗禽": [
+        "SA1 武麗禽"
+      ],
+      "流酔拳": [
+        "弱 流酔拳（1段目）",
+        "中 流酔拳（1段目）",
+        "強 流酔拳（1段目）",
+        "OD 流酔拳（1段目）",
+        "弱 流酔拳（2段目）",
+        "中 流酔拳（2段目）",
+        "強 流酔拳（2段目）",
+        "OD 流酔拳（2段目）",
+        "弱 流酔拳（3段目）",
+        "中 流酔拳（3段目）",
+        "強 流酔拳（3段目）",
+        "OD 流酔拳（3段目）"
+      ],
+      "流酔脚": [
+        "弱 流酔脚（2段目）",
+        "中 流酔脚（2段目）",
+        "強 流酔脚（2段目）",
+        "OD 流酔脚（2段目）",
+        "弱 流酔脚（3段目）",
+        "中 流酔脚（3段目）",
+        "強 流酔脚（3段目）",
+        "OD 流酔脚（3段目）"
+      ],
+      "点辰": [
+        "点辰",
+        "OD 点辰"
+      ],
+      "無影蹴": [
+        "弱 無影蹴",
+        "中 無影蹴",
+        "強 無影蹴",
+        "OD 無影蹴"
+      ],
+      "爆廻": [
+        "弱 爆廻",
+        "中 爆廻",
+        "強 爆廻",
+        "OD 爆廻"
+      ],
+      "疾歩仙掌": [
+        "疾歩仙掌",
+        "OD 疾歩仙掌"
+      ],
+      "絶唱魔身": [
+        "SA2 絶唱魔身"
+      ],
+      "酔疾歩": [
+        "弱 酔疾歩",
+        "中 酔疾歩",
+        "強 酔疾歩",
+        "OD 酔疾歩"
+      ],
+      "魔身": [
+        "魔身"
+      ]
+    },
+    "sc_families": {
+      "Arrow Kick (DL2)": [
+        {
+          "input": "623HK",
+          "name": "Arrow Kick (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "623KK",
+          "name": "Arrow Kick (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "623LK",
+          "name": "Arrow Kick (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "623MK",
+          "name": "Arrow Kick (DL2)",
+          "type": "special"
+        }
+      ],
+      "Bakkai (DL2)": [
+        {
+          "input": "236HK",
+          "name": "Bakkai (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Bakkai (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "Bakkai (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Bakkai (DL2)",
+          "type": "special"
+        }
+      ],
+      "Breakin'": [
+        {
+          "input": "236236K",
+          "name": "Breakin'",
+          "type": "super"
+        }
+      ],
+      "Breakin' ~ Drink": [
+        {
+          "input": "236236K~[2]",
+          "name": "Breakin' ~ Drink",
+          "type": "super"
+        }
+      ],
+      "Freeflow Kicks 1 (DL2)": [
+        {
+          "input": "236HP~6K",
+          "name": "HP Freeflow Kicks 1 (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236LP~6K",
+          "name": "LP Freeflow Kicks 1 (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236MP~6K",
+          "name": "MP Freeflow Kicks 1 (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236PP~6K",
+          "name": "OD Freeflow Kicks 1 (DL2)",
+          "type": "special"
+        }
+      ],
+      "Freeflow Kicks 2 (DL2)": [
+        {
+          "input": "236HP~6K~6K",
+          "name": "HP Freeflow Kicks 2 (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236LP~6K~6K",
+          "name": "LP Freeflow Kicks 2 (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236MP~6K~6K",
+          "name": "MP Freeflow Kicks 2 (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "236PP~6K~6K",
+          "name": "OD Freeflow Kicks 2 (DL2)",
+          "type": "special"
+        }
+      ],
+      "Freeflow Strikes 1 (DL4)": [
+        {
+          "input": "236HP",
+          "name": "HP Freeflow Strikes 1 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "LP Freeflow Strikes 1 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236MP",
+          "name": "MP Freeflow Strikes 1 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "OD Freeflow Strikes 1 (DL4)",
+          "type": "special"
+        }
+      ],
+      "Freeflow Strikes Punch 1 (DL4)": [
+        {
+          "input": "236HP~6P",
+          "name": "HP Freeflow Strikes Punch 1 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236LP~6P",
+          "name": "LP Freeflow Strikes Punch 1 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236MP~6P",
+          "name": "MP Freeflow Strikes Punch 1 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236PP~6P",
+          "name": "OD Freeflow Strikes Punch 1 (DL4)",
+          "type": "special"
+        }
+      ],
+      "Freeflow Strikes Punch 2 (DL4)": [
+        {
+          "input": "236HP~6P~6P",
+          "name": "HP Freeflow Strikes Punch 2 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236LP~6P~6P",
+          "name": "LP Freeflow Strikes Punch 2 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236MP~6P~6P",
+          "name": "MP Freeflow Strikes Punch 2 (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "236PP~6P~6P",
+          "name": "OD Freeflow Strikes Punch 2 (DL4)",
+          "type": "special"
+        }
+      ],
+      "Getsuga Saiho (DL2)": [
+        {
+          "input": "236236P",
+          "name": "Getsuga Saiho (DL2)",
+          "type": "super"
+        }
+      ],
+      "Luminous Dive Kick (DL2)": [
+        {
+          "input": "j.214KK",
+          "name": "Luminous Dive Kick (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "j.214K",
+          "name": "Luminous Dive Kick (DL2)",
+          "type": "special"
+        }
+      ],
+      "Swagger Hermit Punch (DL4)": [
+        {
+          "input": "214PP~6P",
+          "name": "Swagger Hermit Punch (DL4)",
+          "type": "special"
+        },
+        {
+          "input": "214P~6P",
+          "name": "Swagger Hermit Punch (DL4)",
+          "type": "special"
+        }
+      ],
+      "Swagger Step (DL2)": [
+        {
+          "input": "214HP",
+          "name": "Swagger Step (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "Swagger Step (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "Swagger Step (DL2)",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Swagger Step (DL2)",
+          "type": "special"
+        }
+      ],
+      "Tenshin (DL3)": [
+        {
+          "input": "63214KK",
+          "name": "Tenshin (DL3)",
+          "type": "special"
+        },
+        {
+          "input": "63214K",
+          "name": "Tenshin (DL3)",
+          "type": "special"
+        }
+      ],
+      "The Devil Inside": [
+        {
+          "input": "22P",
+          "name": "The Devil Inside",
+          "type": "special"
+        }
+      ],
+      "The Devil Inside (4 drinks)": [
+        {
+          "input": "22P (hold)",
+          "name": "The Devil Inside (4 drinks)",
+          "type": "special"
+        }
+      ],
+      "The Devil Inside (DL4 activation)": [
+        {
+          "input": "22P (activation)",
+          "name": "The Devil Inside (DL4 activation)",
+          "type": "special"
+        }
+      ],
+      "The Devil's Song (DL0-DL4)": [
+        {
+          "input": "214214P",
+          "name": "The Devil's Song (DL0-DL4)",
+          "type": "super"
+        }
+      ]
+    }
+  },
+  "jp": {
+    "sc_chara": "JP",
+    "capcom_families": {
+      "アブニマーチ": [
+        "アブニマーチ",
+        "OD アブニマーチ"
+      ],
+      "アムネジア": [
+        "アムネジア",
+        "OD アムネジア"
+      ],
+      "ザプリェット": [
+        "SA3 ザプリェット",
+        "CA ザプリェット"
+      ],
+      "ストリボーグ": [
+        "弱 ストリボーグ",
+        "中 ストリボーグ",
+        "強 ストリボーグ",
+        "OD ストリボーグ"
+      ],
+      "チェルノボーグ": [
+        "SA1 チェルノボーグ"
+      ],
+      "トリグラフ": [
+        "弱 トリグラフ",
+        "中 トリグラフ",
+        "強 トリグラフ"
+      ],
+      "トルバラン": [
+        "弱 トルバラン",
+        "中 トルバラン",
+        "強 トルバラン",
+        "OD トルバラン"
+      ],
+      "ラヴーシュカ": [
+        "SA2 ラヴーシュカ"
+      ],
+      "ヴィーハト": [
+        "弱 ヴィーハト",
+        "中 ヴィーハト",
+        "強 ヴィーハト"
+      ],
+      "ヴィーハト・アクノ": [
+        "ヴィーハト・アクノ"
+      ],
+      "ヴィーハト・チェーニ": [
+        "ヴィーハト・チェーニ"
+      ],
+      "中 トリグラフ": [
+        "OD 中 トリグラフ"
+      ],
+      "中 ヴィーハト": [
+        "OD 中 ヴィーハト"
+      ],
+      "弱 トリグラフ": [
+        "OD 弱 トリグラフ"
+      ],
+      "弱 ヴィーハト": [
+        "OD 弱 ヴィーハト"
+      ],
+      "強 トリグラフ": [
+        "OD 強 トリグラフ"
+      ],
+      "強 ヴィーハト": [
+        "OD 強 ヴィーハト"
+      ]
+    },
+    "sc_families": {
+      "Amnesia": [
+        {
+          "input": "22KK",
+          "name": "Amnesia",
+          "type": "special"
+        },
+        {
+          "input": "22K",
+          "name": "Amnesia",
+          "type": "special"
+        }
+      ],
+      "Amnesia Bomb": [
+        {
+          "input": "22KK (Bomb)",
+          "name": "Amnesia Bomb",
+          "type": "special"
+        },
+        {
+          "input": "22K (Bomb)",
+          "name": "Amnesia Bomb",
+          "type": "special"
+        }
+      ],
+      "Chornobog": [
+        {
+          "input": "236236P",
+          "name": "Chornobog",
+          "type": "super"
+        }
+      ],
+      "Departure": [
+        {
+          "input": "214P",
+          "name": "Departure",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Departure",
+          "type": "special"
+        }
+      ],
+      "Departure: Shadow": [
+        {
+          "input": "214PP~214HP",
+          "name": "OD Departure: Shadow",
+          "type": "special"
+        },
+        {
+          "input": "214P~214HP",
+          "name": "Departure: Shadow",
+          "type": "special"
+        }
+      ],
+      "Departure: Window": [
+        {
+          "input": "214P~214LP/MP",
+          "name": "Departure: Window",
+          "type": "special"
+        }
+      ],
+      "Embrace": [
+        {
+          "input": "214K",
+          "name": "Embrace",
+          "type": "special"
+        },
+        {
+          "input": "214KK",
+          "name": "Embrace",
+          "type": "special"
+        }
+      ],
+      "Interdiction (CA)": [
+        {
+          "input": "236236K",
+          "name": "Interdiction (CA)",
+          "type": "super"
+        }
+      ],
+      "Lovushka": [
+        {
+          "input": "214214P",
+          "name": "Lovushka",
+          "type": "super"
+        }
+      ],
+      "Stribog": [
+        {
+          "input": "236HP",
+          "name": "Stribog",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "Stribog",
+          "type": "special"
+        },
+        {
+          "input": "236MP",
+          "name": "Stribog",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Stribog",
+          "type": "special"
+        }
+      ],
+      "Torbalan": [
+        {
+          "input": "236HK",
+          "name": "Torbalan",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Torbalan",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "Torbalan",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Torbalan",
+          "type": "special"
+        }
+      ],
+      "Torbalan Feint": [
+        {
+          "input": "236[K]",
+          "name": "Torbalan Feint",
+          "type": "special"
+        }
+      ],
+      "Triglav": [
+        {
+          "input": "22P",
+          "name": "Triglav",
+          "type": "special"
+        },
+        {
+          "input": "22PP",
+          "name": "Triglav",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "juri": {
+    "sc_chara": "Juri",
+    "capcom_families": {
+      "[強化版]五黄殺": [
+        "[強化版]五黄殺"
+      ],
+      "[強化版]暗剣殺": [
+        "[強化版]暗剣殺"
+      ],
+      "[強化版]歳破衝": [
+        "[強化版]歳破衝"
+      ],
+      "五黄殺": [
+        "五黄殺",
+        "OD 五黄殺"
+      ],
+      "回旋断界落": [
+        "SA3 回旋断界落",
+        "CA 回旋断界落"
+      ],
+      "天穿輪": [
+        "弱 天穿輪",
+        "中 天穿輪",
+        "強 天穿輪",
+        "OD 天穿輪"
+      ],
+      "暗剣殺": [
+        "暗剣殺",
+        "OD 暗剣殺"
+      ],
+      "歳破衝": [
+        "歳破衝",
+        "OD 歳破衝"
+      ],
+      "死連閃": [
+        "死連閃",
+        "OD 死連閃"
+      ],
+      "殺界風破斬": [
+        "SA1 殺界風破斬"
+      ],
+      "疾空閃": [
+        "疾空閃",
+        "OD 疾空閃"
+      ],
+      "風水エンジン": [
+        "SA2 風水エンジン",
+        "SA2 風水エンジン（突進）"
+      ],
+      "風破刃": [
+        "弱 風破刃",
+        "中 風破刃",
+        "強 風破刃",
+        "OD 風破刃"
+      ]
+    },
+    "sc_families": {
+      "Ankensatsu": [
+        {
+          "input": "236LKHK",
+          "name": "Ankensatsu",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Ankensatsu",
+          "type": "Special"
+        },
+        {
+          "input": "236MK (1 Stock)",
+          "name": "Ankensatsu",
+          "type": "Special"
+        }
+      ],
+      "Feng Shui Engine": [
+        {
+          "input": "214214P",
+          "name": "Feng Shui Engine",
+          "type": "Super"
+        }
+      ],
+      "Feng Shui Engine (hold)": [
+        {
+          "input": "214214[P]",
+          "name": "Feng Shui Engine (hold)",
+          "type": "Super"
+        }
+      ],
+      "Fuhajin": [
+        {
+          "input": "214HK",
+          "name": "Fuhajin",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Fuhajin",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Fuhajin",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Fuhajin",
+          "type": "Special"
+        }
+      ],
+      "Go Ohsatsu": [
+        {
+          "input": "236MKHK",
+          "name": "Go Ohsatsu",
+          "type": "Special"
+        }
+      ],
+      "Go Ohsatsu (1 Stock)": [
+        {
+          "input": "236HK",
+          "name": "Go Ohsatsu (1 Stock)",
+          "type": "Special"
+        }
+      ],
+      "Kaisen Dankai Raku (CA)": [
+        {
+          "input": "214214K",
+          "name": "Kaisen Dankai Raku (CA)",
+          "type": "Super"
+        }
+      ],
+      "Saihasho": [
+        {
+          "input": "236LK",
+          "name": "Saihasho",
+          "type": "Special"
+        },
+        {
+          "input": "236LKMK",
+          "name": "Saihasho",
+          "type": "Special"
+        },
+        {
+          "input": "236LK (1 Stock)",
+          "name": "Saihasho",
+          "type": "Special"
+        }
+      ],
+      "Sakkai Fuhazan": [
+        {
+          "input": "236236K",
+          "name": "Sakkai Fuhazan",
+          "type": "Super"
+        }
+      ],
+      "Sakkai Fuhazan (hold)": [
+        {
+          "input": "236236[K]",
+          "name": "Sakkai Fuhazan (hold)",
+          "type": "Super"
+        }
+      ],
+      "Shiku-sen": [
+        {
+          "input": "j.214K",
+          "name": "Shiku-sen",
+          "type": "Special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "OD Shiku-sen",
+          "type": "Special"
+        }
+      ],
+      "Shiren-sen": [
+        {
+          "input": "j.214KK~K",
+          "name": "OD Shiren-sen",
+          "type": "Special"
+        },
+        {
+          "input": "j.214K~K",
+          "name": "Shiren-sen",
+          "type": "Special"
+        }
+      ],
+      "Tensenrin": [
+        {
+          "input": "623HP",
+          "name": "Tensenrin",
+          "type": "Special"
+        },
+        {
+          "input": "623LP",
+          "name": "Tensenrin",
+          "type": "Special"
+        },
+        {
+          "input": "623MP",
+          "name": "Tensenrin",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Tensenrin",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "ken": {
+    "sc_chara": "Ken",
+    "capcom_families": {
+      "【奮迅脚】 昇龍拳": [
+        "【奮迅脚】 昇龍拳"
+      ],
+      "【奮迅脚】 竜巻旋風脚": [
+        "【奮迅脚】 竜巻旋風脚"
+      ],
+      "【奮迅脚】 龍尾脚": [
+        "【奮迅脚】 龍尾脚"
+      ],
+      "昇龍拳": [
+        "弱 昇龍拳",
+        "中 昇龍拳",
+        "強 昇龍拳",
+        "OD 昇龍拳"
+      ],
+      "波動拳": [
+        "弱 波動拳",
+        "中 波動拳",
+        "強 波動拳",
+        "OD 波動拳"
+      ],
+      "火砕蹴": [
+        "火砕蹴"
+      ],
+      "疾風迅雷脚": [
+        "SA2 疾風迅雷脚"
+      ],
+      "神龍烈破": [
+        "SA3 神龍烈破",
+        "CA 神龍烈破"
+      ],
+      "空中竜巻旋風脚": [
+        "空中竜巻旋風脚",
+        "OD 空中竜巻旋風脚"
+      ],
+      "竜巻旋風脚": [
+        "弱 竜巻旋風脚",
+        "中 竜巻旋風脚",
+        "強 竜巻旋風脚",
+        "OD 竜巻旋風脚"
+      ],
+      "轟雷落とし": [
+        "轟雷落とし",
+        "OD 轟雷落とし"
+      ],
+      "迅雷脚": [
+        "弱 迅雷脚",
+        "中 迅雷脚",
+        "強 迅雷脚",
+        "OD 迅雷脚"
+      ],
+      "閃火脚": [
+        "閃火脚",
+        "OD 閃火脚"
+      ],
+      "風鎌蹴り": [
+        "風鎌蹴り",
+        "OD 風鎌蹴り"
+      ],
+      "龍尾烈脚": [
+        "SA1 龍尾烈脚"
+      ],
+      "龍尾脚": [
+        "弱 龍尾脚",
+        "中 龍尾脚",
+        "強 龍尾脚",
+        "OD 龍尾脚"
+      ]
+    },
+    "sc_families": {
+      "Aerial Tatsumaki Senpu-kyaku": [
+        {
+          "input": "j.214K",
+          "name": "Aerial Tatsumaki Senpu-kyaku",
+          "type": "special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "Aerial Tatsumaki Senpu-kyaku",
+          "type": "special"
+        }
+      ],
+      "Dragonlash Flame": [
+        {
+          "input": "214214K",
+          "name": "Dragonlash Flame",
+          "type": "super"
+        }
+      ],
+      "Dragonlash Kick": [
+        {
+          "input": "623HK",
+          "name": "Dragonlash Kick",
+          "type": "special"
+        },
+        {
+          "input": "623KK",
+          "name": "Dragonlash Kick",
+          "type": "special"
+        },
+        {
+          "input": "623LK",
+          "name": "Dragonlash Kick",
+          "type": "special"
+        },
+        {
+          "input": "623MK",
+          "name": "Dragonlash Kick",
+          "type": "special"
+        }
+      ],
+      "Emergency Stop": [
+        {
+          "input": "KK~LK",
+          "name": "Emergency Stop",
+          "type": "Special"
+        }
+      ],
+      "Forward Step Kick": [
+        {
+          "input": "KK~HK",
+          "name": "Forward Step Kick",
+          "type": "Special"
+        }
+      ],
+      "Gorai Axe Kick": [
+        {
+          "input": "236KK~6MK",
+          "name": "Gorai Axe Kick",
+          "type": "special"
+        },
+        {
+          "input": "236K~6MK",
+          "name": "Gorai Axe Kick",
+          "type": "special"
+        }
+      ],
+      "Hadoken": [
+        {
+          "input": "236MP",
+          "name": "Hadoken",
+          "type": "special"
+        },
+        {
+          "input": "236HP",
+          "name": "Hadoken",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "Hadoken",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Hadoken",
+          "type": "special"
+        }
+      ],
+      "Jinrai Kick": [
+        {
+          "input": "236HK",
+          "name": "Jinrai Kick",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Jinrai Kick",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "Jinrai Kick",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Jinrai Kick",
+          "type": "special"
+        }
+      ],
+      "Kasai Thrust Kick (HK)": [
+        {
+          "input": "236KK~6HK~6K",
+          "name": "Kasai Thrust Kick (HK)",
+          "type": "special"
+        }
+      ],
+      "Kasai Thrust Kick (LK)": [
+        {
+          "input": "236KK~6LK~6K",
+          "name": "Kasai Thrust Kick (LK)",
+          "type": "special"
+        }
+      ],
+      "Kasai Thrust Kick (MK)": [
+        {
+          "input": "236KK~6MK~6K",
+          "name": "Kasai Thrust Kick (MK)",
+          "type": "special"
+        }
+      ],
+      "Kazekama Shin Kick": [
+        {
+          "input": "236KK~6LK",
+          "name": "Kazekama Shin Kick",
+          "type": "special"
+        },
+        {
+          "input": "236K~6LK",
+          "name": "Kazekama Shin Kick",
+          "type": "special"
+        }
+      ],
+      "Quick Dash": [
+        {
+          "input": "KK",
+          "name": "Quick Dash",
+          "type": "Special"
+        }
+      ],
+      "Run~Dragonlash Kick": [
+        {
+          "input": "KK~623K",
+          "name": "Run~Dragonlash Kick",
+          "type": "Special"
+        }
+      ],
+      "Run~Shoryuken": [
+        {
+          "input": "KK~623P",
+          "name": "Run~Shoryuken",
+          "type": "Special"
+        }
+      ],
+      "Run~Tatsumaki Senpukyaku": [
+        {
+          "input": "KK~214K",
+          "name": "Run~Tatsumaki Senpukyaku",
+          "type": "Special"
+        }
+      ],
+      "Senka Snap Kick": [
+        {
+          "input": "236KK~6HK",
+          "name": "Senka Snap Kick",
+          "type": "special"
+        },
+        {
+          "input": "236K~6HK",
+          "name": "Senka Snap Kick",
+          "type": "special"
+        }
+      ],
+      "Shinryu Reppa (CA)": [
+        {
+          "input": "236236P",
+          "name": "Shinryu Reppa (CA)",
+          "type": "super"
+        }
+      ],
+      "Shippu Jinrai-kyaku": [
+        {
+          "input": "236236K",
+          "name": "Shippu Jinrai-kyaku",
+          "type": "super"
+        }
+      ],
+      "Shoryuken": [
+        {
+          "input": "623LP",
+          "name": "Shoryuken",
+          "type": "special"
+        },
+        {
+          "input": "623HP",
+          "name": "Shoryuken",
+          "type": "special"
+        },
+        {
+          "input": "623MP",
+          "name": "Shoryuken",
+          "type": "special"
+        },
+        {
+          "input": "623PP",
+          "name": "Shoryuken",
+          "type": "special"
+        }
+      ],
+      "Tatsumaki Senpu-kyaku": [
+        {
+          "input": "214HK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "special"
+        },
+        {
+          "input": "214KK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "special"
+        },
+        {
+          "input": "214LK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "special"
+        },
+        {
+          "input": "214MK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "special"
+        }
+      ],
+      "Thunder Kick": [
+        {
+          "input": "KK~MK",
+          "name": "Thunder Kick",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "kimberly": {
+    "sc_chara": "Kimberly",
+    "capcom_families": {
+      "乱れ細工手裏剣": [
+        "弱 乱れ細工手裏剣",
+        "中 乱れ細工手裏剣",
+        "強 乱れ細工手裏剣"
+      ],
+      "召雷細工": [
+        "召雷細工",
+        "OD 召雷細工"
+      ],
+      "弧空": [
+        "弧空",
+        "OD 弧空"
+      ],
+      "彩隠形": [
+        "彩隠形",
+        "OD 彩隠形"
+      ],
+      "影すくい": [
+        "影すくい",
+        "OD 影すくい"
+      ],
+      "急停止": [
+        "急停止",
+        "OD 急停止"
+      ],
+      "武神イズナ落とし": [
+        "武神イズナ落とし",
+        "OD 武神イズナ落とし"
+      ],
+      "武神乱拍子": [
+        "SA1 武神乱拍子"
+      ],
+      "武神乱拍子・雷譜": [
+        "SA1 武神乱拍子・雷譜"
+      ],
+      "武神天翔亢竜": [
+        "SA2 武神天翔亢竜"
+      ],
+      "武神旋風脚": [
+        "弱 武神旋風脚",
+        "中 武神旋風脚",
+        "強 武神旋風脚",
+        "OD 武神旋風脚"
+      ],
+      "武神鉾刃脚": [
+        "武神鉾刃脚",
+        "OD 武神鉾刃脚"
+      ],
+      "武神顕現神楽": [
+        "SA3 武神顕現神楽",
+        "CA 武神顕現神楽"
+      ],
+      "流転一文字": [
+        "弱 流転一文字",
+        "中 流転一文字",
+        "強 流転一文字",
+        "OD 流転一文字"
+      ],
+      "疾駆け": [
+        "疾駆け",
+        "OD 疾駆け"
+      ],
+      "空中武神天翔亢竜": [
+        "SA2 空中武神天翔亢竜"
+      ],
+      "空中武神旋風脚": [
+        "空中武神旋風脚",
+        "OD 空中武神旋風脚"
+      ],
+      "細工手裏剣": [
+        "弱 細工手裏剣",
+        "中 細工手裏剣",
+        "強 細工手裏剣"
+      ],
+      "胴刎ね": [
+        "胴刎ね",
+        "OD 胴刎ね"
+      ],
+      "荒鵺捻り": [
+        "荒鵺捻り",
+        "OD 荒鵺捻り"
+      ],
+      "首狩り": [
+        "首狩り",
+        "OD 首狩り"
+      ]
+    },
+    "sc_families": {
+      "Aerial Bushin Senpukyaku": [
+        {
+          "input": "j.214K",
+          "name": "Aerial Bushin Senpukyaku",
+          "type": "special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "Aerial Bushin Senpukyaku",
+          "type": "special"
+        }
+      ],
+      "Arc Step": [
+        {
+          "input": "236KK (close)",
+          "name": "Arc Step",
+          "type": "special"
+        },
+        {
+          "input": "236K (close)",
+          "name": "Arc Step",
+          "type": "special"
+        }
+      ],
+      "Bushin Beats": [
+        {
+          "input": "236236K",
+          "name": "Bushin Beats",
+          "type": "super"
+        }
+      ],
+      "Bushin Hojin Kick": [
+        {
+          "input": "236KK (close)~K",
+          "name": "Bushin Hojin Kick",
+          "type": "special"
+        },
+        {
+          "input": "236K (close)~K",
+          "name": "Bushin Hojin Kick",
+          "type": "special"
+        }
+      ],
+      "Bushin Izuna Otoshi": [
+        {
+          "input": "236KK (close)~P",
+          "name": "Bushin Izuna Otoshi",
+          "type": "special"
+        },
+        {
+          "input": "236K (close)~P",
+          "name": "Bushin Izuna Otoshi",
+          "type": "special"
+        }
+      ],
+      "Bushin Ninjastar Cypher (CA)": [
+        {
+          "input": "236236P",
+          "name": "Bushin Ninjastar Cypher (CA)",
+          "type": "super"
+        }
+      ],
+      "Bushin Scramble": [
+        {
+          "input": "214214P",
+          "name": "Bushin Scramble",
+          "type": "super"
+        }
+      ],
+      "Bushin Senpukyaku": [
+        {
+          "input": "214KK",
+          "name": "Bushin Senpukyaku",
+          "type": "special"
+        },
+        {
+          "input": "214HK",
+          "name": "Bushin Senpukyaku",
+          "type": "special"
+        },
+        {
+          "input": "214LK",
+          "name": "Bushin Senpukyaku",
+          "type": "special"
+        },
+        {
+          "input": "214MK",
+          "name": "Bushin Senpukyaku",
+          "type": "special"
+        }
+      ],
+      "Bushin Thunderous Beats": [
+        {
+          "input": "236236[K]",
+          "name": "Bushin Thunderous Beats",
+          "type": "super"
+        }
+      ],
+      "Emergency Stop": [
+        {
+          "input": "236KK~P",
+          "name": "Emergency Stop",
+          "type": "special"
+        },
+        {
+          "input": "236K~P",
+          "name": "Emergency Stop",
+          "type": "special"
+        }
+      ],
+      "Genius at Play": [
+        {
+          "input": "22PP (refill)",
+          "name": "Genius at Play",
+          "type": "special"
+        },
+        {
+          "input": "22P (refill)",
+          "name": "Genius at Play",
+          "type": "special"
+        }
+      ],
+      "Hidden Variable": [
+        {
+          "input": "214P",
+          "name": "Hidden Variable",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Hidden Variable",
+          "type": "special"
+        }
+      ],
+      "Neck Hunter": [
+        {
+          "input": "236KK~HK",
+          "name": "Neck Hunter",
+          "type": "special"
+        },
+        {
+          "input": "236K~HK",
+          "name": "Neck Hunter",
+          "type": "special"
+        }
+      ],
+      "Nue Twister": [
+        {
+          "input": "j.236P",
+          "name": "Nue Twister",
+          "type": "special"
+        },
+        {
+          "input": "j.236PP",
+          "name": "Nue Twister",
+          "type": "special"
+        }
+      ],
+      "Shadow Slide": [
+        {
+          "input": "236KK~MK",
+          "name": "Shadow Slide",
+          "type": "special"
+        },
+        {
+          "input": "236K~MK",
+          "name": "Shadow Slide",
+          "type": "special"
+        }
+      ],
+      "Shuriken Bomb": [
+        {
+          "input": "22P (1 stock)",
+          "name": "Shuriken Bomb",
+          "type": "special"
+        }
+      ],
+      "Shuriken Bomb Spread": [
+        {
+          "input": "22PP (2 stock)",
+          "name": "Shuriken Bomb Spread",
+          "type": "special"
+        }
+      ],
+      "Soaring Bushin Scramble": [
+        {
+          "input": "j.214214P",
+          "name": "Soaring Bushin Scramble",
+          "type": "super"
+        }
+      ],
+      "Sprint": [
+        {
+          "input": "236K",
+          "name": "Sprint",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Sprint",
+          "type": "special"
+        }
+      ],
+      "Torso Cleaver": [
+        {
+          "input": "236KK~LK",
+          "name": "Torso Cleaver",
+          "type": "special"
+        },
+        {
+          "input": "236K~LK",
+          "name": "Torso Cleaver",
+          "type": "special"
+        }
+      ],
+      "Vagabond Edge": [
+        {
+          "input": "236HP",
+          "name": "Vagabond Edge",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "Vagabond Edge",
+          "type": "special"
+        },
+        {
+          "input": "236MP",
+          "name": "Vagabond Edge",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Vagabond Edge",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "lily": {
+    "sc_chara": "Lily",
+    "capcom_families": {
+      "[風纏い]OD コンドルダイブ": [
+        "[風纏い]OD コンドルダイブ"
+      ],
+      "[風纏い]OD トマホークバスター": [
+        "[風纏い]OD トマホークバスター"
+      ],
+      "[風纏い]OD 弱 コンドルスパイア": [
+        "[風纏い]OD 弱 コンドルスパイア"
+      ],
+      "[風纏い]OD 強 コンドルスパイア": [
+        "[風纏い]OD 強 コンドルスパイア"
+      ],
+      "[風纏い]SA2 サンダーバード": [
+        "[風纏い]SA2 サンダーバード"
+      ],
+      "[風纏い]SA2 スカイサンダーバード": [
+        "[風纏い]SA2 スカイサンダーバード"
+      ],
+      "[風纏い]コンドルダイブ": [
+        "[風纏い]コンドルダイブ"
+      ],
+      "[風纏い]中 コンドルスパイア": [
+        "[風纏い]中 コンドルスパイア"
+      ],
+      "[風纏い]中 トマホークバスター": [
+        "[風纏い]中 トマホークバスター"
+      ],
+      "[風纏い]弱 コンドルスパイア": [
+        "[風纏い]弱 コンドルスパイア"
+      ],
+      "[風纏い]弱 トマホークバスター": [
+        "[風纏い]弱 トマホークバスター"
+      ],
+      "[風纏い]強 コンドルスパイア": [
+        "[風纏い]強 コンドルスパイア"
+      ],
+      "[風纏い]強 トマホークバスター": [
+        "[風纏い]強 トマホークバスター"
+      ],
+      "コンドルウィンド": [
+        "弱 コンドルウィンド",
+        "中 コンドルウィンド",
+        "強 コンドルウィンド",
+        "OD コンドルウィンド"
+      ],
+      "コンドルスパイア": [
+        "弱 コンドルスパイア",
+        "中 コンドルスパイア",
+        "強 コンドルスパイア"
+      ],
+      "コンドルダイブ": [
+        "コンドルダイブ",
+        "OD コンドルダイブ"
+      ],
+      "サンダーバード": [
+        "SA2 サンダーバード"
+      ],
+      "スカイサンダーバード": [
+        "SA2 スカイサンダーバード"
+      ],
+      "トマホークバスター": [
+        "弱 トマホークバスター",
+        "中 トマホークバスター",
+        "強 トマホークバスター",
+        "OD トマホークバスター"
+      ],
+      "ブリージングホーク": [
+        "SA1 ブリージングホーク"
+      ],
+      "メキシカンタイフーン": [
+        "弱 メキシカンタイフーン",
+        "中 メキシカンタイフーン",
+        "強 メキシカンタイフーン",
+        "OD メキシカンタイフーン"
+      ],
+      "レイジングタイフーン": [
+        "SA3 レイジングタイフーン",
+        "CA レイジングタイフーン"
+      ],
+      "弱 コンドルスパイア": [
+        "OD 弱 コンドルスパイア"
+      ],
+      "強 コンドルスパイア": [
+        "OD 強 コンドルスパイア"
+      ]
+    },
+    "sc_families": {
+      "Breezing Hawk": [
+        {
+          "input": "236236P",
+          "name": "Breezing Hawk",
+          "type": "super"
+        }
+      ],
+      "Condor Dive": [
+        {
+          "input": "j.PP",
+          "name": "Condor Dive",
+          "type": "special"
+        },
+        {
+          "input": "j.PPP",
+          "name": "Condor Dive",
+          "type": "special"
+        }
+      ],
+      "Condor Dive (Windclad)": [
+        {
+          "input": "W.j.PP",
+          "name": "Condor Dive (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.j.PPP",
+          "name": "Condor Dive (Windclad)",
+          "type": "special"
+        }
+      ],
+      "Condor Spire": [
+        {
+          "input": "236HK",
+          "name": "Condor Spire",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Condor Spire",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "Condor Spire",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Condor Spire",
+          "type": "special"
+        }
+      ],
+      "Condor Spire (Windclad)": [
+        {
+          "input": "W.236HK",
+          "name": "Condor Spire (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.236LKMK or W.236LKHK",
+          "name": "Condor Spire (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.236LK",
+          "name": "Condor Spire (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.236MKHK",
+          "name": "Condor Spire (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.236MK",
+          "name": "Condor Spire (Windclad)",
+          "type": "special"
+        }
+      ],
+      "Condor Wind (attack)": [
+        {
+          "input": "214HP (HOLD OK)",
+          "name": "Condor Wind (attack)",
+          "type": "special"
+        },
+        {
+          "input": "214MP (HOLD OK)",
+          "name": "Condor Wind (attack)",
+          "type": "special"
+        },
+        {
+          "input": "214PP (HOLD OK)",
+          "name": "Condor Wind (attack)",
+          "type": "special"
+        }
+      ],
+      "Condor Wind (stock)": [
+        {
+          "input": "214LP",
+          "name": "Condor Wind (stock)",
+          "type": "special"
+        },
+        {
+          "input": "214[PP]",
+          "name": "Condor Wind (stock)",
+          "type": "special"
+        }
+      ],
+      "Dive Follow-up": [
+        {
+          "input": "W.j.PP~PPP",
+          "name": "Dive Follow-up",
+          "type": "special"
+        },
+        {
+          "input": "W.j.PP~PP",
+          "name": "Dive Follow-up",
+          "type": "special"
+        }
+      ],
+      "Mexican Typhoon": [
+        {
+          "input": "360+PP",
+          "name": "Mexican Typhoon",
+          "type": "special"
+        },
+        {
+          "input": "360+HP",
+          "name": "Mexican Typhoon",
+          "type": "special"
+        },
+        {
+          "input": "360+LP",
+          "name": "Mexican Typhoon",
+          "type": "special"
+        },
+        {
+          "input": "360+MP",
+          "name": "Mexican Typhoon",
+          "type": "special"
+        }
+      ],
+      "Raging Typhoon (CA)": [
+        {
+          "input": "214214P",
+          "name": "Raging Typhoon (CA)",
+          "type": "super"
+        }
+      ],
+      "Soaring Thunderbird (Windclad)": [
+        {
+          "input": "j.236236K",
+          "name": "Soaring Thunderbird (Windclad)",
+          "type": "super"
+        }
+      ],
+      "Thunderbird (Windclad)": [
+        {
+          "input": "236236K",
+          "name": "Thunderbird (Windclad)",
+          "type": "super"
+        }
+      ],
+      "Tomahawk Buster": [
+        {
+          "input": "623LP",
+          "name": "Tomahawk Buster",
+          "type": "special"
+        },
+        {
+          "input": "623MP",
+          "name": "Tomahawk Buster",
+          "type": "special"
+        },
+        {
+          "input": "623HP",
+          "name": "Tomahawk Buster",
+          "type": "special"
+        },
+        {
+          "input": "623PP",
+          "name": "Tomahawk Buster",
+          "type": "special"
+        }
+      ],
+      "Tomahawk Buster (Windclad)": [
+        {
+          "input": "W.623MP",
+          "name": "Tomahawk Buster (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.623LP",
+          "name": "Tomahawk Buster (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.623HP",
+          "name": "Tomahawk Buster (Windclad)",
+          "type": "special"
+        },
+        {
+          "input": "W.623PP",
+          "name": "Tomahawk Buster (Windclad)",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "luke": {
+    "sc_chara": "Luke",
+    "capcom_families": {
+      "DDT": [
+        "DDT"
+      ],
+      "アベンジャー": [
+        "アベンジャー",
+        "OD アベンジャー"
+      ],
+      "イレイザー": [
+        "SA2 イレイザー"
+      ],
+      "インパラー": [
+        "インパラー",
+        "OD インパラー"
+      ],
+      "エアフラッシュナックル": [
+        "エアフラッシュナックル",
+        "エアフラッシュナックル（ホールド）",
+        "OD エアフラッシュナックル"
+      ],
+      "サンドブラスト": [
+        "弱 サンドブラスト",
+        "中 サンドブラスト",
+        "強 サンドブラスト",
+        "OD サンドブラスト"
+      ],
+      "スラムダンク": [
+        "スラムダンク"
+      ],
+      "ノーチェイサー": [
+        "ノーチェイサー",
+        "OD ノーチェイサー"
+      ],
+      "バルカンブラスト": [
+        "SA1 バルカンブラスト"
+      ],
+      "フェイタルショット": [
+        "フェイタルショット"
+      ],
+      "フラッシュナックル": [
+        "弱 フラッシュナックル",
+        "弱 フラッシュナックル（ホールド）",
+        "弱 フラッシュナックル（ジャスト）",
+        "中 フラッシュナックル",
+        "中 フラッシュナックル（ホールド）",
+        "中 フラッシュナックル（ジャスト）",
+        "強 フラッシュナックル",
+        "強 フラッシュナックル（ホールド）",
+        "強 フラッシュナックル（ジャスト）",
+        "OD フラッシュナックル",
+        "OD フラッシュナックル（2段目）"
+      ],
+      "ペイルライダー": [
+        "SA3 ペイルライダー",
+        "CA ペイルライダー"
+      ],
+      "ライジングアッパー": [
+        "弱 ライジングアッパー",
+        "中 ライジングアッパー",
+        "強 ライジングアッパー",
+        "OD ライジングアッパー"
+      ]
+    },
+    "sc_families": {
+      "Aerial Flash Knuckle": [
+        {
+          "input": "j.214P",
+          "name": "Aerial Flash Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "j.214PP",
+          "name": "Aerial Flash Knuckle",
+          "type": "special"
+        }
+      ],
+      "Aerial Flash Knuckle (hold)": [
+        {
+          "input": "j.214[P]",
+          "name": "Aerial Flash Knuckle (hold)",
+          "type": "special"
+        }
+      ],
+      "Avenger": [
+        {
+          "input": "236K",
+          "name": "Avenger",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Avenger",
+          "type": "special"
+        }
+      ],
+      "DDT": [
+        {
+          "input": "214PP~PP",
+          "name": "DDT",
+          "type": "special"
+        }
+      ],
+      "Eraser": [
+        {
+          "input": "214214P",
+          "name": "Eraser",
+          "type": "super"
+        }
+      ],
+      "Fatal Shot": [
+        {
+          "input": "236PP~PP",
+          "name": "Fatal Shot",
+          "type": "special"
+        }
+      ],
+      "Flash Knuckle": [
+        {
+          "input": "214PP",
+          "name": "OD Flash Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "214HP",
+          "name": "HP Flash Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "LP Flash Knuckle",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "MP Flash Knuckle",
+          "type": "special"
+        }
+      ],
+      "Flash Knuckle (hold)": [
+        {
+          "input": "214[MP]",
+          "name": "MP Flash Knuckle (hold)",
+          "type": "special"
+        },
+        {
+          "input": "214[HP]",
+          "name": "HP Flash Knuckle (hold)",
+          "type": "special"
+        },
+        {
+          "input": "214[LP]",
+          "name": "LP Flash Knuckle (hold)",
+          "type": "special"
+        }
+      ],
+      "Flash Knuckle (perfect)": [
+        {
+          "input": "pf.214[MP]",
+          "name": "MP Flash Knuckle (perfect)",
+          "type": "special"
+        },
+        {
+          "input": "pf.214[HP]",
+          "name": "HP Flash Knuckle (perfect)",
+          "type": "special"
+        },
+        {
+          "input": "pf.214[LP]",
+          "name": "LP Flash Knuckle (perfect)",
+          "type": "special"
+        }
+      ],
+      "Impaler": [
+        {
+          "input": "236KK~K",
+          "name": "Impaler",
+          "type": "special"
+        },
+        {
+          "input": "236K~K",
+          "name": "Impaler",
+          "type": "special"
+        }
+      ],
+      "No Chaser": [
+        {
+          "input": "236KK~P",
+          "name": "No Chaser",
+          "type": "special"
+        },
+        {
+          "input": "236K~P",
+          "name": "No Chaser",
+          "type": "special"
+        }
+      ],
+      "Pale Rider (CA)": [
+        {
+          "input": "236236K",
+          "name": "Pale Rider (CA)",
+          "type": "super"
+        }
+      ],
+      "Rising Uppercut": [
+        {
+          "input": "623HP",
+          "name": "Rising Uppercut",
+          "type": "special"
+        },
+        {
+          "input": "623LP",
+          "name": "Rising Uppercut",
+          "type": "special"
+        },
+        {
+          "input": "623MP",
+          "name": "Rising Uppercut",
+          "type": "special"
+        },
+        {
+          "input": "623PP",
+          "name": "Rising Uppercut",
+          "type": "special"
+        }
+      ],
+      "Sand Blast": [
+        {
+          "input": "236HP",
+          "name": "Sand Blast",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "Sand Blast",
+          "type": "special"
+        },
+        {
+          "input": "236MP",
+          "name": "Sand Blast",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Sand Blast",
+          "type": "special"
+        }
+      ],
+      "Slam Dunk": [
+        {
+          "input": "623PP~PP",
+          "name": "Slam Dunk",
+          "type": "special"
+        }
+      ],
+      "Vulcan Blast": [
+        {
+          "input": "236236P",
+          "name": "Vulcan Blast",
+          "type": "super"
+        }
+      ]
+    }
+  },
+  "mai": {
+    "sc_chara": "Mai",
+    "capcom_families": {
+      "[強化版]OD ムササビの舞": [
+        "[強化版]OD ムササビの舞"
+      ],
+      "[強化版]OD 必殺忍蜂": [
+        "[強化版]OD 必殺忍蜂"
+      ],
+      "[強化版]OD 花蝶扇": [
+        "[強化版]OD 花蝶扇",
+        "[強化版]OD 花蝶扇（ホールド）"
+      ],
+      "[強化版]OD 飛翔龍炎陣": [
+        "[強化版]OD 飛翔龍炎陣"
+      ],
+      "[強化版]OD 龍炎舞": [
+        "[強化版]OD 龍炎舞"
+      ],
+      "[強化版]SA1 陽炎の舞": [
+        "[強化版]SA1 陽炎の舞"
+      ],
+      "[強化版]SA2 空中超必殺忍蜂": [
+        "[強化版]SA2 空中超必殺忍蜂"
+      ],
+      "[強化版]SA2 超必殺忍蜂": [
+        "[強化版]SA2 超必殺忍蜂"
+      ],
+      "[強化版]ムササビの舞": [
+        "[強化版]ムササビの舞"
+      ],
+      "[強化版]中 必殺忍蜂": [
+        "[強化版]中 必殺忍蜂"
+      ],
+      "[強化版]中 花蝶扇": [
+        "[強化版]中 花蝶扇",
+        "[強化版]中 花蝶扇（ホールド）"
+      ],
+      "[強化版]中 飛翔龍炎陣": [
+        "[強化版]中 飛翔龍炎陣"
+      ],
+      "[強化版]中 龍炎舞": [
+        "[強化版]中 龍炎舞"
+      ],
+      "[強化版]乱れ花蝶扇": [
+        "[強化版]乱れ花蝶扇"
+      ],
+      "[強化版]弱 必殺忍蜂": [
+        "[強化版]弱 必殺忍蜂"
+      ],
+      "[強化版]弱 花蝶扇": [
+        "[強化版]弱 花蝶扇",
+        "[強化版]弱 花蝶扇（ホールド）"
+      ],
+      "[強化版]弱 飛翔龍炎陣": [
+        "[強化版]弱 飛翔龍炎陣"
+      ],
+      "[強化版]弱 龍炎舞": [
+        "[強化版]弱 龍炎舞"
+      ],
+      "[強化版]強 必殺忍蜂": [
+        "[強化版]強 必殺忍蜂"
+      ],
+      "[強化版]強 花蝶扇": [
+        "[強化版]強 花蝶扇",
+        "[強化版]強 花蝶扇（ホールド）"
+      ],
+      "[強化版]強 飛翔龍炎陣": [
+        "[強化版]強 飛翔龍炎陣"
+      ],
+      "[強化版]強 龍炎舞": [
+        "[強化版]強 龍炎舞"
+      ],
+      "ムササビの舞": [
+        "ムササビの舞",
+        "OD ムササビの舞"
+      ],
+      "不知火流・炎舞仇桜": [
+        "SA3 不知火流・炎舞仇桜",
+        "CA 不知火流・炎舞仇桜"
+      ],
+      "乱れ花蝶扇": [
+        "乱れ花蝶扇"
+      ],
+      "必殺忍蜂": [
+        "弱 必殺忍蜂",
+        "中 必殺忍蜂",
+        "強 必殺忍蜂",
+        "OD 必殺忍蜂"
+      ],
+      "空中超必殺忍蜂": [
+        "SA2 空中超必殺忍蜂"
+      ],
+      "花蝶扇": [
+        "弱 花蝶扇",
+        "弱 花蝶扇（ホールド）",
+        "中 花蝶扇",
+        "中 花蝶扇（ホールド）",
+        "強 花蝶扇",
+        "強 花蝶扇（ホールド）",
+        "OD 花蝶扇",
+        "OD 花蝶扇（ホールド）"
+      ],
+      "超必殺忍蜂": [
+        "SA2 超必殺忍蜂"
+      ],
+      "陽炎の舞": [
+        "SA1 陽炎の舞"
+      ],
+      "飛翔龍炎陣": [
+        "弱 飛翔龍炎陣",
+        "中 飛翔龍炎陣",
+        "強 飛翔龍炎陣",
+        "OD 飛翔龍炎陣"
+      ],
+      "龍炎舞": [
+        "弱 龍炎舞",
+        "中 龍炎舞",
+        "強 龍炎舞",
+        "OD 龍炎舞"
+      ]
+    },
+    "sc_families": {
+      "Air Chou Hissatsu Shinobi Bachi (Flame)": [
+        {
+          "input": "j.236236K",
+          "name": "Air Chou Hissatsu Shinobi Bachi (Flame)",
+          "type": "Super"
+        }
+      ],
+      "Chou Hissatsu Shinobi Bachi (Flame)": [
+        {
+          "input": "236236K",
+          "name": "Chou Hissatsu Shinobi Bachi (Flame)",
+          "type": "Super"
+        }
+      ],
+      "Hishou Ryuuenjin (Flame)": [
+        {
+          "input": "623HK",
+          "name": "Hishou Ryuuenjin (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "623KK",
+          "name": "Hishou Ryuuenjin (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "623LK",
+          "name": "Hishou Ryuuenjin (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "623MK",
+          "name": "Hishou Ryuuenjin (Flame)",
+          "type": "Special"
+        }
+      ],
+      "Hissatsu Shinobi Bachi (Flame)": [
+        {
+          "input": "236HK",
+          "name": "Hissatsu Shinobi Bachi (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Hissatsu Shinobi Bachi (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Hissatsu Shinobi Bachi (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Hissatsu Shinobi Bachi (Flame)",
+          "type": "Special"
+        }
+      ],
+      "Kachousen (Flame)": [
+        {
+          "input": "236HP",
+          "name": "Kachousen (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "236LP",
+          "name": "Kachousen (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Kachousen (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Kachousen (Flame)",
+          "type": "Special"
+        }
+      ],
+      "Kachousen (Hold)": [
+        {
+          "input": "236[PP]",
+          "name": "Kachousen (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[P]",
+          "name": "Kachousen (Hold)",
+          "type": "Special"
+        }
+      ],
+      "Kagerou no Mai (Flame)": [
+        {
+          "input": "236236P",
+          "name": "Kagerou no Mai (Flame)",
+          "type": "Super"
+        }
+      ],
+      "Midare Kachousen (Flame)": [
+        {
+          "input": "236[PP]~6P",
+          "name": "Midare Kachousen (Flame)",
+          "type": "Special"
+        }
+      ],
+      "Musasabi no Mai (Flame)": [
+        {
+          "input": "j.214P",
+          "name": "Musasabi no Mai (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "j.214PP",
+          "name": "Musasabi no Mai (Flame)",
+          "type": "Special"
+        }
+      ],
+      "Ryuuenbu (Flame)": [
+        {
+          "input": "214HP",
+          "name": "Ryuuenbu (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Ryuuenbu (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Ryuuenbu (Flame)",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Ryuuenbu (Flame)",
+          "type": "Special"
+        }
+      ],
+      "Shiranui Ryuu: Enbu Ada Zakura (CA)": [
+        {
+          "input": "214214P",
+          "name": "Shiranui Ryuu: Enbu Ada Zakura (CA)",
+          "type": "Super"
+        }
+      ]
+    }
+  },
+  "manon": {
+    "sc_chara": "Manon",
+    "capcom_families": {
+      "アラベスク": [
+        "SA1 アラベスク"
+      ],
+      "エトワール": [
+        "SA2 エトワール"
+      ],
+      "グラン・フェッテ": [
+        "グラン・フェッテ",
+        "OD グラン・フェッテ"
+      ],
+      "デガジェ": [
+        "弱 デガジェ",
+        "中 デガジェ",
+        "強  デガジェ",
+        "OD デガジェ"
+      ],
+      "パ・ド・ドゥ": [
+        "SA3 パ・ド・ドゥ",
+        "CA パ・ド・ドゥ"
+      ],
+      "マネージュ・ドレ": [
+        "弱 マネージュ・ドレ（メダルLvに応じて動作が変化）",
+        "中 マネージュ・ドレ（メダルLvに応じて動作が変化）",
+        "強 マネージュ・ドレ（メダルLvに応じて動作が変化）",
+        "OD マネージュ・ドレ（メダルLvに応じて動作が変化）"
+      ],
+      "ランヴェルセ": [
+        "弱 ランヴェルセ（メダルLvに応じて動作が変化）",
+        "中 ランヴェルセ（メダルLvに応じて動作が変化）",
+        "強 ランヴェルセ（メダルLvに応じて動作が変化）",
+        "OD ランヴェルセ（メダルLvに応じて動作が変化）"
+      ],
+      "ロン・ポワン": [
+        "弱 ロン・ポワン",
+        "中 ロン・ポワン",
+        "強 ロン・ポワン",
+        "OD ロン・ポワン"
+      ]
+    },
+    "sc_families": {
+      "Arabesque": [
+        {
+          "input": "236236K",
+          "name": "Arabesque",
+          "type": "super"
+        }
+      ],
+      "Dégagé": [
+        {
+          "input": "214MK",
+          "name": "MK Dégagé",
+          "type": "special"
+        },
+        {
+          "input": "214HK",
+          "name": "HK Dégagé",
+          "type": "special"
+        },
+        {
+          "input": "214KK",
+          "name": "OD Dégagé",
+          "type": "special"
+        },
+        {
+          "input": "214LK",
+          "name": "LK Dégagé",
+          "type": "special"
+        }
+      ],
+      "Grand Fouetté": [
+        {
+          "input": "236PP~K",
+          "name": "OD Grand Fouetté",
+          "type": "special"
+        },
+        {
+          "input": "236P~K",
+          "name": "Grand Fouetté",
+          "type": "special"
+        }
+      ],
+      "Manège Doré": [
+        {
+          "input": "63214HP",
+          "name": "HP Manège Doré",
+          "type": "special"
+        },
+        {
+          "input": "63214LP",
+          "name": "LP Manège Doré",
+          "type": "special"
+        },
+        {
+          "input": "63214MP",
+          "name": "MP Manège Doré",
+          "type": "special"
+        },
+        {
+          "input": "63214PP",
+          "name": "OD Manège Doré",
+          "type": "special"
+        }
+      ],
+      "Pas de Deux (CA)": [
+        {
+          "input": "236236P",
+          "name": "Pas de Deux (CA)",
+          "type": "super"
+        }
+      ],
+      "Renversé": [
+        {
+          "input": "236PP",
+          "name": "OD Renversé",
+          "type": "special"
+        },
+        {
+          "input": "236HP",
+          "name": "HP Renversé",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "LP Renversé",
+          "type": "special"
+        },
+        {
+          "input": "236MP",
+          "name": "MP Renversé",
+          "type": "special"
+        }
+      ],
+      "Renversé Feint": [
+        {
+          "input": "236[PP]",
+          "name": "OD Renversé Feint",
+          "type": "special"
+        },
+        {
+          "input": "236[P]",
+          "name": "Renversé Feint",
+          "type": "special"
+        }
+      ],
+      "Rond-point": [
+        {
+          "input": "236HK",
+          "name": "HK Rond-point",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "OD Rond-point",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "LK Rond-point",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "MK Rond-point",
+          "type": "special"
+        }
+      ],
+      "Étoile": [
+        {
+          "input": "214214K",
+          "name": "Étoile",
+          "type": "super"
+        }
+      ]
+    }
+  },
+  "marisa": {
+    "sc_chara": "Marisa",
+    "capcom_families": {
+      "アポロウーサ": [
+        "SA3 アポロウーサ",
+        "CA アポロウーサ"
+      ],
+      "エンフォルド": [
+        "エンフォルド"
+      ],
+      "クアドリガ": [
+        "弱 クアドリガ",
+        "中 クアドリガ",
+        "強 クアドリガ",
+        "OD クアドリガ"
+      ],
+      "グラディウス": [
+        "弱 グラディウス",
+        "弱 グラディウス（ホールド）",
+        "中 グラディウス",
+        "中 グラディウス（ホールド）",
+        "強 グラディウス",
+        "強 グラディウス（ホールド）",
+        "OD グラディウス",
+        "OD グラディウス（ホールド）"
+      ],
+      "スクトゥム": [
+        "スクトゥム",
+        "OD スクトゥム"
+      ],
+      "スクトゥム(当身派生版)": [
+        "スクトゥム(当身派生版)",
+        "OD スクトゥム(当身派生版)"
+      ],
+      "ディマカイルス": [
+        "弱 ディマカイルス（1段目）",
+        "弱 ディマカイルス（2段目）",
+        "中 ディマカイルス（1段目）",
+        "中 ディマカイルス（2段目）",
+        "強 ディマカイルス（1段目）",
+        "強 ディマカイルス（2段目）",
+        "OD ディマカイルス（1段目）",
+        "OD ディマカイルス（2段目）"
+      ],
+      "トニトルス": [
+        "トニトルス（1段目）",
+        "トニトルス（2段目）"
+      ],
+      "ファランクス": [
+        "弱 ファランクス",
+        "中 ファランクス",
+        "強 ファランクス",
+        "OD ファランクス"
+      ],
+      "プロケッラ": [
+        "プロケッラ"
+      ],
+      "マリーザジャベリン": [
+        "SA1 マリーザジャベリン",
+        "SA1 マリーザジャベリン（ホールド）"
+      ],
+      "マリーザジャベリン(当身派生版)": [
+        "SA1 マリーザジャベリン(当身派生版)"
+      ],
+      "メテオリティス": [
+        "SA2 メテオリティス"
+      ]
+    },
+    "sc_families": {
+      "Dimachaerus": [
+        {
+          "input": "214HP",
+          "name": "Dimachaerus",
+          "type": "special"
+        },
+        {
+          "input": "214LP",
+          "name": "Dimachaerus",
+          "type": "special"
+        },
+        {
+          "input": "214MP",
+          "name": "Dimachaerus",
+          "type": "special"
+        },
+        {
+          "input": "214PP",
+          "name": "Dimachaerus",
+          "type": "special"
+        }
+      ],
+      "Dimachaerus Follow-up": [
+        {
+          "input": "214HP~6P",
+          "name": "HP Dimachaerus Follow-up",
+          "type": "special"
+        },
+        {
+          "input": "214LP~6P",
+          "name": "LP Dimachaerus Follow-up",
+          "type": "special"
+        },
+        {
+          "input": "214MP~6P",
+          "name": "MP Dimachaerus Follow-up",
+          "type": "special"
+        },
+        {
+          "input": "214PP~6P",
+          "name": "OD Dimachaerus Follow-up",
+          "type": "special"
+        }
+      ],
+      "Enfold": [
+        {
+          "input": "214K~LPLK",
+          "name": "Enfold",
+          "type": "special"
+        }
+      ],
+      "Gladius": [
+        {
+          "input": "236HP",
+          "name": "Gladius",
+          "type": "special"
+        },
+        {
+          "input": "236LP",
+          "name": "Gladius",
+          "type": "special"
+        },
+        {
+          "input": "236MP",
+          "name": "Gladius",
+          "type": "special"
+        },
+        {
+          "input": "236PP",
+          "name": "Gladius",
+          "type": "special"
+        }
+      ],
+      "Gladius (Hold)": [
+        {
+          "input": "236[HP]",
+          "name": "Gladius (Hold)",
+          "type": "special"
+        },
+        {
+          "input": "236[LP]",
+          "name": "Gladius (Hold)",
+          "type": "special"
+        },
+        {
+          "input": "236[MP]",
+          "name": "Gladius (Hold)",
+          "type": "special"
+        },
+        {
+          "input": "236[PP]",
+          "name": "Gladius (Hold)",
+          "type": "special"
+        }
+      ],
+      "Goddess of the Hunt (CA)": [
+        {
+          "input": "236236K",
+          "name": "Goddess of the Hunt (CA)",
+          "type": "super"
+        }
+      ],
+      "Javelin of Marisa": [
+        {
+          "input": "236236P",
+          "name": "Javelin of Marisa",
+          "type": "super"
+        },
+        {
+          "input": "236236[P] Counter",
+          "name": "Javelin of Marisa",
+          "type": "super"
+        },
+        {
+          "input": "236236[P]",
+          "name": "Javelin of Marisa",
+          "type": "super"
+        }
+      ],
+      "Meteorite": [
+        {
+          "input": "214214P",
+          "name": "Meteorite",
+          "type": "super"
+        }
+      ],
+      "Phalanx": [
+        {
+          "input": "623HP",
+          "name": "Phalanx",
+          "type": "special"
+        },
+        {
+          "input": "623LP",
+          "name": "Phalanx",
+          "type": "special"
+        },
+        {
+          "input": "623MP",
+          "name": "Phalanx",
+          "type": "special"
+        },
+        {
+          "input": "623PP",
+          "name": "Phalanx",
+          "type": "special"
+        }
+      ],
+      "Procella": [
+        {
+          "input": "214K~K",
+          "name": "Procella",
+          "type": "special"
+        }
+      ],
+      "Quadriga": [
+        {
+          "input": "236HK",
+          "name": "Quadriga",
+          "type": "special"
+        },
+        {
+          "input": "236KK",
+          "name": "Quadriga",
+          "type": "special"
+        },
+        {
+          "input": "236LK",
+          "name": "Quadriga",
+          "type": "special"
+        },
+        {
+          "input": "236MK",
+          "name": "Quadriga",
+          "type": "special"
+        }
+      ],
+      "Scutum (Counter)": [
+        {
+          "input": "214K",
+          "name": "Scutum (Counter)",
+          "type": "special"
+        },
+        {
+          "input": "214KK",
+          "name": "Scutum (Counter)",
+          "type": "special"
+        }
+      ],
+      "Tonitrus 1": [
+        {
+          "input": "214K~P",
+          "name": "Tonitrus 1",
+          "type": "special"
+        }
+      ],
+      "Tonitrus 2": [
+        {
+          "input": "214K~P~P",
+          "name": "Tonitrus 2",
+          "type": "special"
+        }
+      ]
+    }
+  },
+  "rashid": {
+    "sc_chara": "Rashid",
+    "capcom_families": {
+      "【気流強化】 OD イーグル・スパイク": [
+        "【気流強化】 OD イーグル・スパイク"
+      ],
+      "【気流強化】 OD スピニング・ミキサー": [
+        "【気流強化】 OD スピニング・ミキサー"
+      ],
+      "【気流強化】 中 イーグル・スパイク": [
+        "【気流強化】 中 イーグル・スパイク"
+      ],
+      "【気流強化】 中 スピニング・ミキサー": [
+        "【気流強化】 中 スピニング・ミキサー"
+      ],
+      "【気流強化】 弱 イーグル・スパイク": [
+        "【気流強化】 弱 イーグル・スパイク"
+      ],
+      "【気流強化】 弱 スピニング・ミキサー": [
+        "【気流強化】 弱 スピニング・ミキサー"
+      ],
+      "【気流強化】 強 イーグル・スパイク": [
+        "【気流強化】 強 イーグル・スパイク"
+      ],
+      "【気流強化】 強 スピニング・ミキサー": [
+        "【気流強化】 強 スピニング・ミキサー"
+      ],
+      "アサルト・ネイル": [
+        "アサルト・ネイル"
+      ],
+      "アサルト・ロール": [
+        "アサルト・ロール"
+      ],
+      "アラビアン・サイクロン": [
+        "弱 アラビアン・サイクロン",
+        "中 アラビアン・サイクロン",
+        "強 アラビアン・サイクロン",
+        "OD アラビアン・サイクロン"
+      ],
+      "アラビアン・スカイハイ": [
+        "弱 アラビアン・スカイハイ",
+        "中 アラビアン・スカイハイ",
+        "強 アラビアン・スカイハイ",
+        "OD アラビアン・スカイハイ"
+      ],
+      "アルタイル": [
+        "SA3 アルタイル",
+        "CA アルタイル"
+      ],
+      "イウサール": [
+        "SA2 イウサール"
+      ],
+      "イーグル・スパイク": [
+        "弱 イーグル・スパイク",
+        "中 イーグル・スパイク",
+        "強 イーグル・スパイク",
+        "OD イーグル・スパイク"
+      ],
+      "ウイング・ストローク": [
+        "ウイング・ストローク"
+      ],
+      "スピニング・ミキサー": [
+        "弱 スピニング・ミキサー",
+        "中 スピニング・ミキサー",
+        "強 スピニング・ミキサー",
+        "OD スピニング・ミキサー"
+      ],
+      "スーパー・ラシード・キック": [
+        "SA1 スーパー・ラシード・キック"
+      ],
+      "ワールウインド・ショット": [
+        "弱 ワールウインド・ショット",
+        "中 ワールウインド・ショット",
+        "強 ワールウインド・ショット",
+        "OD ワールウインド・ショット"
+      ],
+      "ワールウインド・ショット (ホールド)": [
+        "弱 ワールウインド・ショット (ホールド)",
+        "中 ワールウインド・ショット (ホールド)",
+        "強 ワールウインド・ショット (ホールド)"
+      ],
+      "ワールウインド・ショット (ホールドMAX)": [
+        "弱 ワールウインド・ショット (ホールドMAX)",
+        "中 ワールウインド・ショット (ホールドMAX)",
+        "強 ワールウインド・ショット (ホールドMAX)"
+      ],
+      "ワールウインド・ショット (ホールド版)": [
+        "OD ワールウインド・ショット (ホールド版)"
+      ]
+    },
+    "sc_families": {
+      "Altair (CA)": [
+        {
+          "input": "236236P",
+          "name": "Altair (CA)",
+          "type": "Super"
+        }
+      ],
+      "Arabian Cyclone": [
+        {
+          "input": "214HP",
+          "name": "Arabian Cyclone",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Arabian Cyclone",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Arabian Cyclone",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Arabian Cyclone",
+          "type": "Special"
+        }
+      ],
+      "Arabian Skyhigh": [
+        {
+          "input": "j.214LK",
+          "name": "Arabian Skyhigh",
+          "type": "Special"
+        },
+        {
+          "input": "j.214MK",
+          "name": "Arabian Skyhigh",
+          "type": "Special"
+        },
+        {
+          "input": "j.214HK",
+          "name": "Arabian Skyhigh",
+          "type": "Special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "Arabian Skyhigh",
+          "type": "Special"
+        }
+      ],
+      "Eagle Spike": [
+        {
+          "input": "214HK",
+          "name": "Eagle Spike",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Eagle Spike",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Eagle Spike",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Eagle Spike",
+          "type": "Special"
+        }
+      ],
+      "Eagle Spike (Air Current)": [
+        {
+          "input": "214HK (Air Current)",
+          "name": "Eagle Spike (Air Current)",
+          "type": "Special"
+        },
+        {
+          "input": "214KK (Air Current)",
+          "name": "Eagle Spike (Air Current)",
+          "type": "Special"
+        },
+        {
+          "input": "214LK (Air Current)",
+          "name": "Eagle Spike (Air Current)",
+          "type": "Special"
+        },
+        {
+          "input": "214MK (Air Current)",
+          "name": "Eagle Spike (Air Current)",
+          "type": "Special"
+        }
+      ],
+      "Front Flip": [
+        {
+          "input": "6KK~KK",
+          "name": "Front Flip",
+          "type": "Special"
+        }
+      ],
+      "Nail Assault": [
+        {
+          "input": "214P~6K~K",
+          "name": "Nail Assault",
+          "type": "Special"
+        }
+      ],
+      "Rolling Assault": [
+        {
+          "input": "214P~6K",
+          "name": "Rolling Assault",
+          "type": "Special"
+        }
+      ],
+      "Run": [
+        {
+          "input": "6[6]",
+          "name": "Run",
+          "type": "Special"
+        }
+      ],
+      "Side Flip": [
+        {
+          "input": "6KK",
+          "name": "Side Flip",
+          "type": "Special"
+        }
+      ],
+      "Spinning Mixer": [
+        {
+          "input": "236HP",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236HP (Air Current)",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236LP",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236LP (Air Current)",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236MP (Air Current)",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        },
+        {
+          "input": "236PP (Air Current)",
+          "name": "Spinning Mixer",
+          "type": "Special"
+        }
+      ],
+      "Super Rashid Kick": [
+        {
+          "input": "236236K",
+          "name": "Super Rashid Kick",
+          "type": "Super"
+        }
+      ],
+      "Wall Jump": [
+        {
+          "input": "9 (against wall)",
+          "name": "Wall Jump",
+          "type": "Special"
+        }
+      ],
+      "Whirlwind Shot": [
+        {
+          "input": "236K",
+          "name": "Whirlwind Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Whirlwind Shot",
+          "type": "Special"
+        }
+      ],
+      "Whirlwind Shot (Hold)": [
+        {
+          "input": "236[KK]",
+          "name": "Whirlwind Shot (Hold)",
+          "type": "Special"
+        },
+        {
+          "input": "236[K]",
+          "name": "Whirlwind Shot (Hold)",
+          "type": "Special"
+        }
+      ],
+      "Whirlwind Shot (Partial Hold)": [
+        {
+          "input": "236{K}",
+          "name": "Whirlwind Shot (Partial Hold)",
+          "type": "Special"
+        }
+      ],
+      "Wing Stroke": [
+        {
+          "input": "214P~4K",
+          "name": "Wing Stroke",
+          "type": "Special"
+        }
+      ],
+      "Ysaar": [
+        {
+          "input": "214214K",
+          "name": "Ysaar",
+          "type": "Super"
+        }
+      ]
+    }
+  },
+  "ryu": {
+    "sc_chara": "Ryu",
+    "capcom_families": {
+      "[電刃錬気]OD 波動拳": [
+        "[電刃錬気]OD 波動拳"
+      ],
+      "[電刃錬気]OD 波掌撃": [
+        "[電刃錬気]OD 波掌撃"
+      ],
+      "[電刃錬気]SA1 真空波動拳": [
+        "[電刃錬気]SA1 真空波動拳"
+      ],
+      "[電刃錬気]SA2 真波掌撃": [
+        "[電刃錬気]SA2 真波掌撃（Lv1）",
+        "[電刃錬気]SA2 真波掌撃（Lv2）",
+        "[電刃錬気]SA2 真波掌撃（Lv3）"
+      ],
+      "[電刃錬気]波動拳": [
+        "[電刃錬気]波動拳"
+      ],
+      "[電刃錬気]波掌撃": [
+        "[電刃錬気]波掌撃"
+      ],
+      "上段足刀蹴り": [
+        "弱 上段足刀蹴り",
+        "中 上段足刀蹴り",
+        "強 上段足刀蹴り",
+        "OD 上段足刀蹴り"
+      ],
+      "昇龍拳": [
+        "弱 昇龍拳",
+        "中 昇龍拳",
+        "強 昇龍拳",
+        "OD 昇龍拳"
+      ],
+      "波動拳": [
+        "弱 波動拳",
+        "中 波動拳",
+        "強 波動拳",
+        "OD 波動拳"
+      ],
+      "波掌撃": [
+        "弱 波掌撃",
+        "中 波掌撃",
+        "強 波掌撃",
+        "OD 波掌撃"
+      ],
+      "真・昇龍拳": [
+        "SA3 真・昇龍拳",
+        "CA 真・昇龍拳"
+      ],
+      "真波掌撃": [
+        "SA2 真波掌撃（Lv1）",
+        "SA2 真波掌撃（Lv2）",
+        "SA2 真波掌撃（Lv3）"
+      ],
+      "真空波動拳": [
+        "SA1 真空波動拳"
+      ],
+      "空中竜巻旋風脚": [
+        "空中竜巻旋風脚",
+        "OD 空中竜巻旋風脚"
+      ],
+      "竜巻旋風脚": [
+        "弱 竜巻旋風脚",
+        "中 竜巻旋風脚",
+        "強 竜巻旋風脚",
+        "OD 竜巻旋風脚"
+      ],
+      "電刃錬気": [
+        "電刃錬気"
+      ]
+    },
+    "sc_families": {
+      "Aerial Tatsumaki Senpu-kyaku": [
+        {
+          "input": "6HK~214K",
+          "name": "Aerial Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "6HK~214KK",
+          "name": "Aerial Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "j.214K",
+          "name": "Aerial Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "j.214KK",
+          "name": "Aerial Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        }
+      ],
+      "Denjin Charge": [
+        {
+          "input": "22P",
+          "name": "Denjin Charge",
+          "type": "Special"
+        }
+      ],
+      "Denjin Charge Hadoken": [
+        {
+          "input": "236HP",
+          "name": "Denjin Charge Hadoken",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Denjin Charge Hadoken",
+          "type": "Special"
+        }
+      ],
+      "Denjin Charge Hashogeki": [
+        {
+          "input": "214HP",
+          "name": "Denjin Charge Hashogeki",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Denjin Charge Hashogeki",
+          "type": "Special"
+        }
+      ],
+      "Denjin Hadoken": [
+        {
+          "input": "236236P",
+          "name": "Denjin Hadoken",
+          "type": "Super"
+        }
+      ],
+      "Denjin Hashogeki Lv.1": [
+        {
+          "input": "214214P",
+          "name": "Denjin Hashogeki Lv.1",
+          "type": "Super"
+        }
+      ],
+      "Hadoken": [
+        {
+          "input": "236LP",
+          "name": "Hadoken",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Hadoken",
+          "type": "Special"
+        }
+      ],
+      "Hashogeki": [
+        {
+          "input": "214LP",
+          "name": "Hashogeki",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Hashogeki",
+          "type": "Special"
+        }
+      ],
+      "High Blade Kick": [
+        {
+          "input": "236HK",
+          "name": "High Blade Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "High Blade Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "High Blade Kick",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "High Blade Kick",
+          "type": "Special"
+        }
+      ],
+      "Shin Hashogeki Lv.2": [
+        {
+          "input": "214214P (Hold Lv.2)",
+          "name": "Shin Hashogeki Lv.2",
+          "type": "Super"
+        }
+      ],
+      "Shin Hashogeki Lv.3": [
+        {
+          "input": "214214P (Hold Lv.3)",
+          "name": "Shin Hashogeki Lv.3",
+          "type": "Super"
+        }
+      ],
+      "Shin Shoryuken (CA)": [
+        {
+          "input": "236236K",
+          "name": "Shin Shoryuken (CA)",
+          "type": "Super"
+        }
+      ],
+      "Shoryuken": [
+        {
+          "input": "623HP",
+          "name": "Shoryuken",
+          "type": "Special"
+        },
+        {
+          "input": "623LP",
+          "name": "Shoryuken",
+          "type": "Special"
+        },
+        {
+          "input": "623MP",
+          "name": "Shoryuken",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Shoryuken",
+          "type": "Special"
+        }
+      ],
+      "Tatsumaki Senpu-kyaku": [
+        {
+          "input": "214HK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Tatsumaki Senpu-kyaku",
+          "type": "Special"
+        }
+      ]
+    }
+  },
+  "sagat": {
+    "sc_chara": "Sagat",
+    "capcom_families": {
+      "グランドタイガーショット": [
+        "グランドタイガーショット",
+        "OD グランドタイガーショット"
+      ],
+      "サベージタイガー": [
+        "SA2 サベージタイガー"
+      ],
+      "サベージタイガースタンプ": [
+        "SA2 サベージタイガースタンプ"
+      ],
+      "サベージタイガーゼニス": [
+        "SA2 サベージタイガーゼニス"
+      ],
+      "サベージタイガーペンデュラム": [
+        "SA2 サベージタイガーペンデュラム"
+      ],
+      "サベージタイガーレイド": [
+        "SA2 サベージタイガーレイド"
+      ],
+      "タイガーアッパーカット": [
+        "弱 タイガーアッパーカット",
+        "中 タイガーアッパーカット",
+        "強 タイガーアッパーカット",
+        "強 タイガーアッパーカット（ホールド）",
+        "OD タイガーアッパーカット"
+      ],
+      "タイガーキャノン": [
+        "SA1 タイガーキャノン"
+      ],
+      "タイガーグリード": [
+        "タイガーグリード",
+        "OD タイガーグリード"
+      ],
+      "タイガーショット": [
+        "中 タイガーショット",
+        "強 タイガーショット",
+        "OD タイガーショット"
+      ],
+      "タイガーニークラッシュ": [
+        "弱 タイガーニークラッシュ",
+        "中 タイガーニークラッシュ",
+        "強 タイガーニークラッシュ",
+        "OD タイガーニークラッシュ"
+      ],
+      "タイガーネクサス": [
+        "弱 タイガーネクサス",
+        "中 タイガーネクサス",
+        "強 タイガーネクサス",
+        "OD タイガーネクサス"
+      ],
+      "タイガーノヴァ": [
+        "タイガーノヴァ",
+        "OD タイガーノヴァ"
+      ],
+      "タイガーマイト": [
+        "タイガーマイト",
+        "OD タイガーマイト"
+      ],
+      "タイガーヴァンキッシュ": [
+        "SA3 タイガーヴァンキッシュ",
+        "CA タイガーヴァンキッシュ"
+      ]
+    },
+    "sc_families": {
+      "Greedy Tiger": [
+        {
+          "input": "214KK~6MK",
+          "name": "Greedy Tiger",
+          "type": "Special"
+        },
+        {
+          "input": "214K~6MK",
+          "name": "Greedy Tiger",
+          "type": "Special"
+        }
+      ],
+      "High Tiger Shot": [
+        {
+          "input": "236HP",
+          "name": "High Tiger Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "High Tiger Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236MPHP",
+          "name": "High Tiger Shot",
+          "type": "Special"
+        }
+      ],
+      "Low Tiger Shot": [
+        {
+          "input": "236LP",
+          "name": "Low Tiger Shot",
+          "type": "Special"
+        },
+        {
+          "input": "236LPMP or 236LPHP",
+          "name": "Low Tiger Shot",
+          "type": "Special"
+        }
+      ],
+      "Mighty Tiger": [
+        {
+          "input": "214KK~6LK",
+          "name": "Mighty Tiger",
+          "type": "Special"
+        },
+        {
+          "input": "214K~6LK",
+          "name": "Mighty Tiger",
+          "type": "Special"
+        }
+      ],
+      "Nova Tiger": [
+        {
+          "input": "214K~6HK",
+          "name": "Nova Tiger",
+          "type": "Special"
+        },
+        {
+          "input": "214KK~6HK",
+          "name": "Nova Tiger",
+          "type": "Special"
+        }
+      ],
+      "Savage Tiger": [
+        {
+          "input": "214214K",
+          "name": "Savage Tiger",
+          "type": "Super"
+        }
+      ],
+      "Savage Tiger Pendulum (Side Switch)": [
+        {
+          "input": "214214K~4",
+          "name": "Savage Tiger Pendulum (Side Switch)",
+          "type": "Super"
+        }
+      ],
+      "Savage Tiger Raid (Damage)": [
+        {
+          "input": "214214K~5",
+          "name": "Savage Tiger Raid (Damage)",
+          "type": "Super"
+        }
+      ],
+      "Savage Tiger Stomp (Oki)": [
+        {
+          "input": "214214K~2",
+          "name": "Savage Tiger Stomp (Oki)",
+          "type": "Super"
+        }
+      ],
+      "Savage Tiger Zenith (Launcher)": [
+        {
+          "input": "214214K~6",
+          "name": "Savage Tiger Zenith (Launcher)",
+          "type": "Super"
+        }
+      ],
+      "Tiger Cannon": [
+        {
+          "input": "236236P",
+          "name": "Tiger Cannon",
+          "type": "Super"
+        }
+      ],
+      "Tiger Knee Crush": [
+        {
+          "input": "236HK",
+          "name": "Tiger Knee Crush",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Tiger Knee Crush",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Tiger Knee Crush",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Tiger Knee Crush",
+          "type": "Special"
+        }
+      ],
+      "Tiger Nexus": [
+        {
+          "input": "214HK",
+          "name": "Tiger Nexus",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Tiger Nexus",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Tiger Nexus",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Tiger Nexus",
+          "type": "Special"
+        }
+      ],
+      "Tiger Uppercut": [
+        {
+          "input": "623HP",
+          "name": "Tiger Uppercut",
+          "type": "Special"
+        },
+        {
+          "input": "623LP",
+          "name": "Tiger Uppercut",
+          "type": "Special"
+        },
+        {
+          "input": "623MP",
+          "name": "Tiger Uppercut",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Tiger Uppercut",
+          "type": "Special"
+        }
+      ],
+      "Tiger Uppercut (hold)": [
+        {
+          "input": "623[HP]",
+          "name": "Tiger Uppercut (hold)",
+          "type": "Special"
+        }
+      ],
+      "Tiger Vanquisher (CA)": [
+        {
+          "input": "236236K",
+          "name": "Tiger Vanquisher (CA)",
+          "type": "Super"
+        }
+      ]
+    }
+  },
+  "terry": {
+    "sc_chara": "Terry",
+    "capcom_families": {
+      "クイックバーン": [
+        "クイックバーン",
+        "OD クイックバーン"
+      ],
+      "クラックシュート": [
+        "弱 クラックシュート",
+        "中 クラックシュート",
+        "強 クラックシュート",
+        "OD クラックシュート"
+      ],
+      "ツインゲイザー": [
+        "SA2 ツインゲイザー"
+      ],
+      "トリプルゲイザー": [
+        "SA2 トリプルゲイザー"
+      ],
+      "トリプルゲイザー(不発)": [
+        "SA2 トリプルゲイザー(不発)"
+      ],
+      "バスターウルフ": [
+        "SA1 バスターウルフ"
+      ],
+      "バーンナックル": [
+        "中 バーンナックル",
+        "強 バーンナックル",
+        "OD バーンナックル"
+      ],
+      "パワーウェイブ": [
+        "弱 パワーウェイブ",
+        "中 パワーウェイブ",
+        "OD パワーウェイブ"
+      ],
+      "パワーゲイザー": [
+        "SA2 パワーゲイザー"
+      ],
+      "パワーチャージ": [
+        "弱 パワーチャージ",
+        "中 パワーチャージ",
+        "強 パワーチャージ",
+        "OD パワーチャージ"
+      ],
+      "ライジングタックル": [
+        "弱 ライジングタックル",
+        "中 ライジングタックル",
+        "強 ライジングタックル",
+        "OD ライジングタックル"
+      ],
+      "ライジングファング": [
+        "SA3 ライジングファング",
+        "CA ライジングファング"
+      ],
+      "ラウンドウェイブ": [
+        "ラウンドウェイブ"
+      ]
+    },
+    "sc_families": {
+      "Burning Knuckle": [
+        {
+          "input": "214HP",
+          "name": "Burning Knuckle",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Burning Knuckle",
+          "type": "Special"
+        },
+        {
+          "input": "214MPHP",
+          "name": "Burning Knuckle",
+          "type": "Special"
+        }
+      ],
+      "Buster Wolf": [
+        {
+          "input": "236236K",
+          "name": "Buster Wolf",
+          "type": "Super"
+        }
+      ],
+      "Crack Shoot": [
+        {
+          "input": "214HK",
+          "name": "Crack Shoot",
+          "type": "Special"
+        },
+        {
+          "input": "214KK",
+          "name": "Crack Shoot",
+          "type": "Special"
+        },
+        {
+          "input": "214LK",
+          "name": "Crack Shoot",
+          "type": "Special"
+        },
+        {
+          "input": "214MK",
+          "name": "Crack Shoot",
+          "type": "Special"
+        }
+      ],
+      "Power Charge": [
+        {
+          "input": "236HK",
+          "name": "Power Charge",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Power Charge",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Power Charge",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Power Charge",
+          "type": "Special"
+        }
+      ],
+      "Power Geyser": [
+        {
+          "input": "214214P",
+          "name": "Power Geyser",
+          "type": "Super"
+        }
+      ],
+      "Power Wave": [
+        {
+          "input": "236LP",
+          "name": "Power Wave",
+          "type": "Special"
+        },
+        {
+          "input": "236MP",
+          "name": "Power Wave",
+          "type": "Special"
+        },
+        {
+          "input": "236PP",
+          "name": "Power Wave",
+          "type": "Special"
+        }
+      ],
+      "Quick Burn": [
+        {
+          "input": "214LP",
+          "name": "Quick Burn",
+          "type": "Special"
+        },
+        {
+          "input": "214LPMP or 214LPHP",
+          "name": "Quick Burn",
+          "type": "Special"
+        }
+      ],
+      "Rising Fang (CA)": [
+        {
+          "input": "236236P",
+          "name": "Rising Fang (CA)",
+          "type": "Super"
+        }
+      ],
+      "Rising Tackle": [
+        {
+          "input": "623HP",
+          "name": "Rising Tackle",
+          "type": "Special"
+        },
+        {
+          "input": "623LP",
+          "name": "Rising Tackle",
+          "type": "Special"
+        },
+        {
+          "input": "623MP",
+          "name": "Rising Tackle",
+          "type": "Special"
+        },
+        {
+          "input": "623PP",
+          "name": "Rising Tackle",
+          "type": "Special"
+        }
+      ],
+      "Round Wave": [
+        {
+          "input": "236HP",
+          "name": "Round Wave",
+          "type": "Special"
+        }
+      ],
+      "Triple Geyser": [
+        {
+          "input": "214214P~PP~PP",
+          "name": "Triple Geyser",
+          "type": "Super"
+        }
+      ],
+      "Twin Geyser": [
+        {
+          "input": "214214P~PP",
+          "name": "Twin Geyser",
+          "type": "Super"
+        }
+      ]
+    }
+  },
+  "vega_mbison": {
+    "sc_chara": "M.Bison",
+    "capcom_families": {
+      "[サイコマイン付与時]OD サイコクラッシャーアタック": [
+        "[サイコマイン付与時]OD サイコクラッシャーアタック"
+      ],
+      "[サイコマイン付与時]OD デビルリバース": [
+        "[サイコマイン付与時]OD デビルリバース"
+      ],
+      "[サイコマイン付与時]OD バックフィストコンボ": [
+        "[サイコマイン付与時]OD バックフィストコンボ"
+      ],
+      "[サイコマイン付与時]デビルリバース": [
+        "[サイコマイン付与時]デビルリバース"
+      ],
+      "[サイコマイン付与時]中 サイコクラッシャーアタック": [
+        "[サイコマイン付与時]中 サイコクラッシャーアタック"
+      ],
+      "[サイコマイン付与時]中 バックフィストコンボ": [
+        "[サイコマイン付与時]中 バックフィストコンボ"
+      ],
+      "[サイコマイン付与時]弱 サイコクラッシャーアタック": [
+        "[サイコマイン付与時]弱 サイコクラッシャーアタック"
+      ],
+      "[サイコマイン付与時]弱 バックフィストコンボ": [
+        "[サイコマイン付与時]弱 バックフィストコンボ"
+      ],
+      "[サイコマイン付与時]強 サイコクラッシャーアタック": [
+        "[サイコマイン付与時]強 サイコクラッシャーアタック"
+      ],
+      "[サイコマイン付与時]強 バックフィストコンボ": [
+        "[サイコマイン付与時]強 バックフィストコンボ"
+      ],
+      "アンリミテッドサイコクラッシャー": [
+        "SA3 アンリミテッドサイコクラッシャー",
+        "CA アンリミテッドサイコクラッシャー"
+      ],
+      "サイコクラッシャーアタック": [
+        "弱 サイコクラッシャーアタック",
+        "中 サイコクラッシャーアタック",
+        "強 サイコクラッシャーアタック",
+        "OD サイコクラッシャーアタック"
+      ],
+      "サイコパニッシャー": [
+        "SA2 サイコパニッシャー"
+      ],
+      "サイコマイン": [
+        "サイコマイン（自動爆発）"
+      ],
+      "サマーソルトスカルダイバー": [
+        "サマーソルトスカルダイバー"
+      ],
+      "シャドウライズ": [
+        "弱 シャドウライズ",
+        "中 シャドウライズ",
+        "強 シャドウライズ",
+        "OD シャドウライズ"
+      ],
+      "ダブルニープレス": [
+        "弱 ダブルニープレス",
+        "中 ダブルニープレス",
+        "強 ダブルニープレス",
+        "OD ダブルニープレス"
+      ],
+      "デビルリバース": [
+        "デビルリバース",
+        "OD デビルリバース"
+      ],
+      "ニープレスナイトメア": [
+        "SA1 ニープレスナイトメア"
+      ],
+      "バックフィストコンボ": [
+        "弱 バックフィストコンボ",
+        "中 バックフィストコンボ",
+        "強 バックフィストコンボ",
+        "OD バックフィストコンボ"
+      ],
+      "ヘッドプレス": [
+        "ヘッドプレス",
+        "OD ヘッドプレス"
+      ]
+    },
+    "sc_families": {
+      "Backfist Combo (Mine)": [
+        {
+          "input": "214HP",
+          "name": "Backfist Combo (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "214LP",
+          "name": "Backfist Combo (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "214MP",
+          "name": "Backfist Combo (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "214PP",
+          "name": "Backfist Combo (Mine)",
+          "type": "Special"
+        }
+      ],
+      "Bison Warp": [
+        {
+          "input": "6 or 4 + PPP/KKK",
+          "name": "Bison Warp",
+          "type": "Special"
+        }
+      ],
+      "Devil Reverse (Mine)": [
+        {
+          "input": "[2]8KK~P or [2]8K~PP",
+          "name": "Devil Reverse (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "[2]8K~P",
+          "name": "Devil Reverse (Mine)",
+          "type": "Special"
+        }
+      ],
+      "Double Knee Press": [
+        {
+          "input": "236HK",
+          "name": "Double Knee Press",
+          "type": "Special"
+        },
+        {
+          "input": "236KK",
+          "name": "Double Knee Press",
+          "type": "Special"
+        },
+        {
+          "input": "236LK",
+          "name": "Double Knee Press",
+          "type": "Special"
+        },
+        {
+          "input": "236MK",
+          "name": "Double Knee Press",
+          "type": "Special"
+        }
+      ],
+      "Final Psycho Crusher": [
+        {
+          "input": "214214P",
+          "name": "Final Psycho Crusher",
+          "type": "Super"
+        }
+      ],
+      "Head Press": [
+        {
+          "input": "[2]8KK~K or [2]8K~KK",
+          "name": "Head Press",
+          "type": "Special"
+        },
+        {
+          "input": "[2]8K~K",
+          "name": "Head Press",
+          "type": "Special"
+        }
+      ],
+      "Knee Press Nightmare": [
+        {
+          "input": "236236K",
+          "name": "Knee Press Nightmare",
+          "type": "Super"
+        }
+      ],
+      "Psycho Burst": [
+        {
+          "input": "623PP",
+          "name": "Psycho Burst",
+          "type": "Special"
+        }
+      ],
+      "Psycho Crusher (Mine)": [
+        {
+          "input": "[4]6HP",
+          "name": "Psycho Crusher (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "[4]6LP",
+          "name": "Psycho Crusher (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "[4]6MP",
+          "name": "Psycho Crusher (Mine)",
+          "type": "Special"
+        },
+        {
+          "input": "[4]6PP",
+          "name": "Psycho Crusher (Mine)",
+          "type": "Special"
+        }
+      ],
+      "Psycho Mine (Detonation)": [
+        {
+          "input": "-",
+          "name": "Psycho Mine (Detonation)",
+          "type": "Special"
+        }
+      ],
+      "Psycho Punisher": [
+        {
+          "input": "214214K",
+          "name": "Psycho Punisher",
+          "type": "Super"
+        }
+      ],
+      "Shadow Rise": [
+        {
+          "input": "[2]8K",
+          "name": "Shadow Rise",
+          "type": "Special"
+        },
+        {
+          "input": "[2]8KK",
+          "name": "Shadow Rise",
+          "type": "Special"
+        }
+      ],
+      "Somersault Skull Diver": [
+        {
+          "input": "[2]8K~K~P",
+          "name": "Somersault Skull Diver",
+          "type": "Special"
+        }
+      ],
+      "Unlimited Psycho Crusher (CA)": [
+        {
+          "input": "236236P",
+          "name": "Unlimited Psycho Crusher (CA)",
+          "type": "Super"
+        }
+      ]
+    }
+  },
+  "zangief": {
+    "sc_chara": "Zangief",
+    "capcom_families": {
+      "エリアルロシアンスラム": [
+        "SA1 エリアルロシアンスラム"
+      ],
+      "サイクロンラリアット": [
+        "SA2 サイクロンラリアット（ホールド）",
+        "SA2 サイクロンラリアット（その場）",
+        "SA2 サイクロンラリアット（移動）"
+      ],
+      "シベリアンエクスプレス": [
+        "シベリアンエクスプレス（近距離版）",
+        "OD シベリアンエクスプレス（近距離版）",
+        "シベリアンエクスプレス（遠距離版）",
+        "OD シベリアンエクスプレス（遠距離版）"
+      ],
+      "スクリューパイルドライバー": [
+        "弱 スクリューパイルドライバー",
+        "中 スクリューパイルドライバー",
+        "強 スクリューパイルドライバー",
+        "OD スクリューパイルドライバー"
+      ],
+      "ダブルラリアット": [
+        "ダブルラリアット",
+        "OD ダブルラリアット"
+      ],
+      "ツンドラストーム": [
+        "ツンドラストーム"
+      ],
+      "ボリショイストームバスター": [
+        "SA3 ボリショイストームバスター",
+        "CA ボリショイストームバスター"
+      ],
+      "ボルシチダイナマイト": [
+        "ボルシチダイナマイト",
+        "OD ボルシチダイナマイト"
+      ],
+      "ロシアンスープレックス": [
+        "ロシアンスープレックス",
+        "OD ロシアンスープレックス"
+      ]
+    },
+    "sc_families": {
+      "Aerial Russian Slam": [
+        {
+          "input": "236236K",
+          "name": "Aerial Russian Slam",
+          "type": "super"
+        }
+      ],
+      "Bolshoi Storm Buster (CA)": [
+        {
+          "input": "720+P",
+          "name": "Bolshoi Storm Buster (CA)",
+          "type": "super"
+        }
+      ],
+      "Borscht Dynamite": [
+        {
+          "input": "j.360+K",
+          "name": "Borscht Dynamite",
+          "type": "special"
+        },
+        {
+          "input": "j.360+KK",
+          "name": "Borscht Dynamite",
+          "type": "special"
+        }
+      ],
+      "Cyclone Lariat": [
+        {
+          "input": "236236P",
+          "name": "Cyclone Lariat",
+          "type": "super"
+        }
+      ],
+      "Cyclone Lariat (hold P)": [
+        {
+          "input": "236236[P]",
+          "name": "Cyclone Lariat (hold P)",
+          "type": "super"
+        }
+      ],
+      "Double Lariat": [
+        {
+          "input": "PP",
+          "name": "Double Lariat",
+          "type": "special"
+        },
+        {
+          "input": "PPP",
+          "name": "Double Lariat",
+          "type": "special"
+        }
+      ],
+      "Russian Suplex": [
+        {
+          "input": "63214KK (Close)",
+          "name": "Russian Suplex",
+          "type": "special"
+        },
+        {
+          "input": "63214K (Close)",
+          "name": "Russian Suplex",
+          "type": "special"
+        }
+      ],
+      "Screw Piledriver": [
+        {
+          "input": "360+HP",
+          "name": "Screw Piledriver",
+          "type": "special"
+        },
+        {
+          "input": "360+LP",
+          "name": "Screw Piledriver",
+          "type": "special"
+        },
+        {
+          "input": "360+MP",
+          "name": "Screw Piledriver",
+          "type": "special"
+        },
+        {
+          "input": "360+PP",
+          "name": "Screw Piledriver",
+          "type": "special"
+        }
+      ],
+      "Siberian Express": [
+        {
+          "input": "63214KK (Far)",
+          "name": "Siberian Express",
+          "type": "special"
+        },
+        {
+          "input": "63214KK (Mid)",
+          "name": "Siberian Express",
+          "type": "special"
+        },
+        {
+          "input": "63214K (Far)",
+          "name": "Siberian Express",
+          "type": "special"
+        },
+        {
+          "input": "63214K (Mid)",
+          "name": "Siberian Express",
+          "type": "special"
+        }
+      ],
+      "Tundra Storm": [
+        {
+          "input": "22HK",
+          "name": "Tundra Storm",
+          "type": "special"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,4 @@
+# SF6 Discord Bot 用の追加依存。
+# sf6_engine 本体 (intent_parser/factory/rag_builder) と mcp は
+# リポジトリ root の requirements.txt 側で導入済み。
+discord.py>=2.3.0

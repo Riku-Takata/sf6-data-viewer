@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./.venv312/bin/python *)",
+      "Bash(PYTHONPATH=src ./.venv312/bin/python *)"
+    ]
+  }
+}

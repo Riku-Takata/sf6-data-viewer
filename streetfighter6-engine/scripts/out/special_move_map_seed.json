@@ -1,0 +1,7066 @@
+[
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "紫煙追",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214LP~6P",
+  "sc_name": "Nightshade Chaser (Burst)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "OD 紫煙追",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214PP~6P",
+  "sc_name": "Nightshade Chaser (Burst)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "紫煙追 （炸裂）",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214LP~6P",
+  "sc_name": "Nightshade Chaser (Burst)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "OD 紫煙追 （炸裂）",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214PP~6P",
+  "sc_name": "Nightshade Chaser (Burst)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "弱 蛇軽功",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236LK",
+  "sc_name": "Snake Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "中 蛇軽功",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236MK",
+  "sc_name": "Snake Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "強 蛇軽功",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236HK",
+  "sc_name": "Snake Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "OD 蛇軽功",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236KK",
+  "sc_name": "Snake Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "悪鬼蛇行",
+  "sc_chara": "A.K.I.",
+  "sc_input": "2PP",
+  "sc_name": "Sinister Slide",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "雁字搦",
+  "sc_chara": "A.K.I.",
+  "sc_input": "2PP~LPLK",
+  "sc_name": "Entrapment",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "紫煙砲",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214LP",
+  "sc_name": "Nightshade Pulse",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "OD 紫煙砲",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214PP",
+  "sc_name": "Nightshade Pulse",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "紫泡撒",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214HP",
+  "sc_name": "Toxic Wreath",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "中 蛇頭鞭",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236MP",
+  "sc_name": "Serpent Lash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "強 蛇頭鞭",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236HP",
+  "sc_name": "Serpent Lash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "OD 蛇頭鞭",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236PP",
+  "sc_name": "Serpent Lash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "OD 凶襲突",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214KK",
+  "sc_name": "Cruel Fate",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "蛇連咬",
+  "sc_chara": "A.K.I.",
+  "sc_input": "2PP~K",
+  "sc_name": "Heel Strike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "SA1 死屍累々",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236236K",
+  "sc_name": "Deadly Implication",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "SA2 紫煙裂爪",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214214P",
+  "sc_name": "Tainted Talons",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "SA3 睚眦",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236236P",
+  "sc_name": "Claws of Ya Zi",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "CA 睚眦",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236236P",
+  "sc_name": "Claws of Ya Zi",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "紫泡泉",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214MP",
+  "sc_name": "Orchid Spring",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "弱 蛇頭鞭",
+  "sc_chara": "A.K.I.",
+  "sc_input": "236LP",
+  "sc_name": "Serpent Lash",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "弱 凶襲突",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214LK",
+  "sc_name": "Cruel Fate",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "中 凶襲突",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214MK",
+  "sc_name": "Cruel Fate",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "強 凶襲突",
+  "sc_chara": "A.K.I.",
+  "sc_input": "214HK",
+  "sc_name": "Cruel Fate",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "aki",
+  "capcom_move_name": "猛毒牙",
+  "sc_chara": "A.K.I.",
+  "sc_input": "2PP~P",
+  "sc_name": "Venomous Fang",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "OD パワーボム",
+  "sc_chara": "Alex",
+  "sc_input": "63214PP",
+  "sc_name": "Power Bomb",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "パワードロップ",
+  "sc_chara": "Alex",
+  "sc_input": "63214P Backturn",
+  "sc_name": "Power Drop",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "OD パワードロップ",
+  "sc_chara": "Alex",
+  "sc_input": "63214PP Backturn",
+  "sc_name": "Power Drop",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "ハイパーボム",
+  "sc_chara": "Alex",
+  "sc_input": "63214PP~6 Backturn",
+  "sc_name": "OD Hyper Bomb",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "SA2 オメガウィングバスター",
+  "sc_chara": "Alex",
+  "sc_input": "PP (SA2)",
+  "sc_name": "Omega Wing Buster",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "弱 フラッシュアックス",
+  "sc_chara": "Alex",
+  "sc_input": "236LP",
+  "sc_name": "Flash Axe",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "中 フラッシュアックス",
+  "sc_chara": "Alex",
+  "sc_input": "236MP",
+  "sc_name": "Flash Axe",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "フラッシュチョップ",
+  "sc_chara": "Alex",
+  "sc_input": "236HP",
+  "sc_name": "Flash Chop",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "OD フラッシュチョップ",
+  "sc_chara": "Alex",
+  "sc_input": "236PP",
+  "sc_name": "Flash Chop",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "弱 エアニースマッシュ",
+  "sc_chara": "Alex",
+  "sc_input": "623LK",
+  "sc_name": "Aerial Knee Smash",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "中 エアニースマッシュ",
+  "sc_chara": "Alex",
+  "sc_input": "623MK",
+  "sc_name": "Aerial Knee Smash",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "強 エアニースマッシュ",
+  "sc_chara": "Alex",
+  "sc_input": "623HK",
+  "sc_name": "Aerial Knee Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "OD エアニースマッシュ",
+  "sc_chara": "Alex",
+  "sc_input": "623KK",
+  "sc_name": "Aerial Knee Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "弱 パワーボム",
+  "sc_chara": "Alex",
+  "sc_input": "63214LP",
+  "sc_name": "Power Bomb",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "中 パワーボム",
+  "sc_chara": "Alex",
+  "sc_input": "63214MP",
+  "sc_name": "Power Bomb",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "強 パワーボム",
+  "sc_chara": "Alex",
+  "sc_input": "63214HP",
+  "sc_name": "Power Bomb",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "SA1 レイジングスピアー",
+  "sc_chara": "Alex",
+  "sc_input": "236236K",
+  "sc_name": "Raging Spear",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "SA2 スレッジクロスハンマー",
+  "sc_chara": "Alex",
+  "sc_input": "214214P",
+  "sc_name": "Sledgecross Hammer",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "SA3 ファイナルキャプチュード",
+  "sc_chara": "Alex",
+  "sc_input": "236236P",
+  "sc_name": "The Final Prison (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "alex",
+  "capcom_move_name": "CA ファイナルキャプチュード",
+  "sc_chara": "Alex",
+  "sc_input": "236236P",
+  "sc_name": "The Final Prison (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "ブランカちゃん爆弾",
+  "sc_chara": "Blanka",
+  "sc_input": "22P",
+  "sc_name": "Blanka-chan Bomb",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "ブランカちゃん爆弾（射出）",
+  "sc_chara": "Blanka",
+  "sc_input": "22P~214P",
+  "sc_name": "Blanka-chan Bomb (Charge)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "ローリングキャノン",
+  "sc_chara": "Blanka",
+  "sc_input": "Any Direction + P (during SA2)",
+  "sc_name": "Rolling Cannon",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "SA2 ライトニングビースト",
+  "sc_chara": "Blanka",
+  "sc_input": "214214P",
+  "sc_name": "Lightning Beast",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "エレクトリックサンダー",
+  "sc_chara": "Blanka",
+  "sc_input": "214P",
+  "sc_name": "Electric Thunder",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 エレクトリックサンダー",
+  "sc_chara": "Blanka",
+  "sc_input": "214P",
+  "sc_name": "Electric Thunder",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD エレクトリックサンダー",
+  "sc_chara": "Blanka",
+  "sc_input": "214PP",
+  "sc_name": "Electric Thunder",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】OD エレクトリックサンダー",
+  "sc_chara": "Blanka",
+  "sc_input": "214PP",
+  "sc_name": "Electric Thunder",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 弱 ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6LP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 中 ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6MP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6PP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 OD ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6PP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8KK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 OD バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8KK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD エリアルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "j.[4]6PP",
+  "sc_name": "Aerial Rolling Attack (SA2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 OD エリアルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "j.[4]6PP",
+  "sc_name": "Aerial Rolling Attack (SA2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "弱 ワイルドハント",
+  "sc_chara": "Blanka",
+  "sc_input": "236LK",
+  "sc_name": "Wild Hunt",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "中 ワイルドハント",
+  "sc_chara": "Blanka",
+  "sc_input": "236MK",
+  "sc_name": "Wild Hunt",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "強 ワイルドハント",
+  "sc_chara": "Blanka",
+  "sc_input": "236HK",
+  "sc_name": "Wild Hunt",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD ワイルドハント",
+  "sc_chara": "Blanka",
+  "sc_input": "236KK",
+  "sc_name": "Wild Hunt",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD ブランカちゃん爆弾（射出）",
+  "sc_chara": "Blanka",
+  "sc_input": "22P~214PP",
+  "sc_name": "Blanka-chan Bomb (OD Charge)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "SA1 シャウトオブアース",
+  "sc_chara": "Blanka",
+  "sc_input": "236236P",
+  "sc_name": "Shout of Earth",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 SA1 シャウトオブアース",
+  "sc_chara": "Blanka",
+  "sc_input": "236236P",
+  "sc_name": "Shout of Earth",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "SA3 グランドシェイブキャノンボール",
+  "sc_chara": "Blanka",
+  "sc_input": "236236K",
+  "sc_name": "Ground Shave Cannonball (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "CA グランドシェイブキャノンボール",
+  "sc_chara": "Blanka",
+  "sc_input": "236236K",
+  "sc_name": "Ground Shave Cannonball (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "弱 ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6LP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "中 ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6MP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "強 ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6HP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 強 ローリングアタック",
+  "sc_chara": "Blanka",
+  "sc_input": "[4]6HP",
+  "sc_name": "Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "弱 バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8LK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 弱 バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8LK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "中 バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8MK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 中 バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8MK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "強 バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8HK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 強 バーチカルローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "[2]8HK",
+  "sc_name": "Vertical Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "弱 バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214LK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 弱 バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214LK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "中 バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214MK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 中 バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214MK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "強 バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214HK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 強 バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214HK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "OD バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214KK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "blanka",
+  "capcom_move_name": "【ライトニングビースト】 OD バックステップローリング",
+  "sc_chara": "Blanka",
+  "sc_input": "63214KK",
+  "sc_name": "Backstep Rolling Attack (SA2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "キャノンストライク",
+  "sc_chara": "Cammy",
+  "sc_input": "j.214K",
+  "sc_name": "Cannon Strike",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD キャノンストライク",
+  "sc_chara": "Cammy",
+  "sc_input": "j.214KK",
+  "sc_name": "Cannon Strike",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "フーリガンコンビネーション",
+  "sc_chara": "Cammy",
+  "sc_input": "236P",
+  "sc_name": "Hooligan Combination",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "フーリガンコンビネーション（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "236[HP]",
+  "sc_name": "Hooligan Combination",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD フーリガンコンビネーション",
+  "sc_chara": "Cammy",
+  "sc_input": "236PP",
+  "sc_name": "Hooligan Combination",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "レイザーエッジスライサー",
+  "sc_chara": "Cammy",
+  "sc_input": "236P~No Input",
+  "sc_name": "Razor's Edge Slicer",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "レイザーエッジスライサー（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "236[HP]~No Input",
+  "sc_name": "Razor's Edge Slicer",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "リバースエッジ",
+  "sc_chara": "Cammy",
+  "sc_input": "236P~2K",
+  "sc_name": "Reverse Edge",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "リバースエッジ（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "236[HP]~2K",
+  "sc_name": "Reverse Edge",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "フェイタルレッグツイスター",
+  "sc_chara": "Cammy",
+  "sc_input": "236P~LPLK",
+  "sc_name": "Fatal Leg Twister",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "フェイタルレッグツイスター（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "236[HP]~LPLK",
+  "sc_name": "Fatal Leg Twister",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD フェイタルレッグツイスター",
+  "sc_chara": "Cammy",
+  "sc_input": "236PP~LPLK",
+  "sc_name": "Fatal Leg Twister",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "サイレントステップ",
+  "sc_chara": "Cammy",
+  "sc_input": "236P~P",
+  "sc_name": "Silent Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "サイレントステップ（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "236[HP]~P",
+  "sc_name": "Silent Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD サイレントステップ",
+  "sc_chara": "Cammy",
+  "sc_input": "236PP~P",
+  "sc_name": "Silent Step",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "弱 スパイラルアロー",
+  "sc_chara": "Cammy",
+  "sc_input": "236LK",
+  "sc_name": "Spiral Arrow",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "中 スパイラルアロー",
+  "sc_chara": "Cammy",
+  "sc_input": "236MK",
+  "sc_name": "Spiral Arrow",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "強 スパイラルアロー",
+  "sc_chara": "Cammy",
+  "sc_input": "236HK",
+  "sc_name": "Spiral Arrow",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "強 スパイラルアロー（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "236[HK]",
+  "sc_name": "Spiral Arrow",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD スパイラルアロー",
+  "sc_chara": "Cammy",
+  "sc_input": "236KK",
+  "sc_name": "Spiral Arrow",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "弱 キャノンスパイク",
+  "sc_chara": "Cammy",
+  "sc_input": "623LK",
+  "sc_name": "Cannon Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "中 キャノンスパイク",
+  "sc_chara": "Cammy",
+  "sc_input": "623MK",
+  "sc_name": "Cannon Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "強 キャノンスパイク",
+  "sc_chara": "Cammy",
+  "sc_input": "623HK",
+  "sc_name": "Cannon Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "強 キャノンスパイク（ホールド）",
+  "sc_chara": "Cammy",
+  "sc_input": "623[HK]",
+  "sc_name": "Cannon Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD キャノンスパイク",
+  "sc_chara": "Cammy",
+  "sc_input": "623KK",
+  "sc_name": "Cannon Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "弱 アクセルスピンナックル",
+  "sc_chara": "Cammy",
+  "sc_input": "214LP",
+  "sc_name": "Quick Spin Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "中 アクセルスピンナックル",
+  "sc_chara": "Cammy",
+  "sc_input": "214MP",
+  "sc_name": "Quick Spin Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "強 アクセルスピンナックル",
+  "sc_chara": "Cammy",
+  "sc_input": "214HP",
+  "sc_name": "Quick Spin Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD アクセルスピンナックル",
+  "sc_chara": "Cammy",
+  "sc_input": "214PP",
+  "sc_name": "Quick Spin Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "SA1 スピンドライブスマッシャー",
+  "sc_chara": "Cammy",
+  "sc_input": "236236K",
+  "sc_name": "Spin Drive Smasher",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "SA2 キラービースピン",
+  "sc_chara": "Cammy",
+  "sc_input": "214214P",
+  "sc_name": "Killer Bee Spin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "SA2 エアキラービースピン",
+  "sc_chara": "Cammy",
+  "sc_input": "j.214214P",
+  "sc_name": "Aerial Killer Bee Spin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "SA3 デルタレッドアサルト",
+  "sc_chara": "Cammy",
+  "sc_input": "236236P",
+  "sc_name": "Delta Red Assault (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "CA デルタレッドアサルト",
+  "sc_chara": "Cammy",
+  "sc_input": "236236P",
+  "sc_name": "Delta Red Assault (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD レイザーエッジスライサー",
+  "sc_chara": "Cammy",
+  "sc_input": "236PP~No Input",
+  "sc_name": "Razor's Edge Slicer",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "cammy",
+  "capcom_move_name": "OD リバースエッジ",
+  "sc_chara": "Cammy",
+  "sc_input": "236PP~2K",
+  "sc_name": "Reverse Edge",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "OD 空中百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "j.236KK",
+  "sc_name": "Aerial Hundred Lightning Kicks",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "SA1 空中気功掌",
+  "sc_chara": "Chun-Li",
+  "sc_input": "j.236236P",
+  "sc_name": "Aerial Kikosho",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "弱 気功拳",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[4]6LP",
+  "sc_name": "Kikoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "中 気功拳",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[4]6MP",
+  "sc_name": "Kikoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "強 気功拳",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[4]6HP",
+  "sc_name": "Kikoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "OD 気功拳",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[4]6PP",
+  "sc_name": "Kikoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "弱 百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236LK",
+  "sc_name": "Hundred Lightning Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "中 百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236MK",
+  "sc_name": "Hundred Lightning Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "強 百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236HK",
+  "sc_name": "Hundred Lightning Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "OD 百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236KK",
+  "sc_name": "Hundred Lightning Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "百裂連脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236KK~KK",
+  "sc_name": "Lightning Kick Barrage",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "弱 スピニングバードキック",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[2]8LK",
+  "sc_name": "Spinning Bird Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "中 スピニングバードキック",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[2]8MK",
+  "sc_name": "Spinning Bird Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "強 スピニングバードキック",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[2]8HK",
+  "sc_name": "Spinning Bird Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "OD スピニングバードキック",
+  "sc_chara": "Chun-Li",
+  "sc_input": "[2]8KK",
+  "sc_name": "Spinning Bird Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "弱 覇山蹴",
+  "sc_chara": "Chun-Li",
+  "sc_input": "214LK",
+  "sc_name": "Hazanshu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "中 覇山蹴",
+  "sc_chara": "Chun-Li",
+  "sc_input": "214MK",
+  "sc_name": "Hazanshu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "強 覇山蹴",
+  "sc_chara": "Chun-Li",
+  "sc_input": "214HK",
+  "sc_name": "Hazanshu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "OD 覇山蹴",
+  "sc_chara": "Chun-Li",
+  "sc_input": "214KK",
+  "sc_name": "Hazanshu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "弱 天昇脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "22LK",
+  "sc_name": "Tensho Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "中 天昇脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "22MK",
+  "sc_name": "Tensho Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "強 天昇脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "22HK",
+  "sc_name": "Tensho Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "OD 天昇脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "22KK",
+  "sc_name": "Tensho Kicks",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "SA1 気功掌",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236236P",
+  "sc_name": "Kikosho",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "SA2 鳳翼扇",
+  "sc_chara": "Chun-Li",
+  "sc_input": "236236K",
+  "sc_name": "Hoyoku-sen",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "SA3 蒼天乱華",
+  "sc_chara": "Chun-Li",
+  "sc_input": "214214K",
+  "sc_name": "Soten Ranka (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "CA 蒼天乱華",
+  "sc_chara": "Chun-Li",
+  "sc_input": "214214K",
+  "sc_name": "Soten Ranka (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "弱 空中百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "j.236LK",
+  "sc_name": "Aerial Hundred Lightning Kicks",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "中 空中百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "j.236MK",
+  "sc_name": "Aerial Hundred Lightning Kicks",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "chunli",
+  "capcom_move_name": "強 空中百裂脚",
+  "sc_chara": "Chun-Li",
+  "sc_input": "j.236HK",
+  "sc_name": "Aerial Hundred Lightning Kicks",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "弱 トレースコンビネーション",
+  "sc_chara": "C.Viper",
+  "sc_input": "214LP~6PP",
+  "sc_name": "Tracer Combination",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "中 トレースコンビネーション",
+  "sc_chara": "C.Viper",
+  "sc_input": "214MP~6PP",
+  "sc_name": "Tracer Combination",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "強 トレースコンビネーション",
+  "sc_chara": "C.Viper",
+  "sc_input": "214HP~6PP",
+  "sc_name": "Tracer Combination",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "弱 セイスモハンマー",
+  "sc_chara": "C.Viper",
+  "sc_input": "623P",
+  "sc_name": "Seismic Hammer",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "中 セイスモハンマー",
+  "sc_chara": "C.Viper",
+  "sc_input": "623P",
+  "sc_name": "Seismic Hammer",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "強 セイスモハンマー",
+  "sc_chara": "C.Viper",
+  "sc_input": "623P",
+  "sc_name": "Seismic Hammer",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "OD セイスモハンマー",
+  "sc_chara": "C.Viper",
+  "sc_input": "623PP",
+  "sc_name": "Seismic Hammer",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "セービングフォース(Lv1)",
+  "sc_chara": "C.Viper",
+  "sc_input": "214K",
+  "sc_name": "Focus Force (Lv.1)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "セービングフォース(Lv2)",
+  "sc_chara": "C.Viper",
+  "sc_input": "214{K}",
+  "sc_name": "Focus Force (Lv.2)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "セービングフォース(Lv3)",
+  "sc_chara": "C.Viper",
+  "sc_input": "214[K]",
+  "sc_name": "Focus Force (Lv.3)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "弱 サンダースラップ",
+  "sc_chara": "C.Viper",
+  "sc_input": "214LP",
+  "sc_name": "Thunder Dash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "中 サンダースラップ",
+  "sc_chara": "C.Viper",
+  "sc_input": "214MP",
+  "sc_name": "Thunder Dash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "強 サンダースラップ",
+  "sc_chara": "C.Viper",
+  "sc_input": "214HP",
+  "sc_name": "Thunder Dash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "OD サンダースラップ",
+  "sc_chara": "C.Viper",
+  "sc_input": "214PP",
+  "sc_name": "Thunder Dash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "弱 バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "236LK",
+  "sc_name": "Burning Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "中 バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "236MK",
+  "sc_name": "Burning Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "強 バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "236HK",
+  "sc_name": "Burning Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "OD バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "236KK",
+  "sc_name": "Burning Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "チェイスナックル",
+  "sc_chara": "C.Viper",
+  "sc_input": "236K~PP",
+  "sc_name": "Knuckled Pursuit",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "ダブルバーン",
+  "sc_chara": "C.Viper",
+  "sc_input": "236K~KK",
+  "sc_name": "Double Burn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "OD セービングフォース(Lv1)",
+  "sc_chara": "C.Viper",
+  "sc_input": "214{KK}",
+  "sc_name": "Focus Force (Lv.2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "SA1 バウンサーステップ",
+  "sc_chara": "C.Viper",
+  "sc_input": "236236K",
+  "sc_name": "Limit Decoupler",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "SA2 ミッションオーバー",
+  "sc_chara": "C.Viper",
+  "sc_input": "214214P",
+  "sc_name": "Mission Complete",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "SA3 アンラックリジェクター",
+  "sc_chara": "C.Viper",
+  "sc_input": "214214K",
+  "sc_name": "Hard Luck Rejector (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "CA アンラックリジェクター",
+  "sc_chara": "C.Viper",
+  "sc_input": "214214K",
+  "sc_name": "Hard Luck Rejector (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "弱 空中バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "j.236LK",
+  "sc_name": "Aerial Burning Kick",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "中 空中バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "j.236MK",
+  "sc_name": "Aerial Burning Kick",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "強 空中バーニングキック",
+  "sc_chara": "C.Viper",
+  "sc_input": "j.236HK",
+  "sc_name": "Aerial Burning Kick",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "cviper",
+  "capcom_move_name": "OD セービングフォース(Lv3)",
+  "sc_chara": "C.Viper",
+  "sc_input": "214[KK]",
+  "sc_name": "Focus Force (Lv.3)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD ワニングムーン",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214KK~MK",
+  "sc_name": "Waning Moon",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236236LP",
+  "sc_name": "Lowkey Sunrise Festival",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236236MP",
+  "sc_name": "Marvelous Sunrise Festival",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236236HP",
+  "sc_name": "Headliner Sunrise Festival",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "中 エアスラッシャー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "[4]6MP",
+  "sc_name": "Air Slasher",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "強 エアスラッシャー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "[4]6HP",
+  "sc_name": "Air Slasher",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "中 ジャックナイフマキシマム",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "[2]8MK",
+  "sc_name": "Jackknife Maximum",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "強 ジャックナイフマキシマム",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "[2]8HK",
+  "sc_name": "Jackknife Maximum",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD ジャックナイフマキシマム",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "[2]8KK",
+  "sc_name": "Jackknife Maximum",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "クイックローリングソバット",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236MK",
+  "sc_name": "Quick Rolling Sobat",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "ダブルローリングソバット",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236HK",
+  "sc_name": "Double Rolling Sobat",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD ダブルローリングソバット",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236KK",
+  "sc_name": "Double Rolling Sobat",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "弱 マシンガンアッパー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214LP",
+  "sc_name": "Machine Gun Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "中 マシンガンアッパー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214MP",
+  "sc_name": "Machine Gun Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "強 マシンガンアッパー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214HP",
+  "sc_name": "Machine Gun Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD マシンガンアッパー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214PP",
+  "sc_name": "Machine Gun Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD ジョスクール",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214KK",
+  "sc_name": "Jus Cool",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA1 グレイテストソバット",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "236236K",
+  "sc_name": "The Greatest Sobat",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト （2段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LP (1)",
+  "sc_name": "+LP (Marvelous Hit 1)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト （3段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MP (2)",
+  "sc_name": "+MP (Marvelous Hit 2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト （4段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HP (3)",
+  "sc_name": "+HP (Marvelous Hit 3)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト （5段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LK (4)",
+  "sc_name": "+LK (Marvelous Hit 4)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト （6段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MK (5)",
+  "sc_name": "+MK (Marvelous Hit 5)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・ライト （7段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HK (6)",
+  "sc_name": "+HK (Marvelous Hit 6)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス （2段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LP (1)",
+  "sc_name": "+LP (Marvelous Hit 1)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス （3段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MP (2)",
+  "sc_name": "+MP (Marvelous Hit 2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス （4段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HP (3)",
+  "sc_name": "+HP (Marvelous Hit 3)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス （5段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LK (4)",
+  "sc_name": "+LK (Marvelous Hit 4)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス （6段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MK (5)",
+  "sc_name": "+MK (Marvelous Hit 5)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マーベラス （7段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HK (6)",
+  "sc_name": "+HK (Marvelous Hit 6)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム （2段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LP (1)",
+  "sc_name": "+LP (Marvelous Hit 1)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム （3段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MP (2)",
+  "sc_name": "+MP (Marvelous Hit 2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム （4段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HP (3)",
+  "sc_name": "+HP (Marvelous Hit 3)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム （5段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LK (4)",
+  "sc_name": "+LK (Marvelous Hit 4)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム （6段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MK (5)",
+  "sc_name": "+MK (Marvelous Hit 5)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA2 サンライズフェスティバル・マキシマム （7段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HK (6)",
+  "sc_name": "+HK (Marvelous Hit 6)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "（失敗版） SA2 サンライズフェスティバル （2段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LP (1)",
+  "sc_name": "+LP (Marvelous Hit 1)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "（失敗版） SA2 サンライズフェスティバル （3段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MP (2)",
+  "sc_name": "+MP (Marvelous Hit 2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "（失敗版） SA2 サンライズフェスティバル （4段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HP (3)",
+  "sc_name": "+HP (Marvelous Hit 3)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "（失敗版） SA2 サンライズフェスティバル （5段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~LK (4)",
+  "sc_name": "+LK (Marvelous Hit 4)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "（失敗版） SA2 サンライズフェスティバル （6段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~MK (5)",
+  "sc_name": "+MK (Marvelous Hit 5)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "（失敗版） SA2 サンライズフェスティバル （7段目）",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "~HK (6)",
+  "sc_name": "+HK (Marvelous Hit 6)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "SA3 サタデーナイト",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214214P",
+  "sc_name": "Weekend Pleasure (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "CA サタデーナイト",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214214P",
+  "sc_name": "Weekend Pleasure (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD エアスラッシャー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "[4]6PP",
+  "sc_name": "Air Slasher",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "ファンキースライサー",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214K~LK",
+  "sc_name": "Funky Slicer",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "deejay",
+  "capcom_move_name": "OD マキシマムストライク",
+  "sc_chara": "Dee_Jay",
+  "sc_input": "214KK~HK",
+  "sc_name": "Maximum Strike",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "弱 ヨガファイア",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236P",
+  "sc_name": "Yoga Fire",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "中 ヨガファイア",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236P",
+  "sc_name": "Yoga Fire",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "強 ヨガファイア",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236P",
+  "sc_name": "Yoga Fire",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "強 ヨガファイア（ホールド）",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236[P]",
+  "sc_name": "Yoga Fire (hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "強 ヨガアーチ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236LK",
+  "sc_name": "Yoga Arch",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD 弱 ヨガファイア",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236PP",
+  "sc_name": "Yoga Fire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD 中 ヨガファイア",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236PP",
+  "sc_name": "Yoga Fire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD 強 ヨガファイア",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236PP",
+  "sc_name": "Yoga Fire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "弱 ヨガアーチ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236LK",
+  "sc_name": "Yoga Arch",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD 弱 ヨガアーチ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236KK",
+  "sc_name": "Yoga Arch",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD 中 ヨガアーチ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236KK",
+  "sc_name": "Yoga Arch",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD 強 ヨガアーチ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236KK",
+  "sc_name": "Yoga Arch",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "弱 ヨガフレイム",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214LP",
+  "sc_name": "Yoga Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "中 ヨガフレイム",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214MP",
+  "sc_name": "Yoga Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "強 ヨガフレイム",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214HP",
+  "sc_name": "Yoga Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD ヨガフレイム",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214PP",
+  "sc_name": "Yoga Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "弱 ヨガブラスト",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214LK",
+  "sc_name": "Yoga Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "中 ヨガブラスト",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214MK",
+  "sc_name": "Yoga Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "OD ヨガブラスト",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214KK",
+  "sc_name": "Yoga Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA1 弱 ヨガインフェルノ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236236LP",
+  "sc_name": "Yoga Inferno",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA1 中 ヨガインフェルノ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236236LP",
+  "sc_name": "Yoga Inferno",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA1 強 ヨガインフェルノ",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236236HP",
+  "sc_name": "Yoga Inferno",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA3 ヨガマーシレス",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236236K",
+  "sc_name": "Merciless Yoga (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "CA ヨガマーシレス",
+  "sc_chara": "Dhalsim",
+  "sc_input": "236236K",
+  "sc_name": "Merciless Yoga (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "強 ヨガブラスト",
+  "sc_chara": "Dhalsim",
+  "sc_input": "63214HK",
+  "sc_name": "Yoga Blast",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "弱 ヨガコメット",
+  "sc_chara": "Dhalsim",
+  "sc_input": "j.63214LP",
+  "sc_name": "Yoga Comet",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA2 ヨガサンバースト（Lv1）",
+  "sc_chara": "Dhalsim",
+  "sc_input": "214214K",
+  "sc_name": "Yoga Sunburst",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA2 ヨガサンバースト（Lv2）",
+  "sc_chara": "Dhalsim",
+  "sc_input": "214214K",
+  "sc_name": "Yoga Sunburst",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "dhalsim",
+  "capcom_move_name": "SA2 ヨガサンバースト（Lv3）",
+  "sc_chara": "Dhalsim",
+  "sc_input": "214214K",
+  "sc_name": "Yoga Sunburst",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "弱 サイコシュート",
+  "sc_chara": "Ed",
+  "sc_input": "236P~6P",
+  "sc_name": "Psycho Shoot",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "中 サイコシュート",
+  "sc_chara": "Ed",
+  "sc_input": "236P~6P",
+  "sc_name": "Psycho Shoot",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "強 サイコシュート",
+  "sc_chara": "Ed",
+  "sc_input": "236P~6P",
+  "sc_name": "Psycho Shoot",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "サイコスパーク",
+  "sc_chara": "Ed",
+  "sc_input": "236P",
+  "sc_name": "Psycho Spark",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD サイコスパーク",
+  "sc_chara": "Ed",
+  "sc_input": "236PP",
+  "sc_name": "Psycho Spark",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD 弱 サイコシュート",
+  "sc_chara": "Ed",
+  "sc_input": "236PP~6P",
+  "sc_name": "Psycho Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD 中 サイコシュート",
+  "sc_chara": "Ed",
+  "sc_input": "236PP~6P",
+  "sc_name": "Psycho Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD 強 サイコシュート",
+  "sc_chara": "Ed",
+  "sc_input": "236PP~6P",
+  "sc_name": "Psycho Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "弱 サイコアッパー",
+  "sc_chara": "Ed",
+  "sc_input": "623LP",
+  "sc_name": "Psycho Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "中 サイコアッパー",
+  "sc_chara": "Ed",
+  "sc_input": "623MP",
+  "sc_name": "Psycho Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "強 サイコアッパー",
+  "sc_chara": "Ed",
+  "sc_input": "623HP",
+  "sc_name": "Psycho Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD サイコアッパー",
+  "sc_chara": "Ed",
+  "sc_input": "623PP",
+  "sc_name": "Psycho Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "弱 サイコブリッツ",
+  "sc_chara": "Ed",
+  "sc_input": "214LP",
+  "sc_name": "Psycho Blitz",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "中 サイコブリッツ",
+  "sc_chara": "Ed",
+  "sc_input": "214MP",
+  "sc_name": "Psycho Blitz",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "強 サイコブリッツ",
+  "sc_chara": "Ed",
+  "sc_input": "214HP",
+  "sc_name": "Psycho Blitz",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD サイコブリッツ",
+  "sc_chara": "Ed",
+  "sc_input": "214PP",
+  "sc_name": "Psycho Blitz",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "OD サイコフリッカー",
+  "sc_chara": "Ed",
+  "sc_input": "236KK",
+  "sc_name": "Psycho Flicker",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "キルスイッチ・ブレイク",
+  "sc_chara": "Ed",
+  "sc_input": "5/6KK~6P",
+  "sc_name": "Kill Switch Break",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "SA1 サイコストーム",
+  "sc_chara": "Ed",
+  "sc_input": "236236K",
+  "sc_name": "Psycho Storm",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "SA2 サイコキャノン",
+  "sc_chara": "Ed",
+  "sc_input": "214214P",
+  "sc_name": "Psycho Cannon",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "SA3 サイコチェンバー",
+  "sc_chara": "Ed",
+  "sc_input": "236236P",
+  "sc_name": "Psycho Chamber (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "CA サイコチェンバー",
+  "sc_chara": "Ed",
+  "sc_input": "236236P",
+  "sc_name": "Psycho Chamber (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "弱 サイコフリッカー",
+  "sc_chara": "Ed",
+  "sc_input": "236LK",
+  "sc_name": "Psycho Flicker",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "弱 サイコフリッカー（ホールド）",
+  "sc_chara": "Ed",
+  "sc_input": "236[LK]",
+  "sc_name": "Psycho Flicker (Hold)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "中 サイコフリッカー",
+  "sc_chara": "Ed",
+  "sc_input": "236MK",
+  "sc_name": "Psycho Flicker",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ed",
+  "capcom_move_name": "中 サイコフリッカー（ホールド）",
+  "sc_chara": "Ed",
+  "sc_input": "236[MK]",
+  "sc_name": "Psycho Flicker (Hold)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD 大銀杏投げ",
+  "sc_chara": "E.Honda",
+  "sc_input": "63214KK",
+  "sc_name": "Oicho Throw",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "弱 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214LP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "中 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214MP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "強 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214HP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214PP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "弱 スーパー頭突き",
+  "sc_chara": "E.Honda",
+  "sc_input": "[4]6LP",
+  "sc_name": "Sumo Headbutt",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "中 スーパー頭突き",
+  "sc_chara": "E.Honda",
+  "sc_input": "[4]6MP",
+  "sc_name": "Sumo Headbutt",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "強 スーパー頭突き",
+  "sc_chara": "E.Honda",
+  "sc_input": "[4]6HP",
+  "sc_name": "Sumo Headbutt",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD スーパー頭突き",
+  "sc_chara": "E.Honda",
+  "sc_input": "[4]6PP",
+  "sc_name": "Sumo Headbutt",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "弱 スーパー百貫落とし",
+  "sc_chara": "E.Honda",
+  "sc_input": "[2]8LK",
+  "sc_name": "Sumo Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "中 スーパー百貫落とし",
+  "sc_chara": "E.Honda",
+  "sc_input": "[2]8MK",
+  "sc_name": "Sumo Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "強 スーパー百貫落とし",
+  "sc_chara": "E.Honda",
+  "sc_input": "[2]8HK",
+  "sc_name": "Sumo Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD スーパー百貫落とし",
+  "sc_chara": "E.Honda",
+  "sc_input": "[2]8KK",
+  "sc_name": "Sumo Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "弱 大銀杏投げ",
+  "sc_chara": "E.Honda",
+  "sc_input": "63214LK",
+  "sc_name": "Oicho Throw",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "中 大銀杏投げ",
+  "sc_chara": "E.Honda",
+  "sc_input": "63214MK",
+  "sc_name": "Oicho Throw",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "強 大銀杏投げ",
+  "sc_chara": "E.Honda",
+  "sc_input": "63214HK",
+  "sc_name": "Oicho Throw",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "鉄砲（２段目）",
+  "sc_chara": "E.Honda",
+  "sc_input": "236KK~P~P",
+  "sc_name": "Teppo Triple Slap 2",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD 鉄砲（２段目）",
+  "sc_chara": "E.Honda",
+  "sc_input": "236KK~P~P",
+  "sc_name": "Teppo Triple Slap 2",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "大砲",
+  "sc_chara": "E.Honda",
+  "sc_input": "236KK~2P",
+  "sc_name": "Taiho Cannon Lift",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD 大砲",
+  "sc_chara": "E.Honda",
+  "sc_input": "236KK~2P",
+  "sc_name": "Taiho Cannon Lift",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "猫だまし",
+  "sc_chara": "E.Honda",
+  "sc_input": "22P",
+  "sc_name": "Neko Damashi",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "SA1 発揮爆砕",
+  "sc_chara": "E.Honda",
+  "sc_input": "236236P",
+  "sc_name": "Show of Force",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "SA2 スーパー鬼無双",
+  "sc_chara": "E.Honda",
+  "sc_input": "[4]646K",
+  "sc_name": "Ultimate Killer Head Ram",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "SA3 千秋楽",
+  "sc_chara": "E.Honda",
+  "sc_input": "214214P",
+  "sc_name": "The Final Bout (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "CA 千秋楽",
+  "sc_chara": "E.Honda",
+  "sc_input": "214214P",
+  "sc_name": "The Final Bout (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "[肩屋入り]弱 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214LP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "[肩屋入り]中 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214MP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "[肩屋入り]強 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214HP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "[肩屋入り]OD 百裂張り手",
+  "sc_chara": "E.Honda",
+  "sc_input": "214PP",
+  "sc_name": "Hundred Hand Slap",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ehonda",
+  "capcom_move_name": "OD 鉄砲（１段目）",
+  "sc_chara": "E.Honda",
+  "sc_input": "236KK~P",
+  "sc_name": "Teppo Triple Slap 1",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "SA2リヴァイブダンス",
+  "sc_chara": "Elena",
+  "sc_input": "236236P",
+  "sc_name": "Revival Dance",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "弱 ライノホーン",
+  "sc_chara": "Elena",
+  "sc_input": "236LK",
+  "sc_name": "Rhino Horn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "中 ライノホーン",
+  "sc_chara": "Elena",
+  "sc_input": "236MK",
+  "sc_name": "Rhino Horn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "強 ライノホーン",
+  "sc_chara": "Elena",
+  "sc_input": "236HK",
+  "sc_name": "Rhino Horn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "OD ライノホーン",
+  "sc_chara": "Elena",
+  "sc_input": "236KK",
+  "sc_name": "Rhino Horn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "弱 スクラッチホイール",
+  "sc_chara": "Elena",
+  "sc_input": "623LK",
+  "sc_name": "Scratch Wheel",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "中 スクラッチホイール",
+  "sc_chara": "Elena",
+  "sc_input": "623MK",
+  "sc_name": "Scratch Wheel",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "強 スクラッチホイール",
+  "sc_chara": "Elena",
+  "sc_input": "623HK",
+  "sc_name": "Scratch Wheel",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "OD スクラッチホイール",
+  "sc_chara": "Elena",
+  "sc_input": "623KK",
+  "sc_name": "Scratch Wheel",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "レオパードスナップ",
+  "sc_chara": "Elena",
+  "sc_input": "236P~6LK",
+  "sc_name": "Leopard Snap",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "[強化版]レオパードスナップ",
+  "sc_chara": "Elena",
+  "sc_input": "236PP~6LK or 236P~6P~6LK",
+  "sc_name": "Leopard Snap",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "ハーベストサークル",
+  "sc_chara": "Elena",
+  "sc_input": "236P~6MK",
+  "sc_name": "Harvest Circle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "[強化版]ハーベストサークル",
+  "sc_chara": "Elena",
+  "sc_input": "236PP~6MK or 236P~6P~6MK",
+  "sc_name": "Harvest Circle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "マレットスマッシュ",
+  "sc_chara": "Elena",
+  "sc_input": "236P~6HK",
+  "sc_name": "Mallet Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "[強化版]マレットスマッシュ",
+  "sc_chara": "Elena",
+  "sc_input": "236PP~6HK or 236P~6P~6HK",
+  "sc_name": "Mallet Smash",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "弱 スピンサイズ",
+  "sc_chara": "Elena",
+  "sc_input": "214LK",
+  "sc_name": "Spinning Scythe",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "中 スピンサイズ",
+  "sc_chara": "Elena",
+  "sc_input": "214MK",
+  "sc_name": "Spinning Scythe",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "強スピンサイズ",
+  "sc_chara": "Elena",
+  "sc_input": "214HK",
+  "sc_name": "Spinning Scythe",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "OD スピンサイズ",
+  "sc_chara": "Elena",
+  "sc_input": "214KK",
+  "sc_name": "Spinning Scythe",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "弱 ムーングライド（1段目）",
+  "sc_chara": "Elena",
+  "sc_input": "214LP",
+  "sc_name": "Moon Glider",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "中 ムーングライド（1段目）",
+  "sc_chara": "Elena",
+  "sc_input": "214MP",
+  "sc_name": "Moon Glider",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "強 ムーングライド（1段目）",
+  "sc_chara": "Elena",
+  "sc_input": "214HP",
+  "sc_name": "Moon Glider",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "ムーングライド（2段目）",
+  "sc_chara": "Elena",
+  "sc_input": "214P~6P",
+  "sc_name": "Moon Glider Follow-up",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "OD ムーングライド（1段目）",
+  "sc_chara": "Elena",
+  "sc_input": "214PP",
+  "sc_name": "Moon Glider",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "OD ムーングライド（2段目）",
+  "sc_chara": "Elena",
+  "sc_input": "214PP~6P",
+  "sc_name": "Moon Glider Follow-up",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "SA1 ミーティアボレー",
+  "sc_chara": "Elena",
+  "sc_input": "236236K",
+  "sc_name": "Meteor Volley",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "SA3 グラスランドソング",
+  "sc_chara": "Elena",
+  "sc_input": "214214K",
+  "sc_name": "Song of the Grasslands (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "elena",
+  "capcom_move_name": "CA グラスランドソング",
+  "sc_chara": "Elena",
+  "sc_input": "214214K",
+  "sc_name": "Song of the Grasslands (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 斬空波動拳",
+  "sc_chara": "Akuma",
+  "sc_input": "j.236PP",
+  "sc_name": "Zanku Hadoken",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "空中竜巻斬空脚",
+  "sc_chara": "Akuma",
+  "sc_input": "j.214K",
+  "sc_name": "Aerial Tatsumaki Zanku-Kyaku",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "百鬼豪斬空",
+  "sc_chara": "Akuma",
+  "sc_input": "236KK~j.236P",
+  "sc_name": "Demon Gou Zanku",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "弱 豪波動拳(Lv1)",
+  "sc_chara": "Akuma",
+  "sc_input": "236LP",
+  "sc_name": "Gou Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "中 豪波動拳(Lv1)",
+  "sc_chara": "Akuma",
+  "sc_input": "236MP",
+  "sc_name": "Gou Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "強 豪波動拳(Lv1)",
+  "sc_chara": "Akuma",
+  "sc_input": "236HP",
+  "sc_name": "Gou Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 豪波動拳",
+  "sc_chara": "Akuma",
+  "sc_input": "236PP",
+  "sc_name": "Gou Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 豪波動拳（ホールド）",
+  "sc_chara": "Akuma",
+  "sc_input": "236[PP]",
+  "sc_name": "OD Gou Hadoken Lv.2",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "弱 豪昇龍拳",
+  "sc_chara": "Akuma",
+  "sc_input": "623LP",
+  "sc_name": "Gou Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "中 豪昇龍拳",
+  "sc_chara": "Akuma",
+  "sc_input": "623MP",
+  "sc_name": "Gou Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "強 豪昇龍拳",
+  "sc_chara": "Akuma",
+  "sc_input": "623HP",
+  "sc_name": "Gou Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 豪昇龍拳",
+  "sc_chara": "Akuma",
+  "sc_input": "j.236PP",
+  "sc_name": "Zanku Hadoken",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "弱 竜巻斬空脚",
+  "sc_chara": "Akuma",
+  "sc_input": "214LK",
+  "sc_name": "Tatsumaki Zanku-Kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "中 竜巻斬空脚",
+  "sc_chara": "Akuma",
+  "sc_input": "214MK",
+  "sc_name": "Tatsumaki Zanku-Kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "強 竜巻斬空脚",
+  "sc_chara": "Akuma",
+  "sc_input": "214HK",
+  "sc_name": "Tatsumaki Zanku-Kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 竜巻斬空脚",
+  "sc_chara": "Akuma",
+  "sc_input": "214KK",
+  "sc_name": "Tatsumaki Zanku-Kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 空中竜巻斬空脚",
+  "sc_chara": "Akuma",
+  "sc_input": "j.214KK",
+  "sc_name": "Aerial Tatsumaki Zanku-Kyaku",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "弱 金剛灼火（1段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214LP",
+  "sc_name": "Adamant Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "弱 金剛灼火（2段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214LP~6P",
+  "sc_name": "Adamant Flame Follow-Up",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "中 金剛灼火（1段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214MP",
+  "sc_name": "Adamant Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "中 金剛灼火（2段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214MP~6P",
+  "sc_name": "Adamant Flame Follow-Up",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "強 金剛灼火（1段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214HP",
+  "sc_name": "Adamant Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "強 金剛灼火（2段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214HP~6P",
+  "sc_name": "Adamant Flame Follow-Up",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 金剛灼火（1段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214PP",
+  "sc_name": "Adamant Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "OD 金剛灼火（2段目）",
+  "sc_chara": "Akuma",
+  "sc_input": "214PP~6P",
+  "sc_name": "Adamant Flame Follow-Up",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "百鬼豪衝",
+  "sc_chara": "Akuma",
+  "sc_input": "236KK~j.214K",
+  "sc_name": "Demon Gou Rasen",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "百鬼豪螺旋",
+  "sc_chara": "Akuma",
+  "sc_input": "623LP",
+  "sc_name": "Gou Shoryuken",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "SA1 滅殺豪波動",
+  "sc_chara": "Akuma",
+  "sc_input": "236236P",
+  "sc_name": "Messatsu Gohado",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "SA1 天魔豪斬空",
+  "sc_chara": "Akuma",
+  "sc_input": "j.236236K",
+  "sc_name": "Tenma Gozanku",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "SA2 崩天劫火",
+  "sc_chara": "Akuma",
+  "sc_input": "214214P",
+  "sc_name": "Empyrean’s End",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "SA3 禍坏",
+  "sc_chara": "Akuma",
+  "sc_input": "236236K",
+  "sc_name": "Sip of Calamity (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "CA 禍坏",
+  "sc_chara": "Akuma",
+  "sc_input": "236236K",
+  "sc_name": "Sip of Calamity (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "gouki_akuma",
+  "capcom_move_name": "CA 瞬獄殺",
+  "sc_chara": "Akuma",
+  "sc_input": "LP~LP~6LK~HP",
+  "sc_name": "Shun Goku Satsu (CA)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "ソニックブレイク （単発）",
+  "sc_chara": "Guile",
+  "sc_input": "PP",
+  "sc_name": "Sonic Break",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "ソニックブレイク （派生）",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6P~P",
+  "sc_name": "Sonic Break (follow-up)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "SA1 ソニックハリケーン （横）",
+  "sc_chara": "Guile",
+  "sc_input": "[4]646P",
+  "sc_name": "Sonic Hurricane",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "弱 ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6LP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "中 ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6MP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "強 ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6HP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "弱 サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8LK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "【ジャスト】 弱 サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8LK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "中 サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8MK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "【ジャスト】 中 サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8MK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "強 サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8HK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "【ジャスト】 強 サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8HK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "OD サマーソルトキック",
+  "sc_chara": "Guile",
+  "sc_input": "[2]8KK",
+  "sc_name": "Somersault Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "弱 ソニックブレイド",
+  "sc_chara": "Guile",
+  "sc_input": "214LP",
+  "sc_name": "Sonic Blade",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "中 ソニックブレイド",
+  "sc_chara": "Guile",
+  "sc_input": "214MP",
+  "sc_name": "Sonic Blade",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "強 ソニックブレイド",
+  "sc_chara": "Guile",
+  "sc_input": "214HP",
+  "sc_name": "Sonic Blade",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "OD 弱 ソニックブレイド",
+  "sc_chara": "Guile",
+  "sc_input": "214PP",
+  "sc_name": "Sonic Cross",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "OD 中 ソニックブレイド",
+  "sc_chara": "Guile",
+  "sc_input": "214PP",
+  "sc_name": "Sonic Cross",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "OD 強 ソニックブレイド",
+  "sc_chara": "Guile",
+  "sc_input": "214PP",
+  "sc_name": "Sonic Cross",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "OD ソニックブレイク",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6PP~P",
+  "sc_name": "OD Sonic Break (follow-up)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "SA3 クロスファイアサマーソルト",
+  "sc_chara": "Guile",
+  "sc_input": "[4]646K",
+  "sc_name": "Crossfire Somersault (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "CA クロスファイアサマーソルト",
+  "sc_chara": "Guile",
+  "sc_input": "[4]646K",
+  "sc_name": "Crossfire Somersault (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "【ジャスト】 弱 ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6LP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "【ジャスト】 中 ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6MP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "【ジャスト】 強 ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6HP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "OD ソニックブーム",
+  "sc_chara": "Guile",
+  "sc_input": "[4]6PP",
+  "sc_name": "Sonic Boom",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "guile",
+  "capcom_move_name": "SA1 ソニックハリケーン （上）",
+  "sc_chara": "Guile",
+  "sc_input": "[4]646HP",
+  "sc_name": "Sonic Hurricane",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 流酔拳（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236LP~6P",
+  "sc_name": "LP Freeflow Strikes Punch 1 (DL4)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 流酔拳（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236MP~6P",
+  "sc_name": "MP Freeflow Strikes Punch 1 (DL4)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 流酔拳（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236HP~6P",
+  "sc_name": "HP Freeflow Strikes Punch 1 (DL4)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 流酔拳（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP~6P",
+  "sc_name": "OD Freeflow Strikes Punch 1 (DL4)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "[酔いレベル4]弱 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236LP",
+  "sc_name": "LP Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "[酔いレベル4]中 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236MP",
+  "sc_name": "MP Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "[酔いレベル4]強 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236HP",
+  "sc_name": "HP Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "[酔いレベル4]OD 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP",
+  "sc_name": "OD Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "[酔いレベル4]OD 流酔拳（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP~6P",
+  "sc_name": "OD Freeflow Strikes Punch 1 (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "[酔いレベル4]OD 流酔拳（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP~6P~6P",
+  "sc_name": "OD Freeflow Strikes Punch 2 (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 流酔脚（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236LP~6K",
+  "sc_name": "LP Freeflow Kicks 1 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 流酔脚（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236MP~6K",
+  "sc_name": "MP Freeflow Kicks 1 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 流酔脚（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236HP~6K",
+  "sc_name": "HP Freeflow Kicks 1 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 流酔脚（2段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP~6K",
+  "sc_name": "OD Freeflow Kicks 1 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 流酔脚（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236LP~6K~6K",
+  "sc_name": "LP Freeflow Kicks 2 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 流酔脚（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236MP~6K~6K",
+  "sc_name": "MP Freeflow Kicks 2 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 流酔脚（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236HP~6K~6K",
+  "sc_name": "HP Freeflow Kicks 2 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 流酔脚（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP~6K~6K",
+  "sc_name": "OD Freeflow Kicks 2 (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 酔疾歩",
+  "sc_chara": "Jamie",
+  "sc_input": "214LP",
+  "sc_name": "Swagger Step (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 酔疾歩",
+  "sc_chara": "Jamie",
+  "sc_input": "214MP",
+  "sc_name": "Swagger Step (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 酔疾歩",
+  "sc_chara": "Jamie",
+  "sc_input": "214HP",
+  "sc_name": "Swagger Step (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 酔疾歩",
+  "sc_chara": "Jamie",
+  "sc_input": "214PP",
+  "sc_name": "Swagger Step (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 張弓腿",
+  "sc_chara": "Jamie",
+  "sc_input": "623MK",
+  "sc_name": "Arrow Kick (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 張弓腿",
+  "sc_chara": "Jamie",
+  "sc_input": "623HK",
+  "sc_name": "Arrow Kick (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 張弓腿",
+  "sc_chara": "Jamie",
+  "sc_input": "623KK",
+  "sc_name": "Arrow Kick (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 無影蹴",
+  "sc_chara": "Jamie",
+  "sc_input": "j.214KK",
+  "sc_name": "Luminous Dive Kick (DL2)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 爆廻",
+  "sc_chara": "Jamie",
+  "sc_input": "236LK",
+  "sc_name": "Bakkai (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 爆廻",
+  "sc_chara": "Jamie",
+  "sc_input": "236MK",
+  "sc_name": "Bakkai (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 爆廻",
+  "sc_chara": "Jamie",
+  "sc_input": "236HK",
+  "sc_name": "Bakkai (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 爆廻",
+  "sc_chara": "Jamie",
+  "sc_input": "236KK",
+  "sc_name": "Bakkai (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "点辰",
+  "sc_chara": "Jamie",
+  "sc_input": "63214K",
+  "sc_name": "Tenshin (DL3)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 点辰",
+  "sc_chara": "Jamie",
+  "sc_input": "63214KK",
+  "sc_name": "Tenshin (DL3)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "疾歩仙掌",
+  "sc_chara": "Jamie",
+  "sc_input": "214PP~6P",
+  "sc_name": "Swagger Hermit Punch (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 疾歩仙掌",
+  "sc_chara": "Jamie",
+  "sc_input": "214PP~6P",
+  "sc_name": "Swagger Hermit Punch (DL4)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "SA1 武麗禽",
+  "sc_chara": "Jamie",
+  "sc_input": "236236K",
+  "sc_name": "Breakin'",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "SA3 月牙叉炮",
+  "sc_chara": "Jamie",
+  "sc_input": "236236P",
+  "sc_name": "Getsuga Saiho (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "CA 月牙叉炮",
+  "sc_chara": "Jamie",
+  "sc_input": "236236P",
+  "sc_name": "Getsuga Saiho (DL2)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236LP",
+  "sc_name": "LP Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236MP",
+  "sc_name": "MP Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236HP",
+  "sc_name": "HP Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 流酔拳（1段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP",
+  "sc_name": "OD Freeflow Strikes 1 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 流酔拳（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236LP~6P~6P",
+  "sc_name": "LP Freeflow Strikes Punch 2 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "中 流酔拳（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236MP~6P~6P",
+  "sc_name": "MP Freeflow Strikes Punch 2 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "強 流酔拳（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236HP~6P~6P",
+  "sc_name": "HP Freeflow Strikes Punch 2 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "OD 流酔拳（3段目）",
+  "sc_chara": "Jamie",
+  "sc_input": "236PP~6P~6P",
+  "sc_name": "OD Freeflow Strikes Punch 2 (DL4)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jamie",
+  "capcom_move_name": "弱 張弓腿",
+  "sc_chara": "Jamie",
+  "sc_input": "623LK",
+  "sc_name": "Arrow Kick (DL2)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "弱 トリグラフ",
+  "sc_chara": "JP",
+  "sc_input": "22P",
+  "sc_name": "Triglav",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "中 トリグラフ",
+  "sc_chara": "JP",
+  "sc_input": "22P",
+  "sc_name": "Triglav",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "強 トリグラフ",
+  "sc_chara": "JP",
+  "sc_input": "22P",
+  "sc_name": "Triglav",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD 弱 トリグラフ",
+  "sc_chara": "JP",
+  "sc_input": "22PP",
+  "sc_name": "Triglav",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD 中 トリグラフ",
+  "sc_chara": "JP",
+  "sc_input": "22PP",
+  "sc_name": "Triglav",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD 強 トリグラフ",
+  "sc_chara": "JP",
+  "sc_input": "22PP",
+  "sc_name": "Triglav",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "弱 ストリボーグ",
+  "sc_chara": "JP",
+  "sc_input": "236LP",
+  "sc_name": "Stribog",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "中 ストリボーグ",
+  "sc_chara": "JP",
+  "sc_input": "236MP",
+  "sc_name": "Stribog",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "強 ストリボーグ",
+  "sc_chara": "JP",
+  "sc_input": "236HP",
+  "sc_name": "Stribog",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD ストリボーグ",
+  "sc_chara": "JP",
+  "sc_input": "236PP",
+  "sc_name": "Stribog",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD トルバラン",
+  "sc_chara": "JP",
+  "sc_input": "236KK",
+  "sc_name": "Torbalan",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "SA1 チェルノボーグ",
+  "sc_chara": "JP",
+  "sc_input": "236236P",
+  "sc_name": "Chornobog",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "SA3 ザプリェット",
+  "sc_chara": "JP",
+  "sc_input": "236236K",
+  "sc_name": "Interdiction (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "CA ザプリェット",
+  "sc_chara": "JP",
+  "sc_input": "236236K",
+  "sc_name": "Interdiction (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "アムネジア",
+  "sc_chara": "JP",
+  "sc_input": "22K",
+  "sc_name": "Amnesia",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD アムネジア",
+  "sc_chara": "JP",
+  "sc_input": "22KK",
+  "sc_name": "Amnesia",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "弱 トルバラン",
+  "sc_chara": "JP",
+  "sc_input": "236LK",
+  "sc_name": "Torbalan",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "中 トルバラン",
+  "sc_chara": "JP",
+  "sc_input": "236MK",
+  "sc_name": "Torbalan",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "強 トルバラン",
+  "sc_chara": "JP",
+  "sc_input": "236HK",
+  "sc_name": "Torbalan",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "jp",
+  "capcom_move_name": "OD アブニマーチ",
+  "sc_chara": "JP",
+  "sc_input": "214KK",
+  "sc_name": "Embrace",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "SA1 殺界風破斬",
+  "sc_chara": "Juri",
+  "sc_input": "236236K",
+  "sc_name": "Sakkai Fuhazan",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "弱 風破刃",
+  "sc_chara": "Juri",
+  "sc_input": "214LK",
+  "sc_name": "Fuhajin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "中 風破刃",
+  "sc_chara": "Juri",
+  "sc_input": "214MK",
+  "sc_name": "Fuhajin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "強 風破刃",
+  "sc_chara": "Juri",
+  "sc_input": "214HK",
+  "sc_name": "Fuhajin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "OD 風破刃",
+  "sc_chara": "Juri",
+  "sc_input": "214KK",
+  "sc_name": "Fuhajin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "歳破衝",
+  "sc_chara": "Juri",
+  "sc_input": "236LK",
+  "sc_name": "Saihasho",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "[強化版]歳破衝",
+  "sc_chara": "Juri",
+  "sc_input": "236LK (1 Stock)",
+  "sc_name": "Saihasho",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "OD 歳破衝",
+  "sc_chara": "Juri",
+  "sc_input": "236LKMK",
+  "sc_name": "Saihasho",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "[強化版]暗剣殺",
+  "sc_chara": "Juri",
+  "sc_input": "236MK (1 Stock)",
+  "sc_name": "Ankensatsu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "OD 暗剣殺",
+  "sc_chara": "Juri",
+  "sc_input": "236LKHK",
+  "sc_name": "Ankensatsu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "[強化版]五黄殺",
+  "sc_chara": "Juri",
+  "sc_input": "j.214K",
+  "sc_name": "Shiku-sen",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "OD 五黄殺",
+  "sc_chara": "Juri",
+  "sc_input": "236MKHK",
+  "sc_name": "Go Ohsatsu",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "弱 天穿輪",
+  "sc_chara": "Juri",
+  "sc_input": "623LP",
+  "sc_name": "Tensenrin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "中 天穿輪",
+  "sc_chara": "Juri",
+  "sc_input": "623MP",
+  "sc_name": "Tensenrin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "強 天穿輪",
+  "sc_chara": "Juri",
+  "sc_input": "623HP",
+  "sc_name": "Tensenrin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "OD 天穿輪",
+  "sc_chara": "Juri",
+  "sc_input": "623PP",
+  "sc_name": "Tensenrin",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "SA2 風水エンジン（突進）",
+  "sc_chara": "Juri",
+  "sc_input": "214214[P]",
+  "sc_name": "Feng Shui Engine (hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "OD 疾空閃",
+  "sc_chara": "Juri",
+  "sc_input": "j.214KK",
+  "sc_name": "OD Shiku-sen",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "SA3 回旋断界落",
+  "sc_chara": "Juri",
+  "sc_input": "214214K",
+  "sc_name": "Kaisen Dankai Raku (CA)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "juri",
+  "capcom_move_name": "CA 回旋断界落",
+  "sc_chara": "Juri",
+  "sc_input": "214214K",
+  "sc_name": "Kaisen Dankai Raku (CA)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "空中竜巻旋風脚",
+  "sc_chara": "Ken",
+  "sc_input": "j.214K",
+  "sc_name": "Aerial Tatsumaki Senpu-kyaku",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 空中竜巻旋風脚",
+  "sc_chara": "Ken",
+  "sc_input": "j.214KK",
+  "sc_name": "Aerial Tatsumaki Senpu-kyaku",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "弱 波動拳",
+  "sc_chara": "Ken",
+  "sc_input": "236LP",
+  "sc_name": "Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "中 波動拳",
+  "sc_chara": "Ken",
+  "sc_input": "236MP",
+  "sc_name": "Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "強 波動拳",
+  "sc_chara": "Ken",
+  "sc_input": "236HP",
+  "sc_name": "Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 波動拳",
+  "sc_chara": "Ken",
+  "sc_input": "236PP",
+  "sc_name": "Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "弱 昇龍拳",
+  "sc_chara": "Ken",
+  "sc_input": "623LP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "中 昇龍拳",
+  "sc_chara": "Ken",
+  "sc_input": "623MP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "強 昇龍拳",
+  "sc_chara": "Ken",
+  "sc_input": "623HP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 昇龍拳",
+  "sc_chara": "Ken",
+  "sc_input": "623PP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "弱 竜巻旋風脚",
+  "sc_chara": "Ken",
+  "sc_input": "214LK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "中 竜巻旋風脚",
+  "sc_chara": "Ken",
+  "sc_input": "214MK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "強 竜巻旋風脚",
+  "sc_chara": "Ken",
+  "sc_input": "214HK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 竜巻旋風脚",
+  "sc_chara": "Ken",
+  "sc_input": "214KK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "弱 龍尾脚",
+  "sc_chara": "Ken",
+  "sc_input": "623LK",
+  "sc_name": "Dragonlash Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "中 龍尾脚",
+  "sc_chara": "Ken",
+  "sc_input": "623MK",
+  "sc_name": "Dragonlash Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "強 龍尾脚",
+  "sc_chara": "Ken",
+  "sc_input": "623HK",
+  "sc_name": "Dragonlash Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 龍尾脚",
+  "sc_chara": "Ken",
+  "sc_input": "623KK",
+  "sc_name": "Dragonlash Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "弱 迅雷脚",
+  "sc_chara": "Ken",
+  "sc_input": "236LK",
+  "sc_name": "Jinrai Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "中 迅雷脚",
+  "sc_chara": "Ken",
+  "sc_input": "236MK",
+  "sc_name": "Jinrai Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "強 迅雷脚",
+  "sc_chara": "Ken",
+  "sc_input": "236HK",
+  "sc_name": "Jinrai Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 迅雷脚",
+  "sc_chara": "Ken",
+  "sc_input": "236KK",
+  "sc_name": "Jinrai Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "風鎌蹴り",
+  "sc_chara": "Ken",
+  "sc_input": "236KK~6LK",
+  "sc_name": "Kazekama Shin Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 風鎌蹴り",
+  "sc_chara": "Ken",
+  "sc_input": "236KK~6LK",
+  "sc_name": "Kazekama Shin Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "火砕蹴",
+  "sc_chara": "Ken",
+  "sc_input": "236KK~6HK~6K",
+  "sc_name": "Kasai Thrust Kick (HK)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "轟雷落とし",
+  "sc_chara": "Ken",
+  "sc_input": "236K~6MK",
+  "sc_name": "Gorai Axe Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 轟雷落とし",
+  "sc_chara": "Ken",
+  "sc_input": "236KK~6MK",
+  "sc_name": "Gorai Axe Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "閃火脚",
+  "sc_chara": "Ken",
+  "sc_input": "236K~6HK",
+  "sc_name": "Senka Snap Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "OD 閃火脚",
+  "sc_chara": "Ken",
+  "sc_input": "236KK~6HK",
+  "sc_name": "Senka Snap Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "SA1 龍尾烈脚",
+  "sc_chara": "Ken",
+  "sc_input": "214214K",
+  "sc_name": "Dragonlash Flame",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "SA2 疾風迅雷脚",
+  "sc_chara": "Ken",
+  "sc_input": "236236K",
+  "sc_name": "Shippu Jinrai-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "SA3 神龍烈破",
+  "sc_chara": "Ken",
+  "sc_input": "236236P",
+  "sc_name": "Shinryu Reppa (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "CA 神龍烈破",
+  "sc_chara": "Ken",
+  "sc_input": "236236P",
+  "sc_name": "Shinryu Reppa (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "【奮迅脚】 昇龍拳",
+  "sc_chara": "Ken",
+  "sc_input": "KK~623P",
+  "sc_name": "Run~Shoryuken",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ken",
+  "capcom_move_name": "【奮迅脚】 龍尾脚",
+  "sc_chara": "Ken",
+  "sc_input": "KK~623K",
+  "sc_name": "Run~Dragonlash Kick",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "空中武神旋風脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "j.214K",
+  "sc_name": "Aerial Bushin Senpukyaku",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 空中武神旋風脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "j.214KK",
+  "sc_name": "Aerial Bushin Senpukyaku",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "SA1 武神乱拍子",
+  "sc_chara": "Kimberly",
+  "sc_input": "236236K",
+  "sc_name": "Bushin Beats",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "SA1 武神乱拍子・雷譜",
+  "sc_chara": "Kimberly",
+  "sc_input": "236236[K]",
+  "sc_name": "Bushin Thunderous Beats",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "SA2 空中武神天翔亢竜",
+  "sc_chara": "Kimberly",
+  "sc_input": "j.214214P",
+  "sc_name": "Soaring Bushin Scramble",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "弱 武神旋風脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "214LK",
+  "sc_name": "Bushin Senpukyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "中 武神旋風脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "214MK",
+  "sc_name": "Bushin Senpukyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "強 武神旋風脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "214HK",
+  "sc_name": "Bushin Senpukyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 武神旋風脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "214KK",
+  "sc_name": "Bushin Senpukyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 影すくい",
+  "sc_chara": "Kimberly",
+  "sc_input": "236KK~MK",
+  "sc_name": "Shadow Slide",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "中 流転一文字",
+  "sc_chara": "Kimberly",
+  "sc_input": "236MP",
+  "sc_name": "Vagabond Edge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "強 流転一文字",
+  "sc_chara": "Kimberly",
+  "sc_input": "236HP",
+  "sc_name": "Vagabond Edge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 流転一文字",
+  "sc_chara": "Kimberly",
+  "sc_input": "236PP",
+  "sc_name": "Vagabond Edge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "荒鵺捻り",
+  "sc_chara": "Kimberly",
+  "sc_input": "j.236P",
+  "sc_name": "Nue Twister",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 荒鵺捻り",
+  "sc_chara": "Kimberly",
+  "sc_input": "j.236PP",
+  "sc_name": "Nue Twister",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "SA3 武神顕現神楽",
+  "sc_chara": "Kimberly",
+  "sc_input": "236236P",
+  "sc_name": "Bushin Ninjastar Cypher (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "CA 武神顕現神楽",
+  "sc_chara": "Kimberly",
+  "sc_input": "236236P",
+  "sc_name": "Bushin Ninjastar Cypher (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "胴刎ね",
+  "sc_chara": "Kimberly",
+  "sc_input": "236K~LK",
+  "sc_name": "Torso Cleaver",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "影すくい",
+  "sc_chara": "Kimberly",
+  "sc_input": "236K~MK",
+  "sc_name": "Shadow Slide",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "首狩り",
+  "sc_chara": "Kimberly",
+  "sc_input": "236K~HK",
+  "sc_name": "Neck Hunter",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 弧空",
+  "sc_chara": "Kimberly",
+  "sc_input": "236KK (close)",
+  "sc_name": "Arc Step",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "OD 武神鉾刃脚",
+  "sc_chara": "Kimberly",
+  "sc_input": "236KK (close)~K",
+  "sc_name": "Bushin Hojin Kick",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "kimberly",
+  "capcom_move_name": "弱 流転一文字",
+  "sc_chara": "Kimberly",
+  "sc_input": "236LP",
+  "sc_name": "Vagabond Edge",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "強 コンドルウィンド",
+  "sc_chara": "Lily",
+  "sc_input": "214HP (HOLD OK)",
+  "sc_name": "Condor Wind (attack)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "強 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "236HK",
+  "sc_name": "Condor Spire",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "コンドルダイブ",
+  "sc_chara": "Lily",
+  "sc_input": "j.PP",
+  "sc_name": "Condor Dive",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "OD コンドルダイブ",
+  "sc_chara": "Lily",
+  "sc_input": "j.PPP",
+  "sc_name": "Condor Dive",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "SA2 スカイサンダーバード",
+  "sc_chara": "Lily",
+  "sc_input": "j.236236K",
+  "sc_name": "Soaring Thunderbird (Windclad)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]SA2 スカイサンダーバード",
+  "sc_chara": "Lily",
+  "sc_input": "j.236236K",
+  "sc_name": "Soaring Thunderbird (Windclad)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "中 コンドルウィンド",
+  "sc_chara": "Lily",
+  "sc_input": "214MP (HOLD OK)",
+  "sc_name": "Condor Wind (attack)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "OD コンドルウィンド",
+  "sc_chara": "Lily",
+  "sc_input": "214PP (HOLD OK)",
+  "sc_name": "Condor Wind (attack)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "弱 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "236LK",
+  "sc_name": "Condor Spire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "中 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "236MK",
+  "sc_name": "Condor Spire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "OD 弱 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "236KK",
+  "sc_name": "Condor Spire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "OD 強 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "236KK",
+  "sc_name": "Condor Spire",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]弱 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "W.236LK",
+  "sc_name": "Condor Spire (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]中 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "W.236MK",
+  "sc_name": "Condor Spire (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]強 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "W.236HK",
+  "sc_name": "Condor Spire (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]OD 弱 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "W.236LKMK or W.236LKHK",
+  "sc_name": "Condor Spire (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]OD 強 コンドルスパイア",
+  "sc_chara": "Lily",
+  "sc_input": "W.236LKMK or W.236LKHK",
+  "sc_name": "Condor Spire (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "弱 トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "623LP",
+  "sc_name": "Tomahawk Buster",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "中 トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "623MP",
+  "sc_name": "Tomahawk Buster",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "強 トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "623HP",
+  "sc_name": "Tomahawk Buster",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "OD トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "623PP",
+  "sc_name": "Tomahawk Buster",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]弱 トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "W.623LP",
+  "sc_name": "Tomahawk Buster (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]中 トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "W.623MP",
+  "sc_name": "Tomahawk Buster (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]強 トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "W.623HP",
+  "sc_name": "Tomahawk Buster (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]OD トマホークバスター",
+  "sc_chara": "Lily",
+  "sc_input": "W.623PP",
+  "sc_name": "Tomahawk Buster (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "弱 メキシカンタイフーン",
+  "sc_chara": "Lily",
+  "sc_input": "360+LP",
+  "sc_name": "Mexican Typhoon",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "中 メキシカンタイフーン",
+  "sc_chara": "Lily",
+  "sc_input": "360+MP",
+  "sc_name": "Mexican Typhoon",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "強 メキシカンタイフーン",
+  "sc_chara": "Lily",
+  "sc_input": "360+HP",
+  "sc_name": "Mexican Typhoon",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "OD メキシカンタイフーン",
+  "sc_chara": "Lily",
+  "sc_input": "360+PP",
+  "sc_name": "Mexican Typhoon",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "SA1 ブリージングホーク",
+  "sc_chara": "Lily",
+  "sc_input": "236236P",
+  "sc_name": "Breezing Hawk",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "[風纏い]SA2 サンダーバード",
+  "sc_chara": "Lily",
+  "sc_input": "236236K",
+  "sc_name": "Thunderbird (Windclad)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "lily",
+  "capcom_move_name": "SA2 サンダーバード",
+  "sc_chara": "Lily",
+  "sc_input": "236236K",
+  "sc_name": "Thunderbird (Windclad)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "弱 フラッシュナックル（ホールド）",
+  "sc_chara": "Luke",
+  "sc_input": "214[LP]",
+  "sc_name": "LP Flash Knuckle (hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "弱 フラッシュナックル（ジャスト）",
+  "sc_chara": "Luke",
+  "sc_input": "pf.214[LP]",
+  "sc_name": "LP Flash Knuckle (perfect)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "中 フラッシュナックル（ホールド）",
+  "sc_chara": "Luke",
+  "sc_input": "214[MP]",
+  "sc_name": "MP Flash Knuckle (hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "中 フラッシュナックル（ジャスト）",
+  "sc_chara": "Luke",
+  "sc_input": "pf.214[MP]",
+  "sc_name": "MP Flash Knuckle (perfect)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "強 フラッシュナックル（ホールド）",
+  "sc_chara": "Luke",
+  "sc_input": "214[HP]",
+  "sc_name": "HP Flash Knuckle (hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "強 フラッシュナックル（ジャスト）",
+  "sc_chara": "Luke",
+  "sc_input": "pf.214[HP]",
+  "sc_name": "HP Flash Knuckle (perfect)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "スラムダンク",
+  "sc_chara": "Luke",
+  "sc_input": "623PP~PP",
+  "sc_name": "Slam Dunk",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "弱 サンドブラスト",
+  "sc_chara": "Luke",
+  "sc_input": "236LP",
+  "sc_name": "Sand Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "中 サンドブラスト",
+  "sc_chara": "Luke",
+  "sc_input": "236MP",
+  "sc_name": "Sand Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "強 サンドブラスト",
+  "sc_chara": "Luke",
+  "sc_input": "236HP",
+  "sc_name": "Sand Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "OD サンドブラスト",
+  "sc_chara": "Luke",
+  "sc_input": "236PP",
+  "sc_name": "Sand Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "フェイタルショット",
+  "sc_chara": "Luke",
+  "sc_input": "236PP~PP",
+  "sc_name": "Fatal Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "弱 フラッシュナックル",
+  "sc_chara": "Luke",
+  "sc_input": "214LP",
+  "sc_name": "LP Flash Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "中 フラッシュナックル",
+  "sc_chara": "Luke",
+  "sc_input": "214MP",
+  "sc_name": "MP Flash Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "強 フラッシュナックル",
+  "sc_chara": "Luke",
+  "sc_input": "214HP",
+  "sc_name": "HP Flash Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "DDT",
+  "sc_chara": "Luke",
+  "sc_input": "214PP~PP",
+  "sc_name": "DDT",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "エアフラッシュナックル",
+  "sc_chara": "Luke",
+  "sc_input": "j.214P",
+  "sc_name": "Aerial Flash Knuckle",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "エアフラッシュナックル（ホールド）",
+  "sc_chara": "Luke",
+  "sc_input": "j.214[P]",
+  "sc_name": "Aerial Flash Knuckle (hold)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "OD エアフラッシュナックル",
+  "sc_chara": "Luke",
+  "sc_input": "j.214PP",
+  "sc_name": "Aerial Flash Knuckle",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "ノーチェイサー",
+  "sc_chara": "Luke",
+  "sc_input": "236K~P",
+  "sc_name": "No Chaser",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "弱 ライジングアッパー",
+  "sc_chara": "Luke",
+  "sc_input": "623LP",
+  "sc_name": "Rising Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "中 ライジングアッパー",
+  "sc_chara": "Luke",
+  "sc_input": "623MP",
+  "sc_name": "Rising Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "強 ライジングアッパー",
+  "sc_chara": "Luke",
+  "sc_input": "623HP",
+  "sc_name": "Rising Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "OD ライジングアッパー",
+  "sc_chara": "Luke",
+  "sc_input": "623PP",
+  "sc_name": "Rising Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "SA1 バルカンブラスト",
+  "sc_chara": "Luke",
+  "sc_input": "236236P",
+  "sc_name": "Vulcan Blast",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "SA2 イレイザー",
+  "sc_chara": "Luke",
+  "sc_input": "214214P",
+  "sc_name": "Eraser",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "SA3 ペイルライダー",
+  "sc_chara": "Luke",
+  "sc_input": "236236K",
+  "sc_name": "Pale Rider (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "CA ペイルライダー",
+  "sc_chara": "Luke",
+  "sc_input": "236236K",
+  "sc_name": "Pale Rider (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "OD フラッシュナックル",
+  "sc_chara": "Luke",
+  "sc_input": "214PP",
+  "sc_name": "OD Flash Knuckle",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "OD ノーチェイサー",
+  "sc_chara": "Luke",
+  "sc_input": "236KK~P",
+  "sc_name": "No Chaser",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "luke",
+  "capcom_move_name": "OD インパラー",
+  "sc_chara": "Luke",
+  "sc_input": "236KK~K",
+  "sc_name": "Impaler",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "弱 花蝶扇（ホールド）",
+  "sc_chara": "Mai",
+  "sc_input": "236[P]",
+  "sc_name": "Kachousen (Hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "中 花蝶扇（ホールド）",
+  "sc_chara": "Mai",
+  "sc_input": "236[P]",
+  "sc_name": "Kachousen (Hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "強 花蝶扇（ホールド）",
+  "sc_chara": "Mai",
+  "sc_input": "236[P]",
+  "sc_name": "Kachousen (Hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "OD 花蝶扇（ホールド）",
+  "sc_chara": "Mai",
+  "sc_input": "236[PP]",
+  "sc_name": "Kachousen (Hold)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "乱れ花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236[PP]~6P",
+  "sc_name": "Midare Kachousen (Flame)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]乱れ花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236[PP]~6P",
+  "sc_name": "Midare Kachousen (Flame)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]弱 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236LP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]中 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236MP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]強 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236HP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]OD 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236PP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]OD 花蝶扇（ホールド）",
+  "sc_chara": "Mai",
+  "sc_input": "236[PP]",
+  "sc_name": "Kachousen (Hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "弱 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623LK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]弱 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623LK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "中 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623MK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]中 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623MK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "OD 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623KK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]OD 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623KK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]弱 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214LP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "中 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214MP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]中 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214MP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]強 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214HP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "OD 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214PP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]OD 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214PP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "弱 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236LK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]弱 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236LK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "中 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236MK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]中 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236MK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "強 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236HK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]強 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236HK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "OD 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236KK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]OD 必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236KK",
+  "sc_name": "Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]SA1 陽炎の舞",
+  "sc_chara": "Mai",
+  "sc_input": "236236P",
+  "sc_name": "Kagerou no Mai (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "SA2 超必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236236K",
+  "sc_name": "Chou Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]SA2 超必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "236236K",
+  "sc_name": "Chou Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "SA2 空中超必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "j.236236K",
+  "sc_name": "Air Chou Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]SA2 空中超必殺忍蜂",
+  "sc_chara": "Mai",
+  "sc_input": "j.236236K",
+  "sc_name": "Air Chou Hissatsu Shinobi Bachi (Flame)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "SA3 不知火流・炎舞仇桜",
+  "sc_chara": "Mai",
+  "sc_input": "214214P",
+  "sc_name": "Shiranui Ryuu: Enbu Ada Zakura (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "CA 不知火流・炎舞仇桜",
+  "sc_chara": "Mai",
+  "sc_input": "214214P",
+  "sc_name": "Shiranui Ryuu: Enbu Ada Zakura (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "弱 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236LP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]弱 花蝶扇（ホールド）",
+  "sc_chara": "Mai",
+  "sc_input": "236LP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "中 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236MP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "強 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236HP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "OD 花蝶扇",
+  "sc_chara": "Mai",
+  "sc_input": "236PP",
+  "sc_name": "Kachousen (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "強 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623HK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]強 飛翔龍炎陣",
+  "sc_chara": "Mai",
+  "sc_input": "623HK",
+  "sc_name": "Hishou Ryuuenjin (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "弱 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214LP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "強 龍炎舞",
+  "sc_chara": "Mai",
+  "sc_input": "214HP",
+  "sc_name": "Ryuuenbu (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "OD ムササビの舞",
+  "sc_chara": "Mai",
+  "sc_input": "j.214PP",
+  "sc_name": "Musasabi no Mai (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "[強化版]OD ムササビの舞",
+  "sc_chara": "Mai",
+  "sc_input": "j.214PP",
+  "sc_name": "Musasabi no Mai (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "mai",
+  "capcom_move_name": "SA1 陽炎の舞",
+  "sc_chara": "Mai",
+  "sc_input": "236236P",
+  "sc_name": "Kagerou no Mai (Flame)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "OD マネージュ・ドレ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "63214PP",
+  "sc_name": "OD Manège Doré",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "弱 マネージュ・ドレ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "63214LP",
+  "sc_name": "LP Manège Doré",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "中 マネージュ・ドレ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "63214MP",
+  "sc_name": "MP Manège Doré",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "強 マネージュ・ドレ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "63214HP",
+  "sc_name": "HP Manège Doré",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "弱 ロン・ポワン",
+  "sc_chara": "Manon",
+  "sc_input": "236LK",
+  "sc_name": "LK Rond-point",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "中 ロン・ポワン",
+  "sc_chara": "Manon",
+  "sc_input": "236MK",
+  "sc_name": "MK Rond-point",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "強 ロン・ポワン",
+  "sc_chara": "Manon",
+  "sc_input": "236HK",
+  "sc_name": "HK Rond-point",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "OD ロン・ポワン",
+  "sc_chara": "Manon",
+  "sc_input": "236KK",
+  "sc_name": "OD Rond-point",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "弱 デガジェ",
+  "sc_chara": "Manon",
+  "sc_input": "214LK",
+  "sc_name": "LK Dégagé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "中 デガジェ",
+  "sc_chara": "Manon",
+  "sc_input": "214MK",
+  "sc_name": "MK Dégagé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "強  デガジェ",
+  "sc_chara": "Manon",
+  "sc_input": "214HK",
+  "sc_name": "HK Dégagé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "OD デガジェ",
+  "sc_chara": "Manon",
+  "sc_input": "214KK",
+  "sc_name": "OD Dégagé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "弱 ランヴェルセ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "236LP",
+  "sc_name": "LP Renversé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "中 ランヴェルセ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "236MP",
+  "sc_name": "MP Renversé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "強 ランヴェルセ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "236HP",
+  "sc_name": "HP Renversé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "OD ランヴェルセ（メダルLvに応じて動作が変化）",
+  "sc_chara": "Manon",
+  "sc_input": "236PP",
+  "sc_name": "OD Renversé",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "SA1 アラベスク",
+  "sc_chara": "Manon",
+  "sc_input": "236236K",
+  "sc_name": "Arabesque",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "SA2 エトワール",
+  "sc_chara": "Manon",
+  "sc_input": "214214K",
+  "sc_name": "Étoile",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "SA3 パ・ド・ドゥ",
+  "sc_chara": "Manon",
+  "sc_input": "214214K",
+  "sc_name": "Étoile",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "CA パ・ド・ドゥ",
+  "sc_chara": "Manon",
+  "sc_input": "214214K",
+  "sc_name": "Étoile",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "manon",
+  "capcom_move_name": "OD グラン・フェッテ",
+  "sc_chara": "Manon",
+  "sc_input": "236PP~K",
+  "sc_name": "OD Grand Fouetté",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "弱 グラディウス",
+  "sc_chara": "Marisa",
+  "sc_input": "236LP",
+  "sc_name": "Gladius",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "弱 グラディウス（ホールド）",
+  "sc_chara": "Marisa",
+  "sc_input": "236[LP]",
+  "sc_name": "Gladius (Hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "中 グラディウス",
+  "sc_chara": "Marisa",
+  "sc_input": "236MP",
+  "sc_name": "Gladius",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "中 グラディウス（ホールド）",
+  "sc_chara": "Marisa",
+  "sc_input": "236[MP]",
+  "sc_name": "Gladius (Hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "強 グラディウス",
+  "sc_chara": "Marisa",
+  "sc_input": "236HP",
+  "sc_name": "Gladius",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "強 グラディウス（ホールド）",
+  "sc_chara": "Marisa",
+  "sc_input": "236[HP]",
+  "sc_name": "Gladius (Hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD グラディウス",
+  "sc_chara": "Marisa",
+  "sc_input": "236PP",
+  "sc_name": "Gladius",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD グラディウス（ホールド）",
+  "sc_chara": "Marisa",
+  "sc_input": "236[PP]",
+  "sc_name": "Gladius (Hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "弱 ディマカイルス（1段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214LP",
+  "sc_name": "Dimachaerus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "弱 ディマカイルス（2段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214LP~6P",
+  "sc_name": "LP Dimachaerus Follow-up",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "中 ディマカイルス（1段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214MP",
+  "sc_name": "Dimachaerus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "中 ディマカイルス（2段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214MP~6P",
+  "sc_name": "MP Dimachaerus Follow-up",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "強 ディマカイルス（1段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214HP",
+  "sc_name": "Dimachaerus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "強 ディマカイルス（2段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214HP~6P",
+  "sc_name": "HP Dimachaerus Follow-up",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD ディマカイルス（1段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214PP",
+  "sc_name": "Dimachaerus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD ディマカイルス（2段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214PP~6P",
+  "sc_name": "OD Dimachaerus Follow-up",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "弱 ファランクス",
+  "sc_chara": "Marisa",
+  "sc_input": "623LP",
+  "sc_name": "Phalanx",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "中 ファランクス",
+  "sc_chara": "Marisa",
+  "sc_input": "623MP",
+  "sc_name": "Phalanx",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "強 ファランクス",
+  "sc_chara": "Marisa",
+  "sc_input": "623HP",
+  "sc_name": "Phalanx",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD ファランクス",
+  "sc_chara": "Marisa",
+  "sc_input": "623PP",
+  "sc_name": "Phalanx",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "弱 クアドリガ",
+  "sc_chara": "Marisa",
+  "sc_input": "236LK",
+  "sc_name": "Quadriga",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "中 クアドリガ",
+  "sc_chara": "Marisa",
+  "sc_input": "236MK",
+  "sc_name": "Quadriga",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "強 クアドリガ",
+  "sc_chara": "Marisa",
+  "sc_input": "236HK",
+  "sc_name": "Quadriga",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD クアドリガ",
+  "sc_chara": "Marisa",
+  "sc_input": "236KK",
+  "sc_name": "Quadriga",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "スクトゥム(当身派生版)",
+  "sc_chara": "Marisa",
+  "sc_input": "214K",
+  "sc_name": "Scutum (Counter)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "OD スクトゥム(当身派生版)",
+  "sc_chara": "Marisa",
+  "sc_input": "214KK",
+  "sc_name": "Scutum (Counter)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "トニトルス（2段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214K~P~P",
+  "sc_name": "Tonitrus 2",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "SA1 マリーザジャベリン",
+  "sc_chara": "Marisa",
+  "sc_input": "236236P",
+  "sc_name": "Javelin of Marisa",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "SA1 マリーザジャベリン（ホールド）",
+  "sc_chara": "Marisa",
+  "sc_input": "236236[P]",
+  "sc_name": "Javelin of Marisa",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "SA1 マリーザジャベリン(当身派生版)",
+  "sc_chara": "Marisa",
+  "sc_input": "236236[P] Counter",
+  "sc_name": "Javelin of Marisa",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "SA2 メテオリティス",
+  "sc_chara": "Marisa",
+  "sc_input": "214214P",
+  "sc_name": "Meteorite",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "SA3 アポロウーサ",
+  "sc_chara": "Marisa",
+  "sc_input": "236236K",
+  "sc_name": "Goddess of the Hunt (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "CA アポロウーサ",
+  "sc_chara": "Marisa",
+  "sc_input": "236236K",
+  "sc_name": "Goddess of the Hunt (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "marisa",
+  "capcom_move_name": "トニトルス（1段目）",
+  "sc_chara": "Marisa",
+  "sc_input": "214K~P",
+  "sc_name": "Tonitrus 1",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "弱 スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236LP",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 弱 スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236LP (Air Current)",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "中 スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236MP",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "強 スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236HP",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 強 スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236HP (Air Current)",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "弱 イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214LK",
+  "sc_name": "Eagle Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 弱 イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214LK (Air Current)",
+  "sc_name": "Eagle Spike (Air Current)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "中 イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214MK",
+  "sc_name": "Eagle Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 中 イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214MK (Air Current)",
+  "sc_name": "Eagle Spike (Air Current)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "強 イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214HK",
+  "sc_name": "Eagle Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 強 イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214HK (Air Current)",
+  "sc_name": "Eagle Spike (Air Current)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "OD イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214KK",
+  "sc_name": "Eagle Spike",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 OD イーグル・スパイク",
+  "sc_chara": "Rashid",
+  "sc_input": "214KK (Air Current)",
+  "sc_name": "Eagle Spike (Air Current)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "OD ワールウインド・ショット",
+  "sc_chara": "Rashid",
+  "sc_input": "236KK",
+  "sc_name": "Whirlwind Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "OD ワールウインド・ショット (ホールド版)",
+  "sc_chara": "Rashid",
+  "sc_input": "236[KK]",
+  "sc_name": "Whirlwind Shot (Hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "弱 アラビアン・サイクロン",
+  "sc_chara": "Rashid",
+  "sc_input": "214LP",
+  "sc_name": "Arabian Cyclone",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "中 アラビアン・サイクロン",
+  "sc_chara": "Rashid",
+  "sc_input": "214MP",
+  "sc_name": "Arabian Cyclone",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "強 アラビアン・サイクロン",
+  "sc_chara": "Rashid",
+  "sc_input": "214HP",
+  "sc_name": "Arabian Cyclone",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "OD アラビアン・サイクロン",
+  "sc_chara": "Rashid",
+  "sc_input": "214PP",
+  "sc_name": "Arabian Cyclone",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "アサルト・ネイル",
+  "sc_chara": "Rashid",
+  "sc_input": "214P~6K~K",
+  "sc_name": "Nail Assault",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "弱 アラビアン・スカイハイ",
+  "sc_chara": "Rashid",
+  "sc_input": "j.214LK",
+  "sc_name": "Arabian Skyhigh",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "中 アラビアン・スカイハイ",
+  "sc_chara": "Rashid",
+  "sc_input": "j.214MK",
+  "sc_name": "Arabian Skyhigh",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "強 アラビアン・スカイハイ",
+  "sc_chara": "Rashid",
+  "sc_input": "j.214HK",
+  "sc_name": "Arabian Skyhigh",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "OD アラビアン・スカイハイ",
+  "sc_chara": "Rashid",
+  "sc_input": "j.214KK",
+  "sc_name": "Arabian Skyhigh",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "SA1 スーパー・ラシード・キック",
+  "sc_chara": "Rashid",
+  "sc_input": "236236K",
+  "sc_name": "Super Rashid Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "SA2 イウサール",
+  "sc_chara": "Rashid",
+  "sc_input": "214214K",
+  "sc_name": "Ysaar",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "SA3 アルタイル",
+  "sc_chara": "Rashid",
+  "sc_input": "236236P",
+  "sc_name": "Altair (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "CA アルタイル",
+  "sc_chara": "Rashid",
+  "sc_input": "236236P",
+  "sc_name": "Altair (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 中 スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236MP (Air Current)",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "OD スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236PP",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "【気流強化】 OD スピニング・ミキサー",
+  "sc_chara": "Rashid",
+  "sc_input": "236PP (Air Current)",
+  "sc_name": "Spinning Mixer",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "中 ワールウインド・ショット",
+  "sc_chara": "Rashid",
+  "sc_input": "214MK (Air Current)",
+  "sc_name": "Eagle Spike (Air Current)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "rashid",
+  "capcom_move_name": "強 ワールウインド・ショット",
+  "sc_chara": "Rashid",
+  "sc_input": "214HK (Air Current)",
+  "sc_name": "Eagle Spike (Air Current)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "弱 波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236LP",
+  "sc_name": "Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "中 波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236MP",
+  "sc_name": "Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "[電刃錬気]波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236HP",
+  "sc_name": "Denjin Charge Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "[電刃錬気]OD 波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236PP",
+  "sc_name": "Denjin Charge Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "弱 昇龍拳",
+  "sc_chara": "Ryu",
+  "sc_input": "623LP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "中 昇龍拳",
+  "sc_chara": "Ryu",
+  "sc_input": "623MP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "OD 昇龍拳",
+  "sc_chara": "Ryu",
+  "sc_input": "623PP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "弱 竜巻旋風脚",
+  "sc_chara": "Ryu",
+  "sc_input": "214LK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "中 竜巻旋風脚",
+  "sc_chara": "Ryu",
+  "sc_input": "214MK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "強 竜巻旋風脚",
+  "sc_chara": "Ryu",
+  "sc_input": "214HK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "OD 竜巻旋風脚",
+  "sc_chara": "Ryu",
+  "sc_input": "214KK",
+  "sc_name": "Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "空中竜巻旋風脚",
+  "sc_chara": "Ryu",
+  "sc_input": "6HK~214K",
+  "sc_name": "Aerial Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "OD 空中竜巻旋風脚",
+  "sc_chara": "Ryu",
+  "sc_input": "6HK~214KK",
+  "sc_name": "Aerial Tatsumaki Senpu-kyaku",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "弱 上段足刀蹴り",
+  "sc_chara": "Ryu",
+  "sc_input": "236LK",
+  "sc_name": "High Blade Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "中 上段足刀蹴り",
+  "sc_chara": "Ryu",
+  "sc_input": "236MK",
+  "sc_name": "High Blade Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "強 上段足刀蹴り",
+  "sc_chara": "Ryu",
+  "sc_input": "236HK",
+  "sc_name": "High Blade Kick",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "弱 波掌撃",
+  "sc_chara": "Ryu",
+  "sc_input": "214LP",
+  "sc_name": "Hashogeki",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "中 波掌撃",
+  "sc_chara": "Ryu",
+  "sc_input": "214MP",
+  "sc_name": "Hashogeki",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "[電刃錬気]波掌撃",
+  "sc_chara": "Ryu",
+  "sc_input": "214HP",
+  "sc_name": "Denjin Charge Hashogeki",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "[電刃錬気]OD 波掌撃",
+  "sc_chara": "Ryu",
+  "sc_input": "214PP",
+  "sc_name": "Denjin Charge Hashogeki",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "SA1 真空波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236236P",
+  "sc_name": "Denjin Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "[電刃錬気]SA1 真空波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236236P",
+  "sc_name": "Denjin Hadoken",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "SA2 真波掌撃（Lv1）",
+  "sc_chara": "Ryu",
+  "sc_input": "214214P",
+  "sc_name": "Denjin Hashogeki Lv.1",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "[電刃錬気]SA2 真波掌撃（Lv1）",
+  "sc_chara": "Ryu",
+  "sc_input": "214214P",
+  "sc_name": "Denjin Hashogeki Lv.1",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "強 波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236HP",
+  "sc_name": "Denjin Charge Hadoken",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "OD 波動拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236PP",
+  "sc_name": "Denjin Charge Hadoken",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "強 昇龍拳",
+  "sc_chara": "Ryu",
+  "sc_input": "623HP",
+  "sc_name": "Shoryuken",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "OD 上段足刀蹴り",
+  "sc_chara": "Ryu",
+  "sc_input": "236KK",
+  "sc_name": "High Blade Kick",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "強 波掌撃",
+  "sc_chara": "Ryu",
+  "sc_input": "214HP",
+  "sc_name": "Denjin Charge Hashogeki",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "OD 波掌撃",
+  "sc_chara": "Ryu",
+  "sc_input": "214PP",
+  "sc_name": "Denjin Charge Hashogeki",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "SA3 真・昇龍拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236236K",
+  "sc_name": "Shin Shoryuken (CA)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "ryu",
+  "capcom_move_name": "CA 真・昇龍拳",
+  "sc_chara": "Ryu",
+  "sc_input": "236236K",
+  "sc_name": "Shin Shoryuken (CA)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "中 タイガーショット",
+  "sc_chara": "Sagat",
+  "sc_input": "236MP",
+  "sc_name": "High Tiger Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "強 タイガーショット",
+  "sc_chara": "Sagat",
+  "sc_input": "236HP",
+  "sc_name": "High Tiger Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーショット",
+  "sc_chara": "Sagat",
+  "sc_input": "236MPHP",
+  "sc_name": "High Tiger Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "グランドタイガーショット",
+  "sc_chara": "Sagat",
+  "sc_input": "236LP",
+  "sc_name": "Low Tiger Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD グランドタイガーショット",
+  "sc_chara": "Sagat",
+  "sc_input": "236LPMP or 236LPHP",
+  "sc_name": "Low Tiger Shot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "弱 タイガーアッパーカット",
+  "sc_chara": "Sagat",
+  "sc_input": "623LP",
+  "sc_name": "Tiger Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "中 タイガーアッパーカット",
+  "sc_chara": "Sagat",
+  "sc_input": "623MP",
+  "sc_name": "Tiger Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "強 タイガーアッパーカット",
+  "sc_chara": "Sagat",
+  "sc_input": "623HP",
+  "sc_name": "Tiger Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "強 タイガーアッパーカット（ホールド）",
+  "sc_chara": "Sagat",
+  "sc_input": "623[HP]",
+  "sc_name": "Tiger Uppercut (hold)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーアッパーカット",
+  "sc_chara": "Sagat",
+  "sc_input": "623PP",
+  "sc_name": "Tiger Uppercut",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "弱 タイガーニークラッシュ",
+  "sc_chara": "Sagat",
+  "sc_input": "236LK",
+  "sc_name": "Tiger Knee Crush",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "中 タイガーニークラッシュ",
+  "sc_chara": "Sagat",
+  "sc_input": "236MK",
+  "sc_name": "Tiger Knee Crush",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "強 タイガーニークラッシュ",
+  "sc_chara": "Sagat",
+  "sc_input": "236HK",
+  "sc_name": "Tiger Knee Crush",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーニークラッシュ",
+  "sc_chara": "Sagat",
+  "sc_input": "236KK",
+  "sc_name": "Tiger Knee Crush",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "弱 タイガーネクサス",
+  "sc_chara": "Sagat",
+  "sc_input": "214LK",
+  "sc_name": "Tiger Nexus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "中 タイガーネクサス",
+  "sc_chara": "Sagat",
+  "sc_input": "214MK",
+  "sc_name": "Tiger Nexus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "強 タイガーネクサス",
+  "sc_chara": "Sagat",
+  "sc_input": "214HK",
+  "sc_name": "Tiger Nexus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーネクサス",
+  "sc_chara": "Sagat",
+  "sc_input": "214KK",
+  "sc_name": "Tiger Nexus",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "タイガーマイト",
+  "sc_chara": "Sagat",
+  "sc_input": "214KK~6LK",
+  "sc_name": "Mighty Tiger",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーマイト",
+  "sc_chara": "Sagat",
+  "sc_input": "214KK~6LK",
+  "sc_name": "Mighty Tiger",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "タイガーグリード",
+  "sc_chara": "Sagat",
+  "sc_input": "214KK~6MK",
+  "sc_name": "Greedy Tiger",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーグリード",
+  "sc_chara": "Sagat",
+  "sc_input": "214KK~6MK",
+  "sc_name": "Greedy Tiger",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "タイガーノヴァ",
+  "sc_chara": "Sagat",
+  "sc_input": "214K~6HK",
+  "sc_name": "Nova Tiger",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "OD タイガーノヴァ",
+  "sc_chara": "Sagat",
+  "sc_input": "214KK~6HK",
+  "sc_name": "Nova Tiger",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "SA1 タイガーキャノン",
+  "sc_chara": "Sagat",
+  "sc_input": "236236P",
+  "sc_name": "Tiger Cannon",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "SA3 タイガーヴァンキッシュ",
+  "sc_chara": "Sagat",
+  "sc_input": "236236K",
+  "sc_name": "Tiger Vanquisher (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "sagat",
+  "capcom_move_name": "CA タイガーヴァンキッシュ",
+  "sc_chara": "Sagat",
+  "sc_input": "236236K",
+  "sc_name": "Tiger Vanquisher (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "弱 パワーウェイブ",
+  "sc_chara": "Terry",
+  "sc_input": "236LP",
+  "sc_name": "Power Wave",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "中 パワーウェイブ",
+  "sc_chara": "Terry",
+  "sc_input": "236MP",
+  "sc_name": "Power Wave",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "ラウンドウェイブ",
+  "sc_chara": "Terry",
+  "sc_input": "236HP",
+  "sc_name": "Round Wave",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "OD パワーウェイブ",
+  "sc_chara": "Terry",
+  "sc_input": "236PP",
+  "sc_name": "Power Wave",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "クイックバーン",
+  "sc_chara": "Terry",
+  "sc_input": "214LP",
+  "sc_name": "Quick Burn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "OD クイックバーン",
+  "sc_chara": "Terry",
+  "sc_input": "214LPMP or 214LPHP",
+  "sc_name": "Quick Burn",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "中 バーンナックル",
+  "sc_chara": "Terry",
+  "sc_input": "214MP",
+  "sc_name": "Burning Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "強 バーンナックル",
+  "sc_chara": "Terry",
+  "sc_input": "214HP",
+  "sc_name": "Burning Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "OD バーンナックル",
+  "sc_chara": "Terry",
+  "sc_input": "214MPHP",
+  "sc_name": "Burning Knuckle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "弱 パワーチャージ",
+  "sc_chara": "Terry",
+  "sc_input": "236LK",
+  "sc_name": "Power Charge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "中 パワーチャージ",
+  "sc_chara": "Terry",
+  "sc_input": "236MK",
+  "sc_name": "Power Charge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "強 パワーチャージ",
+  "sc_chara": "Terry",
+  "sc_input": "236HK",
+  "sc_name": "Power Charge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "OD パワーチャージ",
+  "sc_chara": "Terry",
+  "sc_input": "236KK",
+  "sc_name": "Power Charge",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "弱 クラックシュート",
+  "sc_chara": "Terry",
+  "sc_input": "214LK",
+  "sc_name": "Crack Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "中 クラックシュート",
+  "sc_chara": "Terry",
+  "sc_input": "214MK",
+  "sc_name": "Crack Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "強 クラックシュート",
+  "sc_chara": "Terry",
+  "sc_input": "214HK",
+  "sc_name": "Crack Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "OD クラックシュート",
+  "sc_chara": "Terry",
+  "sc_input": "214KK",
+  "sc_name": "Crack Shoot",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "中 ライジングタックル",
+  "sc_chara": "Terry",
+  "sc_input": "623MP",
+  "sc_name": "Rising Tackle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "強 ライジングタックル",
+  "sc_chara": "Terry",
+  "sc_input": "623HP",
+  "sc_name": "Rising Tackle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "OD ライジングタックル",
+  "sc_chara": "Terry",
+  "sc_input": "623PP",
+  "sc_name": "Rising Tackle",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "SA1 バスターウルフ",
+  "sc_chara": "Terry",
+  "sc_input": "236236K",
+  "sc_name": "Buster Wolf",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "SA2 パワーゲイザー",
+  "sc_chara": "Terry",
+  "sc_input": "214214P",
+  "sc_name": "Power Geyser",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "SA2 ツインゲイザー",
+  "sc_chara": "Terry",
+  "sc_input": "214214P~PP",
+  "sc_name": "Twin Geyser",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "SA2 トリプルゲイザー",
+  "sc_chara": "Terry",
+  "sc_input": "214214P~PP~PP",
+  "sc_name": "Triple Geyser",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "SA3 ライジングファング",
+  "sc_chara": "Terry",
+  "sc_input": "236236P",
+  "sc_name": "Rising Fang (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "CA ライジングファング",
+  "sc_chara": "Terry",
+  "sc_input": "236236P",
+  "sc_name": "Rising Fang (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "terry",
+  "capcom_move_name": "弱 ライジングタックル",
+  "sc_chara": "Terry",
+  "sc_input": "623LP",
+  "sc_name": "Rising Tackle",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "OD ヘッドプレス",
+  "sc_chara": "M.Bison",
+  "sc_input": "[2]8KK~K or [2]8K~KK",
+  "sc_name": "Head Press",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "OD デビルリバース",
+  "sc_chara": "M.Bison",
+  "sc_input": "[2]8KK~P or [2]8K~PP",
+  "sc_name": "Devil Reverse (Mine)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]弱 サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6LP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]中 サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6MP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]強 サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6HP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]OD サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6PP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "弱 ダブルニープレス",
+  "sc_chara": "M.Bison",
+  "sc_input": "236LK",
+  "sc_name": "Double Knee Press",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "中 ダブルニープレス",
+  "sc_chara": "M.Bison",
+  "sc_input": "236MK",
+  "sc_name": "Double Knee Press",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "強 ダブルニープレス",
+  "sc_chara": "M.Bison",
+  "sc_input": "236HK",
+  "sc_name": "Double Knee Press",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "OD ダブルニープレス",
+  "sc_chara": "M.Bison",
+  "sc_input": "236KK",
+  "sc_name": "Double Knee Press",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]弱 バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214LP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]中 バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214MP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]強 バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214HP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "[サイコマイン付与時]OD バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214PP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "SA1 ニープレスナイトメア",
+  "sc_chara": "M.Bison",
+  "sc_input": "236236K",
+  "sc_name": "Knee Press Nightmare",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "SA2 サイコパニッシャー",
+  "sc_chara": "M.Bison",
+  "sc_input": "214214K",
+  "sc_name": "Psycho Punisher",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "SA3 アンリミテッドサイコクラッシャー",
+  "sc_chara": "M.Bison",
+  "sc_input": "236236P",
+  "sc_name": "Unlimited Psycho Crusher (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "CA アンリミテッドサイコクラッシャー",
+  "sc_chara": "M.Bison",
+  "sc_input": "236236P",
+  "sc_name": "Unlimited Psycho Crusher (CA)",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "弱 サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6LP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "中 サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6MP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "強 サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6HP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "OD サイコクラッシャーアタック",
+  "sc_chara": "M.Bison",
+  "sc_input": "[4]6PP",
+  "sc_name": "Psycho Crusher (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "弱 バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214LP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "中 バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214MP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "強 バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214HP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "OD バックフィストコンボ",
+  "sc_chara": "M.Bison",
+  "sc_input": "214PP",
+  "sc_name": "Backfist Combo (Mine)",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "vega_mbison",
+  "capcom_move_name": "サマーソルトスカルダイバー",
+  "sc_chara": "M.Bison",
+  "sc_input": "[2]8K~K~P",
+  "sc_name": "Somersault Skull Diver",
+  "match_method": "auto-loose"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "SA2 サイクロンラリアット（ホールド）",
+  "sc_chara": "Zangief",
+  "sc_input": "236236[P]",
+  "sc_name": "Cyclone Lariat (hold P)",
+  "match_method": "manual"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "ダブルラリアット",
+  "sc_chara": "Zangief",
+  "sc_input": "PP",
+  "sc_name": "Double Lariat",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "OD ダブルラリアット",
+  "sc_chara": "Zangief",
+  "sc_input": "PPP",
+  "sc_name": "Double Lariat",
+  "match_method": "auto-sig3"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "弱 スクリューパイルドライバー",
+  "sc_chara": "Zangief",
+  "sc_input": "360+LP",
+  "sc_name": "Screw Piledriver",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "中 スクリューパイルドライバー",
+  "sc_chara": "Zangief",
+  "sc_input": "360+MP",
+  "sc_name": "Screw Piledriver",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "強 スクリューパイルドライバー",
+  "sc_chara": "Zangief",
+  "sc_input": "360+HP",
+  "sc_name": "Screw Piledriver",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "OD スクリューパイルドライバー",
+  "sc_chara": "Zangief",
+  "sc_input": "360+PP",
+  "sc_name": "Screw Piledriver",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "ボルシチダイナマイト",
+  "sc_chara": "Zangief",
+  "sc_input": "j.360+K",
+  "sc_name": "Borscht Dynamite",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "OD ボルシチダイナマイト",
+  "sc_chara": "Zangief",
+  "sc_input": "j.360+KK",
+  "sc_name": "Borscht Dynamite",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "ロシアンスープレックス",
+  "sc_chara": "Zangief",
+  "sc_input": "63214KK (Close)",
+  "sc_name": "Russian Suplex",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "OD ロシアンスープレックス",
+  "sc_chara": "Zangief",
+  "sc_input": "63214KK (Close)",
+  "sc_name": "Russian Suplex",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "シベリアンエクスプレス（近距離版）",
+  "sc_chara": "Zangief",
+  "sc_input": "63214K (Mid)",
+  "sc_name": "Siberian Express",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "OD シベリアンエクスプレス（近距離版）",
+  "sc_chara": "Zangief",
+  "sc_input": "63214KK (Mid)",
+  "sc_name": "Siberian Express",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "シベリアンエクスプレス（遠距離版）",
+  "sc_chara": "Zangief",
+  "sc_input": "63214K (Far)",
+  "sc_name": "Siberian Express",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "OD シベリアンエクスプレス（遠距離版）",
+  "sc_chara": "Zangief",
+  "sc_input": "63214KK (Far)",
+  "sc_name": "Siberian Express",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "ツンドラストーム",
+  "sc_chara": "Zangief",
+  "sc_input": "360+HP",
+  "sc_name": "Screw Piledriver",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "SA1 エリアルロシアンスラム",
+  "sc_chara": "Zangief",
+  "sc_input": "236236K",
+  "sc_name": "Aerial Russian Slam",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "SA3 ボリショイストームバスター",
+  "sc_chara": "Zangief",
+  "sc_input": "720+P",
+  "sc_name": "Bolshoi Storm Buster (CA)",
+  "match_method": "auto-sig2"
+ },
+ {
+  "capcom_slug": "zangief",
+  "capcom_move_name": "CA ボリショイストームバスター",
+  "sc_chara": "Zangief",
+  "sc_input": "720+P",
+  "sc_name": "Bolshoi Storm Buster (CA)",
+  "match_method": "auto-sig2"
+ }
+]

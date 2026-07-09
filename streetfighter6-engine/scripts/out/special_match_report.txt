@@ -1,0 +1,1223 @@
+
+======================================================================
+aki (A.K.I.)
+======================================================================
+  [MANUAL ] 紫煙追  ->  214LP~6P (Nightshade Chaser (Burst))
+  [MANUAL ] OD 紫煙追  ->  214PP~6P (Nightshade Chaser (Burst))
+  [MANUAL ] 紫煙追 （炸裂）  ->  214LP~6P (Nightshade Chaser (Burst))
+  [MANUAL ] OD 紫煙追 （炸裂）  ->  214PP~6P (Nightshade Chaser (Burst))
+  [MANUAL ] 弱 蛇軽功  ->  236LK (Snake Step)
+  [MANUAL ] 中 蛇軽功  ->  236MK (Snake Step)
+  [MANUAL ] 強 蛇軽功  ->  236HK (Snake Step)
+  [MANUAL ] OD 蛇軽功  ->  236KK (Snake Step)
+  [MANUAL ] 悪鬼蛇行  ->  2PP (Sinister Slide)
+  [MANUAL ] 雁字搦  ->  2PP~LPLK (Entrapment)
+  [OK sig3] 紫煙砲  ->  214LP (Nightshade Pulse)
+  [OK sig3] OD 紫煙砲  ->  214PP (Nightshade Pulse)
+  [OK sig3] 紫泡撒  ->  214HP (Toxic Wreath)
+  [OK sig3] 中 蛇頭鞭  ->  236MP (Serpent Lash)
+  [OK sig3] 強 蛇頭鞭  ->  236HP (Serpent Lash)
+  [OK sig3] OD 蛇頭鞭  ->  236PP (Serpent Lash)
+  [OK sig3] OD 凶襲突  ->  214KK (Cruel Fate)
+  [OK sig3] 蛇連咬  ->  2PP~K (Heel Strike)
+  [OK sig3] SA1 死屍累々  ->  236236K (Deadly Implication)
+  [OK sig3] SA2 紫煙裂爪  ->  214214P (Tainted Talons)
+  [OK sig3] SA3 睚眦  ->  236236P (Claws of Ya Zi)
+  [OK sig3] CA 睚眦  ->  236236P (Claws of Ya Zi)
+  [LOOSE  ] 紫泡泉  ->  214MP (Orchid Spring)
+  [LOOSE  ] 弱 蛇頭鞭  ->  236LP (Serpent Lash)
+  [LOOSE  ] 弱 凶襲突  ->  214LK (Cruel Fate)
+  [LOOSE  ] 中 凶襲突  ->  214MK (Cruel Fate)
+  [LOOSE  ] 強 凶襲突  ->  214HK (Cruel Fate)
+  [LOOSE  ] 猛毒牙  ->  2PP~P (Venomous Fang)
+
+======================================================================
+alex (Alex)
+======================================================================
+  [MANUAL ] OD パワーボム  ->  63214PP (Power Bomb)
+  [MANUAL ] パワードロップ  ->  63214P Backturn (Power Drop)
+  [MANUAL ] OD パワードロップ  ->  63214PP Backturn (Power Drop)
+  [MANUAL ] ハイパーボム  ->  63214PP~6 Backturn (OD Hyper Bomb)
+  [MANUAL ] SA2 オメガウィングバスター  ->  PP (SA2) (Omega Wing Buster)
+  [OK sig3] 弱 フラッシュアックス  ->  236LP (Flash Axe)
+  [OK sig3] 中 フラッシュアックス  ->  236MP (Flash Axe)
+  [OK sig3] フラッシュチョップ  ->  236HP (Flash Chop)
+  [OK sig3] OD フラッシュチョップ  ->  236PP (Flash Chop)
+  [OK sig2] 弱 エアニースマッシュ  ->  623LK (Aerial Knee Smash)
+  [OK sig2] 中 エアニースマッシュ  ->  623MK (Aerial Knee Smash)
+  [OK sig3] 強 エアニースマッシュ  ->  623HK (Aerial Knee Smash)
+  [OK sig3] OD エアニースマッシュ  ->  623KK (Aerial Knee Smash)
+  [OK sig2] 弱 パワーボム  ->  63214LP (Power Bomb)
+  [OK sig2] 中 パワーボム  ->  63214MP (Power Bomb)
+  [OK sig2] 強 パワーボム  ->  63214HP (Power Bomb)
+  [OK sig3] SA1 レイジングスピアー  ->  236236K (Raging Spear)
+  [OK sig3] SA2 スレッジクロスハンマー  ->  214214P (Sledgecross Hammer)
+  [OK sig3] SA3 ファイナルキャプチュード  ->  236236P (The Final Prison (CA))
+  [OK sig3] CA ファイナルキャプチュード  ->  236236P (The Final Prison (CA))
+
+======================================================================
+blanka (Blanka)
+======================================================================
+  [MANUAL ] ブランカちゃん爆弾  ->  22P (Blanka-chan Bomb)
+  [MANUAL ] ブランカちゃん爆弾（射出）  ->  22P~214P (Blanka-chan Bomb (Charge))
+  [MANUAL ] ローリングキャノン  ->  Any Direction + P (during SA2) (Rolling Cannon)
+  [MANUAL ] SA2 ライトニングビースト  ->  214214P (Lightning Beast)
+  [OK sig3] エレクトリックサンダー  ->  214P (Electric Thunder)
+  [OK sig3] 【ライトニングビースト】 エレクトリックサンダー  ->  214P (Electric Thunder)
+  [OK sig3] OD エレクトリックサンダー  ->  214PP (Electric Thunder)
+  [OK sig3] 【ライトニングビースト】OD エレクトリックサンダー  ->  214PP (Electric Thunder)
+  [OK sig3] 【ライトニングビースト】 弱 ローリングアタック  ->  [4]6LP (Rolling Attack (SA2))
+  [OK sig3] 【ライトニングビースト】 中 ローリングアタック  ->  [4]6MP (Rolling Attack (SA2))
+  [OK sig3] OD ローリングアタック  ->  [4]6PP (Rolling Attack (SA2))
+  [OK sig3] 【ライトニングビースト】 OD ローリングアタック  ->  [4]6PP (Rolling Attack (SA2))
+  [OK sig3] OD バーチカルローリング  ->  [2]8KK (Vertical Rolling Attack (SA2))
+  [OK sig3] 【ライトニングビースト】 OD バーチカルローリング  ->  [2]8KK (Vertical Rolling Attack (SA2))
+  [OK sig2] OD エリアルローリング  ->  j.[4]6PP (Aerial Rolling Attack (SA2))
+  [OK sig2] 【ライトニングビースト】 OD エリアルローリング  ->  j.[4]6PP (Aerial Rolling Attack (SA2))
+  [OK sig2] 弱 ワイルドハント  ->  236LK (Wild Hunt)
+  [OK sig2] 中 ワイルドハント  ->  236MK (Wild Hunt)
+  [OK sig2] 強 ワイルドハント  ->  236HK (Wild Hunt)
+  [OK sig2] OD ワイルドハント  ->  236KK (Wild Hunt)
+  [OK sig2] OD ブランカちゃん爆弾（射出）  ->  22P~214PP (Blanka-chan Bomb (OD Charge))
+  [OK sig3] SA1 シャウトオブアース  ->  236236P (Shout of Earth)
+  [OK sig3] 【ライトニングビースト】 SA1 シャウトオブアース  ->  236236P (Shout of Earth)
+  [OK sig3] SA3 グランドシェイブキャノンボール  ->  236236K (Ground Shave Cannonball (CA))
+  [OK sig3] CA グランドシェイブキャノンボール  ->  236236K (Ground Shave Cannonball (CA))
+  [LOOSE  ] 弱 ローリングアタック  ->  [4]6LP (Rolling Attack (SA2))
+  [LOOSE  ] 中 ローリングアタック  ->  [4]6MP (Rolling Attack (SA2))
+  [LOOSE  ] 強 ローリングアタック  ->  [4]6HP (Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 強 ローリングアタック  ->  [4]6HP (Rolling Attack (SA2))
+  [LOOSE  ] 弱 バーチカルローリング  ->  [2]8LK (Vertical Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 弱 バーチカルローリング  ->  [2]8LK (Vertical Rolling Attack (SA2))
+  [LOOSE  ] 中 バーチカルローリング  ->  [2]8MK (Vertical Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 中 バーチカルローリング  ->  [2]8MK (Vertical Rolling Attack (SA2))
+  [LOOSE  ] 強 バーチカルローリング  ->  [2]8HK (Vertical Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 強 バーチカルローリング  ->  [2]8HK (Vertical Rolling Attack (SA2))
+  [LOOSE  ] 弱 バックステップローリング  ->  63214LK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 弱 バックステップローリング  ->  63214LK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] 中 バックステップローリング  ->  63214MK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 中 バックステップローリング  ->  63214MK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] 強 バックステップローリング  ->  63214HK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 強 バックステップローリング  ->  63214HK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] OD バックステップローリング  ->  63214KK (Backstep Rolling Attack (SA2))
+  [LOOSE  ] 【ライトニングビースト】 OD バックステップローリング  ->  63214KK (Backstep Rolling Attack (SA2))
+  [NO-HIT ] 弱 エリアルローリング
+  [NO-HIT ] 【ライトニングビースト】 弱 エリアルローリング
+  [NO-HIT ] 中 エリアルローリング
+  [NO-HIT ] 【ライトニングビースト】 中 エリアルローリング
+  [NO-HIT ] 強 エリアルローリング
+  [NO-HIT ] 【ライトニングビースト】 強 エリアルローリング
+
+======================================================================
+cammy (Cammy)
+======================================================================
+  [MANUAL ] キャノンストライク  ->  j.214K (Cannon Strike)
+  [MANUAL ] OD キャノンストライク  ->  j.214KK (Cannon Strike)
+  [MANUAL ] フーリガンコンビネーション  ->  236P (Hooligan Combination)
+  [MANUAL ] フーリガンコンビネーション（ホールド）  ->  236[HP] (Hooligan Combination)
+  [MANUAL ] OD フーリガンコンビネーション  ->  236PP (Hooligan Combination)
+  [MANUAL ] レイザーエッジスライサー  ->  236P~No Input (Razor's Edge Slicer)
+  [MANUAL ] レイザーエッジスライサー（ホールド）  ->  236[HP]~No Input (Razor's Edge Slicer)
+  [SKIP   ] キャノンストライク（ホールド）  (対応なし確定)
+  [MANUAL ] リバースエッジ  ->  236P~2K (Reverse Edge)
+  [MANUAL ] リバースエッジ（ホールド）  ->  236[HP]~2K (Reverse Edge)
+  [MANUAL ] フェイタルレッグツイスター  ->  236P~LPLK (Fatal Leg Twister)
+  [MANUAL ] フェイタルレッグツイスター（ホールド）  ->  236[HP]~LPLK (Fatal Leg Twister)
+  [MANUAL ] OD フェイタルレッグツイスター  ->  236PP~LPLK (Fatal Leg Twister)
+  [MANUAL ] サイレントステップ  ->  236P~P (Silent Step)
+  [MANUAL ] サイレントステップ（ホールド）  ->  236[HP]~P (Silent Step)
+  [MANUAL ] OD サイレントステップ  ->  236PP~P (Silent Step)
+  [OK sig3] 弱 スパイラルアロー  ->  236LK (Spiral Arrow)
+  [OK sig3] 中 スパイラルアロー  ->  236MK (Spiral Arrow)
+  [OK sig3] 強 スパイラルアロー  ->  236HK (Spiral Arrow)
+  [OK sig3] 強 スパイラルアロー（ホールド）  ->  236[HK] (Spiral Arrow)
+  [OK sig3] OD スパイラルアロー  ->  236KK (Spiral Arrow)
+  [OK sig3] 弱 キャノンスパイク  ->  623LK (Cannon Spike)
+  [OK sig3] 中 キャノンスパイク  ->  623MK (Cannon Spike)
+  [OK sig3] 強 キャノンスパイク  ->  623HK (Cannon Spike)
+  [OK sig3] 強 キャノンスパイク（ホールド）  ->  623[HK] (Cannon Spike)
+  [OK sig3] OD キャノンスパイク  ->  623KK (Cannon Spike)
+  [OK sig3] 弱 アクセルスピンナックル  ->  214LP (Quick Spin Knuckle)
+  [OK sig3] 中 アクセルスピンナックル  ->  214MP (Quick Spin Knuckle)
+  [OK sig3] 強 アクセルスピンナックル  ->  214HP (Quick Spin Knuckle)
+  [OK sig3] OD アクセルスピンナックル  ->  214PP (Quick Spin Knuckle)
+  [OK sig3] SA1 スピンドライブスマッシャー  ->  236236K (Spin Drive Smasher)
+  [OK sig3] SA2 キラービースピン  ->  214214P (Killer Bee Spin)
+  [OK sig3] SA2 エアキラービースピン  ->  j.214214P (Aerial Killer Bee Spin)
+  [OK sig3] SA3 デルタレッドアサルト  ->  236236P (Delta Red Assault (CA))
+  [OK sig3] CA デルタレッドアサルト  ->  236236P (Delta Red Assault (CA))
+  [LOOSE  ] OD レイザーエッジスライサー  ->  236PP~No Input (Razor's Edge Slicer)
+  [LOOSE  ] OD リバースエッジ  ->  236PP~2K (Reverse Edge)
+
+======================================================================
+chunli (Chun-Li)
+======================================================================
+  [MANUAL ] OD 空中百裂脚  ->  j.236KK (Aerial Hundred Lightning Kicks)
+  [MANUAL ] SA1 空中気功掌  ->  j.236236P (Aerial Kikosho)
+  [OK sig3] 弱 気功拳  ->  [4]6LP (Kikoken)
+  [OK sig3] 中 気功拳  ->  [4]6MP (Kikoken)
+  [OK sig3] 強 気功拳  ->  [4]6HP (Kikoken)
+  [OK sig3] OD 気功拳  ->  [4]6PP (Kikoken)
+  [OK sig3] 弱 百裂脚  ->  236LK (Hundred Lightning Kicks)
+  [OK sig3] 中 百裂脚  ->  236MK (Hundred Lightning Kicks)
+  [OK sig3] 強 百裂脚  ->  236HK (Hundred Lightning Kicks)
+  [OK sig3] OD 百裂脚  ->  236KK (Hundred Lightning Kicks)
+  [OK sig3] 百裂連脚  ->  236KK~KK (Lightning Kick Barrage)
+  [OK sig3] 弱 スピニングバードキック  ->  [2]8LK (Spinning Bird Kick)
+  [OK sig3] 中 スピニングバードキック  ->  [2]8MK (Spinning Bird Kick)
+  [OK sig3] 強 スピニングバードキック  ->  [2]8HK (Spinning Bird Kick)
+  [OK sig3] OD スピニングバードキック  ->  [2]8KK (Spinning Bird Kick)
+  [OK sig3] 弱 覇山蹴  ->  214LK (Hazanshu)
+  [OK sig3] 中 覇山蹴  ->  214MK (Hazanshu)
+  [OK sig3] 強 覇山蹴  ->  214HK (Hazanshu)
+  [OK sig3] OD 覇山蹴  ->  214KK (Hazanshu)
+  [OK sig3] 弱 天昇脚  ->  22LK (Tensho Kicks)
+  [OK sig3] 中 天昇脚  ->  22MK (Tensho Kicks)
+  [OK sig3] 強 天昇脚  ->  22HK (Tensho Kicks)
+  [OK sig3] OD 天昇脚  ->  22KK (Tensho Kicks)
+  [OK sig3] SA1 気功掌  ->  236236P (Kikosho)
+  [OK sig3] SA2 鳳翼扇  ->  236236K (Hoyoku-sen)
+  [OK sig3] SA3 蒼天乱華  ->  214214K (Soten Ranka (CA))
+  [OK sig3] CA 蒼天乱華  ->  214214K (Soten Ranka (CA))
+  [LOOSE  ] 弱 空中百裂脚  ->  j.236LK (Aerial Hundred Lightning Kicks)
+  [LOOSE  ] 中 空中百裂脚  ->  j.236MK (Aerial Hundred Lightning Kicks)
+  [LOOSE  ] 強 空中百裂脚  ->  j.236HK (Aerial Hundred Lightning Kicks)
+
+======================================================================
+cviper (C.Viper)
+======================================================================
+  [MANUAL ] 弱 トレースコンビネーション  ->  214LP~6PP (Tracer Combination)
+  [MANUAL ] 中 トレースコンビネーション  ->  214MP~6PP (Tracer Combination)
+  [MANUAL ] 強 トレースコンビネーション  ->  214HP~6PP (Tracer Combination)
+  [MANUAL ] 弱 セイスモハンマー  ->  623P (Seismic Hammer)
+  [MANUAL ] 中 セイスモハンマー  ->  623P (Seismic Hammer)
+  [MANUAL ] 強 セイスモハンマー  ->  623P (Seismic Hammer)
+  [MANUAL ] OD セイスモハンマー  ->  623PP (Seismic Hammer)
+  [MANUAL ] セービングフォース(Lv1)  ->  214K (Focus Force (Lv.1))
+  [MANUAL ] セービングフォース(Lv2)  ->  214{K} (Focus Force (Lv.2))
+  [MANUAL ] セービングフォース(Lv3)  ->  214[K] (Focus Force (Lv.3))
+  [OK sig3] 弱 サンダースラップ  ->  214LP (Thunder Dash)
+  [OK sig3] 中 サンダースラップ  ->  214MP (Thunder Dash)
+  [OK sig3] 強 サンダースラップ  ->  214HP (Thunder Dash)
+  [OK sig3] OD サンダースラップ  ->  214PP (Thunder Dash)
+  [OK sig3] 弱 バーニングキック  ->  236LK (Burning Kick)
+  [OK sig3] 中 バーニングキック  ->  236MK (Burning Kick)
+  [OK sig3] 強 バーニングキック  ->  236HK (Burning Kick)
+  [OK sig3] OD バーニングキック  ->  236KK (Burning Kick)
+  [OK sig3] チェイスナックル  ->  236K~PP (Knuckled Pursuit)
+  [OK sig3] ダブルバーン  ->  236K~KK (Double Burn)
+  [OK sig3] OD セービングフォース(Lv1)  ->  214{KK} (Focus Force (Lv.2))
+  [OK sig3] SA1 バウンサーステップ  ->  236236K (Limit Decoupler)
+  [OK sig3] SA2 ミッションオーバー  ->  214214P (Mission Complete)
+  [OK sig3] SA3 アンラックリジェクター  ->  214214K (Hard Luck Rejector (CA))
+  [OK sig3] CA アンラックリジェクター  ->  214214K (Hard Luck Rejector (CA))
+  [NO-HIT ] [サンダースラップ]フェイント
+  [LOOSE  ] 弱 空中バーニングキック  ->  j.236LK (Aerial Burning Kick)
+  [LOOSE  ] 中 空中バーニングキック  ->  j.236MK (Aerial Burning Kick)
+  [LOOSE  ] 強 空中バーニングキック  ->  j.236HK (Aerial Burning Kick)
+  [NO-HIT ] OD 空中バーニングキック
+  [NO-HIT ] [セイスモハンマー]フェイント
+  [NO-HIT ] OD セービングフォース(Lv2)
+  [LOOSE  ] OD セービングフォース(Lv3)  ->  214[KK] (Focus Force (Lv.3))
+  [NO-HIT ] [セービングフォース]前方ステップ
+
+======================================================================
+deejay (Dee_Jay)
+======================================================================
+  [MANUAL ] OD ワニングムーン  ->  214KK~MK (Waning Moon)
+  [MANUAL ] SA2 サンライズフェスティバル・ライト  ->  236236LP (Lowkey Sunrise Festival)
+  [MANUAL ] SA2 サンライズフェスティバル・マーベラス  ->  236236MP (Marvelous Sunrise Festival)
+  [MANUAL ] SA2 サンライズフェスティバル・マキシマム  ->  236236HP (Headliner Sunrise Festival)
+  [OK sig3] 中 エアスラッシャー  ->  [4]6MP (Air Slasher)
+  [OK sig3] 強 エアスラッシャー  ->  [4]6HP (Air Slasher)
+  [OK sig3] 中 ジャックナイフマキシマム  ->  [2]8MK (Jackknife Maximum)
+  [OK sig3] 強 ジャックナイフマキシマム  ->  [2]8HK (Jackknife Maximum)
+  [OK sig3] OD ジャックナイフマキシマム  ->  [2]8KK (Jackknife Maximum)
+  [OK sig3] クイックローリングソバット  ->  236MK (Quick Rolling Sobat)
+  [OK sig3] ダブルローリングソバット  ->  236HK (Double Rolling Sobat)
+  [OK sig3] OD ダブルローリングソバット  ->  236KK (Double Rolling Sobat)
+  [OK sig3] 弱 マシンガンアッパー  ->  214LP (Machine Gun Uppercut)
+  [OK sig3] 中 マシンガンアッパー  ->  214MP (Machine Gun Uppercut)
+  [OK sig3] 強 マシンガンアッパー  ->  214HP (Machine Gun Uppercut)
+  [OK sig3] OD マシンガンアッパー  ->  214PP (Machine Gun Uppercut)
+  [OK sig3] OD ジョスクール  ->  214KK (Jus Cool)
+  [OK sig3] SA1 グレイテストソバット  ->  236236K (The Greatest Sobat)
+  [OK sig2] SA2 サンライズフェスティバル・ライト （2段目）  ->  ~LP (1) (+LP (Marvelous Hit 1))
+  [OK sig2] SA2 サンライズフェスティバル・ライト （3段目）  ->  ~MP (2) (+MP (Marvelous Hit 2))
+  [OK sig2] SA2 サンライズフェスティバル・ライト （4段目）  ->  ~HP (3) (+HP (Marvelous Hit 3))
+  [OK sig2] SA2 サンライズフェスティバル・ライト （5段目）  ->  ~LK (4) (+LK (Marvelous Hit 4))
+  [OK sig2] SA2 サンライズフェスティバル・ライト （6段目）  ->  ~MK (5) (+MK (Marvelous Hit 5))
+  [OK sig2] SA2 サンライズフェスティバル・ライト （7段目）  ->  ~HK (6) (+HK (Marvelous Hit 6))
+  [OK sig2] SA2 サンライズフェスティバル・マーベラス （2段目）  ->  ~LP (1) (+LP (Marvelous Hit 1))
+  [OK sig2] SA2 サンライズフェスティバル・マーベラス （3段目）  ->  ~MP (2) (+MP (Marvelous Hit 2))
+  [OK sig2] SA2 サンライズフェスティバル・マーベラス （4段目）  ->  ~HP (3) (+HP (Marvelous Hit 3))
+  [OK sig2] SA2 サンライズフェスティバル・マーベラス （5段目）  ->  ~LK (4) (+LK (Marvelous Hit 4))
+  [OK sig2] SA2 サンライズフェスティバル・マーベラス （6段目）  ->  ~MK (5) (+MK (Marvelous Hit 5))
+  [OK sig2] SA2 サンライズフェスティバル・マーベラス （7段目）  ->  ~HK (6) (+HK (Marvelous Hit 6))
+  [OK sig2] SA2 サンライズフェスティバル・マキシマム （2段目）  ->  ~LP (1) (+LP (Marvelous Hit 1))
+  [OK sig2] SA2 サンライズフェスティバル・マキシマム （3段目）  ->  ~MP (2) (+MP (Marvelous Hit 2))
+  [OK sig2] SA2 サンライズフェスティバル・マキシマム （4段目）  ->  ~HP (3) (+HP (Marvelous Hit 3))
+  [OK sig2] SA2 サンライズフェスティバル・マキシマム （5段目）  ->  ~LK (4) (+LK (Marvelous Hit 4))
+  [OK sig2] SA2 サンライズフェスティバル・マキシマム （6段目）  ->  ~MK (5) (+MK (Marvelous Hit 5))
+  [OK sig2] SA2 サンライズフェスティバル・マキシマム （7段目）  ->  ~HK (6) (+HK (Marvelous Hit 6))
+  [OK sig2] （失敗版） SA2 サンライズフェスティバル （2段目）  ->  ~LP (1) (+LP (Marvelous Hit 1))
+  [OK sig2] （失敗版） SA2 サンライズフェスティバル （3段目）  ->  ~MP (2) (+MP (Marvelous Hit 2))
+  [OK sig2] （失敗版） SA2 サンライズフェスティバル （4段目）  ->  ~HP (3) (+HP (Marvelous Hit 3))
+  [OK sig2] （失敗版） SA2 サンライズフェスティバル （5段目）  ->  ~LK (4) (+LK (Marvelous Hit 4))
+  [OK sig2] （失敗版） SA2 サンライズフェスティバル （6段目）  ->  ~MK (5) (+MK (Marvelous Hit 5))
+  [OK sig2] （失敗版） SA2 サンライズフェスティバル （7段目）  ->  ~HK (6) (+HK (Marvelous Hit 6))
+  [OK sig3] SA3 サタデーナイト  ->  214214P (Weekend Pleasure (CA))
+  [OK sig3] CA サタデーナイト  ->  214214P (Weekend Pleasure (CA))
+  [NO-HIT ] 弱 エアスラッシャー
+  [LOOSE  ] OD エアスラッシャー  ->  [4]6PP (Air Slasher)
+  [NO-HIT ] OD エアスラッシャー （射出)
+  [NO-HIT ] 弱 ジャックナイフマキシマム
+  [NO-HIT ] フェイクロールステップ
+  [NO-HIT ] ジョスクール
+  [LOOSE  ] ファンキースライサー  ->  214K~LK (Funky Slicer)
+  [NO-HIT ] OD ファンキースライサー
+  [NO-HIT ] ワニングムーン
+  [NO-HIT ] マキシマムストライク
+  [LOOSE  ] OD マキシマムストライク  ->  214KK~HK (Maximum Strike)
+  [NO-HIT ] ジャグリンステップ
+  [NO-HIT ] OD ジャグリンステップ
+  [NO-HIT ] ジャグリンスウェイ
+  [NO-HIT ] OD ジャグリンスウェイ
+  [NO-HIT ] SA2 クライマックスブロー （マーベラス）
+  [NO-HIT ] SA2 クライマックスブロー （マキシマム）
+  [NO-HIT ] SA2 アンコールビート （マーベラス）
+  [NO-HIT ] SA2 アンコールビート （マキシマム）
+
+======================================================================
+dhalsim (Dhalsim)
+======================================================================
+  [MANUAL ] 弱 ヨガファイア  ->  236P (Yoga Fire)
+  [MANUAL ] 中 ヨガファイア  ->  236P (Yoga Fire)
+  [MANUAL ] 強 ヨガファイア  ->  236P (Yoga Fire)
+  [MANUAL ] 強 ヨガファイア（ホールド）  ->  236[P] (Yoga Fire (hold))
+  [MANUAL ] 強 ヨガアーチ  ->  236LK (Yoga Arch)
+  [OK sig3] OD 弱 ヨガファイア  ->  236PP (Yoga Fire)
+  [OK sig3] OD 中 ヨガファイア  ->  236PP (Yoga Fire)
+  [OK sig3] OD 強 ヨガファイア  ->  236PP (Yoga Fire)
+  [OK sig3] 弱 ヨガアーチ  ->  236LK (Yoga Arch)
+  [OK sig3] OD 弱 ヨガアーチ  ->  236KK (Yoga Arch)
+  [OK sig3] OD 中 ヨガアーチ  ->  236KK (Yoga Arch)
+  [OK sig3] OD 強 ヨガアーチ  ->  236KK (Yoga Arch)
+  [OK sig3] 弱 ヨガフレイム  ->  63214LP (Yoga Flame)
+  [OK sig3] 中 ヨガフレイム  ->  63214MP (Yoga Flame)
+  [OK sig3] 強 ヨガフレイム  ->  63214HP (Yoga Flame)
+  [OK sig3] OD ヨガフレイム  ->  63214PP (Yoga Flame)
+  [OK sig3] 弱 ヨガブラスト  ->  63214LK (Yoga Blast)
+  [OK sig3] 中 ヨガブラスト  ->  63214MK (Yoga Blast)
+  [OK sig3] OD ヨガブラスト  ->  63214KK (Yoga Blast)
+  [OK sig3] SA1 弱 ヨガインフェルノ  ->  236236LP (Yoga Inferno)
+  [OK sig3] SA1 中 ヨガインフェルノ  ->  236236LP (Yoga Inferno)
+  [OK sig3] SA1 強 ヨガインフェルノ  ->  236236HP (Yoga Inferno)
+  [OK sig3] SA3 ヨガマーシレス  ->  236236K (Merciless Yoga (CA))
+  [OK sig3] CA ヨガマーシレス  ->  236236K (Merciless Yoga (CA))
+  [NO-HIT ] 弱 ヨガファイア（ホールド）
+  [NO-HIT ] 中 ヨガファイア（ホールド）
+  [NO-HIT ] 中 ヨガアーチ
+  [LOOSE  ] 強 ヨガブラスト  ->  63214HK (Yoga Blast)
+  [LOOSE  ] 弱 ヨガコメット  ->  j.63214LP (Yoga Comet)
+  [NO-HIT ] 中 ヨガコメット
+  [NO-HIT ] 強 ヨガコメット
+  [NO-HIT ] OD ヨガコメット
+  [NO-HIT ] ヨガフロート（その場）
+  [NO-HIT ] ヨガフロート（前方）
+  [NO-HIT ] 空中ヨガフロート
+  [NO-HIT ] P ヨガテレポート（前方）
+  [NO-HIT ] K ヨガテレポート（前方）
+  [NO-HIT ] P 空中ヨガテレポート（前方）
+  [NO-HIT ] K 空中ヨガテレポート（前方）
+  [NO-HIT ] ヨガテレポート（後方）
+  [NO-HIT ] P 空中ヨガテレポート（後方）
+  [NO-HIT ] K 空中ヨガテレポート（後方）
+  [LOOSE  ] SA2 ヨガサンバースト（Lv1）  ->  214214K (Yoga Sunburst)
+  [LOOSE  ] SA2 ヨガサンバースト（Lv2）  ->  214214K (Yoga Sunburst)
+  [LOOSE  ] SA2 ヨガサンバースト（Lv3）  ->  214214K (Yoga Sunburst)
+
+======================================================================
+ed (Ed)
+======================================================================
+  [MANUAL ] 弱 サイコシュート  ->  236P~6P (Psycho Shoot)
+  [MANUAL ] 中 サイコシュート  ->  236P~6P (Psycho Shoot)
+  [MANUAL ] 強 サイコシュート  ->  236P~6P (Psycho Shoot)
+  [OK sig3] サイコスパーク  ->  236P (Psycho Spark)
+  [OK sig3] OD サイコスパーク  ->  236PP (Psycho Spark)
+  [OK sig3] OD 弱 サイコシュート  ->  236PP~6P (Psycho Shoot)
+  [OK sig3] OD 中 サイコシュート  ->  236PP~6P (Psycho Shoot)
+  [OK sig3] OD 強 サイコシュート  ->  236PP~6P (Psycho Shoot)
+  [OK sig3] 弱 サイコアッパー  ->  623LP (Psycho Uppercut)
+  [OK sig3] 中 サイコアッパー  ->  623MP (Psycho Uppercut)
+  [OK sig3] 強 サイコアッパー  ->  623HP (Psycho Uppercut)
+  [OK sig3] OD サイコアッパー  ->  623PP (Psycho Uppercut)
+  [OK sig3] 弱 サイコブリッツ  ->  214LP (Psycho Blitz)
+  [OK sig3] 中 サイコブリッツ  ->  214MP (Psycho Blitz)
+  [OK sig3] 強 サイコブリッツ  ->  214HP (Psycho Blitz)
+  [OK sig3] OD サイコブリッツ  ->  214PP (Psycho Blitz)
+  [OK sig3] OD サイコフリッカー  ->  236KK (Psycho Flicker)
+  [OK sig3] キルスイッチ・ブレイク  ->  5/6KK~6P (Kill Switch Break)
+  [OK sig3] SA1 サイコストーム  ->  236236K (Psycho Storm)
+  [OK sig3] SA2 サイコキャノン  ->  214214P (Psycho Cannon)
+  [OK sig3] SA3 サイコチェンバー  ->  236236P (Psycho Chamber (CA))
+  [OK sig3] CA サイコチェンバー  ->  236236P (Psycho Chamber (CA))
+  [LOOSE  ] 弱 サイコフリッカー  ->  236LK (Psycho Flicker)
+  [LOOSE  ] 弱 サイコフリッカー（ホールド）  ->  236[LK] (Psycho Flicker (Hold))
+  [LOOSE  ] 中 サイコフリッカー  ->  236MK (Psycho Flicker)
+  [LOOSE  ] 中 サイコフリッカー（ホールド）  ->  236[MK] (Psycho Flicker (Hold))
+  [NO-HIT ] 強 サイコフリッカー
+  [NO-HIT ] 強 サイコフリッカー（ホールド）
+  [NO-HIT ] キルステップ（前方）
+  [NO-HIT ] キルスイッチ・チェイス
+  [NO-HIT ] キルステップ（後方）
+
+======================================================================
+ehonda (E.Honda)
+======================================================================
+  [MANUAL ] OD 大銀杏投げ  ->  63214KK (Oicho Throw)
+  [OK sig3] 弱 百裂張り手  ->  214LP (Hundred Hand Slap)
+  [OK sig3] 中 百裂張り手  ->  214MP (Hundred Hand Slap)
+  [OK sig3] 強 百裂張り手  ->  214HP (Hundred Hand Slap)
+  [OK sig3] OD 百裂張り手  ->  214PP (Hundred Hand Slap)
+  [OK sig3] 弱 スーパー頭突き  ->  [4]6LP (Sumo Headbutt)
+  [OK sig3] 中 スーパー頭突き  ->  [4]6MP (Sumo Headbutt)
+  [OK sig3] 強 スーパー頭突き  ->  [4]6HP (Sumo Headbutt)
+  [OK sig3] OD スーパー頭突き  ->  [4]6PP (Sumo Headbutt)
+  [OK sig3] 弱 スーパー百貫落とし  ->  [2]8LK (Sumo Smash)
+  [OK sig3] 中 スーパー百貫落とし  ->  [2]8MK (Sumo Smash)
+  [OK sig3] 強 スーパー百貫落とし  ->  [2]8HK (Sumo Smash)
+  [OK sig3] OD スーパー百貫落とし  ->  [2]8KK (Sumo Smash)
+  [OK sig2] 弱 大銀杏投げ  ->  63214LK (Oicho Throw)
+  [OK sig2] 中 大銀杏投げ  ->  63214MK (Oicho Throw)
+  [OK sig2] 強 大銀杏投げ  ->  63214HK (Oicho Throw)
+  [OK sig3] 鉄砲（２段目）  ->  236KK~P~P (Teppo Triple Slap 2)
+  [OK sig3] OD 鉄砲（２段目）  ->  236KK~P~P (Teppo Triple Slap 2)
+  [OK sig3] 大砲  ->  236KK~2P (Taiho Cannon Lift)
+  [OK sig3] OD 大砲  ->  236KK~2P (Taiho Cannon Lift)
+  [OK sig3] 猫だまし  ->  22P (Neko Damashi)
+  [OK sig3] SA1 発揮爆砕  ->  236236P (Show of Force)
+  [OK sig3] SA2 スーパー鬼無双  ->  [4]646K (Ultimate Killer Head Ram)
+  [OK sig3] SA3 千秋楽  ->  214214P (The Final Bout (CA))
+  [OK sig3] CA 千秋楽  ->  214214P (The Final Bout (CA))
+  [LOOSE  ] [肩屋入り]弱 百裂張り手  ->  214LP (Hundred Hand Slap)
+  [LOOSE  ] [肩屋入り]中 百裂張り手  ->  214MP (Hundred Hand Slap)
+  [LOOSE  ] [肩屋入り]強 百裂張り手  ->  214HP (Hundred Hand Slap)
+  [LOOSE  ] [肩屋入り]OD 百裂張り手  ->  214PP (Hundred Hand Slap)
+  [NO-HIT ] 相撲ステップ
+  [NO-HIT ] OD 相撲ステップ
+  [NO-HIT ] 鉄砲（１段目）
+  [LOOSE  ] OD 鉄砲（１段目）  ->  236KK~P (Teppo Triple Slap 1)
+  [NO-HIT ] 肩屋入り
+
+======================================================================
+elena (Elena)
+======================================================================
+  [MANUAL ] SA2リヴァイブダンス  ->  236236P (Revival Dance)
+  [OK sig3] 弱 ライノホーン  ->  236LK (Rhino Horn)
+  [OK sig3] 中 ライノホーン  ->  236MK (Rhino Horn)
+  [OK sig3] 強 ライノホーン  ->  236HK (Rhino Horn)
+  [OK sig3] OD ライノホーン  ->  236KK (Rhino Horn)
+  [OK sig3] 弱 スクラッチホイール  ->  623LK (Scratch Wheel)
+  [OK sig3] 中 スクラッチホイール  ->  623MK (Scratch Wheel)
+  [OK sig3] 強 スクラッチホイール  ->  623HK (Scratch Wheel)
+  [OK sig3] OD スクラッチホイール  ->  623KK (Scratch Wheel)
+  [OK sig3] レオパードスナップ  ->  236P~6LK (Leopard Snap)
+  [OK sig3] [強化版]レオパードスナップ  ->  236PP~6LK or 236P~6P~6LK (Leopard Snap)
+  [OK sig3] ハーベストサークル  ->  236P~6MK (Harvest Circle)
+  [OK sig3] [強化版]ハーベストサークル  ->  236PP~6MK or 236P~6P~6MK (Harvest Circle)
+  [OK sig3] マレットスマッシュ  ->  236P~6HK (Mallet Smash)
+  [OK sig3] [強化版]マレットスマッシュ  ->  236PP~6HK or 236P~6P~6HK (Mallet Smash)
+  [OK sig3] 弱 スピンサイズ  ->  214LK (Spinning Scythe)
+  [OK sig3] 中 スピンサイズ  ->  214MK (Spinning Scythe)
+  [OK sig3] 強スピンサイズ  ->  214HK (Spinning Scythe)
+  [OK sig3] OD スピンサイズ  ->  214KK (Spinning Scythe)
+  [OK sig3] 弱 ムーングライド（1段目）  ->  214LP (Moon Glider)
+  [OK sig3] 中 ムーングライド（1段目）  ->  214MP (Moon Glider)
+  [OK sig3] 強 ムーングライド（1段目）  ->  214HP (Moon Glider)
+  [OK sig3] ムーングライド（2段目）  ->  214P~6P (Moon Glider Follow-up)
+  [OK sig3] OD ムーングライド（1段目）  ->  214PP (Moon Glider)
+  [OK sig3] OD ムーングライド（2段目）  ->  214PP~6P (Moon Glider Follow-up)
+  [OK sig3] SA1 ミーティアボレー  ->  236236K (Meteor Volley)
+  [OK sig3] SA3 グラスランドソング  ->  214214K (Song of the Grasslands (CA))
+  [OK sig3] CA グラスランドソング  ->  214214K (Song of the Grasslands (CA))
+  [NO-HIT ] 弱 リンクシング
+  [NO-HIT ] 中 リンクシング
+  [NO-HIT ] 強 リンクシング
+  [NO-HIT ] ODリンクシング
+  [NO-HIT ] 弱 リンクスワール
+  [NO-HIT ] 中 リンクスワール
+  [NO-HIT ] 強 リンクスワール
+  [NO-HIT ] OD リンクスワール
+
+======================================================================
+gouki_akuma (Akuma)
+======================================================================
+  [MANUAL ] OD 斬空波動拳  ->  j.236PP (Zanku Hadoken)
+  [MANUAL ] 空中竜巻斬空脚  ->  j.214K (Aerial Tatsumaki Zanku-Kyaku)
+  [MANUAL ] 百鬼豪斬空  ->  236KK~j.236P (Demon Gou Zanku)
+  [OK sig3] 弱 豪波動拳(Lv1)  ->  236LP (Gou Hadoken)
+  [OK sig3] 中 豪波動拳(Lv1)  ->  236MP (Gou Hadoken)
+  [OK sig3] 強 豪波動拳(Lv1)  ->  236HP (Gou Hadoken)
+  [OK sig3] OD 豪波動拳  ->  236PP (Gou Hadoken)
+  [OK sig3] OD 豪波動拳（ホールド）  ->  236[PP] (OD Gou Hadoken Lv.2)
+  [OK sig3] 弱 豪昇龍拳  ->  623LP (Gou Shoryuken)
+  [OK sig3] 中 豪昇龍拳  ->  623MP (Gou Shoryuken)
+  [OK sig3] 強 豪昇龍拳  ->  623HP (Gou Shoryuken)
+  [OK sig2] OD 豪昇龍拳  ->  j.236PP (Zanku Hadoken)
+  [OK sig3] 弱 竜巻斬空脚  ->  214LK (Tatsumaki Zanku-Kyaku)
+  [OK sig3] 中 竜巻斬空脚  ->  214MK (Tatsumaki Zanku-Kyaku)
+  [OK sig3] 強 竜巻斬空脚  ->  214HK (Tatsumaki Zanku-Kyaku)
+  [OK sig3] OD 竜巻斬空脚  ->  214KK (Tatsumaki Zanku-Kyaku)
+  [OK sig2] OD 空中竜巻斬空脚  ->  j.214KK (Aerial Tatsumaki Zanku-Kyaku)
+  [OK sig3] 弱 金剛灼火（1段目）  ->  214LP (Adamant Flame)
+  [OK sig3] 弱 金剛灼火（2段目）  ->  214LP~6P (Adamant Flame Follow-Up)
+  [OK sig3] 中 金剛灼火（1段目）  ->  214MP (Adamant Flame)
+  [OK sig3] 中 金剛灼火（2段目）  ->  214MP~6P (Adamant Flame Follow-Up)
+  [OK sig3] 強 金剛灼火（1段目）  ->  214HP (Adamant Flame)
+  [OK sig3] 強 金剛灼火（2段目）  ->  214HP~6P (Adamant Flame Follow-Up)
+  [OK sig3] OD 金剛灼火（1段目）  ->  214PP (Adamant Flame)
+  [OK sig3] OD 金剛灼火（2段目）  ->  214PP~6P (Adamant Flame Follow-Up)
+  [OK sig2] 百鬼豪衝  ->  236KK~j.214K (Demon Gou Rasen)
+  [OK sig2] 百鬼豪螺旋  ->  623LP (Gou Shoryuken)
+  [OK sig3] SA1 滅殺豪波動  ->  236236P (Messatsu Gohado)
+  [OK sig2] SA1 天魔豪斬空  ->  j.236236K (Tenma Gozanku)
+  [OK sig3] SA2 崩天劫火  ->  214214P (Empyrean’s End)
+  [OK sig3] SA3 禍坏  ->  236236K (Sip of Calamity (CA))
+  [OK sig3] CA 禍坏  ->  236236K (Sip of Calamity (CA))
+  [OK sig2] CA 瞬獄殺  ->  LP~LP~6LK~HP (Shun Goku Satsu (CA))
+  [NO-HIT ] 弱 豪波動拳(Lv2)
+  [NO-HIT ] 弱 豪波動拳(Lv3)
+  [NO-HIT ] 中 豪波動拳(Lv2)
+  [NO-HIT ] 中 豪波動拳(Lv3)
+  [NO-HIT ] 強 豪波動拳(Lv2)
+  [NO-HIT ] 強 豪波動拳(Lv3)
+  [NO-HIT ] 弱 斬空波動拳
+  [NO-HIT ] 中 斬空波動拳
+  [NO-HIT ] 強 斬空波動拳
+  [NO-HIT ] 弱 百鬼襲
+  [NO-HIT ] 中 百鬼襲
+  [NO-HIT ] 強 百鬼襲
+  [NO-HIT ] OD 百鬼襲
+  [NO-HIT ] 百鬼豪斬
+  [NO-HIT ] 百鬼豪刃
+  [NO-HIT ] 百鬼潜影
+  [NO-HIT ] 阿修羅閃空（前方）
+  [NO-HIT ] 阿修羅閃空（後方）
+  [NO-HIT ] 朧
+
+======================================================================
+guile (Guile)
+======================================================================
+  [MANUAL ] ソニックブレイク （単発）  ->  PP (Sonic Break)
+  [MANUAL ] ソニックブレイク （派生）  ->  [4]6P~P (Sonic Break (follow-up))
+  [MANUAL ] SA1 ソニックハリケーン （横）  ->  [4]646P (Sonic Hurricane)
+  [OK sig3] 弱 ソニックブーム  ->  [4]6LP (Sonic Boom)
+  [OK sig3] 中 ソニックブーム  ->  [4]6MP (Sonic Boom)
+  [OK sig3] 強 ソニックブーム  ->  [4]6HP (Sonic Boom)
+  [OK sig3] 弱 サマーソルトキック  ->  [2]8LK (Somersault Kick)
+  [OK sig3] 【ジャスト】 弱 サマーソルトキック  ->  [2]8LK (Somersault Kick)
+  [OK sig3] 中 サマーソルトキック  ->  [2]8MK (Somersault Kick)
+  [OK sig3] 【ジャスト】 中 サマーソルトキック  ->  [2]8MK (Somersault Kick)
+  [OK sig3] 強 サマーソルトキック  ->  [2]8HK (Somersault Kick)
+  [OK sig3] 【ジャスト】 強 サマーソルトキック  ->  [2]8HK (Somersault Kick)
+  [OK sig3] OD サマーソルトキック  ->  [2]8KK (Somersault Kick)
+  [OK sig3] 弱 ソニックブレイド  ->  214LP (Sonic Blade)
+  [OK sig3] 中 ソニックブレイド  ->  214MP (Sonic Blade)
+  [OK sig3] 強 ソニックブレイド  ->  214HP (Sonic Blade)
+  [OK sig3] OD 弱 ソニックブレイド  ->  214PP (Sonic Cross)
+  [OK sig3] OD 中 ソニックブレイド  ->  214PP (Sonic Cross)
+  [OK sig3] OD 強 ソニックブレイド  ->  214PP (Sonic Cross)
+  [OK sig3] OD ソニックブレイク  ->  [4]6PP~P (OD Sonic Break (follow-up))
+  [OK sig3] SA3 クロスファイアサマーソルト  ->  [4]646K (Crossfire Somersault (CA))
+  [OK sig3] CA クロスファイアサマーソルト  ->  [4]646K (Crossfire Somersault (CA))
+  [LOOSE  ] 【ジャスト】 弱 ソニックブーム  ->  [4]6LP (Sonic Boom)
+  [LOOSE  ] 【ジャスト】 中 ソニックブーム  ->  [4]6MP (Sonic Boom)
+  [LOOSE  ] 【ジャスト】 強 ソニックブーム  ->  [4]6HP (Sonic Boom)
+  [LOOSE  ] OD ソニックブーム  ->  [4]6PP (Sonic Boom)
+  [NO-HIT ] 弱 ソニッククロス
+  [NO-HIT ] 【ジャスト】弱 ソニッククロス
+  [NO-HIT ] 中 ソニッククロス
+  [NO-HIT ] 【ジャスト】中 ソニッククロス
+  [NO-HIT ] 強 ソニッククロス
+  [NO-HIT ] 【ジャスト】強 ソニッククロス
+  [NO-HIT ] OD ソニッククロス１
+  [NO-HIT ] OD ソニッククロス２
+  [LOOSE  ] SA1 ソニックハリケーン （上）  ->  [4]646HP (Sonic Hurricane)
+  [NO-HIT ] SA2 ソリッドパンチャー
+
+======================================================================
+ingrid (Ingrid)
+======================================================================
+  [NO-HIT ] 弱 サンシュート
+  [NO-HIT ] 中 サンシュート
+  [NO-HIT ] 強 サンシュート
+  [NO-HIT ] OD 弱 サンシュート
+  [NO-HIT ] OD 中 サンシュート
+  [NO-HIT ] OD 強 サンシュート
+  [NO-HIT ] 弱 サンフレア
+  [NO-HIT ] サンフレア(Lv1)
+  [NO-HIT ] サンフレア(Lv2)
+  [NO-HIT ] サンフレア(Lv3)
+  [NO-HIT ] OD サンフレア(Lv1)
+  [NO-HIT ] OD サンフレア(Lv2)
+  [NO-HIT ] OD サンフレア(Lv3)
+  [NO-HIT ] 弱ソーラーフレア
+  [NO-HIT ] ソーラーフレア(Lv1)
+  [NO-HIT ] ソーラーフレア(Lv2)
+  [NO-HIT ] ソーラーフレア(Lv3)
+  [NO-HIT ] OD ソーラーフレア(Lv1)
+  [NO-HIT ] OD ソーラーフレア(Lv2)
+  [NO-HIT ] OD ソーラーフレア(Lv3)
+  [NO-HIT ] 弱 サンライズ
+  [NO-HIT ] 中 サンライズ
+  [NO-HIT ] 強 サンライズ
+  [NO-HIT ] OD サンライズ
+  [NO-HIT ] サンヴェール
+  [NO-HIT ] OD サンヴェール
+  [NO-HIT ] サンバニッシュ(後方)
+  [NO-HIT ] サンバニッシュ(上方)
+  [NO-HIT ] サンバニッシュ(前方)
+  [NO-HIT ] SA1 サンシャイン(Lv1)
+  [NO-HIT ] SA1 サンシャイン(Lv2)
+  [NO-HIT ] SA1 サンシャイン(Lv3)
+  [NO-HIT ] SA2 サンオーダー(Lv1)
+  [NO-HIT ] SA2 サンオーダー(Lv2)
+  [NO-HIT ] SA2 サンオーダー(Lv3)
+  [NO-HIT ] SA3 コズミックレイ
+  [NO-HIT ] CA コズミックレイ
+
+======================================================================
+jamie (Jamie)
+======================================================================
+  [MANUAL ] 弱 流酔拳（2段目）  ->  236LP~6P (LP Freeflow Strikes Punch 1 (DL4))
+  [MANUAL ] 中 流酔拳（2段目）  ->  236MP~6P (MP Freeflow Strikes Punch 1 (DL4))
+  [MANUAL ] 強 流酔拳（2段目）  ->  236HP~6P (HP Freeflow Strikes Punch 1 (DL4))
+  [SKIP   ] [酔いレベル4]流酔拳（2段目）  (対応なし確定)
+  [MANUAL ] OD 流酔拳（2段目）  ->  236PP~6P (OD Freeflow Strikes Punch 1 (DL4))
+  [SKIP   ] [酔いレベル4]流酔拳（3段目）  (対応なし確定)
+  [OK sig3] [酔いレベル4]弱 流酔拳（1段目）  ->  236LP (LP Freeflow Strikes 1 (DL4))
+  [OK sig3] [酔いレベル4]中 流酔拳（1段目）  ->  236MP (MP Freeflow Strikes 1 (DL4))
+  [OK sig3] [酔いレベル4]強 流酔拳（1段目）  ->  236HP (HP Freeflow Strikes 1 (DL4))
+  [OK sig3] [酔いレベル4]OD 流酔拳（1段目）  ->  236PP (OD Freeflow Strikes 1 (DL4))
+  [OK sig3] [酔いレベル4]OD 流酔拳（2段目）  ->  236PP~6P (OD Freeflow Strikes Punch 1 (DL4))
+  [OK sig3] [酔いレベル4]OD 流酔拳（3段目）  ->  236PP~6P~6P (OD Freeflow Strikes Punch 2 (DL4))
+  [OK sig3] 弱 流酔脚（2段目）  ->  236LP~6K (LP Freeflow Kicks 1 (DL2))
+  [OK sig3] 中 流酔脚（2段目）  ->  236MP~6K (MP Freeflow Kicks 1 (DL2))
+  [OK sig3] 強 流酔脚（2段目）  ->  236HP~6K (HP Freeflow Kicks 1 (DL2))
+  [OK sig3] OD 流酔脚（2段目）  ->  236PP~6K (OD Freeflow Kicks 1 (DL2))
+  [OK sig3] 弱 流酔脚（3段目）  ->  236LP~6K~6K (LP Freeflow Kicks 2 (DL2))
+  [OK sig3] 中 流酔脚（3段目）  ->  236MP~6K~6K (MP Freeflow Kicks 2 (DL2))
+  [OK sig3] 強 流酔脚（3段目）  ->  236HP~6K~6K (HP Freeflow Kicks 2 (DL2))
+  [OK sig3] OD 流酔脚（3段目）  ->  236PP~6K~6K (OD Freeflow Kicks 2 (DL2))
+  [OK sig3] 弱 酔疾歩  ->  214LP (Swagger Step (DL2))
+  [OK sig3] 中 酔疾歩  ->  214MP (Swagger Step (DL2))
+  [OK sig3] 強 酔疾歩  ->  214HP (Swagger Step (DL2))
+  [OK sig3] OD 酔疾歩  ->  214PP (Swagger Step (DL2))
+  [OK sig3] 中 張弓腿  ->  623MK (Arrow Kick (DL2))
+  [OK sig3] 強 張弓腿  ->  623HK (Arrow Kick (DL2))
+  [OK sig3] OD 張弓腿  ->  623KK (Arrow Kick (DL2))
+  [OK sig2] OD 無影蹴  ->  j.214KK (Luminous Dive Kick (DL2))
+  [OK sig3] 弱 爆廻  ->  236LK (Bakkai (DL2))
+  [OK sig3] 中 爆廻  ->  236MK (Bakkai (DL2))
+  [OK sig3] 強 爆廻  ->  236HK (Bakkai (DL2))
+  [OK sig3] OD 爆廻  ->  236KK (Bakkai (DL2))
+  [OK sig2] 点辰  ->  63214K (Tenshin (DL3))
+  [OK sig2] OD 点辰  ->  63214KK (Tenshin (DL3))
+  [OK sig3] 疾歩仙掌  ->  214PP~6P (Swagger Hermit Punch (DL4))
+  [OK sig3] OD 疾歩仙掌  ->  214PP~6P (Swagger Hermit Punch (DL4))
+  [OK sig3] SA1 武麗禽  ->  236236K (Breakin')
+  [OK sig3] SA3 月牙叉炮  ->  236236P (Getsuga Saiho (DL2))
+  [OK sig3] CA 月牙叉炮  ->  236236P (Getsuga Saiho (DL2))
+  [NO-HIT ] 魔身
+  [LOOSE  ] 弱 流酔拳（1段目）  ->  236LP (LP Freeflow Strikes 1 (DL4))
+  [LOOSE  ] 中 流酔拳（1段目）  ->  236MP (MP Freeflow Strikes 1 (DL4))
+  [LOOSE  ] 強 流酔拳（1段目）  ->  236HP (HP Freeflow Strikes 1 (DL4))
+  [LOOSE  ] OD 流酔拳（1段目）  ->  236PP (OD Freeflow Strikes 1 (DL4))
+  [LOOSE  ] 弱 流酔拳（3段目）  ->  236LP~6P~6P (LP Freeflow Strikes Punch 2 (DL4))
+  [LOOSE  ] 中 流酔拳（3段目）  ->  236MP~6P~6P (MP Freeflow Strikes Punch 2 (DL4))
+  [LOOSE  ] 強 流酔拳（3段目）  ->  236HP~6P~6P (HP Freeflow Strikes Punch 2 (DL4))
+  [LOOSE  ] OD 流酔拳（3段目）  ->  236PP~6P~6P (OD Freeflow Strikes Punch 2 (DL4))
+  [LOOSE  ] 弱 張弓腿  ->  623LK (Arrow Kick (DL2))
+  [NO-HIT ] 弱 無影蹴
+  [NO-HIT ] 中 無影蹴
+  [NO-HIT ] 強 無影蹴
+  [NO-HIT ] SA2 絶唱魔身
+
+======================================================================
+jp (JP)
+======================================================================
+  [MANUAL ] 弱 トリグラフ  ->  22P (Triglav)
+  [MANUAL ] 中 トリグラフ  ->  22P (Triglav)
+  [MANUAL ] 強 トリグラフ  ->  22P (Triglav)
+  [OK sig3] OD 弱 トリグラフ  ->  22PP (Triglav)
+  [OK sig3] OD 中 トリグラフ  ->  22PP (Triglav)
+  [OK sig3] OD 強 トリグラフ  ->  22PP (Triglav)
+  [OK sig3] 弱 ストリボーグ  ->  236LP (Stribog)
+  [OK sig3] 中 ストリボーグ  ->  236MP (Stribog)
+  [OK sig3] 強 ストリボーグ  ->  236HP (Stribog)
+  [OK sig3] OD ストリボーグ  ->  236PP (Stribog)
+  [OK sig3] OD トルバラン  ->  236KK (Torbalan)
+  [OK sig3] SA1 チェルノボーグ  ->  236236P (Chornobog)
+  [OK sig3] SA3 ザプリェット  ->  236236K (Interdiction (CA))
+  [OK sig3] CA ザプリェット  ->  236236K (Interdiction (CA))
+  [NO-HIT ] 弱 ヴィーハト
+  [NO-HIT ] 中 ヴィーハト
+  [NO-HIT ] 強 ヴィーハト
+  [NO-HIT ] OD 弱 ヴィーハト
+  [NO-HIT ] OD 中 ヴィーハト
+  [NO-HIT ] OD 強 ヴィーハト
+  [NO-HIT ] ヴィーハト・アクノ
+  [NO-HIT ] ヴィーハト・チェーニ
+  [LOOSE  ] アムネジア  ->  22K (Amnesia)
+  [LOOSE  ] OD アムネジア  ->  22KK (Amnesia)
+  [LOOSE  ] 弱 トルバラン  ->  236LK (Torbalan)
+  [LOOSE  ] 中 トルバラン  ->  236MK (Torbalan)
+  [LOOSE  ] 強 トルバラン  ->  236HK (Torbalan)
+  [NO-HIT ] アブニマーチ
+  [LOOSE  ] OD アブニマーチ  ->  214KK (Embrace)
+  [NO-HIT ] SA2 ラヴーシュカ
+
+======================================================================
+juri (Juri)
+======================================================================
+  [MANUAL ] SA1 殺界風破斬  ->  236236K (Sakkai Fuhazan)
+  [OK sig3] 弱 風破刃  ->  214LK (Fuhajin)
+  [OK sig3] 中 風破刃  ->  214MK (Fuhajin)
+  [OK sig3] 強 風破刃  ->  214HK (Fuhajin)
+  [OK sig3] OD 風破刃  ->  214KK (Fuhajin)
+  [OK sig3] 歳破衝  ->  236LK (Saihasho)
+  [OK sig3] [強化版]歳破衝  ->  236LK (1 Stock) (Saihasho)
+  [OK sig3] OD 歳破衝  ->  236LKMK (Saihasho)
+  [OK sig3] [強化版]暗剣殺  ->  236MK (1 Stock) (Ankensatsu)
+  [OK sig3] OD 暗剣殺  ->  236LKHK (Ankensatsu)
+  [OK sig3] [強化版]五黄殺  ->  j.214K (Shiku-sen)
+  [OK sig3] OD 五黄殺  ->  236MKHK (Go Ohsatsu)
+  [OK sig3] 弱 天穿輪  ->  623LP (Tensenrin)
+  [OK sig3] 中 天穿輪  ->  623MP (Tensenrin)
+  [OK sig3] 強 天穿輪  ->  623HP (Tensenrin)
+  [OK sig3] OD 天穿輪  ->  623PP (Tensenrin)
+  [OK sig3] SA2 風水エンジン（突進）  ->  214214[P] (Feng Shui Engine (hold))
+  [NO-HIT ] 暗剣殺
+  [NO-HIT ] 五黄殺
+  [NO-HIT ] 疾空閃
+  [LOOSE  ] OD 疾空閃  ->  j.214KK (OD Shiku-sen)
+  [NO-HIT ] 死連閃
+  [NO-HIT ] OD 死連閃
+  [NO-HIT ] SA2 風水エンジン
+  [LOOSE  ] SA3 回旋断界落  ->  214214K (Kaisen Dankai Raku (CA))
+  [LOOSE  ] CA 回旋断界落  ->  214214K (Kaisen Dankai Raku (CA))
+
+======================================================================
+ken (Ken)
+======================================================================
+  [MANUAL ] 空中竜巻旋風脚  ->  j.214K (Aerial Tatsumaki Senpu-kyaku)
+  [MANUAL ] OD 空中竜巻旋風脚  ->  j.214KK (Aerial Tatsumaki Senpu-kyaku)
+  [OK sig3] 弱 波動拳  ->  236LP (Hadoken)
+  [OK sig3] 中 波動拳  ->  236MP (Hadoken)
+  [OK sig3] 強 波動拳  ->  236HP (Hadoken)
+  [OK sig3] OD 波動拳  ->  236PP (Hadoken)
+  [OK sig3] 弱 昇龍拳  ->  623LP (Shoryuken)
+  [OK sig3] 中 昇龍拳  ->  623MP (Shoryuken)
+  [OK sig3] 強 昇龍拳  ->  623HP (Shoryuken)
+  [OK sig3] OD 昇龍拳  ->  623PP (Shoryuken)
+  [OK sig3] 弱 竜巻旋風脚  ->  214LK (Tatsumaki Senpu-kyaku)
+  [OK sig3] 中 竜巻旋風脚  ->  214MK (Tatsumaki Senpu-kyaku)
+  [OK sig3] 強 竜巻旋風脚  ->  214HK (Tatsumaki Senpu-kyaku)
+  [OK sig3] OD 竜巻旋風脚  ->  214KK (Tatsumaki Senpu-kyaku)
+  [OK sig3] 弱 龍尾脚  ->  623LK (Dragonlash Kick)
+  [OK sig3] 中 龍尾脚  ->  623MK (Dragonlash Kick)
+  [OK sig3] 強 龍尾脚  ->  623HK (Dragonlash Kick)
+  [OK sig3] OD 龍尾脚  ->  623KK (Dragonlash Kick)
+  [OK sig3] 弱 迅雷脚  ->  236LK (Jinrai Kick)
+  [OK sig3] 中 迅雷脚  ->  236MK (Jinrai Kick)
+  [OK sig3] 強 迅雷脚  ->  236HK (Jinrai Kick)
+  [OK sig3] OD 迅雷脚  ->  236KK (Jinrai Kick)
+  [OK sig3] 風鎌蹴り  ->  236KK~6LK (Kazekama Shin Kick)
+  [OK sig3] OD 風鎌蹴り  ->  236KK~6LK (Kazekama Shin Kick)
+  [OK sig3] 火砕蹴  ->  236KK~6HK~6K (Kasai Thrust Kick (HK))
+  [OK sig3] 轟雷落とし  ->  236K~6MK (Gorai Axe Kick)
+  [OK sig3] OD 轟雷落とし  ->  236KK~6MK (Gorai Axe Kick)
+  [OK sig3] 閃火脚  ->  236K~6HK (Senka Snap Kick)
+  [OK sig3] OD 閃火脚  ->  236KK~6HK (Senka Snap Kick)
+  [OK sig3] SA1 龍尾烈脚  ->  214214K (Dragonlash Flame)
+  [OK sig3] SA2 疾風迅雷脚  ->  236236K (Shippu Jinrai-kyaku)
+  [OK sig3] SA3 神龍烈破  ->  236236P (Shinryu Reppa (CA))
+  [OK sig3] CA 神龍烈破  ->  236236P (Shinryu Reppa (CA))
+  [LOOSE  ] 【奮迅脚】 昇龍拳  ->  KK~623P (Run~Shoryuken)
+  [NO-HIT ] 【奮迅脚】 竜巻旋風脚
+  [LOOSE  ] 【奮迅脚】 龍尾脚  ->  KK~623K (Run~Dragonlash Kick)
+
+======================================================================
+kimberly (Kimberly)
+======================================================================
+  [MANUAL ] 空中武神旋風脚  ->  j.214K (Aerial Bushin Senpukyaku)
+  [MANUAL ] OD 空中武神旋風脚  ->  j.214KK (Aerial Bushin Senpukyaku)
+  [MANUAL ] SA1 武神乱拍子  ->  236236K (Bushin Beats)
+  [MANUAL ] SA1 武神乱拍子・雷譜  ->  236236[K] (Bushin Thunderous Beats)
+  [MANUAL ] SA2 空中武神天翔亢竜  ->  j.214214P (Soaring Bushin Scramble)
+  [OK sig3] 弱 武神旋風脚  ->  214LK (Bushin Senpukyaku)
+  [OK sig3] 中 武神旋風脚  ->  214MK (Bushin Senpukyaku)
+  [OK sig3] 強 武神旋風脚  ->  214HK (Bushin Senpukyaku)
+  [OK sig3] OD 武神旋風脚  ->  214KK (Bushin Senpukyaku)
+  [OK sig3] OD 影すくい  ->  236KK~MK (Shadow Slide)
+  [OK sig3] 中 流転一文字  ->  236MP (Vagabond Edge)
+  [OK sig3] 強 流転一文字  ->  236HP (Vagabond Edge)
+  [OK sig3] OD 流転一文字  ->  236PP (Vagabond Edge)
+  [OK sig2] 荒鵺捻り  ->  j.236P (Nue Twister)
+  [OK sig2] OD 荒鵺捻り  ->  j.236PP (Nue Twister)
+  [OK sig3] SA3 武神顕現神楽  ->  236236P (Bushin Ninjastar Cypher (CA))
+  [OK sig3] CA 武神顕現神楽  ->  236236P (Bushin Ninjastar Cypher (CA))
+  [NO-HIT ] 疾駆け
+  [NO-HIT ] OD 疾駆け
+  [NO-HIT ] 急停止
+  [NO-HIT ] OD 急停止
+  [LOOSE  ] 胴刎ね  ->  236K~LK (Torso Cleaver)
+  [NO-HIT ] OD 胴刎ね
+  [LOOSE  ] 影すくい  ->  236K~MK (Shadow Slide)
+  [LOOSE  ] 首狩り  ->  236K~HK (Neck Hunter)
+  [NO-HIT ] OD 首狩り
+  [NO-HIT ] 弧空
+  [LOOSE  ] OD 弧空  ->  236KK (close) (Arc Step)
+  [NO-HIT ] 武神イズナ落とし
+  [NO-HIT ] OD 武神イズナ落とし
+  [NO-HIT ] 武神鉾刃脚
+  [LOOSE  ] OD 武神鉾刃脚  ->  236KK (close)~K (Bushin Hojin Kick)
+  [LOOSE  ] 弱 流転一文字  ->  236LP (Vagabond Edge)
+  [NO-HIT ] 彩隠形
+  [NO-HIT ] OD 彩隠形
+  [NO-HIT ] 召雷細工
+  [NO-HIT ] OD 召雷細工
+  [NO-HIT ] 弱 細工手裏剣
+  [NO-HIT ] 中 細工手裏剣
+  [NO-HIT ] 強 細工手裏剣
+  [NO-HIT ] 弱 乱れ細工手裏剣
+  [NO-HIT ] 中 乱れ細工手裏剣
+  [NO-HIT ] 強 乱れ細工手裏剣
+  [NO-HIT ] SA2 武神天翔亢竜
+
+======================================================================
+lily (Lily)
+======================================================================
+  [MANUAL ] 強 コンドルウィンド  ->  214HP (HOLD OK) (Condor Wind (attack))
+  [MANUAL ] 強 コンドルスパイア  ->  236HK (Condor Spire)
+  [MANUAL ] コンドルダイブ  ->  j.PP (Condor Dive)
+  [MANUAL ] OD コンドルダイブ  ->  j.PPP (Condor Dive)
+  [MANUAL ] SA2 スカイサンダーバード  ->  j.236236K (Soaring Thunderbird (Windclad))
+  [MANUAL ] [風纏い]SA2 スカイサンダーバード  ->  j.236236K (Soaring Thunderbird (Windclad))
+  [OK sig3] 中 コンドルウィンド  ->  214MP (HOLD OK) (Condor Wind (attack))
+  [OK sig3] OD コンドルウィンド  ->  214PP (HOLD OK) (Condor Wind (attack))
+  [OK sig3] 弱 コンドルスパイア  ->  236LK (Condor Spire)
+  [OK sig3] 中 コンドルスパイア  ->  236MK (Condor Spire)
+  [OK sig3] OD 弱 コンドルスパイア  ->  236KK (Condor Spire)
+  [OK sig3] OD 強 コンドルスパイア  ->  236KK (Condor Spire)
+  [OK sig3] [風纏い]弱 コンドルスパイア  ->  W.236LK (Condor Spire (Windclad))
+  [OK sig3] [風纏い]中 コンドルスパイア  ->  W.236MK (Condor Spire (Windclad))
+  [OK sig3] [風纏い]強 コンドルスパイア  ->  W.236HK (Condor Spire (Windclad))
+  [OK sig3] [風纏い]OD 弱 コンドルスパイア  ->  W.236LKMK or W.236LKHK (Condor Spire (Windclad))
+  [OK sig3] [風纏い]OD 強 コンドルスパイア  ->  W.236LKMK or W.236LKHK (Condor Spire (Windclad))
+  [OK sig3] 弱 トマホークバスター  ->  623LP (Tomahawk Buster)
+  [OK sig3] 中 トマホークバスター  ->  623MP (Tomahawk Buster)
+  [OK sig3] 強 トマホークバスター  ->  623HP (Tomahawk Buster)
+  [OK sig3] OD トマホークバスター  ->  623PP (Tomahawk Buster)
+  [OK sig3] [風纏い]弱 トマホークバスター  ->  W.623LP (Tomahawk Buster (Windclad))
+  [OK sig3] [風纏い]中 トマホークバスター  ->  W.623MP (Tomahawk Buster (Windclad))
+  [OK sig3] [風纏い]強 トマホークバスター  ->  W.623HP (Tomahawk Buster (Windclad))
+  [OK sig3] [風纏い]OD トマホークバスター  ->  W.623PP (Tomahawk Buster (Windclad))
+  [OK sig2] 弱 メキシカンタイフーン  ->  360+LP (Mexican Typhoon)
+  [OK sig2] 中 メキシカンタイフーン  ->  360+MP (Mexican Typhoon)
+  [OK sig2] 強 メキシカンタイフーン  ->  360+HP (Mexican Typhoon)
+  [OK sig2] OD メキシカンタイフーン  ->  360+PP (Mexican Typhoon)
+  [OK sig3] SA1 ブリージングホーク  ->  236236P (Breezing Hawk)
+  [OK sig3] [風纏い]SA2 サンダーバード  ->  236236K (Thunderbird (Windclad))
+  [NO-HIT ] 弱 コンドルウィンド
+  [NO-HIT ] [風纏い]コンドルダイブ
+  [NO-HIT ] [風纏い]OD コンドルダイブ
+  [LOOSE  ] SA2 サンダーバード  ->  236236K (Thunderbird (Windclad))
+  [NO-HIT ] SA3 レイジングタイフーン
+  [NO-HIT ] CA レイジングタイフーン
+
+======================================================================
+luke (Luke)
+======================================================================
+  [MANUAL ] 弱 フラッシュナックル（ホールド）  ->  214[LP] (LP Flash Knuckle (hold))
+  [MANUAL ] 弱 フラッシュナックル（ジャスト）  ->  pf.214[LP] (LP Flash Knuckle (perfect))
+  [MANUAL ] 中 フラッシュナックル（ホールド）  ->  214[MP] (MP Flash Knuckle (hold))
+  [MANUAL ] 中 フラッシュナックル（ジャスト）  ->  pf.214[MP] (MP Flash Knuckle (perfect))
+  [MANUAL ] 強 フラッシュナックル（ホールド）  ->  214[HP] (HP Flash Knuckle (hold))
+  [MANUAL ] 強 フラッシュナックル（ジャスト）  ->  pf.214[HP] (HP Flash Knuckle (perfect))
+  [MANUAL ] スラムダンク  ->  623PP~PP (Slam Dunk)
+  [OK sig3] 弱 サンドブラスト  ->  236LP (Sand Blast)
+  [OK sig3] 中 サンドブラスト  ->  236MP (Sand Blast)
+  [OK sig3] 強 サンドブラスト  ->  236HP (Sand Blast)
+  [OK sig3] OD サンドブラスト  ->  236PP (Sand Blast)
+  [OK sig3] フェイタルショット  ->  236PP~PP (Fatal Shot)
+  [OK sig3] 弱 フラッシュナックル  ->  214LP (LP Flash Knuckle)
+  [OK sig3] 中 フラッシュナックル  ->  214MP (MP Flash Knuckle)
+  [OK sig3] 強 フラッシュナックル  ->  214HP (HP Flash Knuckle)
+  [OK sig2] DDT  ->  214PP~PP (DDT)
+  [OK sig2] エアフラッシュナックル  ->  j.214P (Aerial Flash Knuckle)
+  [OK sig2] エアフラッシュナックル（ホールド）  ->  j.214[P] (Aerial Flash Knuckle (hold))
+  [OK sig2] OD エアフラッシュナックル  ->  j.214PP (Aerial Flash Knuckle)
+  [OK sig3] ノーチェイサー  ->  236K~P (No Chaser)
+  [OK sig3] 弱 ライジングアッパー  ->  623LP (Rising Uppercut)
+  [OK sig3] 中 ライジングアッパー  ->  623MP (Rising Uppercut)
+  [OK sig3] 強 ライジングアッパー  ->  623HP (Rising Uppercut)
+  [OK sig3] OD ライジングアッパー  ->  623PP (Rising Uppercut)
+  [OK sig3] SA1 バルカンブラスト  ->  236236P (Vulcan Blast)
+  [OK sig3] SA2 イレイザー  ->  214214P (Eraser)
+  [OK sig3] SA3 ペイルライダー  ->  236236K (Pale Rider (CA))
+  [OK sig3] CA ペイルライダー  ->  236236K (Pale Rider (CA))
+  [LOOSE  ] OD フラッシュナックル  ->  214PP (OD Flash Knuckle)
+  [NO-HIT ] OD フラッシュナックル（2段目）
+  [NO-HIT ] アベンジャー
+  [NO-HIT ] OD アベンジャー
+  [LOOSE  ] OD ノーチェイサー  ->  236KK~P (No Chaser)
+  [NO-HIT ] インパラー
+  [LOOSE  ] OD インパラー  ->  236KK~K (Impaler)
+
+======================================================================
+mai (Mai)
+======================================================================
+  [MANUAL ] 弱 花蝶扇（ホールド）  ->  236[P] (Kachousen (Hold))
+  [MANUAL ] 中 花蝶扇（ホールド）  ->  236[P] (Kachousen (Hold))
+  [MANUAL ] 強 花蝶扇（ホールド）  ->  236[P] (Kachousen (Hold))
+  [MANUAL ] OD 花蝶扇（ホールド）  ->  236[PP] (Kachousen (Hold))
+  [MANUAL ] 乱れ花蝶扇  ->  236[PP]~6P (Midare Kachousen (Flame))
+  [MANUAL ] [強化版]乱れ花蝶扇  ->  236[PP]~6P (Midare Kachousen (Flame))
+  [OK sig3] [強化版]弱 花蝶扇  ->  236LP (Kachousen (Flame))
+  [OK sig3] [強化版]中 花蝶扇  ->  236MP (Kachousen (Flame))
+  [OK sig3] [強化版]強 花蝶扇  ->  236HP (Kachousen (Flame))
+  [OK sig3] [強化版]OD 花蝶扇  ->  236PP (Kachousen (Flame))
+  [OK sig3] [強化版]OD 花蝶扇（ホールド）  ->  236[PP] (Kachousen (Hold))
+  [OK sig3] 弱 飛翔龍炎陣  ->  623LK (Hishou Ryuuenjin (Flame))
+  [OK sig3] [強化版]弱 飛翔龍炎陣  ->  623LK (Hishou Ryuuenjin (Flame))
+  [OK sig3] 中 飛翔龍炎陣  ->  623MK (Hishou Ryuuenjin (Flame))
+  [OK sig3] [強化版]中 飛翔龍炎陣  ->  623MK (Hishou Ryuuenjin (Flame))
+  [OK sig3] OD 飛翔龍炎陣  ->  623KK (Hishou Ryuuenjin (Flame))
+  [OK sig3] [強化版]OD 飛翔龍炎陣  ->  623KK (Hishou Ryuuenjin (Flame))
+  [OK sig3] [強化版]弱 龍炎舞  ->  214LP (Ryuuenbu (Flame))
+  [OK sig3] 中 龍炎舞  ->  214MP (Ryuuenbu (Flame))
+  [OK sig3] [強化版]中 龍炎舞  ->  214MP (Ryuuenbu (Flame))
+  [OK sig3] [強化版]強 龍炎舞  ->  214HP (Ryuuenbu (Flame))
+  [OK sig3] OD 龍炎舞  ->  214PP (Ryuuenbu (Flame))
+  [OK sig3] [強化版]OD 龍炎舞  ->  214PP (Ryuuenbu (Flame))
+  [OK sig3] 弱 必殺忍蜂  ->  236LK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] [強化版]弱 必殺忍蜂  ->  236LK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] 中 必殺忍蜂  ->  236MK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] [強化版]中 必殺忍蜂  ->  236MK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] 強 必殺忍蜂  ->  236HK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] [強化版]強 必殺忍蜂  ->  236HK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] OD 必殺忍蜂  ->  236KK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] [強化版]OD 必殺忍蜂  ->  236KK (Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] [強化版]SA1 陽炎の舞  ->  236236P (Kagerou no Mai (Flame))
+  [OK sig3] SA2 超必殺忍蜂  ->  236236K (Chou Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] [強化版]SA2 超必殺忍蜂  ->  236236K (Chou Hissatsu Shinobi Bachi (Flame))
+  [OK sig2] SA2 空中超必殺忍蜂  ->  j.236236K (Air Chou Hissatsu Shinobi Bachi (Flame))
+  [OK sig2] [強化版]SA2 空中超必殺忍蜂  ->  j.236236K (Air Chou Hissatsu Shinobi Bachi (Flame))
+  [OK sig3] SA3 不知火流・炎舞仇桜  ->  214214P (Shiranui Ryuu: Enbu Ada Zakura (CA))
+  [OK sig3] CA 不知火流・炎舞仇桜  ->  214214P (Shiranui Ryuu: Enbu Ada Zakura (CA))
+  [LOOSE  ] 弱 花蝶扇  ->  236LP (Kachousen (Flame))
+  [LOOSE  ] [強化版]弱 花蝶扇（ホールド）  ->  236LP (Kachousen (Flame))
+  [LOOSE  ] 中 花蝶扇  ->  236MP (Kachousen (Flame))
+  [NO-HIT ] [強化版]中 花蝶扇（ホールド）
+  [LOOSE  ] 強 花蝶扇  ->  236HP (Kachousen (Flame))
+  [NO-HIT ] [強化版]強 花蝶扇（ホールド）
+  [LOOSE  ] OD 花蝶扇  ->  236PP (Kachousen (Flame))
+  [LOOSE  ] 強 飛翔龍炎陣  ->  623HK (Hishou Ryuuenjin (Flame))
+  [LOOSE  ] [強化版]強 飛翔龍炎陣  ->  623HK (Hishou Ryuuenjin (Flame))
+  [LOOSE  ] 弱 龍炎舞  ->  214LP (Ryuuenbu (Flame))
+  [LOOSE  ] 強 龍炎舞  ->  214HP (Ryuuenbu (Flame))
+  [NO-HIT ] ムササビの舞
+  [NO-HIT ] [強化版]ムササビの舞
+  [LOOSE  ] OD ムササビの舞  ->  j.214PP (Musasabi no Mai (Flame))
+  [LOOSE  ] [強化版]OD ムササビの舞  ->  j.214PP (Musasabi no Mai (Flame))
+  [LOOSE  ] SA1 陽炎の舞  ->  236236P (Kagerou no Mai (Flame))
+
+======================================================================
+manon (Manon)
+======================================================================
+  [MANUAL ] OD マネージュ・ドレ（メダルLvに応じて動作が変化）  ->  63214PP (OD Manège Doré)
+  [OK sig2] 弱 マネージュ・ドレ（メダルLvに応じて動作が変化）  ->  63214LP (LP Manège Doré)
+  [OK sig2] 中 マネージュ・ドレ（メダルLvに応じて動作が変化）  ->  63214MP (MP Manège Doré)
+  [OK sig2] 強 マネージュ・ドレ（メダルLvに応じて動作が変化）  ->  63214HP (HP Manège Doré)
+  [OK sig3] 弱 ロン・ポワン  ->  236LK (LK Rond-point)
+  [OK sig3] 中 ロン・ポワン  ->  236MK (MK Rond-point)
+  [OK sig3] 強 ロン・ポワン  ->  236HK (HK Rond-point)
+  [OK sig3] OD ロン・ポワン  ->  236KK (OD Rond-point)
+  [OK sig3] 弱 デガジェ  ->  214LK (LK Dégagé)
+  [OK sig3] 中 デガジェ  ->  214MK (MK Dégagé)
+  [OK sig3] 強  デガジェ  ->  214HK (HK Dégagé)
+  [OK sig3] OD デガジェ  ->  214KK (OD Dégagé)
+  [OK sig3] 弱 ランヴェルセ（メダルLvに応じて動作が変化）  ->  236LP (LP Renversé)
+  [OK sig3] 中 ランヴェルセ（メダルLvに応じて動作が変化）  ->  236MP (MP Renversé)
+  [OK sig3] 強 ランヴェルセ（メダルLvに応じて動作が変化）  ->  236HP (HP Renversé)
+  [OK sig3] OD ランヴェルセ（メダルLvに応じて動作が変化）  ->  236PP (OD Renversé)
+  [OK sig3] SA1 アラベスク  ->  236236K (Arabesque)
+  [OK sig3] SA2 エトワール  ->  214214K (Étoile)
+  [OK sig2] SA3 パ・ド・ドゥ  ->  214214K (Étoile)
+  [OK sig2] CA パ・ド・ドゥ  ->  214214K (Étoile)
+  [NO-HIT ] グラン・フェッテ
+  [LOOSE  ] OD グラン・フェッテ  ->  236PP~K (OD Grand Fouetté)
+
+======================================================================
+marisa (Marisa)
+======================================================================
+  [OK sig3] 弱 グラディウス  ->  236LP (Gladius)
+  [OK sig3] 弱 グラディウス（ホールド）  ->  236[LP] (Gladius (Hold))
+  [OK sig3] 中 グラディウス  ->  236MP (Gladius)
+  [OK sig3] 中 グラディウス（ホールド）  ->  236[MP] (Gladius (Hold))
+  [OK sig3] 強 グラディウス  ->  236HP (Gladius)
+  [OK sig3] 強 グラディウス（ホールド）  ->  236[HP] (Gladius (Hold))
+  [OK sig3] OD グラディウス  ->  236PP (Gladius)
+  [OK sig3] OD グラディウス（ホールド）  ->  236[PP] (Gladius (Hold))
+  [OK sig3] 弱 ディマカイルス（1段目）  ->  214LP (Dimachaerus)
+  [OK sig2] 弱 ディマカイルス（2段目）  ->  214LP~6P (LP Dimachaerus Follow-up)
+  [OK sig3] 中 ディマカイルス（1段目）  ->  214MP (Dimachaerus)
+  [OK sig2] 中 ディマカイルス（2段目）  ->  214MP~6P (MP Dimachaerus Follow-up)
+  [OK sig3] 強 ディマカイルス（1段目）  ->  214HP (Dimachaerus)
+  [OK sig2] 強 ディマカイルス（2段目）  ->  214HP~6P (HP Dimachaerus Follow-up)
+  [OK sig3] OD ディマカイルス（1段目）  ->  214PP (Dimachaerus)
+  [OK sig2] OD ディマカイルス（2段目）  ->  214PP~6P (OD Dimachaerus Follow-up)
+  [OK sig3] 弱 ファランクス  ->  623LP (Phalanx)
+  [OK sig3] 中 ファランクス  ->  623MP (Phalanx)
+  [OK sig3] 強 ファランクス  ->  623HP (Phalanx)
+  [OK sig3] OD ファランクス  ->  623PP (Phalanx)
+  [OK sig3] 弱 クアドリガ  ->  236LK (Quadriga)
+  [OK sig3] 中 クアドリガ  ->  236MK (Quadriga)
+  [OK sig3] 強 クアドリガ  ->  236HK (Quadriga)
+  [OK sig3] OD クアドリガ  ->  236KK (Quadriga)
+  [OK sig3] スクトゥム(当身派生版)  ->  214K (Scutum (Counter))
+  [OK sig3] OD スクトゥム(当身派生版)  ->  214KK (Scutum (Counter))
+  [OK sig3] トニトルス（2段目）  ->  214K~P~P (Tonitrus 2)
+  [OK sig3] SA1 マリーザジャベリン  ->  236236P (Javelin of Marisa)
+  [OK sig3] SA1 マリーザジャベリン（ホールド）  ->  236236[P] (Javelin of Marisa)
+  [OK sig3] SA1 マリーザジャベリン(当身派生版)  ->  236236[P] Counter (Javelin of Marisa)
+  [OK sig3] SA2 メテオリティス  ->  214214P (Meteorite)
+  [OK sig3] SA3 アポロウーサ  ->  236236K (Goddess of the Hunt (CA))
+  [OK sig3] CA アポロウーサ  ->  236236K (Goddess of the Hunt (CA))
+  [NO-HIT ] スクトゥム
+  [NO-HIT ] OD スクトゥム
+  [LOOSE  ] トニトルス（1段目）  ->  214K~P (Tonitrus 1)
+  [NO-HIT ] プロケッラ
+  [NO-HIT ] エンフォルド
+
+======================================================================
+rashid (Rashid)
+======================================================================
+  [OK sig3] 弱 スピニング・ミキサー  ->  236LP (Spinning Mixer)
+  [OK sig3] 【気流強化】 弱 スピニング・ミキサー  ->  236LP (Air Current) (Spinning Mixer)
+  [OK sig3] 中 スピニング・ミキサー  ->  236MP (Spinning Mixer)
+  [OK sig3] 強 スピニング・ミキサー  ->  236HP (Spinning Mixer)
+  [OK sig3] 【気流強化】 強 スピニング・ミキサー  ->  236HP (Air Current) (Spinning Mixer)
+  [OK sig3] 弱 イーグル・スパイク  ->  214LK (Eagle Spike)
+  [OK sig3] 【気流強化】 弱 イーグル・スパイク  ->  214LK (Air Current) (Eagle Spike (Air Current))
+  [OK sig3] 中 イーグル・スパイク  ->  214MK (Eagle Spike)
+  [OK sig3] 【気流強化】 中 イーグル・スパイク  ->  214MK (Air Current) (Eagle Spike (Air Current))
+  [OK sig3] 強 イーグル・スパイク  ->  214HK (Eagle Spike)
+  [OK sig3] 【気流強化】 強 イーグル・スパイク  ->  214HK (Air Current) (Eagle Spike (Air Current))
+  [OK sig3] OD イーグル・スパイク  ->  214KK (Eagle Spike)
+  [OK sig3] 【気流強化】 OD イーグル・スパイク  ->  214KK (Air Current) (Eagle Spike (Air Current))
+  [OK sig3] OD ワールウインド・ショット  ->  236KK (Whirlwind Shot)
+  [OK sig3] OD ワールウインド・ショット (ホールド版)  ->  236[KK] (Whirlwind Shot (Hold))
+  [OK sig3] 弱 アラビアン・サイクロン  ->  214LP (Arabian Cyclone)
+  [OK sig3] 中 アラビアン・サイクロン  ->  214MP (Arabian Cyclone)
+  [OK sig3] 強 アラビアン・サイクロン  ->  214HP (Arabian Cyclone)
+  [OK sig3] OD アラビアン・サイクロン  ->  214PP (Arabian Cyclone)
+  [OK sig3] アサルト・ネイル  ->  214P~6K~K (Nail Assault)
+  [OK sig2] 弱 アラビアン・スカイハイ  ->  j.214LK (Arabian Skyhigh)
+  [OK sig2] 中 アラビアン・スカイハイ  ->  j.214MK (Arabian Skyhigh)
+  [OK sig2] 強 アラビアン・スカイハイ  ->  j.214HK (Arabian Skyhigh)
+  [OK sig2] OD アラビアン・スカイハイ  ->  j.214KK (Arabian Skyhigh)
+  [OK sig3] SA1 スーパー・ラシード・キック  ->  236236K (Super Rashid Kick)
+  [OK sig3] SA2 イウサール  ->  214214K (Ysaar)
+  [OK sig3] SA3 アルタイル  ->  236236P (Altair (CA))
+  [OK sig3] CA アルタイル  ->  236236P (Altair (CA))
+  [LOOSE  ] 【気流強化】 中 スピニング・ミキサー  ->  236MP (Air Current) (Spinning Mixer)
+  [LOOSE  ] OD スピニング・ミキサー  ->  236PP (Spinning Mixer)
+  [LOOSE  ] 【気流強化】 OD スピニング・ミキサー  ->  236PP (Air Current) (Spinning Mixer)
+  [NO-HIT ] 弱 ワールウインド・ショット
+  [NO-HIT ] 弱 ワールウインド・ショット (ホールド)
+  [NO-HIT ] 弱 ワールウインド・ショット (ホールドMAX)
+  [LOOSE  ] 中 ワールウインド・ショット  ->  214MK (Air Current) (Eagle Spike (Air Current))
+  [NO-HIT ] 中 ワールウインド・ショット (ホールド)
+  [NO-HIT ] 中 ワールウインド・ショット (ホールドMAX)
+  [LOOSE  ] 強 ワールウインド・ショット  ->  214HK (Air Current) (Eagle Spike (Air Current))
+  [NO-HIT ] 強 ワールウインド・ショット (ホールド)
+  [NO-HIT ] 強 ワールウインド・ショット (ホールドMAX)
+  [NO-HIT ] ウイング・ストローク
+  [NO-HIT ] アサルト・ロール
+
+======================================================================
+ryu (Ryu)
+======================================================================
+  [OK sig3] 弱 波動拳  ->  236LP (Hadoken)
+  [OK sig3] 中 波動拳  ->  236MP (Hadoken)
+  [OK sig3] [電刃錬気]波動拳  ->  236HP (Denjin Charge Hadoken)
+  [OK sig3] [電刃錬気]OD 波動拳  ->  236PP (Denjin Charge Hadoken)
+  [OK sig3] 弱 昇龍拳  ->  623LP (Shoryuken)
+  [OK sig3] 中 昇龍拳  ->  623MP (Shoryuken)
+  [OK sig3] OD 昇龍拳  ->  623PP (Shoryuken)
+  [OK sig3] 弱 竜巻旋風脚  ->  214LK (Tatsumaki Senpu-kyaku)
+  [OK sig3] 中 竜巻旋風脚  ->  214MK (Tatsumaki Senpu-kyaku)
+  [OK sig3] 強 竜巻旋風脚  ->  214HK (Tatsumaki Senpu-kyaku)
+  [OK sig3] OD 竜巻旋風脚  ->  214KK (Tatsumaki Senpu-kyaku)
+  [OK sig2] 空中竜巻旋風脚  ->  6HK~214K (Aerial Tatsumaki Senpu-kyaku)
+  [OK sig2] OD 空中竜巻旋風脚  ->  6HK~214KK (Aerial Tatsumaki Senpu-kyaku)
+  [OK sig3] 弱 上段足刀蹴り  ->  236LK (High Blade Kick)
+  [OK sig3] 中 上段足刀蹴り  ->  236MK (High Blade Kick)
+  [OK sig3] 強 上段足刀蹴り  ->  236HK (High Blade Kick)
+  [OK sig3] 弱 波掌撃  ->  214LP (Hashogeki)
+  [OK sig3] 中 波掌撃  ->  214MP (Hashogeki)
+  [OK sig3] [電刃錬気]波掌撃  ->  214HP (Denjin Charge Hashogeki)
+  [OK sig3] [電刃錬気]OD 波掌撃  ->  214PP (Denjin Charge Hashogeki)
+  [OK sig3] SA1 真空波動拳  ->  236236P (Denjin Hadoken)
+  [OK sig3] [電刃錬気]SA1 真空波動拳  ->  236236P (Denjin Hadoken)
+  [OK sig3] SA2 真波掌撃（Lv1）  ->  214214P (Denjin Hashogeki Lv.1)
+  [OK sig3] [電刃錬気]SA2 真波掌撃（Lv1）  ->  214214P (Denjin Hashogeki Lv.1)
+  [LOOSE  ] 強 波動拳  ->  236HP (Denjin Charge Hadoken)
+  [LOOSE  ] OD 波動拳  ->  236PP (Denjin Charge Hadoken)
+  [LOOSE  ] 強 昇龍拳  ->  623HP (Shoryuken)
+  [LOOSE  ] OD 上段足刀蹴り  ->  236KK (High Blade Kick)
+  [LOOSE  ] 強 波掌撃  ->  214HP (Denjin Charge Hashogeki)
+  [LOOSE  ] OD 波掌撃  ->  214PP (Denjin Charge Hashogeki)
+  [NO-HIT ] 電刃錬気
+  [NO-HIT ] SA2 真波掌撃（Lv2）
+  [NO-HIT ] SA2 真波掌撃（Lv3）
+  [NO-HIT ] [電刃錬気]SA2 真波掌撃（Lv2）
+  [NO-HIT ] [電刃錬気]SA2 真波掌撃（Lv3）
+  [LOOSE  ] SA3 真・昇龍拳  ->  236236K (Shin Shoryuken (CA))
+  [LOOSE  ] CA 真・昇龍拳  ->  236236K (Shin Shoryuken (CA))
+
+======================================================================
+sagat (Sagat)
+======================================================================
+  [OK sig3] 中 タイガーショット  ->  236MP (High Tiger Shot)
+  [OK sig3] 強 タイガーショット  ->  236HP (High Tiger Shot)
+  [OK sig3] OD タイガーショット  ->  236MPHP (High Tiger Shot)
+  [OK sig3] グランドタイガーショット  ->  236LP (Low Tiger Shot)
+  [OK sig3] OD グランドタイガーショット  ->  236LPMP or 236LPHP (Low Tiger Shot)
+  [OK sig3] 弱 タイガーアッパーカット  ->  623LP (Tiger Uppercut)
+  [OK sig3] 中 タイガーアッパーカット  ->  623MP (Tiger Uppercut)
+  [OK sig3] 強 タイガーアッパーカット  ->  623HP (Tiger Uppercut)
+  [OK sig3] 強 タイガーアッパーカット（ホールド）  ->  623[HP] (Tiger Uppercut (hold))
+  [OK sig3] OD タイガーアッパーカット  ->  623PP (Tiger Uppercut)
+  [OK sig3] 弱 タイガーニークラッシュ  ->  236LK (Tiger Knee Crush)
+  [OK sig3] 中 タイガーニークラッシュ  ->  236MK (Tiger Knee Crush)
+  [OK sig3] 強 タイガーニークラッシュ  ->  236HK (Tiger Knee Crush)
+  [OK sig3] OD タイガーニークラッシュ  ->  236KK (Tiger Knee Crush)
+  [OK sig3] 弱 タイガーネクサス  ->  214LK (Tiger Nexus)
+  [OK sig3] 中 タイガーネクサス  ->  214MK (Tiger Nexus)
+  [OK sig3] 強 タイガーネクサス  ->  214HK (Tiger Nexus)
+  [OK sig3] OD タイガーネクサス  ->  214KK (Tiger Nexus)
+  [OK sig3] タイガーマイト  ->  214KK~6LK (Mighty Tiger)
+  [OK sig3] OD タイガーマイト  ->  214KK~6LK (Mighty Tiger)
+  [OK sig3] タイガーグリード  ->  214KK~6MK (Greedy Tiger)
+  [OK sig3] OD タイガーグリード  ->  214KK~6MK (Greedy Tiger)
+  [OK sig3] タイガーノヴァ  ->  214K~6HK (Nova Tiger)
+  [OK sig3] OD タイガーノヴァ  ->  214KK~6HK (Nova Tiger)
+  [OK sig3] SA1 タイガーキャノン  ->  236236P (Tiger Cannon)
+  [OK sig3] SA3 タイガーヴァンキッシュ  ->  236236K (Tiger Vanquisher (CA))
+  [OK sig3] CA タイガーヴァンキッシュ  ->  236236K (Tiger Vanquisher (CA))
+  [NO-HIT ] SA2 サベージタイガー
+  [NO-HIT ] SA2 サベージタイガーレイド
+  [NO-HIT ] SA2 サベージタイガーゼニス
+  [NO-HIT ] SA2 サベージタイガーペンデュラム
+  [NO-HIT ] SA2 サベージタイガースタンプ
+
+======================================================================
+terry (Terry)
+======================================================================
+  [OK sig3] 弱 パワーウェイブ  ->  236LP (Power Wave)
+  [OK sig3] 中 パワーウェイブ  ->  236MP (Power Wave)
+  [OK sig3] ラウンドウェイブ  ->  236HP (Round Wave)
+  [OK sig3] OD パワーウェイブ  ->  236PP (Power Wave)
+  [OK sig3] クイックバーン  ->  214LP (Quick Burn)
+  [OK sig3] OD クイックバーン  ->  214LPMP or 214LPHP (Quick Burn)
+  [OK sig3] 中 バーンナックル  ->  214MP (Burning Knuckle)
+  [OK sig3] 強 バーンナックル  ->  214HP (Burning Knuckle)
+  [OK sig3] OD バーンナックル  ->  214MPHP (Burning Knuckle)
+  [OK sig3] 弱 パワーチャージ  ->  236LK (Power Charge)
+  [OK sig3] 中 パワーチャージ  ->  236MK (Power Charge)
+  [OK sig3] 強 パワーチャージ  ->  236HK (Power Charge)
+  [OK sig3] OD パワーチャージ  ->  236KK (Power Charge)
+  [OK sig3] 弱 クラックシュート  ->  214LK (Crack Shoot)
+  [OK sig3] 中 クラックシュート  ->  214MK (Crack Shoot)
+  [OK sig3] 強 クラックシュート  ->  214HK (Crack Shoot)
+  [OK sig3] OD クラックシュート  ->  214KK (Crack Shoot)
+  [OK sig3] 中 ライジングタックル  ->  623MP (Rising Tackle)
+  [OK sig3] 強 ライジングタックル  ->  623HP (Rising Tackle)
+  [OK sig3] OD ライジングタックル  ->  623PP (Rising Tackle)
+  [OK sig3] SA1 バスターウルフ  ->  236236K (Buster Wolf)
+  [OK sig3] SA2 パワーゲイザー  ->  214214P (Power Geyser)
+  [OK sig2] SA2 ツインゲイザー  ->  214214P~PP (Twin Geyser)
+  [OK sig2] SA2 トリプルゲイザー  ->  214214P~PP~PP (Triple Geyser)
+  [OK sig3] SA3 ライジングファング  ->  236236P (Rising Fang (CA))
+  [OK sig3] CA ライジングファング  ->  236236P (Rising Fang (CA))
+  [LOOSE  ] 弱 ライジングタックル  ->  623LP (Rising Tackle)
+  [NO-HIT ] SA2 トリプルゲイザー(不発)
+
+======================================================================
+vega_mbison (M.Bison)
+======================================================================
+  [MANUAL ] OD ヘッドプレス  ->  [2]8KK~K or [2]8K~KK (Head Press)
+  [MANUAL ] OD デビルリバース  ->  [2]8KK~P or [2]8K~PP (Devil Reverse (Mine))
+  [OK sig3] [サイコマイン付与時]弱 サイコクラッシャーアタック  ->  [4]6LP (Psycho Crusher (Mine))
+  [OK sig3] [サイコマイン付与時]中 サイコクラッシャーアタック  ->  [4]6MP (Psycho Crusher (Mine))
+  [OK sig3] [サイコマイン付与時]強 サイコクラッシャーアタック  ->  [4]6HP (Psycho Crusher (Mine))
+  [OK sig3] [サイコマイン付与時]OD サイコクラッシャーアタック  ->  [4]6PP (Psycho Crusher (Mine))
+  [OK sig3] 弱 ダブルニープレス  ->  236LK (Double Knee Press)
+  [OK sig3] 中 ダブルニープレス  ->  236MK (Double Knee Press)
+  [OK sig3] 強 ダブルニープレス  ->  236HK (Double Knee Press)
+  [OK sig3] OD ダブルニープレス  ->  236KK (Double Knee Press)
+  [OK sig3] [サイコマイン付与時]弱 バックフィストコンボ  ->  214LP (Backfist Combo (Mine))
+  [OK sig3] [サイコマイン付与時]中 バックフィストコンボ  ->  214MP (Backfist Combo (Mine))
+  [OK sig3] [サイコマイン付与時]強 バックフィストコンボ  ->  214HP (Backfist Combo (Mine))
+  [OK sig3] [サイコマイン付与時]OD バックフィストコンボ  ->  214PP (Backfist Combo (Mine))
+  [OK sig3] SA1 ニープレスナイトメア  ->  236236K (Knee Press Nightmare)
+  [OK sig3] SA2 サイコパニッシャー  ->  214214K (Psycho Punisher)
+  [OK sig3] SA3 アンリミテッドサイコクラッシャー  ->  236236P (Unlimited Psycho Crusher (CA))
+  [OK sig3] CA アンリミテッドサイコクラッシャー  ->  236236P (Unlimited Psycho Crusher (CA))
+  [LOOSE  ] 弱 サイコクラッシャーアタック  ->  [4]6LP (Psycho Crusher (Mine))
+  [LOOSE  ] 中 サイコクラッシャーアタック  ->  [4]6MP (Psycho Crusher (Mine))
+  [LOOSE  ] 強 サイコクラッシャーアタック  ->  [4]6HP (Psycho Crusher (Mine))
+  [LOOSE  ] OD サイコクラッシャーアタック  ->  [4]6PP (Psycho Crusher (Mine))
+  [LOOSE  ] 弱 バックフィストコンボ  ->  214LP (Backfist Combo (Mine))
+  [LOOSE  ] 中 バックフィストコンボ  ->  214MP (Backfist Combo (Mine))
+  [LOOSE  ] 強 バックフィストコンボ  ->  214HP (Backfist Combo (Mine))
+  [LOOSE  ] OD バックフィストコンボ  ->  214PP (Backfist Combo (Mine))
+  [NO-HIT ] サイコマイン（自動爆発）
+  [NO-HIT ] 弱 シャドウライズ
+  [NO-HIT ] 中 シャドウライズ
+  [NO-HIT ] 強 シャドウライズ
+  [NO-HIT ] OD シャドウライズ
+  [NO-HIT ] ヘッドプレス
+  [LOOSE  ] サマーソルトスカルダイバー  ->  [2]8K~K~P (Somersault Skull Diver)
+  [NO-HIT ] デビルリバース
+  [NO-HIT ] [サイコマイン付与時]デビルリバース
+  [NO-HIT ] [サイコマイン付与時]OD デビルリバース
+
+======================================================================
+zangief (Zangief)
+======================================================================
+  [MANUAL ] SA2 サイクロンラリアット（ホールド）  ->  236236[P] (Cyclone Lariat (hold P))
+  [OK sig3] ダブルラリアット  ->  PP (Double Lariat)
+  [OK sig3] OD ダブルラリアット  ->  PPP (Double Lariat)
+  [OK sig2] 弱 スクリューパイルドライバー  ->  360+LP (Screw Piledriver)
+  [OK sig2] 中 スクリューパイルドライバー  ->  360+MP (Screw Piledriver)
+  [OK sig2] 強 スクリューパイルドライバー  ->  360+HP (Screw Piledriver)
+  [OK sig2] OD スクリューパイルドライバー  ->  360+PP (Screw Piledriver)
+  [OK sig2] ボルシチダイナマイト  ->  j.360+K (Borscht Dynamite)
+  [OK sig2] OD ボルシチダイナマイト  ->  j.360+KK (Borscht Dynamite)
+  [OK sig2] ロシアンスープレックス  ->  63214KK (Close) (Russian Suplex)
+  [OK sig2] OD ロシアンスープレックス  ->  63214KK (Close) (Russian Suplex)
+  [OK sig2] シベリアンエクスプレス（近距離版）  ->  63214K (Mid) (Siberian Express)
+  [OK sig2] OD シベリアンエクスプレス（近距離版）  ->  63214KK (Mid) (Siberian Express)
+  [OK sig2] シベリアンエクスプレス（遠距離版）  ->  63214K (Far) (Siberian Express)
+  [OK sig2] OD シベリアンエクスプレス（遠距離版）  ->  63214KK (Far) (Siberian Express)
+  [OK sig2] ツンドラストーム  ->  360+HP (Screw Piledriver)
+  [OK sig2] SA1 エリアルロシアンスラム  ->  236236K (Aerial Russian Slam)
+  [OK sig2] SA3 ボリショイストームバスター  ->  720+P (Bolshoi Storm Buster (CA))
+  [OK sig2] CA ボリショイストームバスター  ->  720+P (Bolshoi Storm Buster (CA))
+  [NO-HIT ] SA2 サイクロンラリアット（その場）
+  [NO-HIT ] SA2 サイクロンラリアット（移動）

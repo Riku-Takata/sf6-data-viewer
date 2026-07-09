@@ -1,0 +1,19 @@
+# SF6 MCP サーバ デプロイ設定の雛形。
+# 実ファイル samconfig-mcp.toml にコピーして使う (.gitignore 済み)。
+#   cp samconfig-mcp.toml.example samconfig-mcp.toml
+#   sam build -t template-mcp.yaml
+#   sam deploy --config-file samconfig-mcp.toml
+version = 0.1
+
+[default.global.parameters]
+stack_name = "sf6-mcp-server"  # 生成される IAM ロール名が sf6-* になるよう sf6- 始まり必須
+
+[default.build.parameters]
+template_file = "template-mcp.yaml"
+
+[default.deploy.parameters]
+stack_name = "sf6-mcp-server"
+region = "ap-northeast-1"
+capabilities = "CAPABILITY_IAM"
+resolve_s3 = true
+confirm_changeset = true

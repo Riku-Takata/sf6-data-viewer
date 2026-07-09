@@ -60,15 +60,55 @@ _JP_ABBREV_TO_NUMPAD: dict[str, str] = {
     '空中弱K': 'j.LK',    '空中中K': 'j.MK',    '空中強K': 'j.HK',
 }
 
+# 方向 (前/後ろ/下) + 強度 (大/小 の別表記含む) の組み合わせを自動生成
+# 例: '前大K' → 6HK, '後ろ強P' → 4HP。挿入順が照合優先順になるため、
+# 方向付き → 立ち/しゃがみ/ジャンプの大小表記 → 素の大小表記 の順で追加する
+_DIR_JP = {'前': '6', '後ろ': '4', '後': '4', '下': '2'}
+_STRENGTH_JP = {'弱': 'L', '小': 'L', '中': 'M', '強': 'H', '大': 'H'}
+for _d_jp, _d in _DIR_JP.items():
+    for _s_jp, _s in _STRENGTH_JP.items():
+        for _b in ('P', 'K'):
+            _JP_ABBREV_TO_NUMPAD.setdefault(f'{_d_jp}{_s_jp}{_b}', f'{_d}{_s}{_b}')
+for _p_jp, _p in (('立ち', '5'), ('立', '5'), ('しゃがみ', '2'), ('屈', '2')):
+    for _s_jp, _s in (('大', 'H'), ('小', 'L')):
+        for _b in ('P', 'K'):
+            _JP_ABBREV_TO_NUMPAD.setdefault(f'{_p_jp}{_s_jp}{_b}', f'{_p}{_s}{_b}')
+for _p_jp in ('ジャンプ', '空中'):
+    for _s_jp, _s in (('大', 'H'), ('小', 'L')):
+        for _b in ('P', 'K'):
+            _JP_ABBREV_TO_NUMPAD.setdefault(f'{_p_jp}{_s_jp}{_b}', f'j.{_s}{_b}')
+# 素の大小表記 (位置なし) は立ちとみなす。方向付き表記の後に置く
+for _s_jp, _s in (('大', 'H'), ('小', 'L')):
+    for _b in ('P', 'K'):
+        _JP_ABBREV_TO_NUMPAD.setdefault(f'{_s_jp}{_b}', f'5{_s}{_b}')
+
 # クエリ中に numpad 表記が明示的に書かれているかを検出するパターン
+# 注: lookbehind/lookahead を英数字に拡張して「623HP」内の「3HP」誤マッチを防止
 _NUMPAD_EXPLICIT = re.compile(
-    r'(?<![A-Za-z])'   # 前に英字がない (誤マッチ防止)
+    r'(?<![A-Za-z0-9])'   # 前に英数字がない (例: 623HP 中の 3HP を防ぐ)
     r'('
-    r'[1-9][LMH][PK]'  # 通常技: 5LP, 2MK, j.HP など
-    r'|j\.[LMH][PK]'   # ジャンプ技: j.LP, j.HK
-    r'|[2-9]{3,}[PK]'  # コマンド技: 236P, 623K, 214K
+    r'[1-9][LMH][PK]'     # 通常技: 5LP, 2MK, j.HP など
+    r'|j\.[LMH][PK]'      # ジャンプ技: j.LP, j.HK
+    r'|[2-9]{3,}[PK]'     # コマンド技 (強度なし): 236P, 623K, 214K
     r'|DI'
-    r')(?![A-Za-z])'   # 後に英字がない
+    r')(?![A-Za-z0-9])'   # 後に英数字がない
+)
+
+# コマンド技の明示表記: 623HP, 236LK, 236KK (OD), 236[LK] (ホールド), 22P, 6KK 等
+# 単数字+単ボタン ('5P' 等) は誤マッチしやすいため対象外
+_COMMAND_NUMPAD = re.compile(
+    r'(?<![A-Za-z0-9])'
+    r'('
+    r'[1-9]{2,6}\[?(?:[LMH]?[PK]{1,3})\]?'   # 22P, 236LK, 236KK, 236[PP], 63214KK
+    r'|[1-9](?:PP|KK|PPP|KKK)'               # 6KK, 4PP, 2KKK
+    r')'
+    r'(?![A-Za-z0-9])'
+)
+
+# combo_info / max_combo らしさの指標 (これが無いのに当該判定なら誤分類とみなす)
+# 注: 「最大までためた」の「最大」だけで max_combo に誤分類される事例あり
+_COMBO_INDICATORS = re.compile(
+    r'コンボ|繋|つなが|つなげ|キャンセル|ルート|始動|派生|ラッシュ|ノックダウン|の後|火力'
 )
 
 logger = logging.getLogger(__name__)
@@ -177,7 +217,7 @@ SYSTEM_PROMPT = """\
 - 「〜と〜どっちが速い?」「〜と〜を比べると?」→ compare_moves
 - 「ドライブインパクトとは?」「バーンアウトって何?」→ explain_concept
 - 「〜ガードして反撃できる?」「〜は確定反撃?」→ punish_check
-- 「〜からコンボある?」「〜始動は?」「〜の後に何が繋がる?」「〜をDRキャンセルすると?」「コンボ後の有利は?」「ノックダウン後は?」→ combo_info
+- 「〜からコンボある?」「〜始動は?」「〜の後に何が繋がる?」「〜をDRキャンセルすると?」「〜をDRキャンセルすると何F?」「DRキャンセル後の有利は?」「コンボ後の有利は?」「ノックダウン後は?」→ combo_info
 - 「〜からの最大コンボは?」「〜始動の最大ダメージは?」「最大コンボを教えて」「〜から何が最も繋がる?」「フルコンボは?」「BnB コンボは?」→ max_combo
 - 「〜ガードして反撃できる?」「〜は確定反撃?」「〜の弱派生前は割り込める?」「〜の派生は真の連携?」「〜は割り込める?」「〜はブロックストリング?」→ punish_check
 - 「〜のKD後は?」「〜ヒット後の起き攻めは?」「〜からセットプレイは?」「〜の後に前ステップしたら?」「〜の択は?」「ノックダウン後の攻め方は?」「〜でKDした後は?」→ setplay_analysis
@@ -216,6 +256,7 @@ SYSTEM_PROMPT = """\
 - 「ケンの中迅雷脚のフレームは?」→ {"intent_type": "lookup_move", "chara": "Ken", "move_name": "Jinrai Kick"}
 - 「ケンの迅雷脚の弱派生は?」→ {"intent_type": "combo_info", "chara": "Ken", "move_name": "Jinrai Kick"}
 - 「ケンの迅雷脚の弱派生前は割り込める?」→ {"intent_type": "punish_check", "chara": "Ken", "move_name": "Jinrai Kick"}
+- 「ルークの5MPをDRキャンセルすると何F?」→ {"intent_type": "combo_info", "chara": "Luke", "input": "5MP"}
 
 ## 悪い例 (絶対にやらないこと)
 - 「波動拳のガード硬直は?」→ input: "5HP" ← これは間違い (波動拳≠5HP)
@@ -246,11 +287,13 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     prompt = f'次のSF6に関する質問を解析してください:\n\n{query}'
 
     try:
-        result = await provider.generate_structured(
-            prompt=prompt,
-            schema=INTENT_SCHEMA,
-            system=SYSTEM_PROMPT,
-        )
+        from sf6_engine.token_usage import usage_label
+        with usage_label("intent"):
+            result = await provider.generate_structured(
+                prompt=prompt,
+                schema=INTENT_SCHEMA,
+                system=SYSTEM_PROMPT,
+            )
     except (ValueError, Exception) as e:
         logger.warning(f"Intent parse failed: {e}. Falling back to general_question.")
         return {"intent_type": "general_question", "raw_query": query}
@@ -258,6 +301,18 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     # raw_query が欠けている場合は補完
     result.setdefault("raw_query", query)
     result.setdefault("intent_type", "general_question")
+
+    # intent_type がスキーマ外の値 (例: "punish_adv") の場合は lookup_move にフォールバック
+    _VALID_INTENTS = {
+        "lookup_move", "compare_moves", "explain_concept",
+        "punish_check", "combo_info", "max_combo",
+        "setplay_analysis", "general_question",
+    }
+    if result.get("intent_type") not in _VALID_INTENTS:
+        logger.warning(
+            f"Invalid intent_type '{result['intent_type']}' — falling back to lookup_move"
+        )
+        result["intent_type"] = "lookup_move"
 
     # --- ポストプロセス検証 ---
 
@@ -325,12 +380,45 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
             'スクリューパイルドライバー': 'Screw Pile Driver',
             'スパイラルアロー': 'Spiral Arrow', 'キャノンスパイク': 'Cannon Spike',
             '瞬獄殺': 'Shun Goku Satsu',
+            # ルーク
+            'フラッシュナックル': 'Flash Knuckle', '強フラッシュナックル': 'Flash Knuckle',
+            '中フラッシュナックル': 'Flash Knuckle', '弱フラッシュナックル': 'Flash Knuckle',
+            'サンドブラスト': 'Sandblast', 'ライジングアッパー': 'Rising Uppercut',
         }
         for jp, en in _JP_SPECIAL_NAMES.items():
             if jp in query:
                 result["move_name"] = en
                 logger.info(f"JP special name extracted: '{jp}' → '{en}'")
                 break
+
+    # (4b) コマンド表記 (623HP, 236LK 等) が含まれる場合は move_name として抽出
+    # 通常技パターン ([1-9][LMH][PK]) と混同しないよう、3桁以上の数字 + 強度修飾子付きのみ対象
+    if not result.get("move_name") and not result.get("input"):
+        m = _COMMAND_NUMPAD.search(query)
+        if m:
+            result["move_name"] = m.group(1)
+            logger.info(f"Extracted command notation as move_name: '{m.group(1)}'")
+
+    # (4c) クエリにコマンド表記 (236LK / 236[LK] / 623HP 等) が明示されている場合は
+    # LLM の input 出力より常に優先する (LLM は '236LK' → '2LK' のように
+    # トークンを壊すことがある — 明示表記の転記は決定論層の仕事)
+    m_cmd = _COMMAND_NUMPAD.search(query)
+    if m_cmd and result.get("input") != m_cmd.group(1):
+        if result.get("input"):
+            logger.info(
+                f"Command notation override: input '{result['input']}' → '{m_cmd.group(1)}'"
+            )
+        result["input"] = m_cmd.group(1)
+
+    # (5) combo_info / max_combo 誤分類の補正: コンボ関連語がクエリに無いのに
+    # 当該判定の場合は lookup_move に降格 (例: 「236LKをためた時の性能は?」
+    # 「最大までためた時の性能は?」)
+    if (result.get("intent_type") in ("combo_info", "max_combo")
+            and not _COMBO_INDICATORS.search(query)):
+        logger.info(
+            f"{result['intent_type']} without combo keywords — downgrading to lookup_move"
+        )
+        result["intent_type"] = "lookup_move"
 
     # (4) 英語の技名がクエリに含まれて move_name 未設定の場合は抽出
     # 「ルークのFlash Knuckleから…」のように日本語文中に英語技名が埋め込まれたケース

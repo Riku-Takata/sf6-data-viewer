@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SF6 Engine MCP Server - frame data tools over MCP (API Gateway + Lambda)
+
+# ------------------------------------------------------------
+# デプロイ前提 (ADR-017):
+#   - Supabase URL / anon key / 認証トークンを SSM Parameter Store に登録済みであること
+#       /sf6/supabase-url        (String)        … https://xxxx.supabase.co
+#       /sf6/supabase-anon-key   (SecureString)  … anon (read-only) key
+#       /sf6/mcp/auth-token      (SecureString)  … Bearer 認証トークン (任意だが推奨)
+#   - Bedrock Titan V2 (ap-northeast-1) のモデルアクセスが有効であること
+#   - デプロイ実行プリンシパルに apigateway 権限があること
+#     (sf6-deployer は未付与 → deploy/iam/NOTES.md 参照)
+# ------------------------------------------------------------
+
+Parameters:
+  SupabaseUrlSsmPath:
+    Type: String
+    Default: /sf6/supabase-url
+  SupabaseAnonKeySsmPath:
+    Type: String
+    Default: /sf6/supabase-anon-key
+  McpAuthTokenSsmPath:
+    Type: String
+    Default: /sf6/mcp/auth-token
+  TitanModelId:
+    Type: String
+    Default: amazon.titan-embed-text-v2:0
+
+Globals:
+  Function:
+    Runtime: python3.12
+    MemorySize: 512
+    Timeout: 30
+    Architectures:
+      - arm64
+
+Resources:
+  McpServerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: sf6-mcp-server
+      CodeUri: src/
+      Handler: sf6_engine.mcp_server.app.handler
+      Description: SF6 frame-data MCP server (stateless streamable-http via Mangum)
+      Environment:
+        Variables:
+          SUPABASE_URL_SSM_PATH: !Ref SupabaseUrlSsmPath
+          SUPABASE_ANON_KEY_SSM_PATH: !Ref SupabaseAnonKeySsmPath
+          MCP_AUTH_TOKEN_SSM_PATH: !Ref McpAuthTokenSsmPath
+          BEDROCK_EMBED_MODEL: !Ref TitanModelId
+          BEDROCK_EMBED_DIM: '1024'
+          # HTTP API の非 $default ステージは path に "/prod" を含むため Mangum で剥がす。
+          # StageName (McpHttpApi.StageName) と一致させること。
+          MCP_BASE_PATH: /prod
+      Policies:
+        # SSM から Supabase 接続情報 / 認証トークンを読む
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameter
+              Resource:
+                - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/sf6/*
+        # Bedrock Titan V2 (埋め込み) の InvokeModel
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeModel
+              Resource:
+                - !Sub arn:aws:bedrock:${AWS::Region}::foundation-model/${TitanModelId}
+      Events:
+        McpPost:
+          Type: HttpApi
+          Properties:
+            Path: /mcp
+            Method: POST
+            ApiId: !Ref McpHttpApi
+        McpGet:
+          Type: HttpApi
+          Properties:
+            Path: /mcp
+            Method: GET
+            ApiId: !Ref McpHttpApi
+
+  # HTTP API (payload v2)。認証はアプリ内 Bearer ミドルウェアで実施。
+  # スロットリングでコスト暴発を防ぐ。
+  McpHttpApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 10
+        ThrottlingRateLimit: 5
+
+  McpServerLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${McpServerFunction}
+      RetentionInDays: 30
+
+Outputs:
+  McpEndpoint:
+    Description: MCP エンドポイント (POST). クライアントにはこの URL を登録する。
+    Value: !Sub https://${McpHttpApi}.execute-api.${AWS::Region}.amazonaws.com/prod/mcp
+  FunctionName:
+    Value: !Ref McpServerFunction

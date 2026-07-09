@@ -10,9 +10,11 @@ from __future__ import annotations
 
 import logging
 import re
+from functools import lru_cache
 from typing import Any
 
 from sf6_engine.db import get_client
+from sf6_engine.token_usage import usage_label
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +80,9 @@ _JP_MOVE_TO_EN: dict[str, str] = {
     # ルーク
     'サンドブラスト': 'Sandblast',
     'フラッシュナックル': 'Flash Knuckle',
+    '強フラッシュナックル': 'Flash Knuckle',
+    '中フラッシュナックル': 'Flash Knuckle',
+    '弱フラッシュナックル': 'Flash Knuckle',
     'ライジングアッパー': 'Rising Uppercut',
 }
 
@@ -174,14 +179,274 @@ def _pick_variant(rows: list[dict], raw_query: str, move_name: str = '') -> dict
 
 _SPECIAL_MOVE_TYPES = ['Special', 'special', 'Super', 'super']
 
+# CAPCOM 技名の強度/SA prefix と条件タグ (special_move_map のファミリー抽出用)
+_CAPCOM_PREFIX_RE = re.compile(r'(?:^|\s)(弱|中|強|OD|SA1|SA2|SA3|CA)\s*')
+_CAPCOM_COND_RE = re.compile(r'(【[^】]*】|\[[^\]]*\]|（[^）]*）)')
+# ファミリー選択の優先順 (強度ヒントがない場合は無印 → 弱 → … の順で採用)
+_CAPCOM_PREFIX_RANK = {None: 0, '弱': 1, '中': 2, '強': 3, 'OD': 4,
+                       'SA1': 5, 'SA2': 6, 'SA3': 7, 'CA': 8}
+
+
+def _capcom_family(move_name: str) -> str:
+    """CAPCOM 技名から強度prefix・条件タグ・注釈を除いたファミリー名。"""
+    name = _CAPCOM_COND_RE.sub('', move_name)
+    name = _CAPCOM_PREFIX_RE.sub(' ', name)
+    return re.sub(r'\s+', ' ', name).strip()
+
+
+def _capcom_prefix(move_name: str) -> str | None:
+    """CAPCOM 技名の強度/SA prefix (OD 優先)。"""
+    found = _CAPCOM_PREFIX_RE.findall(_CAPCOM_COND_RE.sub('', move_name))
+    if not found:
+        return None
+    return 'OD' if 'OD' in found else found[0]
+
+
+@lru_cache(maxsize=64)
+def _get_special_map(capcom_slug: str) -> tuple:
+    """special_move_map のキャラ分を取得 (プロセス内キャッシュ)。
+
+    テーブル未作成 (migration 未適用) の場合は空を返して既存経路にフォールバック。
+    """
+    try:
+        res = get_client().table('special_move_map').select(
+            'capcom_move_name,sc_chara,sc_input,sc_name'
+        ).eq('capcom_slug', capcom_slug).execute()
+        return tuple(tuple(sorted(r.items())) for r in (res.data or []))
+    except Exception as e:  # noqa: BLE001
+        logger.debug(f"special_move_map 取得失敗 (未適用?): {e}")
+        return ()
+
+
+def _fetch_sc_by_input(sc_chara: str, sc_input: str, sc_name: str | None = None) -> dict | None:
+    """sc_move_normalized から (chara, input[, name]) 完全一致で1件取得。"""
+    q = get_client().table('sc_move_normalized').select(_SC_MOVE_SELECT).eq(
+        'chara', sc_chara).eq('input', sc_input)
+    if sc_name:
+        q = q.eq('name', sc_name)
+    res = q.execute()
+    return res.data[0] if res.data else None
+
+
+# --- 入力表記の正規化とバリアントグルーピング ---
+# SuperCombo はひとつの技の「条件違い」を別行として収録する:
+#   ボタンホールド:   236[LK] / 5[HP]        部分ため:       236{P} / 214{K}
+#   スタンス prefix:  W.623MP (Windclad)     パーフェクト:   pf.214[MP]
+#   入力欄への注釈:   22P (hold) / 214HK (Air Current)
+#   代替表記:         5/6KK / MPMK or 66
+# これらを [] {} 注釈 prefix を剥がした「正規化キー」で同一グループに束ねる。
+# 注: [4]6P / [2]8K / 6[6] のような数字の [] はチャージ"コマンド"なので剥がさない。
+
+_INPUT_ANNOT_RE = re.compile(r'\s*\([^)]*\)')                 # '22P (hold)' → '22P'
+_BTN_HOLD_RE = re.compile(r'[\[{]([LMH]?[PK]{1,2})[\]}]')     # 236[LK]/236{P} → 236LK/236P
+_STANCE_PREFIX_RE = re.compile(r'^(?:W\.|pf\.)')              # W.623MP / pf.214MP
+
+
+def _canon_input_keys(inp: str) -> tuple[str, ...]:
+    """入力表記から正規化キーの組を生成する ('5/6KK' → ('5KK', '6KK'))。"""
+    s = _INPUT_ANNOT_RE.sub('', inp or '').strip()
+    s = _BTN_HOLD_RE.sub(r'\1', s)
+    s = _STANCE_PREFIX_RE.sub('', s)
+    if not s:
+        return ()
+    parts = [p.strip() for p in s.split(' or ')] if ' or ' in s else [s]
+    keys: list[str] = []
+    for p in parts:
+        m = re.match(r'^(\d)/(\d)(.*)$', p)   # '5/6KK' → 5KK と 6KK
+        if m:
+            keys += [m.group(1) + m.group(3), m.group(2) + m.group(3)]
+        else:
+            keys.append(p)
+    # 1文字キー ('4 or 6 + PPP/KKK' の '4' 等) は照合キーとして弱すぎるため除外
+    return tuple(dict.fromkeys(k for k in keys if len(k) >= 2))
+
+
+def _variant_label(row: dict) -> str:
+    """バリアント行の条件ラベルを技名の括弧修飾と入力表記から決定論的に導出。"""
+    name = row.get('name') or ''
+    inp = row.get('input') or ''
+    quals = re.findall(r'\(([^)]+)\)', name)
+    for q in quals:
+        ql = q.lower()
+        if 'hold' in ql and 'partial' not in ql:
+            return 'ため (ホールド) 版'
+        if 'partial' in ql:
+            return '部分ため版'
+        if 'charge' in ql:
+            return f'ため版 ({q})'
+        if ql.startswith('lv'):
+            return f'{q} 版'
+        if ql.startswith('dl'):
+            return f'飲酒レベル {q}'
+        if ql == 'windclad':
+            return 'ウィンドクラッド (風まとい) 版'
+        if ql == 'air current':
+            return 'エアカレント (風あり) 版'
+        if ql == 'enhanced':
+            return '強化版'
+        if ql == 'perfect':
+            return 'パーフェクト (ジャスト入力) 版'
+        if ql == 'flame':
+            return '炎まとい版'
+        if ql == 'mine':
+            return 'マイン設置時'
+    if _BTN_HOLD_RE.search(inp) and '{' not in inp:
+        return 'ため (ホールド) 版'
+    if '{' in inp:
+        return '部分ため版'
+    if inp.startswith('W.'):
+        return 'ウィンドクラッド (風まとい) 版'
+    if inp.startswith('pf.'):
+        return 'パーフェクト (ジャスト入力) 版'
+    if '(hold' in inp.lower():
+        return 'ため (ホールド) 版'
+    if _INPUT_ANNOT_RE.search(inp):
+        return f'{_INPUT_ANNOT_RE.search(inp).group(0).strip()} 版'
+    if quals:
+        return f'{quals[-1]} 版'
+    return '通常版'
+
+
+# バリアントとして束ねない move_type (Drive Parry と Drive Rush Cancel が
+# 'MPMK' キーで誤って対になる等を防ぐ)
+_VARIANT_EXCLUDE_TYPES = {'drive', 'taunt'}
+
+
+def _fetch_variant_group(sc_chara: str, sc_input: str,
+                         exclude_name: str | None = None) -> list[dict]:
+    """同キャラで正規化キーが交差する別バリアント行を取得。
+
+    Args:
+        sc_chara:     SuperCombo キャラ名 ("Ed" 等)。大文字小文字は無視。
+        sc_input:     基準となる入力 ("236LK" / "236[LK]" / "6KK" 等)。
+        exclude_name: 基準行の技名。同一入力で名前違いの行 (Jamie の飲酒レベル等)
+                      をバリアントとして残すために使う。None なら同一入力は全て除外。
+
+    Returns:
+        list[dict]: バリアント行 (基準行自身は含まない)。なければ空リスト。
+    """
+    keys = set(_canon_input_keys(sc_input))
+    if not sc_chara or not keys:
+        return []
+    # セカンダリキー: 強度修飾子を落としたキー ('236LP' → '236P')。
+    # 通常版が強度別 (236LP/MP/HP)、ため版が強度なし (236{P}/[P]) で
+    # 収録される非対称ケース (Akuma 波動拳等) を拾う。強度違いの通常版同士が
+    # 誤って束にならないよう、バリアントラベル付きの行にのみ適用する。
+    generic_keys = {re.sub(r'(\d)[LMH]([PK])', r'\1\2', k) for k in keys} - keys
+    try:
+        res = get_client().table('sc_move_normalized').select(_SC_MOVE_SELECT).ilike(
+            'chara', sc_chara).execute()
+    except Exception as e:  # noqa: BLE001
+        logger.debug(f"バリアント検索失敗: {e}")
+        return []
+    out = []
+    for r in res.data or []:
+        if (r.get('move_type') or '').lower() in _VARIANT_EXCLUDE_TYPES:
+            continue
+        inp = r.get('input') or ''
+        if inp == sc_input and (exclude_name is None or r.get('name') == exclude_name):
+            continue
+        rkeys = set(_canon_input_keys(inp))
+        if keys & rkeys:
+            out.append(r)
+        elif generic_keys & rkeys and _variant_label(r) != '通常版':
+            out.append(r)
+    return out
+
+
+def _fmt_variant_section(picked_input: str, variants: list[dict]) -> str:
+    """バリアント行のコンテキストセクションを生成。"""
+    lines = [
+        f"【バリアントあり】{picked_input} には条件・操作によって性能が変わる"
+        f"別バージョンがあります ([] はボタンホールド=ためる、{{}} は部分ための意):"
+    ]
+    for v in variants:
+        lines.append("")
+        lines.append(f"▼ {_variant_label(v)}:")
+        lines.append(_fmt_sc_move(v))
+    return '\n'.join(lines)
+
+
+def _fetch_special_by_jp(capcom_slug: str, move_name: str, raw_query: str) -> dict | None:
+    """CAPCOM 公式日本語名で special_move_map を引き、SC 行を返す (ステップ0)。
+
+    move_name / raw_query のどちらかに CAPCOM ファミリー名 (例: ロン・ポワン,
+    タイガーアッパーカット) が含まれていれば、強度ヒント (弱/中/強/OD/SA1-3)
+    を prefix と照合して該当バリアントの SC フレームデータを取得する。
+    """
+    map_rows = [dict(r) for r in _get_special_map(capcom_slug.lower())]
+    if not map_rows:
+        return None
+    text = f"{move_name} {raw_query}"
+
+    # ファミリー名が text に含まれる行を候補に (最長一致を優先)
+    cands: list[tuple[int, dict]] = []
+    for r in map_rows:
+        fam = _capcom_family(r['capcom_move_name'])
+        if len(fam) >= 2 and fam in text:
+            cands.append((len(fam), r))
+    if not cands:
+        return None
+    max_len = max(l for l, _ in cands)
+    cands2 = [r for l, r in cands if l == max_len]
+
+    # 強度ヒント: text 中の 弱/中/強/OD/SA1-3/CA を prefix と照合
+    hint = None
+    m = re.search(r'(?<![A-Za-z0-9])(OD|SA1|SA2|SA3|CA)(?![A-Za-z0-9])|オーバードライブ|[弱中強]', text)
+    if m:
+        hint = 'OD' if m.group(0) == 'オーバードライブ' else m.group(0)
+    if hint:
+        hinted = [r for r in cands2 if _capcom_prefix(r['capcom_move_name']) == hint]
+        if hinted:
+            cands2 = hinted
+
+    cands2.sort(key=lambda r: _CAPCOM_PREFIX_RANK.get(
+        _capcom_prefix(r['capcom_move_name']), 9))
+    for r in cands2:
+        row = _fetch_sc_by_input(r['sc_chara'], r['sc_input'], r.get('sc_name'))
+        if row:
+            logger.info(
+                f"special_move_map hit: '{r['capcom_move_name']}' → {r['sc_input']}")
+            return row
+    return None
+
+
+def _fetch_by_alias(capcom_slug: str, sc_chara: str, move_name: str, raw_query: str) -> dict | None:
+    """学習済みエイリアス (move_aliases) で検索する (ステップ0.5)。
+
+    alias は強度なしのファミリー名で保存されているため、ヒット後は
+    sc_name_family の ILIKE 検索 + _pick_variant で強度を解決する。
+    """
+    try:
+        res = get_client().table('move_aliases').select(
+            'alias,sc_name_family').eq('sc_chara', sc_chara).execute()
+        aliases = res.data or []
+    except Exception as e:  # noqa: BLE001
+        logger.debug(f"move_aliases 取得失敗 (未適用?): {e}")
+        return None
+    text = f"{move_name} {raw_query}"
+    hits = [a for a in aliases if a['alias'] and a['alias'] in text]
+    if not hits:
+        return None
+    hits.sort(key=lambda a: -len(a['alias']))  # 最長エイリアス優先
+    family = hits[0]['sc_name_family']
+    res = get_client().table('sc_move_normalized').select(_SC_MOVE_SELECT).eq(
+        'chara', sc_chara).ilike('name', f'%{family}%').execute()
+    if not res.data:
+        return None
+    logger.info(f"move_aliases hit: '{hits[0]['alias']}' → '{family}'")
+    return _pick_variant(_sort_by_type(res.data), raw_query, family)
+
 
 def _fetch_move_by_name(chara: str, move_name: str, raw_query: str = '') -> dict | None:
     """必殺技・SA 名で sc_move_normalized を検索する。
 
     検索順序 (ハードコーディングを排除して汎用化):
-    1. Special/Super タイプに絞って move_name を直接 ILIKE 検索
+    0. special_move_map (CAPCOM 公式日本語名 → SC input) — 全キャラ対応の主経路
+    0.5. move_aliases (Discord bot 等で学習したコミュニティ略称)
+    1. Special/Super タイプに絞って move_name を直接 ILIKE 検索 (英語名向け)
     2. move_name を単語分割して各単語で Special/Super 検索
-    3. _JP_MOVE_TO_EN マッピング経由 (日本語→英語フォールバック)
+    3. _JP_MOVE_TO_EN マッピング経由 (LLM誤訳のリカバリー、最終フォールバック)
     4. タイプ不問で全移動技から検索 (コマンド通常技・throw なども拾う)
 
     複数ヒット時は raw_query の弱/中/強ヒントで最適なバリアントを選択する。
@@ -195,6 +460,16 @@ def _fetch_move_by_name(chara: str, move_name: str, raw_query: str = '') -> dict
         logger.warning(f"char_slug_map に {chara} が見つかりません")
         return None
     sc_chara = map_res.data[0]['sc_chara']
+
+    # 0. CAPCOM 公式日本語名 (special_move_map) — LLM の翻訳を経由しない主経路
+    row = _fetch_special_by_jp(chara, move_name, raw_query)
+    if row:
+        return row
+
+    # 0.5. 学習済みエイリアス (コミュニティ略称)
+    row = _fetch_by_alias(chara, sc_chara, move_name, raw_query)
+    if row:
+        return row
 
     def search_special(keyword: str) -> list[dict]:
         """Special/Super タイプのみを name ILIKE で検索。"""
@@ -220,10 +495,20 @@ def _fetch_move_by_name(chara: str, move_name: str, raw_query: str = '') -> dict
         return _pick_variant(_sort_by_type(rows), raw_query, move_name)
 
     # 2. 単語分割検索 ("Tiger Uppercut" → ["Tiger","Uppercut"] で各単語を試す)
+    # 複数の単語が残っている場合は他の単語で絞り込みを行う (例: "Tiger" → Tiger Shot/Knee/Uppercut が混在するためさらに絞る)
     for word in move_name.split():
         if len(word) >= 3:
             rows = search_special(word)
             if rows:
+                # 残り単語でさらに絞り込む
+                other_words = [w for w in move_name.split() if w != word and len(w) >= 3]
+                if other_words:
+                    narrowed = [
+                        r for r in rows
+                        if any(w.lower() in (r.get('name', '') or '').lower() for w in other_words)
+                    ]
+                    if narrowed:
+                        rows = narrowed
                 return _pick_variant(_sort_by_type(rows), raw_query, move_name)
 
     # 3. JP→EN マッピング (LLM が日本語名を出力したときのフォールバック)
@@ -262,6 +547,18 @@ def _fetch_move_by_name(chara: str, move_name: str, raw_query: str = '') -> dict
     return None
 
 
+def _block_adv_line(v: int) -> str:
+    """ガード時有利を両視点で明示する行 (視点取り違え防止)。"""
+    return (f"ガード時: {_sign(v)}F (技を出した側が{_sign(v)}F / "
+            f"ガードした側は{_sign(-v)}F)")
+
+
+def _hit_adv_line(v: int) -> str:
+    """ヒット時有利を両視点で明示する行。"""
+    return (f"ヒット時: {_sign(v)}F (技を当てた側が{_sign(v)}F / "
+            f"食らった側は{_sign(-v)}F)")
+
+
 def _fmt_sc_move(row: dict) -> str:
     """sc_move_normalized の行 (必殺技用) をコンテキスト用テキストに変換。"""
     name = row.get('name', '不明')
@@ -272,12 +569,12 @@ def _fmt_sc_move(row: dict) -> str:
     if row.get('startup_f') is not None:
         lines.append(f"発生: {row['startup_f']}F")
     if row.get('block_adv_f') is not None:
-        lines.append(f"ガード時: {_sign(row['block_adv_f'])}F")
+        lines.append(_block_adv_line(row['block_adv_f']))
     if row.get('hit_adv_f') is not None:
         if row.get('hit_is_knockdown'):
             lines.append(f"ヒット時: KD (ノックダウン)")
         else:
-            lines.append(f"ヒット時: {_sign(row['hit_adv_f'])}F")
+            lines.append(_hit_adv_line(row['hit_adv_f']))
     if row.get('punish_adv_f') is not None:
         lines.append(f"パニッシュカウンター時: {_sign(row['punish_adv_f'])}F")
     if row.get('atk_range_n') is not None:
@@ -291,7 +588,8 @@ def _fmt_sc_move(row: dict) -> str:
     if row.get('recovery_f') is not None:
         lines.append(f"硬直: {row['recovery_f']}F")
     if row.get('notes'):
-        lines.append(f"解説: {row['notes']}")
+        notes = row['notes']
+        lines.append(f"解説: {notes[:400]}" + ("…" if len(notes) > 400 else ""))
 
     return "\n".join(lines)
 
@@ -362,15 +660,31 @@ def _fmt_combo_context(chara: str, row: dict) -> str:
     hit = row.get('hit_adv', '')
     if hit:
         if 'KD' in str(hit) or 'HKD' in str(hit):
-            lines.append(f"ヒット時: {hit} (ノックダウン)")
+            lines.append(f"ヒット時: {hit} (ノックダウン — 食らった側はダウンする)")
             lines.append(f"  → 相手が起き上がるまで {hit} の有利があります")
         else:
-            lines.append(f"ヒット時有利: {_sign_str(hit)}")
+            hv = _parse_frame_value(hit)
+            if hv is not None:
+                lines.append(_hit_adv_line(hv))
+            else:
+                lines.append(f"ヒット時有利: {_sign_str(hit)} (技を当てた側の視点)")
+
+    # パニッシュカウンター有利
+    pc = row.get('punish_adv', '')
+    if pc and str(pc).strip() not in ('', '-'):
+        if 'KD' in str(pc) or 'HKD' in str(pc):
+            lines.append(f"パニッシュカウンター時: {pc} (ハードノックダウン)")
+        else:
+            lines.append(f"パニッシュカウンター時有利: {_sign_str(pc)} (技を当てた側の視点)")
 
     # ガード有利
     blk = row.get('block_adv', '')
     if blk:
-        lines.append(f"ガード時有利: {_sign_str(blk)}")
+        bv = _parse_frame_value(blk)
+        if bv is not None:
+            lines.append(_block_adv_line(bv))
+        else:
+            lines.append(f"ガード時有利: {_sign_str(blk)} (技を出した側の視点)")
 
     # キャンセル可否
     cancel_raw = row.get('cancel', '-')
@@ -600,21 +914,21 @@ def _fmt_move(row: dict) -> str:
     elif sc_st is not None:
         lines.append(f"発生: {sc_st}F (SCデータ)")
 
-    # ガード有利
+    # ガード有利 (両視点を明示: 視点取り違え防止)
     c_blk = row.get("c_on_block")
     sc_blk = row.get("sc_block_adv")
     if c_blk is not None:
-        lines.append(f"ガード時: {_sign(c_blk)}F" + (f" (SC: {_sign(sc_blk)}F)" if sc_blk and sc_blk != c_blk else ""))
+        lines.append(_block_adv_line(c_blk) + (f" (SC: {_sign(sc_blk)}F)" if sc_blk and sc_blk != c_blk else ""))
     elif sc_blk is not None:
-        lines.append(f"ガード時: {_sign(sc_blk)}F (SCデータ)")
+        lines.append(_block_adv_line(sc_blk) + " (SCデータ)")
 
     # ヒット有利
     sc_hit = row.get("sc_hit_adv")
     c_hit  = row.get("c_on_hit")
     if sc_hit is not None:
-        lines.append(f"ヒット時: {_sign(sc_hit)}F")
+        lines.append(_hit_adv_line(sc_hit))
     elif c_hit is not None:
-        lines.append(f"ヒット時: {_sign(c_hit)}F")
+        lines.append(_hit_adv_line(c_hit))
 
     # パニッシュカウンター有利
     pa = row.get("sc_punish_adv")
@@ -780,7 +1094,8 @@ async def _search_docs(query_text: str, provider, threshold: float = 0.45, count
                 en_terms.extend(en_list)
         embed_text = ' '.join(en_terms) if en_terms else query_text
 
-        embedding = await provider.embed(embed_text)
+        with usage_label("embed"):
+            embedding = await provider.embed(embed_text)
         sb = get_client()
         vec_res = sb.rpc('search_docs', {
             'query_embedding': embedding,
@@ -836,6 +1151,18 @@ async def build_context(intent: dict, provider=None) -> str:
     move_name2 = intent.get("move_name2") # 比較先の必殺技・SA 名
     concept    = intent.get("concept")
 
+    # LLM が move_name を出力しなかった場合のフォールバック:
+    # raw_query をそのまま渡すと、_fetch_move_by_name のステップ0
+    # (special_move_map の日本語ファミリー containment 検索) が
+    # クエリ文中の技名 (例: 「…弱ロン・ポワンを食らった時…」) を拾える。
+    _MOVE_INTENTS = ("lookup_move", "combo_info", "punish_check",
+                     "setplay_analysis", "max_combo")
+    if chara and not inp and not move_name and intent_type in _MOVE_INTENTS:
+        rq = intent.get("raw_query", "")
+        if rq:
+            move_name = rq
+            logger.info("move_name 欠落 → raw_query でファミリー検索を試行")
+
     sections: list[str] = []
 
     # --- setplay_analysis: KD後・有利フレーム後の起き攻め択を計算 ---
@@ -846,10 +1173,15 @@ async def build_context(intent: dict, provider=None) -> str:
         if inp:
             raw_row = _fetch_combo_data(chara, inp)
         elif move_name:
-            norm_row = _fetch_move_by_name(chara, move_name, raw_query=intent.get("raw_query",""))
-            if norm_row:
-                actual_inp = norm_row.get('input', '')
-                raw_row = _fetch_combo_data(chara, actual_inp)
+            # コマンド表記 (623HP, 236LK 等) の場合は sc_moves.input で直接検索
+            if re.match(r'^[2-9]{3,}[LMH]?[PK]$', move_name):
+                raw_row = _fetch_combo_data(chara, move_name)
+                actual_inp = move_name
+            if not raw_row:
+                norm_row = _fetch_move_by_name(chara, move_name, raw_query=intent.get("raw_query",""))
+                if norm_row:
+                    actual_inp = norm_row.get('input', '')
+                    raw_row = _fetch_combo_data(chara, actual_inp)
 
         if raw_row and actual_inp:
             hit_adv_raw    = raw_row.get('hit_adv')
@@ -1026,6 +1358,10 @@ async def build_context(intent: dict, provider=None) -> str:
         row = _fetch_move_by_name(chara, move_name, raw_query=intent.get("raw_query",""))
         if row:
             sections.append(_fmt_sc_move(row))
+            variants = _fetch_variant_group(
+                row.get('chara', ''), row.get('input', ''), exclude_name=row.get('name'))
+            if variants:
+                sections.append(_fmt_variant_section(row.get('input', ''), variants))
             if intent_type == "punish_check":
                 blk = row.get("block_adv_f")
                 if blk is not None:
@@ -1112,6 +1448,10 @@ async def build_context(intent: dict, provider=None) -> str:
         row = _fetch_move(chara, inp)
         if row:
             sections.append(_fmt_move(row))
+            # バリアント (ため版等) があれば添付 (例: Ed 5HP → 5[HP] Psycho Knuckle)
+            variants = _fetch_variant_group(chara, inp)
+            if variants:
+                sections.append(_fmt_variant_section(inp, variants))
             # cancel・DR情報も追加 (キャンセル・コンボに関する質問への対応)
             combo_row = _fetch_combo_data(chara, inp)
             if combo_row and (combo_row.get('cancel') or combo_row.get('dr_cancel_hit')):
@@ -1143,11 +1483,51 @@ async def build_context(intent: dict, provider=None) -> str:
                             f"ガードした側が不利のため反撃はできません。"
                         )
         else:
-            sections.append(
-                f"⚠ {chara} の {inp} のデータが見つかりません。"
-                f"通常技 (立ち/しゃがみ/ジャンプ + 弱/中/強 + P/K) のみ対応しています。"
-                f"必殺技・SAのデータは M2 以降で対応予定です。"
-            )
+            # unified_moves は通常技のみ → 必殺技入力 (236LK / 236[LK] 等) は
+            # sc_move_normalized を直接検索するフォールバック
+            row_s = None
+            try:
+                res_sc = get_client().table('sc_move_normalized').select(
+                    _SC_MOVE_SELECT).ilike('chara', chara).eq('input', inp).execute()
+                if res_sc.data:
+                    row_s = _sort_by_type(res_sc.data)[0]
+            except Exception as e:  # noqa: BLE001
+                logger.debug(f"sc_move_normalized input検索失敗: {e}")
+            if row_s is None:
+                # 完全一致ミス → 正規化キー一致で再検索
+                # ('6KK' → '5/6KK' Kill Rush, '22P' → '22P (hold)' 等)
+                cands = _fetch_variant_group(chara, inp)
+                if cands:
+                    base = [r for r in cands if _variant_label(r) == '通常版']
+                    row_s = _sort_by_type(base or cands)[0]
+                    logger.info(
+                        f"Canonical input match: '{inp}' → '{row_s.get('input')}'"
+                    )
+            if row_s:
+                sections.append(_fmt_sc_move(row_s))
+                variants = _fetch_variant_group(
+                    row_s.get('chara', ''), row_s.get('input', ''),
+                    exclude_name=row_s.get('name'))
+                if variants:
+                    sections.append(_fmt_variant_section(row_s.get('input', ''), variants))
+                if intent_type == "punish_check":
+                    blk = row_s.get("block_adv_f")
+                    if blk is not None:
+                        if blk <= -1:
+                            sections.append(
+                                f"【反撃判定】ガード時 {_sign(blk)}F → "
+                                f"発生 {abs(blk)}F 以内の技なら確定反撃が入ります。"
+                            )
+                        else:
+                            sections.append(
+                                f"【反撃判定】ガード時 {_sign(blk)}F → "
+                                f"ガードした側が不利のため反撃はできません。"
+                            )
+            else:
+                sections.append(
+                    f"⚠ {chara} の {inp} のデータが見つかりません。"
+                    f"入力表記 (例: 5HP, 2MK, 236LK) または技名をご確認ください。"
+                )
     elif intent_type == "punish_check" and chara and not inp and not move_name:
         # 技名も input も特定できない場合のみエラー表示
         sections.append(
@@ -1241,12 +1621,226 @@ ANSWER_SYSTEM = """\
     - 派生技の notes に "counter-hit any opponent button" があれば「割り込めばカウンターヒットを食らう」と回答する
     - ガード時の計算: 隙間 = |ガード不利| − 派生発生F (0以下なら真の連携、割り込み不可)
     - ヒット時・ガード時の両方について言及し、「押せるが〜」「割り込み不可」を明確に述べること
-13. 【セットプレイ分析】セクションがある場合:
+13. 「無敵:」フィールドが参照データにある場合、必ずその値 (例: '1-21 Air') を回答に含めること。
+    「データに含まれていません」と言ってはいけない — 無敵フレームの行が記述そのものである。
+14. 【セットプレイ分析】セクションがある場合:
     - 各アクション (前ステップ等) ごとの残り有利Fと択を箇条書きで示すこと
     - 「推論根拠」の計算式 (KD有利F − アクションF = 残りF) を説明に含めること
     - 投げ択と打撃択の両方について言及し、起き攻めの「択」として整理すること
     - KD後と通常ヒット後で異なる場合は区別して回答すること
+15. 【最重要: フレーム有利の視点】「ガード時: +N」「ヒット時: +N」は常に
+    **技を出した側 (攻撃側) の視点**の数値である。参照データには両視点が
+    括弧書きされているので、質問に該当する側の数値を**そのまま引用**する
+    (自分で符号を計算し直さないこと)。視点の判別ルール:
+    - 質問者が技を**受ける側** (「Xをガードした時」「Xをガードしたら」「Xを食らった時」):
+      → 「ガードした側は−NF」「食らった側は−NF」の数値で答える
+      例: ガード時+2Fの技に「ガードした時何F有利?」→「ガードした側は -2F (2フレーム不利) です」
+    - 質問者が技を**出す側** (「Xはガードされた時」「Xがガードされると」「Xをガードさせた時」
+      「Xのガード硬直差は」):
+      → 技を出した側の数値で答える
+      例: ガード時+2Fの技に「ガードされた時何F?」→「技を出した側が +2F 有利です」
+      例: ガード時+2Fの技に「ガードさせた時何F有利?」→「技を出した側が +2F 有利です」
+      注意: 「ガードさせた」(使役形) は攻撃側、「ガードした」は防御側 — 混同しないこと
+    - 「XをガードしたA側」「ガードさせたB側」のように主語が明示されていれば主語に従う
+    - 「## 視点判定」セクションがプロンプトにある場合は、その判定に**無条件で従う**こと
+    どちらの視点で答えたかを回答の冒頭で必ず明記すること
+16. 【バリアントあり】セクションがある場合 (ため版・レベル別・スタンス条件等):
+    - 「## バリアント判定」セクションがプロンプトにあれば、指定された「▼ ラベル」の
+      行の数値で答えること
+    - 判定セクションが無ければ通常版のデータで答えた上で、バリアントが存在すること
+      (と主な違い、例: ガード時有利の変化) に必ず一言触れる
+    - 入力表記の [] はボタンを押し続ける (ためる)、{} は部分ための意味である
 """
+
+
+# 視点の決定論的判定 (ADR/メモ: gemma4 は「ガードさせた」(使役=攻撃側) と
+# 「ガードした」(防御側) をプロンプトのルールだけでは安定して区別できない)
+_ATTACKER_VIEW_RE = re.compile(
+    r"ガードさせ|ガードされ|ヒットさせ|当てさせ|当てた(?:時|とき|場合|側|ら)|硬直差"
+)
+_DEFENDER_VIEW_RE = re.compile(
+    r"ガードした|ガードして|[食喰く]らった|受けた(?:時|とき|場合|側|ら)"
+)
+
+
+# 質問文中の「バリアント条件語」→ バリアントラベルの対応 (決定論判定)
+_VARIANT_COND_TO_LABEL: list[tuple[re.Pattern, str]] = [
+    (re.compile(r'部分ため|部分タメ'), '部分ため版'),
+    # 注: 「勝つために」等の目的の「ため」に誤マッチしないよう活用形を限定
+    (re.compile(r'ため[たるて]|(?:最大|フル)ため|ため版|タメ|溜め|ホールド|長押し|押しっぱ'),
+     'ため (ホールド) 版'),
+    (re.compile(r'ウィンドクラッド|風まと'), 'ウィンドクラッド (風まとい) 版'),
+    (re.compile(r'エアカレント'), 'エアカレント (風あり) 版'),
+    (re.compile(r'飲酒|ドリンク|お酒|酔[いっ]|DL[0-9]'), '飲酒レベル'),
+    (re.compile(r'パーフェクト|ジャスト入力'), 'パーフェクト (ジャスト入力) 版'),
+    (re.compile(r'炎まと|フレイム'), '炎まとい版'),
+    (re.compile(r'マイン'), 'マイン設置時'),
+    (re.compile(r'(?:Lv\.?|レベル)\s*([0-9])'), 'Lv 指定版'),
+]
+
+
+# 質問フィールド判定: 質問語 → (表示名, コンテキストからの値抽出パターン群)
+# 値抽出はテキスト形式 (build_context) と JSON 形式 (MCP move dict) の両対応
+_FIELD_SPECS: list[tuple[re.Pattern, str, list[re.Pattern], bool]] = [
+    # (質問語, 表示名, 抽出パターン, 数値検証するか)
+    (re.compile(r'発生'), '発生',
+     [re.compile(r'発生[:：]?\s*([0-9]+(?:\+[0-9]+)?)'),
+      re.compile(r'"startup[^"]*"\s*:\s*"?([0-9]+(?:\+[0-9]+)?)')], True),
+    (re.compile(r'持続'), '持続',
+     [re.compile(r'持続[:：]?\s*([0-9~〜\-]+)'),
+      re.compile(r'"active[^"]*"\s*:\s*"?([0-9~〜\-]+)')], True),
+    (re.compile(r'硬直(?!差)'), '硬直',
+     [re.compile(r'硬直[:：]?\s*([0-9]+)'),
+      re.compile(r'"recovery[^"]*"\s*:\s*"?([0-9]+)')], True),
+    (re.compile(r'ダメージ|威力'), 'ダメージ',
+     [re.compile(r'ダメージ[:：]?\s*([0-9,x×]+)'),
+      re.compile(r'"damage[^"]*"\s*:\s*"?([0-9,x×]+)')], True),
+    (re.compile(r'無敵'), '無敵',
+     [re.compile(r'無敵[:：]?\s*([^\n]+)'),
+      re.compile(r'"invuln[^"]*"\s*:\s*"?([^",]+)')], False),
+    (re.compile(r'リーチ|間合い|射程'), 'リーチ',
+     [re.compile(r'リーチ[:：]?\s*([0-9.]+)'),
+      re.compile(r'"(?:atk_)?range[^"]*"\s*:\s*"?([0-9.]+)')], False),
+]
+# 有利フレーム系の質問語 (これがある場合はフィールド専念の注意書きを付けない)
+_ADV_QUERY_RE = re.compile(r'ガード|ヒット|有利|不利|硬直差|反撃|パニ')
+
+
+def _detect_fields(query: str) -> list[tuple[str, list[re.Pattern], bool]]:
+    """質問文が聞いているフィールドを列挙する。"""
+    return [(label, pats, strict) for q_re, label, pats, strict in _FIELD_SPECS
+            if q_re.search(query)]
+
+
+def _field_directive(query: str) -> str:
+    """質問フィールドの判定指示をプロンプト冒頭に置く (決定論判定)。
+
+    「発生を聞かれたのにガード有利を答える」誤りを防ぐ。
+    """
+    fields = [label for label, _, _ in _detect_fields(query)]
+    if not fields:
+        return ''
+    names = '」「'.join(fields)
+    text = (
+        "## 質問フィールド判定 (システムによる自動判定)\n"
+        f"質問が聞いているのは「{names}」の値である。"
+        f"参照データのその項目の値を転記して端的に答えること。"
+    )
+    if not _ADV_QUERY_RE.search(query):
+        text += "\nガード時・ヒット時の有利フレームは質問されていないので回答の主役にしないこと。"
+    return text
+
+
+def _field_expected_values(query: str, context: str) -> dict[str, set[str]]:
+    """質問フィールドごとに、コンテキストから抽出した正解候補値を返す。
+
+    数値検証対象 (strict=True) のフィールドのみ。候補が取れないフィールドは含めない。
+    """
+    out: dict[str, set[str]] = {}
+    for label, pats, strict in _detect_fields(query):
+        if not strict:
+            continue
+        vals: set[str] = set()
+        for p in pats:
+            vals.update(m.group(1) for m in p.finditer(context))
+        if vals:
+            out[label] = vals
+    return out
+
+
+def _detect_variant_cond(query: str) -> tuple[str, str] | None:
+    """質問文からバリアント条件語を検出する。(マッチ語, ラベル) か None。"""
+    for pat, label in _VARIANT_COND_TO_LABEL:
+        m = pat.search(query)
+        if m:
+            return m.group(0), label
+    return None
+
+
+def _variant_directive(query: str) -> str:
+    """質問文からバリアント条件語を検出し、プロンプト冒頭に置く指示行を返す。
+
+    ラベル対応はデータ側の _variant_label と揃えてあり、LLM は指定された
+    「▼ ラベル」の行を引用するだけでよい。
+    """
+    cond = _detect_variant_cond(query)
+    if cond:
+        word, label = cond
+        return (
+            "## バリアント判定 (システムによる自動判定)\n"
+            f"質問は「{word}」のバージョンについて聞いている。\n"
+            f"参照データの【バリアントあり】セクションに"
+            f"「▼ {label}」に該当する行があれば、**その行の数値**で答えること。\n"
+            "該当する行が無い場合のみ通常版のデータで答え、その旨を明記すること。"
+        )
+    return ""
+
+
+def _recap_lines(query: str, context: str) -> str:
+    """回答に使うべき行を質問の直前に再掲する (Lost in the Middle 対策)。
+
+    LLM は生成直前のコンテキストを最も強く参照するため、視点判定・
+    バリアント判定に該当する重要行をコンテキスト末尾へ決定論で再配置する。
+    """
+    lines: list[str] = []
+    # バリアント判定該当ブロックの再掲
+    cond = _detect_variant_cond(query)
+    if cond and '【バリアントあり】' in context:
+        _, label = cond
+        m = re.search(
+            rf'^▼ {re.escape(label)}.*?:\n(.*?)(?=\n▼ |\n\n---|\Z)',
+            context, re.DOTALL | re.MULTILINE)
+        if m:
+            lines.append(f"▼ {label} (質問に該当するバージョン):")
+            lines.append(m.group(1).strip())
+    # 視点付きフレーム行の再掲
+    if _ATTACKER_VIEW_RE.search(query) or _DEFENDER_VIEW_RE.search(query):
+        seen = 0
+        for ln in context.split('\n'):
+            if _CTX_ATTACKER_VAL_RE.search(ln) or _CTX_DEFENDER_VAL_RE.search(ln):
+                lines.append(ln.strip())
+                seen += 1
+                if seen >= 4:
+                    break
+    # 質問フィールドの値の再掲 (候補が一意に取れた場合のみ — 複数技の混在を防ぐ)
+    for label, vals in _field_expected_values(query, context).items():
+        if len(vals) == 1:
+            lines.append(f"{label}: {next(iter(vals))}")
+    if not lines:
+        return ''
+    return "\n\n## 回答に必ず使う参照行 (再掲)\n" + '\n'.join(dict.fromkeys(lines))
+
+
+def _perspective_directive(query: str) -> str:
+    """質問文から視点 (攻撃側/防御側) を判定し、プロンプト冒頭に置く指示行を返す。
+
+    Args:
+        query: 元のユーザー質問。
+
+    Returns:
+        str: 視点指示セクション。判定できない場合は空文字列。
+    """
+    if _ATTACKER_VIEW_RE.search(query):
+        return (
+            "## 視点判定 (システムによる自動判定)\n"
+            "この質問は**技を出した側 (攻撃側) の視点**である。\n"
+            "参照データの括弧内「技を出した側が○F」「技を当てた側が○F」に書かれた\n"
+            "数値を符号ごと一字一句そのまま転記して答えること。\n"
+            "作業例: データが「ガード時: +2F (技を出した側が+2F / ガードした側は-2F)」\n"
+            "        → 答えは「技を出した側が +2F 有利」(「+2F」をそのまま転記)\n"
+            "自分で符号を付け直す・反転することは絶対に禁止。"
+        )
+    if _DEFENDER_VIEW_RE.search(query):
+        return (
+            "## 視点判定 (システムによる自動判定)\n"
+            "この質問は**技を受けた側 (ガード/被弾側) の視点**である。\n"
+            "参照データの括弧内「ガードした側は○F」「食らった側は○F」に書かれた\n"
+            "数値を符号ごと一字一句そのまま転記して答えること。\n"
+            "作業例: データが「ガード時: +2F (技を出した側が+2F / ガードした側は-2F)」\n"
+            "        → 答えは「ガードした側は -2F (2フレーム不利)」(「-2F」をそのまま転記)\n"
+            "自分で符号を付け直す・反転することは絶対に禁止。"
+        )
+    return ""
 
 ANSWER_TEMPLATE = """\
 ## 参照データ
@@ -1255,6 +1849,155 @@ ANSWER_TEMPLATE = """\
 ## 質問
 {query}
 """
+
+# 回答の構造化出力スキーマ。プロパティ名自体に指示を埋め込む (プロパティ名CoT):
+# gemma4 は自由文だと転記指示を忘れるが、プロパティ名は生成の直前に必ず「見る」ため
+# 追従性が維持される。生成順も CoT になるよう「転記 → 視点 → 回答文」の順に定義。
+ANSWER_JSON_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "参照した技または文書の名前": {"type": "string"},
+        "参照データから符号ごと一字一句転記したフレーム数値のリスト": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "回答で使う数値。例: ['+4F', '26F']。参照データに無い数値を書いてはいけない",
+        },
+        "回答の視点_出した側か受けた側か視点なしか": {"type": "string"},
+        "回答文_上で転記した数値だけを使い日本語で簡潔に": {"type": "string"},
+    },
+    "required": [
+        "参照データから符号ごと一字一句転記したフレーム数値のリスト",
+        "回答文_上で転記した数値だけを使い日本語で簡潔に",
+    ],
+}
+
+_ANSWER_TEXT_KEY = "回答文_上で転記した数値だけを使い日本語で簡潔に"
+
+# --- 決定論検証: 回答の数値がコンテキストに実在するか / 視点の結び付けが正しいか ---
+
+_FRAME_TOKEN_RE = re.compile(r'[+-]?\d+(?:\.\d+)?F')
+# コンテキスト内の両視点ラベル付き数値 (自前フォーマッタの出力形式に依存)
+_CTX_ATTACKER_VAL_RE = re.compile(r'技を(?:出した|当てた)側が([+-]\d+)F')
+_CTX_DEFENDER_VAL_RE = re.compile(r'(?:ガードした|食らった)側は([+-]\d+)F')
+# 回答内の「視点語 と 数値」の結び付き
+_ANS_SIDE_VAL_RE = re.compile(
+    r'(出した側|攻撃側|当てた側|ガードした側|食らった側|受けた側|防御側)'
+    r'[^\d+\-]{0,14}([+-]\d+)F'
+)
+_ATTACKER_WORDS = ('出した側', '攻撃側', '当てた側')
+
+
+def _phantom_frame_tokens(answer: str, context: str) -> list[str]:
+    """回答中のフレーム数値のうち、参照データに存在しないものを列挙する。"""
+    bad = []
+    for tok in set(_FRAME_TOKEN_RE.findall(answer)):
+        if tok in context:
+            continue
+        num = tok[:-1]
+        # 'F' なし表記 (DRキャンセル行の '+12' 等) も許容
+        if num.startswith(('+', '-')):
+            if re.search(rf'{re.escape(num)}(?![\d.])', context):
+                continue
+        else:
+            # 符号なしは部分文字列誤判定 (800 の '80' 等) を境界チェックで防ぐ
+            if re.search(rf'(?<![\d.+\-]){re.escape(num)}(?![\d.])', context):
+                continue
+        bad.append(tok)
+    return bad
+
+
+def _perspective_violations(answer: str, context: str) -> list[str]:
+    """回答が視点語に逆側の数値を結び付けていないか検査する。
+
+    コンテキストは両視点を「技を出した側が+2F / ガードした側は-2F」形式で
+    併記しているので、そこから正解の集合を抽出して照合する。
+    """
+    atk = set(_CTX_ATTACKER_VAL_RE.findall(context))
+    dfn = set(_CTX_DEFENDER_VAL_RE.findall(context))
+    if not atk and not dfn:
+        return []
+    problems = []
+    for m in _ANS_SIDE_VAL_RE.finditer(answer):
+        side, val = m.group(1), m.group(2)
+        want = atk if side in _ATTACKER_WORDS else dfn
+        if want and val not in want:
+            correct = ' / '.join(f'{v}F' for v in sorted(want))
+            problems.append(
+                f"「{side}」に {val}F を結び付けているが、参照データでは {correct}"
+            )
+    return problems
+
+
+# 幻覚検出用の既知キャラ名 (英語表記 + 日本語表記)
+_KNOWN_CHARA_NAMES = (
+    'Ryu', 'Ken', 'Guile', 'Luke', 'Sagat', 'Cammy', 'Chun-Li', 'Zangief',
+    'Blanka', 'Dhalsim', 'Akuma', 'Juri', 'Marisa', 'Jamie', 'Kimberly',
+    'Lily', 'Manon', 'Rashid', 'Dee Jay', 'Dee_Jay', 'Ed', 'Terry', 'Mai',
+    'Elena', 'Ingrid', 'Alex', 'M.Bison', 'C.Viper', 'E.Honda', 'JP',
+    'リュウ', 'ケン', 'ガイル', 'ルーク', 'サガット', 'キャミィ', '春麗',
+    'ザンギエフ', 'ブランカ', 'ダルシム', '豪鬼', 'ジュリ', 'マリーザ',
+    'ジェイミー', 'キンバリー', 'リリー', 'マノン', 'ラシード', 'ディージェイ',
+    'エド', 'テリー', 'エレナ', 'イングリッド', 'アレックス', 'ベガ',
+    'バイパー',
+    # 注: '舞' '本田' は一般語 (振る舞い等) に誤マッチするため対象外
+)
+
+
+def _foreign_chara_mentions(answer: str, context: str, query: str) -> list[str]:
+    """回答に登場するのに参照データにも質問にも居ないキャラ名を列挙する。
+
+    gemma4 が JSON モードで無関係なキャラの学習知識を幻覚する事故
+    (Ed の質問に Manon の解説を返す等) を検出する。
+    """
+    source = context + query
+    bad = []
+    for name in _KNOWN_CHARA_NAMES:
+        if name in answer and name not in source:
+            # 'Ed' が 'Edmond' 等の一部でないか英字名のみ境界チェック
+            if name.isascii() and not re.search(
+                    rf'(?<![A-Za-z]){re.escape(name)}(?![A-Za-z])', answer):
+                continue
+            bad.append(name)
+    return bad
+
+
+def _ensure_move_reference(answer: str, context: str) -> str:
+    """回答がどの技のデータかを名乗っていない場合、先頭に技ヘッダを付ける。
+
+    「硬直は31Fです。」のような主語のない回答を防ぐ。参照データの
+    【chara / name (input)】ヘッダは決定論生成なのでそのまま転用できる。
+    """
+    headers = re.findall(r'【([^】]+)】', context)
+    if not headers:
+        return answer
+    for h in headers:
+        parts = [p.strip() for p in re.split(r'[/()]', h) if p.strip()]
+        if any(p in answer for p in parts if len(p) >= 2):
+            return answer
+    return f"【{headers[0]}】\n{answer}"
+
+
+def _variant_mention_note(answer: str, context: str) -> str:
+    """バリアント存在への言及 (ANSWER_SYSTEM ルール16) を決定論で補完する。
+
+    参照データに【バリアントあり】があるのに回答が触れていない場合、
+    ▼ ラベルを列挙した補足行を返す。LLM の言及忘れに依存しない。
+    """
+    if '【バリアントあり】' not in context:
+        return ''
+    if re.search(r'ため|ホールド|バリアント|ウィンドクラッド|飲酒|エアカレント|Lv|版', answer):
+        return ''
+    labels = re.findall(r'^▼ (.+):$', context, re.MULTILINE)
+    if not labels:
+        return ''
+    return f"\n\n※ この技には条件で性能が変わるバージョンがあります: {' / '.join(dict.fromkeys(labels))}"
+
+
+def _context_frame_excerpt(context: str, limit: int = 6) -> str:
+    """検証失敗時にユーザーへ添える、コンテキストのフレーム数値行の抜粋。"""
+    lines = [ln.strip() for ln in context.split('\n')
+             if _FRAME_TOKEN_RE.search(ln) and not ln.startswith('⚠')]
+    return '\n'.join(lines[:limit])
 
 
 async def generate_answer(
@@ -1272,6 +2015,73 @@ async def generate_answer(
     Returns:
         str: ユーザーへの回答文字列。
     """
-    prompt = ANSWER_TEMPLATE.format(context=context, query=query)
-    resp = await provider.generate(prompt=prompt, system=ANSWER_SYSTEM)
-    return resp.text.strip()
+    # 重要行の再掲を参照データ末尾 (=質問の直前) に配置する (Lost in the Middle 対策)
+    prompt = ANSWER_TEMPLATE.format(
+        context=context + _recap_lines(query, context), query=query)
+    directives = [d for d in (_field_directive(query), _variant_directive(query),
+                              _perspective_directive(query)) if d]
+    if directives:
+        prompt = '\n\n'.join(directives) + f"\n\n{prompt}"
+
+    # 構造化出力 (プロパティ名CoT) + 決定論検証。失敗時は検証エラーを
+    # フィードバックして1回だけ再生成する (再帰修正)。
+    answer = ""
+    if hasattr(provider, 'generate_structured'):
+        attempt_prompt = prompt
+        for attempt in (1, 2):
+            try:
+                with usage_label("answer" if attempt == 1 else "answer_retry"):
+                    data = await provider.generate_structured(
+                        prompt=attempt_prompt, schema=ANSWER_JSON_SCHEMA,
+                        system=ANSWER_SYSTEM)
+            except Exception as e:  # noqa: BLE001
+                logger.warning(f"構造化回答生成失敗 (attempt {attempt}): {e}")
+                break
+            answer = str(data.get(_ANSWER_TEXT_KEY) or '').strip()
+            if not answer:
+                logger.warning(f"構造化回答が空 (attempt {attempt}): keys={list(data)}")
+                continue
+            problems = _phantom_frame_tokens(answer, context)
+            problems = [f"数値 {t} は参照データに存在しない" for t in problems]
+            problems += _perspective_violations(answer, context)
+            problems += [
+                f"参照データに無いキャラ「{n}」に言及している (質問と無関係な内容)"
+                for n in _foreign_chara_mentions(answer, context, query)
+            ]
+            # フレームデータがあるのに回答が数値を1つも使っていない場合も疑う
+            # ('4フレーム' 表記も数値使用とみなす)
+            transcribed = data.get(
+                "参照データから符号ごと一字一句転記したフレーム数値のリスト") or []
+            if (transcribed and _FRAME_TOKEN_RE.search(context)
+                    and not re.search(r'[+-]?\d+(?:\.\d+)?\s*(?:F|フレーム)', answer)):
+                problems.append("回答文が転記した数値を1つも使っていない")
+            # 質問されたフィールドの値が回答に含まれているか
+            for label, vals in _field_expected_values(query, context).items():
+                if not any(v in answer for v in vals):
+                    cand = ' / '.join(sorted(vals))
+                    problems.append(
+                        f"質問された「{label}」の値 ({cand}) が回答に含まれていない"
+                    )
+            if not problems:
+                answer = _ensure_move_reference(answer, context)
+                return answer + _variant_mention_note(answer, context)
+            logger.warning(f"回答検証NG (attempt {attempt}): {problems}")
+            attempt_prompt = (
+                f"{prompt}\n\n## 前回回答の検証エラー (参照データの数値をそのまま転記して修正すること)\n- "
+                + "\n- ".join(problems)
+            )
+        if answer:
+            # 2回とも検証NG → 回答に参照データ抜粋を添えて正直に返す
+            excerpt = _context_frame_excerpt(context)
+            if excerpt:
+                return (
+                    f"{answer}\n\n⚠ 自動検証で数値の不一致を検出しました。"
+                    f"正確な参照データ:\n{excerpt}"
+                )
+            return answer
+
+    # フォールバック: 従来の自由文生成 (構造化非対応プロバイダ / JSON失敗時)
+    with usage_label("answer_fallback"):
+        resp = await provider.generate(prompt=prompt, system=ANSWER_SYSTEM)
+    answer = resp.text.strip()
+    return answer + _variant_mention_note(answer, context)

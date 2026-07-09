@@ -7,8 +7,9 @@
 
 ## 🎯 現在のフェーズ
 
-**Milestone**: M3 完了 + Layer 1 パッチ通知 **✅ 完了 (2026-05-19)**
-**次**: M4 候補 — AWS 完全移行 (Bedrock LLM / Lambda CLI) または追加精度向上
+**Milestone**: **M4 完了 (AWS MCP本番) + M5 Discord Bot ✅ 動作確認済 (2026-06-08)**
+**次**: Discordトークン設定して常駐運用 (残る唯一の外部操作)。
+MCP改善 (技名→SC input解決 / 戻り値にinput付与 / パリィ除外) は ✅ 本番反映済 (2026-07-06)
 
 ## 📊 全体進捗
 
@@ -48,7 +49,37 @@
 
 ## 🚀 次にやること
 
-**M3 + Layer 1 通知 完了 🎉🎉🎉**
+**M4 完了 🎉 — AWS リモート MCP サーバが本番稼働中**
+
+- エンドポイント: API Gateway (HTTP API, stage prod) → Lambda `sf6-mcp-server`
+  URL は CloudFormation 出力 `McpEndpoint` / 認証は SSM `/sf6/mcp/auth-token` の Bearer
+- 公開ツール7種すべて本番疎通確認済 (DB照会 / Bedrock Titan / パッチ状況)
+- クライアント登録: リモートMCPとして URL + `Authorization: Bearer <token>` を設定すれば利用可
+
+以下は実装時の方針メモ (ADR-017):
+
+**M4: AWS リモート MCP サーバ切り出し (ADR-017 で方針確定)**
+
+LLM 段 (intent_parser / generate_answer) はサーバから外し、決定論ロジック層のみを
+MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が推論役を担う。
+
+実装ステップ:
+1. [x] `mcp_server/` を FastMCP で作成、決定論ツール5種をラップ ✅ (2026-06-08)
+       (lookup_move / check_punish / compute_setplay / analyze_combo / list_moves)
+       → `src/sf6_engine/mcp_server/{server.py,README.md}`、実DB スモークテスト全通過
+2. [x] `doc_chunks.embedding_titan vector(1024)` カラム追加 + 72チャンク Titan v2 再埋め込み ✅ (2026-06-08)
+       → migration SQL 適用済 / IAM の BedrockDenyAllOtherModels に Titan ARN 追加で疎通
+       → reembed_titan.py で 72/72 成功 / search_docs_titan RPC 実クエリ検証OK
+       → (任意) migration STEP 3 の IVFFlat 索引は未実行 (72件なら全件スキャンで実用上問題なし)
+3. [x] `search_system_docs` MCPツール追加 (Bedrock Titan + search_docs_titan ハイブリッド) ✅ (2026-06-08)
+4. [x] Streamable HTTP stateless 化 + SAM (Lambda + API GW + トークン認証) ✅ デプロイ済 (2026-06-08)
+5. [x] Lambda 実行ロールに `bedrock:InvokeModel` + SSM(Supabase接続情報) ✅
+6. [x] デプロイ → 本番エンドポイントで全7ツール疎通確認 ✅
+       → 残: クライアント(Claude Desktop等)へのリモート登録 (URL + Bearer ヘッダ)
+
+確定事項: 稼働先=AWSリモート / RDB=Supabase維持 / 埋め込み=Bedrock Titan v2
+
+---
 
 現在の対応範囲:
 - フレームデータ照会・確定反撃 (全30キャラ / 通常技・必殺技・SA)
@@ -61,10 +92,305 @@
 1. **AWS 完全移行** — Bedrock Gemma3 + Lambda/API Gateway で CLI をクラウド化
    - BedrockProvider 実装 (LLMProvider 抽象化済みなので 1ファイル追加)
    - SNS 確認メールの承認 (初回パッチ検知時)
-2. **統合テスト拡充** — setplay_analysis / punish_check + 派生 を 20問追加
+2. ~~**統合テスト拡充** — setplay_analysis / punish_check + 派生 を 20問追加~~ **✅ 完了 (2026-05-29)**
 3. **Web UI** — Slack Bot or 簡易 Web フロントエンド
 
 ## 📝 直近のセッションログ
+
+### 2026-07-09 (6) ★ 質問フィールド判定 + 日本語略称の拡張 (「前大K」事故対応)
+- **報告**: 「ケンの前大Kの発生は?」に ①move_name='Forward K' に化け ②発生でなく
+  ガード有利を回答 (しかも +3F/-4F と数値も幻覚)
+- **略称拡張 (intent_parser)**: _JP_ABBREV_TO_NUMPAD に方向+強度を自動生成で追加
+  (前大K→6HK / 後ろ強P→4HP / 下大K→2HK / 立ち大K→5HK / 素の大K→5HK 等、
+  大=強・小=弱の別表記対応)。挿入順=照合優先順 (方向付き→位置付き→素)
+- **質問フィールド判定 (rag_builder)**: _FIELD_SPECS (発生/持続/硬直/ダメージ/無敵/リーチ)
+  を質問文から決定論判定し、①「## 質問フィールド判定」指示を注入
+  ②正解候補値をコンテキストから抽出して質問直前に再掲 (一意時のみ)
+  ③回答に値が含まれるかを検証 (含まれなければリトライ)。
+  値抽出はテキスト形式 (build_context) と JSON形式 (MCP move dict) の両対応
+- **発見**: bot経路の lookup コンテキストは MCP move dict の生JSON
+  (mcp_router.result_to_context) — 検証正規表現は両形式を意識すること
+- **回帰評価 13/13** (新ケース: 立ち大K発生=12F / 前大K→「データなし」と正直に回答)
+
+### 2026-07-09 (5) ★ トークン使用量の計測とコスト換算
+- **token_usage.py 新規**: UsageTracker (ラベル別累積) + usage_label (contextvars、
+  async安全) + usage_diff / format_usage / estimate_cost
+- **ollama_provider**: generate / generate_structured / embed の3経路すべてで
+  Ollama 実測値 (prompt_eval_count / eval_count) を記録 (structured と embed は
+  従来破棄していた)
+- **ラベル**: intent / answer / answer_retry / answer_fallback / embed
+- **bot.py**: handle_question の最後に1質問分の消費とコスト換算をログ出力。
+  regression_eval.py も末尾に累積を表示
+- **コスト換算 env**: SF6_COST_INPUT_PER_MTOK / SF6_COST_OUTPUT_PER_MTOK /
+  SF6_COST_CURRENCY (未設定ならトークン数のみ)。トークナイザ差で1〜2割誤差あり
+- **実測の知見**: intent 解析だけで入力 ~2,400 tok/質問 (SYSTEM_PROMPT が大きい)。
+  検証リトライ発生時は answer コストが倍になる → 今後の削減ポイント
+
+### 2026-07-09 (4) ★ 構造化回答出力 + 決定論検証 + 回帰評価基盤 (コンテキストエンジニアリング適用)
+- **背景**: Agentic RAG 記事 + 蒲生氏「コンテキスト/ハーネスエンジニアリング」PDF の
+  設計見直し。gemma4 を推論エージェントにせず、制御構造は Python 決定論で実装する方針
+- **構造化回答出力 (プロパティ名CoT, rag_builder)**:
+  - ANSWER_JSON_SCHEMA: プロパティ名に指示を埋め込み (「参照データから符号ごと
+    一字一句転記したフレーム数値のリスト」→「回答文_転記した数値だけを使い…」の生成順CoT)
+  - 決定論検証: _phantom_frame_tokens (幻覚数値) / _perspective_violations (視点と
+    数値の結び付け照合) / _foreign_chara_mentions (無関係キャラの幻覚 — EdのQに
+    Manon解説を返す事故が実際に発生) / 転記数値未使用チェック
+  - 検証NG→エラーをフィードバックして1回再生成 (再帰修正)、なお NG なら
+    ⚠付きで参照データ抜粋を添付。JSON失敗時は自由文にフォールバック
+  - _ensure_move_reference: 主語なし回答に技ヘッダを決定論で前置
+  - _variant_mention_note: バリアント存在への言及 (ルール16) を LLM 任せにせず後付け
+- **Lost in the Middle 対策**: _recap_lines — 視点判定・バリアント判定に該当する
+  重要行を質問直前に再掲 (生成直前に質の良い情報を置く)
+- **temperature=0 (ollama_provider)**: Ollama 既定0.8で intent 分類・転記が実行ごとに
+  ブレていた。env OLLAMA_TEMPERATURE で変更可
+- **intent_parser**: _COMMAND_NUMPAD を拡張 (236KK/22P/6KK/63214KK 等のOD・
+  複数ボタン表記も明示入力として抽出)
+- **回帰評価基盤**: tests/regression_eval.py — DB確定の正解値付き11問
+  (視点×2/ため×2/レベル/Windclad/無敵/通常技/反撃/概念/正規化キー) を機械採点。
+  **2周連続 11/11 合格**。今後の変更は必ずこれを回してから終了すること
+
+### 2026-07-09 (3) ★ バリアントグルーピングの一般化 (全キャラの特殊表記対応)
+- **DB全体調査 (2118行)**: Edのため版は氷山の一角 — ホールド[]66行 / 部分ため{}系 /
+  Lily Windclad (W.prefix) 13行 / Rashid (Air Current)注釈入力 / Jamie 飲酒DL 53行+ /
+  Luke pf. / 入力欄注釈 22P (hold) / 代替表記 5/6KK 等98行 / チャージコマンド[4]6P 67行(束ね禁止)
+- **実装 (旧 _fetch_charge_variants を一般化)**:
+  - _canon_input_keys(): 注釈除去 + []{}ボタンホールド剥がし + W./pf.prefix除去 +
+    '5/6KK'→(5KK,6KK)展開。チャージコマンドの数字[]は保持。1文字キーは除外
+  - _variant_label(): 技名括弧修飾+入力表記から条件ラベルを決定論導出
+    (ため版/部分ため版/Lv.N版/ウィンドクラッド版/飲酒レベル/エアカレント版/…)
+  - _fetch_variant_group(): 正規化キー交差でグルーピング。強度付き→強度なし
+    ブリッジ (Akuma 236LP→236{P}/[P]) はバリアントラベル行限定で誤結合防止。
+    drive/taunt は除外 (Drive ParryとDRCが'MPMK'で対になる誤爆防止)
+  - input完全一致ミス時の canon 再検索 ('6KK'→'5/6KK' Kill Rush 等)
+  - _variant_directive(): 質問の条件語 (ためた/ウィンドクラッド/DL2/…) を正規表現
+    判定し「## バリアント判定」をプロンプト注入 (視点判定と同パターン)
+- **視点判定の強化**: 指示に転記の作業例を埋め込み (gemma4 が指示だけでは+2F→-2Fに
+  反転する事例が E2E で発覚したため)
+- **intent_parser**: max_combo も combo_info と同様にコンボ語なしなら lookup_move 降格
+  (「最大までためた」→max_combo 誤分類対策)。_COMBO_INDICATORS に「火力」追加
+- **検証**: 全DB掃引でユニークペア151組・3件以上の過大グループ0・誤結合サンプル0。
+  E2E (実LLM): 最大ため波動拳 (Lv.3 56F/+20F を通常版と比較して正答) /
+  Lily Windclad 623MP / サガット立ち中Pガードさせた+2F×2回 すべて ✅
+
+### 2026-07-09 (2) ★ ため (ホールド) 版バリアントの自動添付 + input指定必殺技のフォールバック
+- **要望**: Ed の 236LK/236HK 等の「ためられる技」の情報も渡せる仕組みに (dogfooding)
+- **データ確認**: SC はホールド版を `236[LK]` / `5[HP]` のような []付き入力の**別行**で収録
+  (Ed: Psycho Flicker (Hold) ×3, Psycho Knuckle Lv.2)。unified_moves には必殺技も
+  []付き行も存在しない (通常技のみ)
+- **実装 (rag_builder)**:
+  - _fetch_charge_variants(): []を剥がした入力が一致する同キャラ行をため/ためなし
+    バリアントとして取得 (双方向)。ガイル [4]6P のようなタメ"コマンド"は誤爆しない
+  - _fmt_charge_variant_section(): 「【ため (ホールド) 版あり】」セクション生成
+  - build_context の3経路 (名前検索 / unified input / inputフォールバック) にフック
+    (compare_moves 経路は未フック — 必要になったら追加)
+  - **副次修正**: input指定の必殺技 (236LK等) が unified_moves ミスで
+    「M2以降で対応予定」エラーになっていた → sc_move_normalized への
+    フォールバック追加 (punish_check の反撃判定も対応)
+  - ANSWER_SYSTEM ルール16: ため言及あり→ため版 / なし→通常版+ため版の存在に言及
+- **検証**: Ed 6ケース (236LK/236[LK]/名前/5HP/2MK回帰/punish 236HK) + Guile/Sagat 回帰 ✅
+- **追加修正 (dogfooding で発覚)**: gemma4 が「236LK」を input='2LK' に壊し
+  intent も combo_info に誤分類 → intent_parser に決定論補正を2つ追加:
+  - (4c) クエリに明示されたコマンド表記 (_COMMAND_NUMPAD、[]ホールド表記も対応) は
+    LLM の input 出力より**常に優先**して上書き
+  - (5) コンボ関連語 (_COMBO_INDICATORS) がクエリに無い combo_info は lookup_move に降格
+- **E2E (実LLM)**: 「エドの236LKをためた時の性能は?」→ override発動 → Hold版 (発生26F/
+  ガード+4F/KD) を攻撃側視点で正答 ✅
+- **気づき (未修正)**: 「弱タイガーショット」の名前検索が 236MP を返す
+  (_pick_variant の強度解決の既存挙動、今回の変更とは無関係)
+
+### 2026-07-09 ★ 視点判定の決定論化 — 「ガードさせた時」(使役形) の誤判定修正
+- **問題**: 「ガードさせた時何F有利?」(使役=攻撃側視点) に防御側視点で回答していた。
+  gemma4 が「ガードさせた」と「ガードした」をプロンプトルールだけでは区別できない
+  (2026-07-07 の既知の限界と同根)
+- **修正 (LLM 判定 → Python 正規表現判定に移行)**:
+  - rag_builder: _perspective_directive() 追加 — _ATTACKER_VIEW_RE (ガードさせ/ガードされ/
+    硬直差/当てた時 等) / _DEFENDER_VIEW_RE (ガードした/食らった 等) で質問文を判定し、
+    「## 視点判定 (システムによる自動判定)」セクションをプロンプト冒頭に注入
+  - ANSWER_SYSTEM ルール15: 使役形の注意書き + 「視点判定セクションには無条件で従う」を追加
+- **検証**: 判定ロジック9パターン (攻撃側4/防御側4/判定なし1) 全通過。
+  LLM 込み E2E は Ollama 停止中のため未実施 — 次回ボット起動時に
+  「サガットの立ち中Pをガードさせた時は何フレーム有利?」で確認すること
+
+### 2026-07-07 (2) ★ フレーム有利の視点取り違え修正 (dogfooding フィードバック)
+- **問題**: 「立ち中Pをガードした時何F有利?」に攻撃側視点 (+2F) で回答していた
+  (正: ガードした側 -2F)。LLM は符号反転を自力で計算できない
+- **修正 (決定論層で両視点を明示)**:
+  - rag_builder: _block_adv_line/_hit_adv_line 追加 —
+    「ガード時: +2F (技を出した側が+2F / ガードした側は-2F)」形式で全フォーマッタ統一
+    (_fmt_sc_move / unified / _fmt_combo_context)
+  - ANSWER_SYSTEM ルール15追加: 視点判別 (「Xをガードした」=受け手 /
+    「Xがガードされた」=出し手) + 括弧書きの数値をそのまま引用させる
+  - MCP: move dict に frame_perspective_note フィールド追加 → 本番デプロイ済
+- **副次修正**: LLM が move_name を出力しない場合、raw_query を
+  _fetch_move_by_name に渡すフォールバック (special_move_map の containment 検索が
+  クエリ文中の技名を拾う) → 「弱ロン・ポワンを食らった時」が正答するように
+- **E2E**: 元の報告ケース「ガードした側は -2F (2フレーム不利)」✅ /
+  ヒット時受け手視点 (-3F) ✅ / 両視点の括弧書きが常に回答に含まれる
+- **既知の限界**: 「Xはガードされた時何F?」の主語曖昧な聞き方は gemma4 が
+  受け手視点で答えることがある (両視点の括弧書きは必ず併記されるため実害小)
+
+### 2026-07-07 ★ ADR-018 — 必殺技の日本語名解決を DB 結合 + 対話学習に移行 (コード完成)
+- **special_move_map シード生成**: match_specials.py (フレームシグネチャ自動照合 2パス +
+  手動オーバーライド約120件) → 883件マッチ / 曖昧0 / 未対応217 (条件付き強化版等は許容)
+  - 発見: recovery は CAPCOM/SC でカウント方法が異なる (着地硬直) → 照合から除外
+  - 発見: SC 側が旧パッチ数値のことがある → 厳格一致だけでは不足、緩和パス必須
+- **SQL**: sql/special_move_map_migration.sql (special_move_map + move_aliases + RLS)
+- **rag_builder**: _fetch_move_by_name にステップ0 (special_move_map 日本語名) と
+  0.5 (move_aliases 学習略称) を追加。既存 EN 検索・_JP_MOVE_TO_EN はフォールバックに降格
+- **MCP**: register_move_alias ツール追加 (コマンド実在検証 → 強度prefix剥がし →
+  ファミリー単位 UPSERT)。app.py が SSM /sf6/supabase-service-key を追加ロード
+- **Discord bot**: 聞き返し学習ループ (技名未解決+キャラ特定済み → コマンド聞き返し →
+  register_move_alias → 復唱 → 元質問に即答)。保留5分TTL、コマンド正規表現抽出
+- **✅ 本番反映完了 (2026-07-07)**: migration 適用 → シード883件投入 → 再デプロイ
+  - 追加修正: lookup_move / check_punish に _sc_name_fallback を追加
+    (handlers.lookup → input一致 → 技名解決の3段。special_move_map/エイリアスが効くように)
+  - ローカル解決テスト 10/10 (マノン/エド/JP/リリー/舞/マリーザ/テリー/サガット/キンバリー)
+  - 本番E2E 4/4: lookup ODロン・ポワン→236KK / 学習エイリアス 強フリッカー→236HK /
+    punish 中トルバラン(-8F) / setplay 強タイガーアッパーカット→623HP
+  - register_move_alias: 誤コマンド拒否・強度prefix除去・復唱 すべて動作確認済
+- deploy コマンド: `sam build --use-container -t template-mcp.yaml --config-file samconfig-mcp.toml && sam deploy --config-file samconfig-mcp.toml --no-confirm-changeset`
+
+### 2026-07-06 ★ MCP改善候補を全実装 + 本番デプロイ (check_punish 改善含む)
+- **技名→SC input 解決**: compute_setplay / analyze_combo が input 不一致時に
+  rag_builder._fetch_move_by_name (日英ILIKE + 強度/OD判別) で自動逆引き
+  → 「強タイガーアッパーカット」→623HP、「タイガーニー」→236HK を実証
+- **戻り値に input 付与**: list_moves を unified_moves に切替 (input列 + keyword が技名/input両対応)、
+  lookup_move (CAPCOM解決時も sc_input_key 付与)、check_punish の punisher_options に input 付与
+- **既知課題解消**: punisher_options のパリィ (発生1F) 混入を move_name フィルタで除外
+- ローカルスモークテスト 10/10 ✅ → sam build --use-container && sam deploy → 本番疎通4件 ✅
+  (2026-06-09 の check_punish queried_move 改善もこのデプロイで本番反映)
+- 残: Discord Developer Portal でトークン設定 (ユーザー操作のみ)
+
+### 2026-06-09 ★ dogfooding反映 — check_punish の戻り値を曖昧性なしに改善
+- check_punish: 呼び出し識別子(2HK)と解決名(Tiger Kick)が異なる場合「2HK（Tiger Kick）」併記
+  + 戻り値に queried_move 追加。公開MCPとして消費側LLMが同一技だと分かるよう根本対応
+- ローカル検証OK。**反映には MCP 再デプロイが必要** (sam build && sam deploy, スタック更新)
+- 残改善候補: list_moves に SC input 付与 (技名→SC input 解決, setplay/combo の必殺技対応)
+
+### 2026-06-08 (8) ★ M5 — Discord Bot (MCP経由 dogfooding) 動作確認
+- `discord_bot/` 新規: bot.py(discord.py) / mcp_router.py(intent→MCPツール変換+MCPクライアント) / README
+- 設計: gemma4(ローカル)でintent解析 → map_intentでMCPツール選択 → AWS MCP経由実行 → gemma4で回答
+  → bot は Ollama + MCP のみに依存 (Supabase/Bedrock非依存)。開発者公開MCPのdogfooding
+- キャラ名: intent_parserはSC英語名(Sagat/M.Bison)出力 → char_slug_mapスナップショットで
+  capcom slug変換 (M.Bison→vega_mbison 等7キャラ)。SC_TO_SLUG をbotに静的保持
+- **E2E検証 (gemma4 + 本番AWS MCP)**: 反撃判定/最大コンボ/バーンアウト説明/発生F すべて正答
+- **dogfooding発見**: check_punish等がSC名(Tiger Kick)で返すため質問の2HKと結びつかず誤答
+  → bot側でコンテキストに「2HK（Tiger Kick）」等値表記を補って解決。MCP戻り値にinput付与が改善候補
+- 残: Discord Developer Portalでbot作成+トークン設定 (DISCORD_TOKEN/SF6_MCP_URL/SF6_MCP_TOKEN)
+
+### 2026-06-08 (7) ★ M4 完了 — 本番デプロイ & 全ツール疎通確認
+- SAM デプロイ成功 (sf6-mcp-server スタック)。Lambda + HTTP API + 実行ロール作成
+- デプロイ中の IAM ハマり 2件を解決:
+  1) deployer に apigateway 権限なし → apigateway-deploy-policy.json (Resource を /* に拡大)
+  2) `apigateway:TagResource` が IAM 可視エディタで「存在しない」エラー = AWS既知の未文書化アクション
+     → CLI/JSONエディタで保存すれば実際は有効 (CloudFormationが要求する実在アクション)
+- デプロイ後 404 → 原因: HTTP API 非$defaultステージは path に /prod を含む
+  → Mangum api_gateway_base_path="/prod" (MCP_BASE_PATH 環境変数) で剥がして解決
+- **本番エンドポイントで全7ツール疎通OK**: lookup/punish/setplay/combo(3500dmg)/docs(Titan)/patch + 認証(401/200)
+
+### 2026-06-08 (6) ★ M4 ステップ4 — AWSリモート化 (コード完成・ローカル検証済)
+- `app.py`: Lambda ハンドラ (Mangum + Bearer認証ミドルウェア + SSM bootstrap)
+- `server.py`: stateless_http+json_response、DNS rebinding保護OFF、get_patch_status追加 (7ツール)
+- `template-mcp.yaml`: Lambda + HTTP API + 実行ロール(ssm:GetParameter /sf6/*, bedrock:InvokeModel Titan)
+  + スロットリング(burst10/rate5)、`src/requirements.txt`(Lambda依存)、samconfig-mcp.toml.example
+- **核心の技術課題2件を解決**:
+  1) StreamableHTTP セッションマネージャは run-once 制約 → Mangum auto/on は warm invocation で破綻
+     → cold start で lifespan を1度だけ起動し保持 (LifespanCycle.__enter__ のみ、shutdown呼ばず)
+  2) FastMCP が host=127.0.0.1 で DNS rebinding保護を自動ON → 421 → transport_security で無効化(認証はBearer)
+- **ローカル検証 (Mangum合成イベント)**: initialize×2(warm含む)/tools/list(7種)/tools/call(lookup_move)
+  /Bearer認証(401/401/200) すべて成功。streamablehttp_client 実接続も全7ツール動作確認済
+- デプロイ手順: `deploy/DEPLOY.md` (SSM登録/IAM追加/sam build --use-container & deploy)
+- 残ブロッカー(外部操作): ①SSM 3パラメータ登録 ②deployerに apigateway 権限追加(deploy/iam/apigateway-deploy-policy.json)
+- 次回: 上記解消後デプロイ → エンドポイントで疎通 → クライアント登録
+
+### 2026-06-08 (5) ★ M4 ステップ3 完了 — search_system_docs MCPツール追加
+- server.py に `search_system_docs` 追加 (公開ツール 5→6種)
+- 元 rag_builder._search_docs のハイブリッド構成を移植: キーワード検索(JP→EN ILIKE,
+  Ollama不要) + ベクトル検索(Titan埋め込み + search_docs_titan RPC)。埋め込みのみ Bedrock 化
+- ベクトル検索が落ちてもキーワード結果は返すフォールバック設計、vector_search_error で可視化
+- 検証: 'ドライブインパクトのアーマー'(JP)→Drive Impact / 'perfect parry'(EN)→Perfect Parry
+  / 'バーンアウト'(JP)→Burnout すべて的確にヒット、vector_error なし
+- README にツール表更新・Bedrock権限要件を追記
+- 次回(ステップ4): Streamable HTTP stateless 化 + SAM(Lambda+API GW) デプロイ
+  + get_patch_status ツール + Lambda実行ロールにbedrock:InvokeModel
+
+### 2026-06-08 (4) ★ M4 ステップ2 完了 — Titan v2 再埋め込み実行
+- IAM 真因確定: `SF6FrameScraperDeployerPolicy` の `BedrockDenyAllOtherModels` が
+  NotResource(Gemma系)以外を明示Deny → Titan ARN を NotResource に1行追加で解消
+  (deploy/iam/NOTES.md に記録)
+- Bedrock 疎通OK (1024次元) → reembed_titan.py 実行 → **72/72 成功 (err=0)**
+- 検証: embedding_titan 72/72 投入済 / search_docs_titan RPC で
+  'drive impact armor break' → Drive Impact(0.625)/Armor(0.588) と的確にヒット
+- 次回(ステップ3): search_system_docs MCPツール追加 (search_docs_titan + Titanクエリ埋め込み)
+
+### 2026-06-08 (3) ★ M4 ステップ2 — Bedrock Titan v2 再埋め込み基盤 (コード完成)
+- `sql/doc_chunks_titan_migration.sql`: embedding_titan vector(1024) + search_docs_titan() 関数
+  (既存 embedding 768次元/search_docs は温存して並存、ロールバック容易)
+- `src/sf6_engine/bedrock_embed.py`: Titan V2 埋め込みヘルパー (boto3, Ollama非依存)。step3でも共用
+- `scripts/reembed_titan.py`: 72チャンクを元importerと同じ入力テキストで再埋め込み (--dry-run対応)
+- requirements に boto3 追加、.venv312 に導入
+- **検証済み**: AWS認証OK / Titan v2 ap-northeast-1 で ACTIVE / dry-run で72件読込・入力構築OK
+- **ブロッカー2件 (私が実行不可な外部操作)**:
+  a) Supabase Studio で migration SQL 適用 (Supabaseへの直接DDLは手動運用)
+  b) sf6-deployer に bedrock:InvokeModel 権限なし (明示deny検出) → deploy/iam/bedrock-invoke-titan.json
+- 解消後: `PYTHONPATH=src python scripts/reembed_titan.py` → 全72件 embedding_titan 投入
+- 次回(ステップ3): search_system_docs ツール追加 (search_docs_titan RPC + Titanクエリ埋め込み)
+
+### 2026-06-08 (2) ★ M4 ステップ1 — mcp_server スキャフォールド完了
+- `src/sf6_engine/mcp_server/` を FastMCP で新規作成。決定論ツール5種を公開:
+  lookup_move / check_punish / compute_setplay / analyze_combo / list_moves
+- 既存の handlers.lookup / combo_engine / setplay_engine を薄くラップ (LLM段は非搭載)
+- **重要発見**: numpad表記 (`2HK`) は move_normalized (CAPCOM日本語名) で解決不可。
+  → MCPラッパー層に sc_move_normalized の input フォールバックを追加 (既存handlerは不変)
+  → `2HK` で発生11F/ガード-12F/KD を決定論取得できることを確認
+- requirements.txt に `mcp>=1.2.0` 追加、.venv312 に導入
+- 実DBスモークテスト全5ツール通過 (sagat 2HK/2MP/623HP、ryu反撃択列挙、タイガージャブ)
+- README.md に起動方法・Claude Desktop登録例を記載
+- 次回: ステップ2 (doc_chunks に embedding_titan カラム + 72チャンク Titan v2 再埋め込み)
+- 既知調整: check_punish の punisher_options にパリィ(発生1F)が混ざる → 後続でフィルタ
+
+### 2026-06-08 ★ M4 方針確定 — AWS リモート MCP 切り出し設計
+- Bot 構築の前段として、実装済みの Layer 1 (CAPCOM更新→RDB) と M1〜M3 (技相性等回答) を
+  MCP サーバとして切り出す方針を決定 (ADR-017)
+- **核心判断**: LLM 段 (intent_parser/generate_answer) はサーバから外し、決定論ロジック層
+  (lookup/combo/setplay) のみツール公開。推論はホスト LLM が担う → Ollama 依存・誤分類が消える
+- **3つの確定事項**: 稼働先=AWSリモート(API GW+Lambda, Streamable HTTP stateless) /
+  RDB=Supabase維持(読み取りのみ) / 埋め込み=Bedrock Titan v2(768→1024次元のため再埋め込み必要)
+- ADR-017 記録、M4 実装ステップ6項目を PROGRESS に記載
+- 次回: ステップ1 (`mcp_server/` FastMCP スキャフォールド) から着手
+
+### 2026-05-29 (3) ★ 全キャラ網羅テスト構築
+- **char_coverage_test.py 新規作成**: DBから実フレームデータを動的取得して全30キャラのテストケースを自動生成
+  - `--fast` (発生F 29問) / フル (発生F + ガード 58問) / `--chars` フィルタ対応
+  - イングリッドのみ標準ナンバーパッド技がないためスキップ (29体対象)
+- **バグ修正 2件**:
+  - factory.py: `localhost` → `127.0.0.1` (macOS がIPv6 `::1` を試みて Ollama IPv4に失敗するため)
+  - 代表技フォールバック: `_std_normal` 正規表現で `[1-9][LMH][PK]` 以外の技を除外
+- **実行コマンド**: `PYTHONPATH=src python tests/char_coverage_test.py --fast` (~10分)
+- **全29キャラ結果: 29✅ 0❌ 合格率 100%** (平均応答 12.5s/キャラ)
+
+### 2026-05-29 (2) ★ M4 統合テスト拡充 — 新20問追加 (100% 合格)
+- **capability_test.py に 20問追加**: S/P/R/Q 4領域、合計 56問に拡張
+  - S-01〜S-06: セットプレイ追加 (Ken/Guile/Cammy/Luke/Ryu の KD後 択)
+  - P-01〜P-05: 確定反撃追加 (Sagat/Luke/Ryu/Guile/Zangief)
+  - R-01〜R-05: 派生技追加 (ケン迅雷脚 中/強派生 フレームデータ)
+  - Q-01〜Q-04: 複合クエリ (DR cancel / パニカン後セットプレイ等)
+- **バグ修正 3件**:
+  - A-04 回帰修正: `_fmt_combo_context` が `punish_adv` を表示していなかった → 追加 (HKD +45 ✅)
+  - Ollama タイムアウト: `factory.py` で `OLLAMA_TIMEOUT` 環境変数対応 (デフォルト 300s)
+  - R-01/R-02: 質問文中の `（6HK）（6MK）` が `_NUMPAD_EXPLICIT` に誤マッチ → 表記を削除
+- **新20問 結果: 20✅ 0❌ (合格率 100%)**
+
+### 2026-05-29 ★ 対応範囲テスト + バグ修正 (80% → 88% / 実質 91.7%)
+- **対応範囲テスト新規作成**: `tests/capability_test.py` (36問 / 5領域自動評価)
+- **修正4件**:
+  - A-13: `_fetch_move_by_name` 単語分割でタイガーアッパー→GreedyTiger誤返却 → 残り単語による絞り込みで修正
+  - B-02: "DRキャンセルすると何F?" が `lookup_move` 誤分類 → SYSTEM_PROMPT に例追加で `combo_info` へ
+  - C-01: `_NUMPAD_EXPLICIT` の lookbehind が数字を除外せず `623HP` → `3HP` 誤抽出 → `(?<![A-Za-z0-9])` に修正 + `_COMMAND_NUMPAD` 追加
+  - C-04: 「強フラッシュナックル」→ move_name 未解決 → `_JP_SPECIAL_NAMES` / `_JP_MOVE_TO_EN` にルーク技追加
+- **副次改善**: intent_type バリデーション追加 (punish_adv等の無効値を lookup_move にフォールバック)
+- **notes 切り詰め**: `_fmt_sc_move` で 400 字制限 → 平均応答 26.9s → 15.9s (41% 高速化)
+- **.venv312 作成**: Python 3.9 venv シンボリックリンク切れのため Python 3.12 で新規 venv
 
 ### 2026-05-19 ★ M3 完了 + Layer 1 パッチ通知デプロイ
 - **必殺技の汎用検索対応**: _fetch_move_by_name を DB 直接 ILIKE に刷新、_JP_MOVE_TO_EN はフォールバックのみ

@@ -36,8 +36,10 @@ def create_provider(provider_name: str | None = None) -> LLMProvider:
         from sf6_engine.ollama_provider import OllamaProvider
         return OllamaProvider(
             model=os.getenv("OLLAMA_MODEL", "gemma4:e2b"),
-            base_url=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434"),
+            base_url=os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434"),
             embed_model=os.getenv("OLLAMA_EMBED_MODEL", "nomic-embed-text"),
+            timeout=float(os.getenv("OLLAMA_TIMEOUT", "300")),
+            temperature=float(os.getenv("OLLAMA_TEMPERATURE", "0")),
         )
 
     if name == "gemini":
