@@ -46,6 +46,19 @@ def get_write_client() -> Client:
             "SUPABASE_SERVICE_KEY が .env に設定されていません。\n"
             "Supabase Dashboard → Settings → API → service_role から取得して設定してください。"
         )
+    return create_write_client()
+
+
+def create_write_client() -> Client:
+    """書き込み用の新しいSupabaseクライアントを返す。
+
+    Storageへの並列アップロードではクライアント内部の同期HTTP状態を共有しないため、
+    ワーカーごとにこの関数を使う。通常のDBインポートはget_write_client()を使う。
+    """
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_SERVICE_KEY")
+    if not url or not key:
+        raise RuntimeError("SUPABASE_SERVICE_KEY が .env に設定されていません。")
     options = ClientOptions(postgrest_client_timeout=60)
     return create_client(url, key, options=options)
 

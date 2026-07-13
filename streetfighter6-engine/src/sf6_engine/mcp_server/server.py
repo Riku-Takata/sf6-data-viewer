@@ -28,6 +28,9 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 
 from sf6_engine.db import get_client
+from sf6_engine.frame_data import lookup_frame_data
+from sf6_engine.punish_service import check_punish_data
+from sf6_engine.ufd import fetch_ufd_details
 
 # stateless_http + json_response: HTTP transport を AWS Lambda / API Gateway 向けに
 # セッションレス・単一JSONレスポンス化する (SSE/セッション不要)。stdio では無影響。
@@ -147,9 +150,21 @@ def _perspective_note(on_block, on_hit) -> str | None:
     return "。".join(parts) or None
 
 
-def _sc_to_move(row: dict) -> dict:
+def _attach_ufd(move: dict, character_slug: str) -> dict:
+    """UFD実測の補足をMCPレスポンスへ追加する。未導入時は既存形を保つ。"""
+    details = fetch_ufd_details(
+        character_slug,
+        sc_input=move.get("input"),
+        move_name=move.get("move_name"),
+    )
+    if details:
+        move["ufd"] = details
+    return move
+
+
+def _sc_to_move(row: dict, character_slug: str) -> dict:
     """sc_move_normalized の行を MCP の move レスポンス形に正規化する。"""
-    return {
+    return _attach_ufd({
         "source": "supercombo",
         "frame_perspective_note": _perspective_note(
             row.get("block_adv_f"), row.get("hit_adv_f")),
@@ -174,15 +189,28 @@ def _sc_to_move(row: dict) -> dict:
             "block_adv": row.get("block_adv"),
             "punish_adv": row.get("punish_adv"),
         },
-    }
+    }, character_slug)
 
 
 # ============================================================
 # ツール: lookup_move
 # ============================================================
 
+def _lookup_move_impl(
+    character: str,
+    move_name: str,
+    scenario: dict | None = None,
+) -> dict:
+    """MCP/ローカル経路で共有する決定論的な技照会実装。"""
+    return lookup_frame_data(character, move_name, scenario=scenario)
+
+
 @mcp.tool()
-def lookup_move(character: str, move_name: str) -> dict:
+def lookup_move(
+    character: str,
+    move_name: str,
+    scenario: dict | None = None,
+) -> dict:
     """指定キャラの単一技のフレームデータ (発生・持続・硬直・ガード/ヒット時有利・
     ダメージ・キャンセル可否) を返す。
 
@@ -192,56 +220,11 @@ def lookup_move(character: str, move_name: str) -> dict:
                    部分一致 (例: 'タイガージャブ', '2HK') を受け付ける。
 
     Returns:
-        dict: ``found`` が True なら ``move`` に詳細 (``move.source`` が
-              'capcom' か 'supercombo')。曖昧な場合は ``candidate_names`` に
-              候補技名が入る。技名が分からない場合は先に list_moves で確認すること。
+        dict: ``found`` が True なら ``move`` に統合フレームプロファイルと
+              互換用の主要フィールドが入る。各値には採用ソースと全ソースの
+              観測値が付き、ガード時は攻撃側・防御側の両視点を返す。
     """
-    from sf6_engine.handlers.lookup import lookup_move as _lookup
-
-    result = _lookup(character, move_name)
-    if result.found and result.move is not None:
-        d = result.to_dict()
-        if d.get("move"):
-            d["move"]["source"] = "capcom"
-            d["move"]["frame_perspective_note"] = _perspective_note(
-                d["move"].get("on_block"), d["move"].get("on_hit"))
-            # SC input (numpad) を付与 — compute_setplay / analyze_combo への連携用
-            try:
-                r = (
-                    get_client().table("unified_moves").select("sc_input_key")
-                    .eq("character_slug", character.lower())
-                    .eq("move_name", d["move"].get("move_name"))
-                    .limit(1).execute()
-                )
-                if r.data and r.data[0].get("sc_input_key"):
-                    d["move"]["input"] = r.data[0]["sc_input_key"]
-            except Exception as e:
-                logger.warning(f"sc_input_key 付与に失敗 (継続): {e}")
-        return d
-
-    # CAPCOM 日本語名で解決できない場合 → SuperCombo の numpad input で再試行
-    sc = _sc_input_lookup(character, move_name)
-    if sc:
-        return {
-            "found": True,
-            "character": character,
-            "query_move_name": move_name,
-            "move": _sc_to_move(sc),
-            "message": "SuperCombo の input 一致で取得しました。",
-        }
-
-    # 技名解決フォールバック (special_move_map 日本語公式名 / 学習エイリアス / 英語名)
-    sc = _sc_name_fallback(character, move_name)
-    if sc:
-        return {
-            "found": True,
-            "character": character,
-            "query_move_name": move_name,
-            "move": _sc_to_move(sc),
-            "message": "技名解決 (special_move_map / エイリアス) で取得しました。",
-        }
-
-    return result.to_dict()
+    return _lookup_move_impl(character, move_name, scenario)
 
 
 # ============================================================
@@ -249,116 +232,29 @@ def lookup_move(character: str, move_name: str) -> dict:
 # ============================================================
 
 @mcp.tool()
-def check_punish(character: str, move_name: str, punisher: str | None = None) -> dict:
-    """ある技をガードした際に確定反撃が入るかを判定する。
+def check_punish(
+    character: str,
+    move_name: str,
+    punisher: str | None = None,
+    scenario: dict | None = None,
+) -> dict:
+    """ある技をガードした後の反撃可能性を条件付きで判定する。
 
-    技のガード時硬直差 (block_adv) から「ガードした側の有利フレーム」を算出し、
-    その発生F以内の技が確定反撃になる、という決定論的な判定を返す。
+    フレーム窓と空間的な到達可能性を分離する。現行DBで到達を証明できない候補は
+    ``timing_only`` とし、確定反撃が成立すると断定しない。
 
     Args:
         character: ガードされる技を持つキャラの slug。
         move_name: ガードされる技名 (部分一致可)。
         punisher:  反撃する側のキャラ slug (任意)。指定すると、そのキャラの
-                   確定反撃候補 (発生F が punish window 以内の技) を列挙する。
+                   フレーム上の候補を列挙する。
+        scenario:  距離・接触持続・相手状態など、質問に明示された状況条件。
 
     Returns:
-        dict: ``punishable`` (確定反撃可否)、``block_adv`` (ガード時硬直差)、
-              ``punish_window_f`` (反撃できる発生Fの上限)、``summary`` (説明文)、
-              punisher 指定時は ``punisher_options`` (確定反撃候補リスト)。
+        dict: ``frame_punishable`` (時間条件)、``confirmed_punishable``
+              (時間+距離を含む確定状態)、``punish_window_f``、候補と検証状態。
     """
-    from sf6_engine.handlers.lookup import lookup_move as _lookup
-
-    # CAPCOM 日本語名 → SuperCombo numpad input の順で技を解決
-    result = _lookup(character, move_name)
-    if result.found and result.move is not None:
-        resolved_name = result.move.move_name
-        block_adv = result.move.on_block
-        block_adv_is_range = result.move.on_block_is_range
-    else:
-        sc = _sc_input_lookup(character, move_name) or _sc_name_fallback(character, move_name)
-        if sc is None:
-            return {
-                "found": False,
-                "message": result.message,
-                "candidate_names": result.candidate_names,
-            }
-        resolved_name = sc.get("name") or move_name
-        block_adv = sc.get("block_adv_f")
-        block_adv_is_range = False
-
-    # 呼び出し時の識別子 (例: 2HK) と解決後の名前 (例: Tiger Kick) が異なる場合は
-    # 「2HK（Tiger Kick）」と併記し、消費側 LLM が同一技だと分かるようにする。
-    display_name = (
-        resolved_name if resolved_name == move_name
-        else f"{move_name}（{resolved_name}）"
-    )
-
-    if block_adv is None:
-        return {
-            "found": True,
-            "character": character,
-            "queried_move": move_name,
-            "move_name": resolved_name,
-            "block_adv": None,
-            "punishable": None,
-            "summary": f"{display_name} のガード時硬直差データがありません (判定不能)。",
-        }
-
-    window = -block_adv if block_adv < 0 else 0
-    punishable = window > 0
-
-    if punishable:
-        summary = (
-            f"{display_name} はガード時 {block_adv:+d}F。"
-            f"ガードした側は +{window}F 有利 → 発生 {window}F 以内の技が確定反撃。"
-        )
-    else:
-        summary = (
-            f"{display_name} はガード時 {block_adv:+d}F。"
-            f"ガードした側が不利のため確定反撃はできません。"
-        )
-
-    out: dict = {
-        "found": True,
-        "character": character,
-        "queried_move": move_name,
-        "move_name": resolved_name,
-        "block_adv": block_adv,
-        "block_adv_is_range": block_adv_is_range,
-        "punish_window_f": window,
-        "punishable": punishable,
-        "summary": summary,
-    }
-
-    # punisher 指定時: 確定反撃候補を発生F昇順で列挙
-    # unified_moves を使い SC input (numpad) も併記 → analyze_combo へ直接渡せる。
-    # ドライブパリィ (発生1F) は打撃反撃ではないため除外。
-    if punisher and punishable:
-        sb = get_client()
-        res = (
-            sb.table("unified_moves")
-            .select("move_name,sc_input_key,c_startup,c_on_block,section")
-            .eq("character_slug", punisher.lower())
-            .lte("c_startup", window)
-            .not_.is_("c_startup", "null")
-            .not_.ilike("move_name", "%パリィ%")
-            .order("c_startup")
-            .limit(8)
-            .execute()
-        )
-        out["punisher"] = punisher
-        out["punisher_options"] = [
-            {
-                "move_name": r["move_name"],
-                "input": r.get("sc_input_key"),
-                "startup": r.get("c_startup"),
-                "on_block": r.get("c_on_block"),
-                "section": r.get("section"),
-            }
-            for r in (res.data or [])
-        ]
-
-    return out
+    return check_punish_data(character, move_name, punisher, scenario)
 
 
 # ============================================================

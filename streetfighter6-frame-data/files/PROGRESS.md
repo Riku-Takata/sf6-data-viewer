@@ -7,9 +7,11 @@
 
 ## 🎯 現在のフェーズ
 
-**Milestone**: **M4 完了 (AWS MCP本番) + M5 Discord Bot ✅ 動作確認済 (2026-06-08)**
-**次**: Discordトークン設定して常駐運用 (残る唯一の外部操作)。
-MCP改善 (技名→SC input解決 / 戻り値にinput付与 / パリィ除外) は ✅ 本番反映済 (2026-07-06)
+**Milestone**: **状況付きフレーム契約・確反確度分離 ✅ Supabase/AWS本番反映済 (2026-07-13)**
+**現在**: 距離/持続/状態をIntentから保持し、技の曖昧性と条件付き値を計算前に判定する。
+確反は時間窓と到達証明を分離。追加DBスキーマ適用・AWS MCP再デプロイ済み、バックフィル未実施。
+**次**: 正規技ID/条件付き観測をバックフィルし、恒常インポーターへ接続する。
+レビュー済みシステムルールと距離実測を投入後、到達込み確反とヒット後接続へ進む。
 
 ## 📊 全体進捗
 
@@ -81,12 +83,20 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 
 ---
 
-現在の対応範囲:
-- フレームデータ照会・確定反撃 (全30キャラ / 通常技・必殺技・SA)
+現在の対応範囲 (値が原典に存在する場合。未収録は明示的にデータなし):
+- 型付きフレームデータ照会 (全30キャラ / 通常技・特殊技・必殺技・SA)
+  - 発生 / 実持続区間 / 硬直・着地硬直 / 総動作 / ヒット・ガード差
+  - ガードさせた側=攻撃側、ガードした側=防御側を必ず両視点で機械算出
+  - CAPCOM主値 + UFD/SC補完 + ソース差異・条件注記
+- フレーム上の反撃候補 (単一のガード硬直差。距離未検証なら確定反撃とは断定しない)
 - コンボ接続検証・最大コンボ計算 (ビームサーチ)
 - セットプレイ (KD後の起き攻め択計算、全キャラダッシュF対応)
 - 派生技の割り込み判定 (フレームギャップ自動計算)
 - パッチ検知時のメール通知 (AWS SNS + SSM)
+
+**現行ローカル実装の検証 (2026-07-13)**: unittest **58/58**、統合監査
+**92,940 assertions / 0失敗**、Discord Bot実経路 **9,728/9,728**
+(発生/持続/硬直/攻撃側/防御側 各1,790 + 確反提案・判定保留778)。
 
 **M4 候補 (優先度順):**
 1. **AWS 完全移行** — Bedrock Gemma3 + Lambda/API Gateway で CLI をクラウド化
@@ -96,6 +106,112 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 3. **Web UI** — Slack Bot or 簡易 Web フロントエンド
 
 ## 📝 直近のセッションログ
+
+### 2026-07-13 ★ 状況付きフレーム契約・技同定・確反確度分離を実装
+- **状況を型化**: 距離、接触持続F、段数、相手状態、カウンター、Burnout、DR、
+  画面端、block/hit、視点を `scenario` として技名から分離。主語不明は確認対象にする。
+- **技同定を型化**: `resolved / ambiguous / not_found` と候補・解決手段・confidenceを返し、
+  弱中強や派生が一意でない技を計算へ流さない。正式技名の `（遠距離版）` は状況語ではなく
+  技IDの一部として保持する。
+- **条件評価を型化**: exact / derived / interval / unresolvedを分離。通常技の明示された
+  持続接触だけ安全に派生し、先端だけ・Burnout/DR・空中結果などはルール未登録なら保留する。
+  条件付き参照値は両視点へ正しく反転表示する一方、条件未選択なら確反計算へ使用しない。
+- **確反を時間と空間へ分離**: 発生が間に合う地上ニュートラル技だけを時間候補として返す。
+  ガード後距離・押し戻し・到達が未検証なら `confirmed_punishable=null` とし、確定反撃とは
+  断定しない。MCP / Discord / RAG は共通 `punish_service.py` を使用する。
+- **保持モデル**: 正規技ID、source link/alias、条件付きframe observation、system rule、
+  interaction、frame別geometry、実測punish、cancel/chain/juggle遷移、実測combo linkを追加する
+  `contextual_frame_model_migration.sql` を作成。Supabaseへ適用し、追加10テーブルの存在・
+  公開読み取り・全テーブル0行を確認。**バックフィルは未実施**で、既存ソース表は変更していない。
+- **全件検証**: unittest **58/58**、CAPCOM 2,357 / SC 2,118 / UFD 1,559行を使う
+  統合監査 **92,940 assertions / 0失敗**、Bot **9,728/9,728 / 0失敗**。
+- **本番反映**: SAM arm64コンテナbuild + lint、CloudFormation `sf6-mcp-server` を
+  `UPDATE_COMPLETE` まで更新。本番MCPでKen 5HK最終持続=-4F/+4F、春麗214P~LKの
+  条件付き確反=`timing_unresolved`を確認。次は正規技IDバックフィル・レビュー済み
+  ルール/geometry投入後、距離込み確反とヒット後接続を実装する。
+
+### 2026-07-10 ★ 型付き統合フレームプロファイル基盤完成・全件検証・AWS本番反映
+- **誤評価を訂正**: 旧実装は単純値の取得はできたが、CAPCOM硬直欄の
+  `着地後3` / `24+着地後16` / `全体52`、複数持続、条件別ガード差を先頭整数へ
+  潰すため、要求性能を満たしていなかった。
+- **実装**: `frame_data.py` を追加し、CAPCOM主値・UFD/SC補完のフィールド別採用、
+  全ソース観測、型、条件、差異、公式注記を1プロファイルへ統合 (ADR-020)。
+- **視点保証**: on_blockは攻撃側値として保持し、防御側は単一値・範囲・条件別値を
+  Pythonで符号反転。発生/持続/硬直/両ガード視点はLLMなしで回答する。
+- **技解決**: 生文字列完全一致を最優先。同一入力の条件違いは3項目以上の一意な
+  フレームシグネチャだけで補助解決し、未マッピングUFD行へ別技を混ぜない。
+  技区分境界、`nj.HK`/`8HK`同義表記、既知ファミリー内の弱中強・OD・ホールド補完を追加。
+- **非数値型**: ターゲットコンボの段階別値、ガード不成立、状況依存を欠損や単一値に
+  潰さず保持。キャミィ通常投げとターゲットコンボの誤結合を解消。
+- **全経路統一**: MCP / Discord local・AWS / CLI RAG を同じlookupへ移行。
+  旧routerの「日本語正式名→SC input先行変換」を削除し、正式名の条件を保持。
+- **UFD同期**: 1,559行/30キャラ、sc_input 1,179件 (1,090→+89)、GIF 773件保存。
+  元URLあり775件のうち2件 (Ryu 5MP / Lily 5HP) はUFD側404で保存不能。
+- **検証**: unittest **41/41**、統合監査 **92,940 assertions / 0失敗**、
+  Discord bot実経路 **8,950/8,950** (各1,790: 発生/持続/硬直/攻撃側/防御側)。
+- **本番**: SAM arm64 build + validate、CloudFormation `sf6-mcp-server` を
+  `UPDATE_COMPLETE` まで更新。Ken 5HK、C.Viper 8HK、Terry段階技、Edガード不成立、
+  豪鬼の状況依存をローカルフォールバックなしで確認。
+- **重要: 数値網羅は未完了**: 通常技578攻撃行は4項目100%。特殊技277攻撃行は
+  発生/持続/硬直100%、ガード差は265数値+7対象外+5未解決。必殺技830攻撃行は
+  発生829、持続710、硬直796、ガード差742数値+63対象外+4状況依存+21未解決。
+  SA187攻撃行は発生180、持続171、硬直178、ガード差170数値+9対象外+8未解決。
+  監査0失敗は回答整合性であり、原典数値の100%充足を意味しない。
+- **次**: 未解決値を原典未収録とマッピング漏れに分離して解消。続いて範囲硬直差の
+  保証/可能確反、SCリーチと当たり判定を使う到達判定、ヒット後接続を実装。
+
+### 2026-07-10 ★ Ultimate Frame Data 統合の実装・DB適用・全キャラ同期
+- **追加**: `ufd_moves` 分離テーブルとprivate Storage bucket
+  `sf6-ufd-hitboxes` のマイグレーションを追加。CAPCOM/SCの生データを上書きせず、
+  UFD実測値・メモ・GIF元URL/Storageパス/SHA-256を出所付きで保存する方針 (ADR-019)。
+- **追加**: `importers/ultimate_frame_data.py`。UFDの静的キャラページをカテゴリ/技単位で
+  解析し、通常技/コマンドをSC inputへ可能な範囲で正規化、GIFをStorageへ保存する。
+  既存URLのGIFは再アップロードしない。
+- **Bot/MCP反映**: `lookup_move` のCAPCOM・SC・ローカルフォールバック全経路で
+  `ufd` 補足を返し、Bot/RAG回答に「Ultimate Frame Data 実測補足」を追加。
+- **検証**: ケンの実ページHTMLから60技抽出（5HK=発生12/持続2/硬直25/全体38/
+  ガード-5、GIF対応）を確認。unittest 15件・py_compile OK。
+- **本番反映**: ARM64 Dockerビルド後、AWSスタック `sf6-mcp-server` を
+  `UPDATE_COMPLETE` まで再デプロイ済み。UFDデータ取り込み後は同MCPが即座に補足を返す。
+- **DB反映済み**: migration適用、全30キャラ同期、private Storage保存まで完了。
+
+### 2026-07-10 ★ Discord Bot 全件網羅評価 完走 5,562/5,562 ✅
+- **全件実行**: `tests/bot_comprehensive_eval.py --exhaustive` を bot executor で実行。
+  通常技/特殊技/必殺技/SA の発生、ガードさせた側、ガードした側、確定反撃候補提案を
+  合計 5,562 ケースで機械採点し、最終結果 **5,562✅ / 0❌ / 0⚠ (100%)**。
+- **安定化 (intent_parser)**: 定型の「キャラの技の発生」「ガードさせた/した」
+  「○○でガード後の確定反撃」を LLM なしで intent 化。`5HP~HP`, `j.HP~j.HP`,
+  `KK~MK`, `2~8`, `~HK (End)`, `6[6]`, `-` など特殊な SC input も保持。
+- **安定化 (mcp_router)**: API Gateway 429 回避用に `SF6_MCP_LOCAL_ONLY=1` の
+  ローカルMCP相当モードを追加 (`lookup_move` / `check_punish`)。AWS MCP 失敗時の
+  ローカルフォールバックも追加。
+- **評価ハーネス改善**: `--concurrency`, `--quiet-success`, `--progress-every`,
+  `--retries`, `--retry-base-sleep` を追加。失敗詳細はJSONLへ全保存。
+- **検証**: py_compile OK / unittest 12件 OK /
+  ブランカ+キャミィ特殊技 170/170 ✅ / edge input 対象キャラ 578/578 ✅ /
+  全件 5,562/5,562 ✅。結果: `streetfighter6-engine/tests/bot_comprehensive_results.json(l)`。
+
+### 2026-07-09 (8) ★ Discord Bot 全技網羅評価ハーネス追加
+- **追加 (tests/bot_comprehensive_eval.py)**: DB から全キャラ×通常技/特殊技/必殺技/SA の
+  ケースを生成し、bot と同じ `intent_parser → mcp_router → generate_answer` 経路を機械採点。
+  発生照会 / ガードさせた側 / ガードした側 / 確定反撃候補提案を評価。
+- **bot改善 (discord_bot/mcp_router)**: lookup_move の MCP JSON を視点付きテキストに整形し、
+  check_punish の `punisher_options` を回答コンテキストへ含めるよう変更。
+  raw query の「リュウでガード」等から `punisher` を決定論補完。
+- **回答補完 (rag_builder)**: 確定反撃候補がコンテキストにあるのに LLM が落とした場合、
+  候補上位を決定論で追記。
+- **検証**: py_compile OK / unittest 2件 OK / bot executor 小ケース 4/4 OK /
+  既存 `tests/regression_eval.py` 13/13 OK。全件 dry-run は 5,562ケース生成
+  (move_data 1,718 / guard各1,524 / punish 796)。
+
+### 2026-07-09 (7) ★ Discord Bot の自動検証デバッグ表示を非表示化
+- **報告**: 「ケンの大Kの発生は?」で正答後に
+  `⚠ 自動検証で数値の不一致を検出しました` と参照JSONが Discord へ表示される。
+- **修正 (rag_builder)**: 検証NGの参照データ抜粋は `logger.warning` のみに残し、
+  `generate_answer` のユーザー向け戻り値へ混ぜないよう変更。
+- **過剰検証の緩和**: 構造化出力の転記値が `12F` でも回答本文の `12です` を
+  正当な値使用として扱う `_answer_mentions_transcribed_values` を追加。
+- **検証**: 追加 unittest 2件 OK。権限付き回帰評価 `tests/regression_eval.py` 13/13 OK。
 
 ### 2026-07-09 (6) ★ 質問フィールド判定 + 日本語略称の拡張 (「前大K」事故対応)
 - **報告**: 「ケンの前大Kの発生は?」に ①move_name='Forward K' に化け ②発生でなく

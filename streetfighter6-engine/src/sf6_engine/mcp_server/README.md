@@ -10,8 +10,8 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 
 | ツール | 用途 | 主な入力 |
 |---|---|---|
-| `lookup_move` | 単一技のフレームデータ照会 (戻り値に SC input 付与) | character, move_name (日本語名 or numpad) |
-| `check_punish` | ガード時の確定反撃判定 (候補技に input 付与, パリィ除外) | character, move_name, punisher(任意) |
+| `lookup_move` | 型付き統合フレームプロファイル (全ソース・採用値・両視点・状況評価) | character, move_name, scenario(任意) |
+| `check_punish` | フレーム窓と到達確度を分離した反撃判定 | character, move_name, punisher(任意), scenario(任意) |
 | `compute_setplay` | KD/ヒット後の起き攻め択計算 | character, move_input (SC表記 or 技名) |
 | `analyze_combo` | 始動技からの最大コンボ計算 | character, starter_input (SC表記 or 技名), use_dr, drive_bars |
 | `list_moves` | 技一覧 (技名 + SC input。技名解決の補助) | character, keyword(任意, 技名/input 両対応) |
@@ -24,6 +24,18 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 の両方を解決する。`compute_setplay` / `analyze_combo` は input が一致しない場合、
 技名 (日本語/英語) からの逆引き解決を自動で試みる (強度修飾子・OD 判別込み)。
 曖昧な場合は先に `list_moves` で確認すること。
+
+`lookup_move` のコア値はフィールドごとに CAPCOM公式 → UFD → SuperCombo の順で採用する。
+ただしCAPCOM硬直欄の `全体 N` は硬直値として使わず、UFD/SCの硬直で補完する。
+ガード時は攻撃側値を正規値として保持し、防御側値を機械的に符号反転する。範囲・条件別・
+段階別・複数持続・着地硬直は単一整数へ潰さず、`frame_profile.facts` に型と生値を保持する。
+ガード不能/非攻撃動作は `not_applicable`、固定値がない場合は `variable` とし、欠損値や
+仮の0Fへ変換しない。
+
+`scenario` は距離、接触持続F、段数、相手状態、Burnout/DR、画面端、block/hit、視点を
+受け取る。技解決が複数強度・派生へ当たる場合は `resolution=ambiguous` として計算を止める。
+`check_punish` は硬直差から `frame_punishable` を返すが、ガード後距離・押し戻し・技の
+到達が未検証なら `confirmed_punishable=null` のままにし、候補を `timing_only` と表示する。
 
 ## ローカル起動 (stdio)
 
@@ -77,3 +89,7 @@ AWS デプロイ (SAM):
 
 - ~~`check_punish` の `punisher_options` にパリィ (発生1F) が混ざる~~
   → 対応済 (2026-07-06): 技名に「パリィ」を含む行を除外。
+- 範囲/条件別ガード硬直差は単一windowに丸めず、条件が結合できない場合は判定保留。
+- リーチ/当たり判定を使う到達判定は未統合。候補は「フレーム上・到達未検証」と明示する。
+- `contextual_frame_model_migration.sql` の適用・バックフィル後に、レビュー済みgeometryと
+  直接実測を使う `confirmed_punishable=true` を実装する。

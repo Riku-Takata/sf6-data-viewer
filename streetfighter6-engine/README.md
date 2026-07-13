@@ -1,4 +1,4 @@
-# SF6 Engine — SF6 対戦アシスタント (M1)
+# SF6 Engine — SF6 対戦アシスタント
 
 Street Fighter 6 のフレームデータとゲーム知識を自然言語で引き出せる個人向け CLI アシスタント。
 
@@ -7,7 +7,8 @@ $ python -m sf6_engine.cli ask "サガットの2HKの発生は?"
 サガットの2HK（しゃがみ強K）の発生は11Fです。
 
 $ python -m sf6_engine.cli ask "サガットの2HKガードして反撃できる?"
-ガード時 -12F → 発生 12F 以内の技なら確定反撃が入ります。
+ガード時 -12F → 発生12F以内がフレーム上の候補です。
+ガード後距離と到達が未検証のため、確定反撃としては未確定です。
 ```
 
 ## アーキテクチャ
@@ -16,14 +17,22 @@ $ python -m sf6_engine.cli ask "サガットの2HKガードして反撃できる
 ユーザーの質問 (自然言語)
     │
     ▼
-Intent Parser (Gemma4 via Ollama)
-    │  "サガットの2HKの発生は?" → {type: lookup_move, chara: Sagat, input: 2HK}
+Intent Parser (定型フレーム質問は決定論 / その他はLLM)
+    │  技名と距離/持続/状態/視点を分離して scenario 化
     ▼
-RAG Context Builder
-    │  Supabase の unified_moves から該当技を取得
+Move Resolver
+    │  resolved / ambiguous / not_found + 候補・根拠
     ▼
-Answer Generator (Gemma4 via Ollama)
-    │  フレームデータ + ゲーム知識 → 自然言語回答
+Typed Frame Profile Service
+    │  CAPCOM公式を主値、UFD / SuperComboを補完値としてフィールド別に統合
+    │  単一値・範囲・複数持続・着地硬直・条件別値・KDを型付きで保持
+    │  ガード防御側の値は攻撃側値をコードで符号反転
+    ▼
+Scenario Evaluator / Punish Service
+    │  条件適用値、時間窓、到達証明を別々に判定
+    ▼
+Answer Generator
+    │  発生/持続/硬直/両ガード視点は決定論、一般知識はLLM
     ▼
 CLI 出力
 ```
@@ -31,6 +40,10 @@ CLI 出力
 **データソース:**
 - CAPCOM 公式 (Layer 1 Lambda で自動収集) → 発生/硬直/ダメージ等
 - SuperCombo Wiki → リーチ/パニカン有利/解説テキスト等
+- Ultimate Frame Data → 実測の全体/持続/着地硬直、キャンセル、パッチメモ、当たり判定GIF
+
+同じ値を1列へ上書きせず、全ソースの生値・取得時点・採用ソースを保持する。
+CAPCOM硬直欄の `全体52` は硬直52Fとは解釈せず、UFD/SCに硬直値があれば補完する。
 
 ## 必要なもの
 
@@ -86,6 +99,29 @@ cp engine_dotenv_example.txt .env
 | `OLLAMA_MODEL` | 使用モデル | `gemma4:e2b` |
 | `OLLAMA_EMBED_MODEL` | 埋め込みモデル | `nomic-embed-text` |
 
+### 4. Ultimate Frame Data の取り込み
+
+まず [ultimate_frame_data_migration.sql](sql/ultimate_frame_data_migration.sql) を
+Supabase Studio の SQL Editor で一度適用する。DDL はこのプロジェクトでは手動運用である。
+
+```bash
+# ケンだけを検証なしに取り込む（GIFも private Storage に保存）
+PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --character ken
+
+# 全キャラを取り込む。公開サイトへ負荷を掛けないようページ間を1秒空ける。
+PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --all --delay 1.0
+
+# HTML解析のみの確認（DB/Storageへ書き込まない）
+PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data \
+  --character ken --dry-run --no-gifs --html-path /path/to/ken.html
+```
+
+GIF本体は `sf6-ufd-hitboxes` (private bucket) へ保存し、`ufd_moves` には技との対応・
+元URL・ハッシュ・Storageパスを保持する。Botは公式/SuperComboの値を維持したまま、
+UFD由来の詳細を統合プロファイルへ追加する。再取込は既存行/GIFを再利用し、現行ページから
+消えた行だけを同期後に削除する。2026-07-10時点で1,559行、`sc_input` 1,179件、
+取得可能な当たり判定GIF 773件を保存済み (UFD元URLが404の2件を除く)。
+
 ## 使い方
 
 ### 質問する
@@ -99,7 +135,10 @@ PYTHONPATH=src python -m sf6_engine.cli ask "サガットの2HKの発生は?"
 | タイプ | 例 |
 |---|---|
 | 単一技照会 | 「サガットの2HKの発生は?」 |
-| 反撃判定 | 「サガットの2HKガードして反撃できる?」 |
+| 持続・硬直 | 「ケンの大Kの持続は?」「硬直は?」 |
+| ガード両視点 | 「ガードさせたら?」=攻撃側 / 「ガードしたら?」=防御側 |
+| 状況付き硬直差 | 「ケンの大Kを先端でガードしたら?」「最終持続をガードさせたら?」 |
+| 反撃判定 | 「サガットの2HKガードして反撃できる?」(時間候補と到達確度を分離) |
 | 比較 | 「サガットとルーク、立ち強Pどっちがリーチ長い?」 |
 | 複数フィールド | 「サガットの2HKでパニカン取ったら何F有利?」 |
 | ゲーム概念 | 「ドライブインパクトって何?」(Phase 2 で精度向上) |
@@ -132,22 +171,53 @@ PYTHONPATH=src python -m sf6_engine.cli ask "サガットの2HKの発生は?" -v
 PYTHONPATH=src python -m sf6_engine.cli lookup sagat "立ち弱P（タイガージャブ）"
 ```
 
-## 現在のデータカバレッジ (M1)
+## 現在のデータカバレッジ
 
 | カテゴリ | 状態 | 備考 |
 |---|---|---|
-| 通常技 (全30キャラ) | ✅ | 発生/硬直/リーチ/パニカン等 |
-| 必殺技・SA | ❌ | M2 で対応予定 |
-| ゲームシステム文書 | ❌ | Phase 2 (文書取込) 完了後 |
-| Ingrid | ⚠ | CAPCOM / SC 両方未掲載 |
+| 型付き統合照会 (全30キャラ) | ✅ | 原典にある値を発生/持続/硬直/ヒット・ガード差として保持 |
+| 通常技 578攻撃行 | ✅ | 発生/持続/硬直/ガード差 578/578 |
+| 特殊技・必殺技・SAの数値網羅 | ⚠ | 対象外・状況依存を分離済み。原典未収録/未解決値は継続対応 |
+| 条件付き・多段・空中技 | ✅ | 範囲/複数区間/着地硬直を非スカラーで保持 |
+| ガード攻撃側・防御側 | ✅ | 防御側は決定論的な符号反転 |
+| UFD当たり判定GIF | ✅ | 取得可能773件をprivate Storageへ保存 |
+| ゲームシステム文書 | ✅ | Bedrock Titanハイブリッド検索 |
+| 質問条件の保持 | ✅ | 距離/接触持続/状態/DR/Burnout/画面端/視点をscenario化 |
+| 技名の曖昧性 | ✅ | 複数強度・派生は数値計算せず確認候補を返す |
+| フレーム上の反撃候補 | ✅ | ジャンプ技・連携途中を除外、到達/リソース未検証を明示 |
+| 距離込み確定反撃 | ⚠ | 時間と空間を分離済み。geometry/実測のDB投入は未完了 |
+| ヒット後接続の全条件対応 | ⚠ | キャンセル/距離/空中状態の型拡張が必要 |
 
-## M2 への引き継ぎ事項
+追加の条件付きデータモデルは [CONTEXTUAL_FRAME_MODEL.md](docs/CONTEXTUAL_FRAME_MODEL.md) と
+[contextual_frame_model_migration.sql](sql/contextual_frame_model_migration.sql) を参照。
 
-- 必殺技・SA の CAPCOM ↔ SuperCombo マッピング
-- ゲームシステム文書 (Gauges, Offense, Defense 等) のベクトル検索
-- Ollama Embedding の pgvector 格納 (Phase 2)
-- 他キャラの解説テキスト整備
-- OllamaProvider のベクトル検索精度チューニング
+## 次の設計対象
+
+- 追加スキーマ適用と正規技ID/条件付き観測のバックフィル
+- SC `atk_range`、ガード後距離、レビュー済みUFD geometryを使った到達可能性判定
+- パッチ単位のBurnout/DR/カウンター補正ルール投入
+- ヒット有利・キャンセル・チェーン・空中/KD状態を使う接続候補計算
+- ソース更新日時/パッチ差分を使う鮮度監視
+
+## 検証
+
+```bash
+# 単体テスト
+PYTHONPATH=src ./.venv312/bin/python -m unittest discover -s tests -p 'test_*.py'
+
+# 全ソース・全技の型/視点/回答監査
+PYTHONPATH=src ./.venv312/bin/python tests/frame_profile_comprehensive_audit.py
+
+# Discord bot実経路の全質問（基礎5系統 + 確反提案/判定保留）
+SF6_MCP_LOCAL_ONLY=1 PYTHONPATH=src ./.venv312/bin/python \
+  tests/bot_comprehensive_eval.py --exhaustive \
+  --summary-only --jsonl '' --concurrency 16
+```
+
+2026-07-13時点: unittest 58/58、統合監査92,940 assertions、bot 9,728問
+（発生/持続/硬直/攻撃側/防御側 各1,790 + 確反778）、すべて0失敗。
+0失敗は保存済み値の型・出所・視点・回答の整合性を示し、数値網羅率100%を意味しない。
+攻撃行の詳細な充足数は `tests/frame_profile_comprehensive_results.json` を参照。
 
 ## 失敗パターンログ
 
@@ -155,6 +225,7 @@ PYTHONPATH=src python -m sf6_engine.cli lookup sagat "立ち弱P（タイガー�
 |---|---|---|
 | 波動拳/昇竜拳を通常技に誤マッピング | Gemma4 の学習バイアス | ✅ キーワード検出 + 事後除去 |
 | punish_check でパニカンFを反撃Fと混同 | コンテキスト不足 | ✅ 反撃可否を自動計算して追記 |
+| 発生だけでジャンプ技まで確反扱い | 距離・実行可能状態を未分離 | ✅ 時間候補へ訂正、非ニュートラル技を除外 |
 | ゲーム概念の精度が低い | 文書データなし | Phase 2 で解決予定 |
 
 ## AWS EC2 でのリモート Ollama 利用

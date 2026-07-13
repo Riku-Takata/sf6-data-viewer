@@ -15,6 +15,7 @@ from typing import Any
 
 from sf6_engine.db import get_client
 from sf6_engine.token_usage import usage_label
+from sf6_engine.ufd import fetch_ufd_details, format_ufd_details
 
 logger = logging.getLogger(__name__)
 
@@ -591,7 +592,28 @@ def _fmt_sc_move(row: dict) -> str:
         notes = row['notes']
         lines.append(f"解説: {notes[:400]}" + ("…" if len(notes) > 400 else ""))
 
+    ufd = fetch_ufd_details(
+        _ufd_slug_for_sc_chara(chara), sc_input=inp, move_name=name
+    )
+    if ufd:
+        lines.append(format_ufd_details(ufd))
+
     return "\n".join(lines)
+
+
+@lru_cache(maxsize=64)
+def _ufd_slug_for_sc_chara(chara: str) -> str:
+    """SuperComboキャラ名をUFDの保存キー(CAPCOM slug)へ解決する。"""
+    try:
+        result = (
+            get_client().table("char_slug_map").select("capcom_slug")
+            .eq("sc_chara", chara).limit(1).execute()
+        )
+        if result.data:
+            return result.data[0]["capcom_slug"]
+    except Exception as exc:  # pragma: no cover - DB一時障害時の安全なフォールバック
+        logger.debug("UFD character mapping unavailable: %s", exc)
+    return chara.lower().replace(".", "").replace("_", "")
 
 
 # ============================================================
@@ -972,6 +994,12 @@ def _fmt_move(row: dict) -> str:
     if notes:
         lines.append(f"解説: {notes}")
 
+    ufd = fetch_ufd_details(
+        chara_slug, sc_input=sc_input, move_name=move_name
+    )
+    if ufd:
+        lines.append(format_ufd_details(ufd))
+
     return "\n".join(lines)
 
 
@@ -1164,6 +1192,75 @@ async def build_context(intent: dict, provider=None) -> str:
             logger.info("move_name 欠落 → raw_query でファミリー検索を試行")
 
     sections: list[str] = []
+
+    # Core frame-data questions use the same deterministic multi-source
+    # profile as MCP/Discord.  This keeps CLI and bot source selection
+    # identical and bypasses the legacy query-shape-dependent lookup paths.
+    raw_query = intent.get("raw_query", "")
+    core_frame_query = bool(re.search(
+        r'発生|持続|硬直|ガード|ヒット|全体|性能|フレーム', raw_query
+    ))
+    typed_frame_path = bool(
+        intent_type == "punish_check"
+        or core_frame_query
+        or intent.get("scenario")
+    )
+    if (intent_type in ("lookup_move", "punish_check") and chara
+            and typed_frame_path and (inp or move_name)):
+        from sf6_engine.frame_data import format_frame_profile_context, lookup_frame_data
+
+        identifier = inp or move_name or raw_query
+        lookup = lookup_frame_data(
+            chara,
+            identifier,
+            scenario=intent.get("scenario"),
+        )
+        if lookup.get("found") and lookup.get("move"):
+            move = lookup["move"]
+            profile = move.get("frame_profile") or {}
+            sections.append(format_frame_profile_context(profile))
+            resolution = profile.get("resolution") or {}
+            if resolution.get("status") != "resolved":
+                sections.append(
+                    "【回答制約】技が一意に解決されていません。数値を断定せず、"
+                    f"次を確認してください: {resolution.get('clarification') or '正式名またはコマンド'}"
+                )
+                return "\n\n".join(sections)
+            ufd = move.get("ufd") or {}
+            if ufd.get("hitbox_source_url"):
+                sections.append(f"当たり判定GIF (UFD): {ufd['hitbox_source_url']}")
+            if intent_type == "punish_check":
+                evaluation = profile.get("scenario_evaluation") or {}
+                assessment = evaluation.get("punish_assessment") or {}
+                contextual_block = (
+                    evaluation.get("block_perspectives", {}).get("attacker") or {}
+                )
+                block_adv = (
+                    contextual_block.get("value")
+                    if contextual_block.get("usable_for_calculation") else None
+                )
+                if isinstance(block_adv, int) and assessment.get("frame_punishable"):
+                    sections.append(
+                        f"【反撃判定】攻撃側はガード時 {block_adv:+d}F、"
+                        f"防御側は {-block_adv:+d}F → "
+                        f"発生 {assessment.get('punish_window_f')}F 以内がフレーム上の候補です。"
+                        "ガード後距離・押し戻し・技の到達は未検証なので、"
+                        "確定反撃としては断定できません。"
+                    )
+                elif isinstance(block_adv, int):
+                    sections.append(
+                        f"【反撃判定】攻撃側はガード時 {block_adv:+d}Fのため、"
+                        "防御側に確定反撃のフレームはありません。"
+                    )
+                else:
+                    sections.append(
+                        "【反撃判定】今回の条件で硬直差が単一値に確定しないため判定保留。"
+                    )
+            return "\n\n".join(sections)
+        sections.append(
+            f"⚠ {chara} の {identifier} の統合フレームデータが見つかりませんでした。"
+        )
+        return "\n\n".join(sections)
 
     # --- setplay_analysis: KD後・有利フレーム後の起き攻め択を計算 ---
     if intent_type == "setplay_analysis" and chara:
@@ -1368,7 +1465,8 @@ async def build_context(intent: dict, provider=None) -> str:
                     if blk <= -1:
                         sections.append(
                             f"【反撃判定】ガード時 {_sign(blk)}F → "
-                            f"発生 {abs(blk)}F 以内の技なら確定反撃が入ります。"
+                            f"発生 {abs(blk)}F 以内がフレーム上の候補です。"
+                            "到達距離は未検証です。"
                         )
                     else:
                         sections.append(
@@ -1475,7 +1573,8 @@ async def build_context(intent: dict, provider=None) -> str:
                     if blk <= -1:
                         sections.append(
                             f"【反撃判定】ガード時 {_sign(blk)}F → "
-                            f"発生 {abs(blk)}F 以内の技なら確定反撃が入ります。"
+                            f"発生 {abs(blk)}F 以内がフレーム上の候補です。"
+                            "到達距離は未検証です。"
                         )
                     else:
                         sections.append(
@@ -1516,7 +1615,8 @@ async def build_context(intent: dict, provider=None) -> str:
                         if blk <= -1:
                             sections.append(
                                 f"【反撃判定】ガード時 {_sign(blk)}F → "
-                                f"発生 {abs(blk)}F 以内の技なら確定反撃が入ります。"
+                                f"発生 {abs(blk)}F 以内がフレーム上の候補です。"
+                                "到達距離は未検証です。"
                             )
                         else:
                             sections.append(
@@ -1650,6 +1750,11 @@ ANSWER_SYSTEM = """\
     - 判定セクションが無ければ通常版のデータで答えた上で、バリアントが存在すること
       (と主な違い、例: ガード時有利の変化) に必ず一言触れる
     - 入力表記の [] はボタンを押し続ける (ためる)、{} は部分ための意味である
+17. 【質問条件】または「条件適用後」の行がある場合:
+    - 通常の表値ではなく、条件適用後の値と status を優先する
+    - conditional_unresolved / invalid_condition / move_ambiguous は数値を推測せず、確認事項を返す
+    - 「フレーム上の反撃候補」は距離・押し戻し・到達を証明していないため、
+      「確定反撃」と断定せず、到達未検証の候補として説明する
 """
 
 
@@ -1993,11 +2098,434 @@ def _variant_mention_note(answer: str, context: str) -> str:
     return f"\n\n※ この技には条件で性能が変わるバージョンがあります: {' / '.join(dict.fromkeys(labels))}"
 
 
+def _answer_has_frame_value(answer: str, value: int) -> bool:
+    """回答が指定フレーム値を表現しているかを緩めに判定する。"""
+    signed = f"{value:+d}"
+    abs_value = str(abs(value))
+    if re.search(rf'(?<![\d.]){re.escape(signed)}\s*(?:F|フレーム)?(?![\d.])', answer):
+        return True
+    if value == 0 and re.search(r'(?<![\d.])0\s*(?:F|フレーム)?(?![\d.])|五分', answer):
+        return True
+    word = '有利' if value > 0 else '不利'
+    return bool(
+        re.search(rf'(?<![\d.]){abs_value}\s*(?:F|フレーム)?[^。\n]{{0,10}}{word}', answer)
+        or re.search(rf'{word}[^。\n]{{0,10}}(?<![\d.]){abs_value}\s*(?:F|フレーム)?', answer)
+    )
+
+
+def _answer_has_signed_polarity_conflict(answer: str, value: int) -> bool:
+    """符号付き数値の近くで有利/不利が逆に書かれていないか判定する。"""
+    if value == 0:
+        return False
+    signed = f"{value:+d}"
+    wrong_word = '有利' if value < 0 else '不利'
+    return bool(
+        re.search(rf'{re.escape(signed)}\s*(?:F|フレーム)?[^。\n]{{0,10}}{wrong_word}', answer)
+        or re.search(rf'{wrong_word}[^。\n]{{0,10}}{re.escape(signed)}\s*(?:F|フレーム)?', answer)
+    )
+
+
+def _requested_perspective_value(query: str, context: str) -> tuple[str, int] | None:
+    """質問が要求する視点のフレーム値をコンテキストから決定論で取る。"""
+    if _has_material_scenario(context):
+        if "ガード" in query:
+            if _ATTACKER_VIEW_RE.search(query):
+                label = "技を出した側"
+                contextual = _contextual_profile_fact(context, "ガード時（攻撃側）")
+            elif _DEFENDER_VIEW_RE.search(query):
+                label = "ガードした側"
+                contextual = _contextual_profile_fact(context, "ガード時（防御側）")
+            else:
+                contextual = None
+                label = ""
+        elif re.search(r"ヒット|当て|食ら|喰ら|受け", query):
+            contextual = _contextual_profile_fact(context, "ヒット時（攻撃側）")
+            if _ATTACKER_VIEW_RE.search(query):
+                label = "技を当てた側"
+            elif _DEFENDER_VIEW_RE.search(query):
+                label = "食らった側"
+                if contextual and re.fullmatch(r"[+-]?\d+F", contextual[0]):
+                    value = -int(contextual[0][:-1])
+                    return label, value
+            else:
+                contextual = None
+                label = ""
+        else:
+            contextual = None
+            label = ""
+        if contextual:
+            display, status = contextual
+            if status in {"source_exact", "derived_exact", "condition_selected"}:
+                match = re.fullmatch(r"([+-]?\d+)F", display)
+                if match:
+                    return label, int(match.group(1))
+            return None
+
+    if 'ガード' in query:
+        if _ATTACKER_VIEW_RE.search(query):
+            label = '技を出した側'
+            pattern = r'ガード時[^\n]*技を出した側が([+-]\d+)F'
+        elif _DEFENDER_VIEW_RE.search(query):
+            label = 'ガードした側'
+            pattern = r'ガード時[^\n]*ガードした側は([+-]\d+)F'
+        else:
+            return None
+    elif re.search(r'ヒット|当て|食ら|喰ら|受け', query):
+        if _ATTACKER_VIEW_RE.search(query):
+            label = '技を当てた側'
+            pattern = r'ヒット時[^\n]*技を当てた側が([+-]\d+)F'
+        elif _DEFENDER_VIEW_RE.search(query):
+            label = '食らった側'
+            pattern = r'ヒット時[^\n]*食らった側は([+-]\d+)F'
+        else:
+            return None
+    else:
+        return None
+    m = re.search(pattern, context)
+    if not m and 'ガード' in query:
+        if _ATTACKER_VIEW_RE.search(query):
+            m = re.search(r'ガード時\s*([+-]\d+)F', context)
+        elif _DEFENDER_VIEW_RE.search(query):
+            m = re.search(r'ガードした側は\s*([+-]\d+)F', context)
+    if not m:
+        return None
+    return label, int(m.group(1))
+
+
+def _perspective_corrected_answer(answer: str, query: str, context: str) -> str:
+    """要求視点の値が回答に無い場合は、決定論で短く正答へ置き換える。"""
+    expected = _requested_perspective_value(query, context)
+    if not expected:
+        return answer
+    label, value = expected
+    if _answer_has_frame_value(answer, value) and not _answer_has_signed_polarity_conflict(answer, value):
+        return answer
+    if value > 0:
+        desc = f"{abs(value)}フレーム有利"
+    elif value < 0:
+        desc = f"{abs(value)}フレーム不利"
+    else:
+        desc = "五分"
+    return _ensure_move_reference(f"{label}は {value:+d}F ({desc})です。", context)
+
+
+def _frame_desc(value: int) -> str:
+    if value > 0:
+        return f"{abs(value)}フレーム有利"
+    if value < 0:
+        return f"{abs(value)}フレーム不利"
+    return "五分"
+
+
+def _profile_fact(context: str, label: str) -> tuple[str, str] | None:
+    """統合フレームプロファイルの採用値とソースを取得する。"""
+    match = re.search(
+        rf'^{re.escape(label)}:\s*(.+?)\s+'
+        rf'\[(?:採用:\s*([^\]]+)|攻撃側の(.+?)値を符号反転)\]$',
+        context,
+        re.MULTILINE,
+    )
+    if not match:
+        return None
+    source = match.group(2) or match.group(3)
+    return match.group(1).strip(), source.strip()
+
+
+def _contextual_profile_fact(context: str, label: str) -> tuple[str, str] | None:
+    """Read a condition-applied display and its calculation status."""
+    match = re.search(
+        rf'^条件適用後{re.escape(label)}:\s*(.+?)\s+\[([^\]]+)\]$',
+        context,
+        re.MULTILINE,
+    )
+    if not match:
+        return None
+    return match.group(1).strip(), match.group(2).strip()
+
+
+def _has_material_scenario(context: str) -> bool:
+    """Return whether the question adds a condition that can change frames."""
+    if "条件の確認事項:" in context:
+        return True
+    match = re.search(r"^質問条件:\s*(.+)$", context, re.MULTILINE)
+    if not match:
+        return False
+    fields = set(re.findall(r"([a-z_][a-z0-9_]*)=", match.group(1)))
+    return bool(fields - {"interaction", "perspective"})
+
+
+def _profile_difference(context: str, label: str) -> str:
+    match = re.search(
+        rf'^【ソース差異:{re.escape(label)}】(.+)$', context, re.MULTILINE
+    )
+    return match.group(1).strip() if match else ''
+
+
+def _profile_capcom_note(context: str) -> str:
+    match = re.search(r'^CAPCOM公式注記:\s*(.+)$', context, re.MULTILINE)
+    return match.group(1).strip() if match else ''
+
+
+def _advantage_display(display: str) -> str:
+    """'+4F' を '+4F (4フレーム有利)' のように補足する。"""
+    match = re.fullmatch(r'([+-]?\d+)F', display.strip())
+    if not match:
+        return display
+    value = int(match.group(1))
+    return f"{value:+d}F ({_frame_desc(value)})"
+
+
+def _profile_field_answer(query: str, context: str) -> str | None:
+    """主要フレーム項目を統合プロファイルから決定論的に回答する。"""
+    requested: list[tuple[str, str]] = []
+    for pattern, label in (
+        (r'発生|何Fで出|何フレームで出', '発生'),
+        (r'持続', '持続'),
+        (r'硬直(?!差)', '硬直'),
+    ):
+        if re.search(pattern, query):
+            if (
+                label == "持続"
+                and "質問条件:" in context
+                and "ガード" in query
+                and re.search(r"持続当て|最終持続|持続\s*\d+\s*F?目", query)
+            ):
+                continue
+            requested.append((label, label))
+
+    attacker = _profile_fact(context, 'ガード時（攻撃側・ガードさせた側）')
+    defender = _profile_fact(context, 'ガード時（防御側・ガードした側）')
+    asks_guard = bool(re.search(r'ガード|硬直差', query))
+    lines: list[str] = []
+    contextual_attacker = _contextual_profile_fact(context, "ガード時（攻撃側）")
+    contextual_defender = _contextual_profile_fact(context, "ガード時（防御側）")
+    if asks_guard and _has_material_scenario(context):
+        selected_contextual = (
+            contextual_defender if _DEFENDER_VIEW_RE.search(query)
+            else contextual_attacker
+        )
+        if selected_contextual and selected_contextual[1] not in {
+            "source_exact", "derived_exact", "condition_selected",
+        }:
+            lines.append(
+                f"条件適用後のガード時硬直差は{selected_contextual[0]}"
+                f"（{selected_contextual[1]}）のため、単一値を確定できません。"
+            )
+            attacker = None
+            defender = None
+        elif contextual_attacker:
+            attacker = (contextual_attacker[0], f"条件評価:{contextual_attacker[1]}")
+            if contextual_defender:
+                defender = (
+                    contextual_defender[0],
+                    f"条件評価:{contextual_defender[1]}",
+                )
+
+    for _, label in requested:
+        fact = _profile_fact(context, label)
+        if not fact:
+            continue
+        display, source = fact
+        if source == 'なし' or display == 'データなし':
+            lines.append(
+                f"{label}はCAPCOM公式・UFD・SuperComboのいずれにも"
+                "データがありません。"
+            )
+        else:
+            lines.append(f"{label}は{display}です（{source}）。")
+        difference = _profile_difference(context, label)
+        if difference:
+            lines.append(f"ソース別の記録: {difference}。")
+        note = _profile_capcom_note(context)
+        if note and any(token in display for token in (
+            '条件', '※', '複数持続', '着地', '硬直単独値なし'
+        )):
+            lines.append(f"CAPCOM公式注記: {note}")
+
+    if asks_guard and attacker:
+        attacker_display, source = attacker
+        defender_display = defender[0] if defender else '算出不可'
+        if source == 'なし' or attacker_display == 'データなし':
+            lines.append(
+                "ガード時硬直差はCAPCOM公式・UFD・SuperComboのいずれにも"
+                "データがないため、攻撃側・防御側とも算出できません。"
+            )
+        elif _ATTACKER_VIEW_RE.search(query):
+            lines.append(
+                "ガードさせた側（攻撃側）は"
+                f"{_advantage_display(attacker_display)}です（{source}）。"
+            )
+        elif _DEFENDER_VIEW_RE.search(query):
+            lines.append(
+                "ガードした側（防御側）は"
+                f"{_advantage_display(defender_display)}です"
+                f"（{source}の攻撃側硬直差を符号反転）。"
+            )
+        else:
+            lines.append(
+                "ガード時は、"
+                f"攻撃側が{_advantage_display(attacker_display)}、"
+                f"防御側が{_advantage_display(defender_display)}です（{source}）。"
+            )
+        difference = _profile_difference(context, 'ガード時')
+        if difference:
+            lines.append(f"ソース別の記録: {difference}。")
+
+    generic_profile_query = bool(
+        re.search(r'性能|フレームデータ|フレーム情報|詳しく|教えて|データ', query)
+    )
+    if not lines and generic_profile_query and '統合フレームプロファイル' in context:
+        for label in ('発生', '持続', '硬直'):
+            fact = _profile_fact(context, label)
+            if fact:
+                lines.append(f"{label}: {fact[0]}（{fact[1]}）")
+        if attacker:
+            defender_display = defender[0] if defender else '算出不可'
+            lines.append(
+                "ガード時: "
+                f"攻撃側{_advantage_display(attacker[0])} / "
+                f"防御側{_advantage_display(defender_display)}（{attacker[1]}）"
+            )
+
+    if not lines:
+        return None
+    body = lines[0] if len(lines) == 1 else '\n'.join(f"- {line}" for line in lines)
+    return _ensure_move_reference(body, context)
+
+
+def _deterministic_frame_answer(query: str, context: str) -> str | None:
+    """単純なフレーム質問は参照データから決定論で即答する。
+
+    発生・ガード視点・確定反撃候補は MCP/DB コンテキストに正規化済みの
+    数値が含まれるため、LLM 生成を介さない方が速く、視点取り違えも起きない。
+    """
+    profile_answer = _profile_field_answer(query, context)
+    if profile_answer:
+        return profile_answer
+
+    if re.search(r'発生|何Fで出|何フレームで出', query):
+        m = re.search(r'発生:\s*([+-]?\d+)\s*F?', context)
+        if m:
+            return _ensure_move_reference(f"発生は{int(m.group(1))}Fです。", context)
+
+    if (
+        re.search(r'確定反撃|確反|反撃|提案|使える技|何で返', query)
+        and re.search(r'単一値を確定できないため反撃判定を保留', context)
+    ):
+        display_match = re.search(
+            r'条件適用後ガード時硬直差は\s*(.+?)。', context
+        )
+        display = display_match.group(1) if display_match else "条件別データ"
+        return (
+            f"攻撃側のガード時参照値は{display}ですが、適用条件が未指定です。"
+            "今回の条件では硬直差を単一値に確定できないため、"
+            "確定反撃候補の提示を保留します。"
+        )
+
+    if (
+        'フレーム上の反撃候補（到達未検証）' in context
+        and re.search(r'確定反撃|確反|反撃|提案|使える技|何で返', query)
+    ):
+        options: list[tuple[str, str, str]] = []
+        for m in re.finditer(r'^- ([^/\n]+) / ([^:\n]+): 発生(\d+)F', context, re.MULTILINE):
+            options.append((m.group(1).strip(), m.group(2).strip(), m.group(3)))
+        if not options:
+            return None
+        window_match = re.search(r'発生\s*(\d+)F\s*以内', context)
+        window = window_match.group(1) if window_match else options[-1][2]
+        parts = [
+            f"{inp}（{name}、発生{startup}F）" if inp != '-' else f"{name}（発生{startup}F）"
+            for inp, name, startup in options[:5]
+        ]
+        return (
+            f"ガードした側は +{window}F で、発生{window}F以内がフレーム上の候補です。"
+            f"候補: {'、'.join(parts)}。"
+            "ただしリーチとガード後距離が未検証なので、確定反撃としては未確定です。"
+        )
+
+    if '確定反撃候補' in context and re.search(r'確定反撃|確反|反撃|提案|使える技|何で返', query):
+        options: list[tuple[str, str, str]] = []
+        for m in re.finditer(r'^- ([^/\n]+) / ([^:\n]+): 発生(\d+)F', context, re.MULTILINE):
+            options.append((m.group(1).strip(), m.group(2).strip(), m.group(3)))
+        if not options:
+            return None
+        window_match = re.search(r'発生\s*(\d+)F\s*以内', context)
+        window = window_match.group(1) if window_match else options[-1][2]
+        parts = [
+            f"{inp}（{name}、発生{startup}F）" if inp != '-' else f"{name}（発生{startup}F）"
+            for inp, name, startup in options[:5]
+        ]
+        return (
+            f"ガードした側は +{window}F 有利なので、発生{window}F以内の技が確定反撃です。"
+            f"候補: {'、'.join(parts)}。"
+        )
+
+    expected = _requested_perspective_value(query, context)
+    if expected:
+        label, value = expected
+        return _ensure_move_reference(f"{label}は {value:+d}F ({_frame_desc(value)})です。", context)
+
+    return None
+
+
+def _punish_option_note(answer: str, query: str, context: str) -> str:
+    """確定反撃候補がコンテキストにあるのに回答が落とした場合に補う。"""
+    timing_only = 'フレーム上の反撃候補（到達未検証）' in context
+    if '確定反撃候補' not in context and not timing_only:
+        return ''
+    if not re.search(r'提案|候補|使える技|どの技|何で|確反|反撃', query):
+        return ''
+    opts = []
+    for m in re.finditer(r'^- ([^/\n]+) / ([^:\n]+): 発生(\d+)F', context, re.MULTILINE):
+        inp, name, startup = (m.group(1).strip(), m.group(2).strip(), m.group(3))
+        if (inp != '-' and inp in answer) or name in answer:
+            return ''
+        opts.append((inp, name, startup))
+    if not opts:
+        return ''
+    parts = [
+        f"{inp}（{name}、発生{startup}F）" if inp != '-' else f"{name}（発生{startup}F）"
+        for inp, name, startup in opts[:3]
+    ]
+    label = "フレーム上の反撃候補（到達未検証）" if timing_only else "確定反撃候補"
+    return f"\n\n{label}: " + "、".join(parts)
+
+
+def _postprocess_answer(answer: str, query: str, context: str) -> str:
+    """LLM後の決定論的な補足をまとめて適用する。"""
+    answer = _perspective_corrected_answer(answer, query, context)
+    return answer + _variant_mention_note(answer, context) + _punish_option_note(answer, query, context)
+
+
 def _context_frame_excerpt(context: str, limit: int = 6) -> str:
     """検証失敗時にユーザーへ添える、コンテキストのフレーム数値行の抜粋。"""
     lines = [ln.strip() for ln in context.split('\n')
              if _FRAME_TOKEN_RE.search(ln) and not ln.startswith('⚠')]
     return '\n'.join(lines[:limit])
+
+
+def _answer_mentions_transcribed_values(answer: str, transcribed: object) -> bool:
+    """構造化出力が転記した値を、回答本文が使っているか緩めに判定する。
+
+    発生などの単純なフレーム値は「12F」ではなく「12です」と返っても
+    ユーザー向けには自然なので、符号なし値は単位なし表記も許容する。
+    """
+    if not transcribed:
+        return False
+    values = transcribed if isinstance(transcribed, list) else [transcribed]
+    for value in values:
+        text = str(value).strip()
+        if not text:
+            continue
+        numeric_like = re.fullmatch(r'[+-]?\d+(?:\.\d+)?\s*(?:F|フレーム)?', text)
+        if not numeric_like and text in answer:
+            return True
+        for m in re.finditer(r'([+-]?)(\d+(?:\.\d+)?)\s*(?:F|フレーム)?', text):
+            sign, num = m.group(1), m.group(2)
+            prefix = re.escape(sign + num) if sign else rf'[+-]?{re.escape(num)}'
+            if re.search(rf'(?<![\d.]){prefix}\s*(?:F|フレーム)?(?![\d.])', answer):
+                return True
+    return False
 
 
 async def generate_answer(
@@ -2015,6 +2543,10 @@ async def generate_answer(
     Returns:
         str: ユーザーへの回答文字列。
     """
+    deterministic = _deterministic_frame_answer(query, context)
+    if deterministic:
+        return _postprocess_answer(deterministic, query, context)
+
     # 重要行の再掲を参照データ末尾 (=質問の直前) に配置する (Lost in the Middle 対策)
     prompt = ANSWER_TEMPLATE.format(
         context=context + _recap_lines(query, context), query=query)
@@ -2053,7 +2585,7 @@ async def generate_answer(
             transcribed = data.get(
                 "参照データから符号ごと一字一句転記したフレーム数値のリスト") or []
             if (transcribed and _FRAME_TOKEN_RE.search(context)
-                    and not re.search(r'[+-]?\d+(?:\.\d+)?\s*(?:F|フレーム)', answer)):
+                    and not _answer_mentions_transcribed_values(answer, transcribed)):
                 problems.append("回答文が転記した数値を1つも使っていない")
             # 質問されたフィールドの値が回答に含まれているか
             for label, vals in _field_expected_values(query, context).items():
@@ -2064,24 +2596,27 @@ async def generate_answer(
                     )
             if not problems:
                 answer = _ensure_move_reference(answer, context)
-                return answer + _variant_mention_note(answer, context)
+                return _postprocess_answer(answer, query, context)
             logger.warning(f"回答検証NG (attempt {attempt}): {problems}")
             attempt_prompt = (
                 f"{prompt}\n\n## 前回回答の検証エラー (参照データの数値をそのまま転記して修正すること)\n- "
                 + "\n- ".join(problems)
             )
         if answer:
-            # 2回とも検証NG → 回答に参照データ抜粋を添えて正直に返す
+            # 2回とも検証NG → 誤った回答は返さず、安全な決定論フォールバックへ。
             excerpt = _context_frame_excerpt(context)
             if excerpt:
-                return (
-                    f"{answer}\n\n⚠ 自動検証で数値の不一致を検出しました。"
-                    f"正確な参照データ:\n{excerpt}"
-                )
-            return answer
+                logger.warning("回答検証NG。参照データ抜粋:\n%s", excerpt)
+            deterministic_retry = _deterministic_frame_answer(query, context)
+            if deterministic_retry:
+                return _postprocess_answer(deterministic_retry, query, context)
+            return (
+                "参照データは取得できましたが、矛盾のない回答文を生成できませんでした。"
+                "技名と確認したい項目（発生・持続・硬直・ガード時など）を指定してください。"
+            )
 
     # フォールバック: 従来の自由文生成 (構造化非対応プロバイダ / JSON失敗時)
     with usage_label("answer_fallback"):
         resp = await provider.generate(prompt=prompt, system=ANSWER_SYSTEM)
     answer = resp.text.strip()
-    return answer + _variant_mention_note(answer, context)
+    return _postprocess_answer(answer, query, context)

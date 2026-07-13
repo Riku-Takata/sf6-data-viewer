@@ -20,6 +20,11 @@ import json
 import logging
 import re
 
+from sf6_engine.frame_scenario import (
+    merge_frame_scenarios,
+    parse_frame_scenario,
+    strip_scenario_phrases,
+)
 from sf6_engine.llm_provider import LLMProvider
 
 # 通常技を示す単語パターン (これを含む技名は通常技と判定)
@@ -113,6 +118,132 @@ _COMBO_INDICATORS = re.compile(
 
 logger = logging.getLogger(__name__)
 
+_JP_TO_SC_CHARA: dict[str, str] = {
+    "リュウ": "Ryu", "ケン": "Ken", "サガット": "Sagat", "ルーク": "Luke",
+    "ガイル": "Guile", "春麗": "Chun-Li", "チュンリー": "Chun-Li",
+    "キャミィ": "Cammy", "豪鬼": "Akuma", "アクマ": "Akuma",
+    "ザンギエフ": "Zangief", "ブランカ": "Blanka", "ダルシム": "Dhalsim",
+    "本田": "E.Honda", "エドモンド本田": "E.Honda", "エホンダ": "E.Honda",
+    "ジュリ": "Juri", "マリーザ": "Marisa", "ジェイミー": "Jamie",
+    "キンバリー": "Kimberly", "リリー": "Lily", "マノン": "Manon",
+    "ラシード": "Rashid", "ディージェイ": "Dee_Jay", "エド": "Ed",
+    "テリー": "Terry", "舞": "Mai", "エレナ": "Elena",
+    "イングリッド": "Ingrid", "アレックス": "Alex", "JP": "JP",
+    "A.K.I.": "A.K.I.", "AKI": "A.K.I.", "ベガ": "M.Bison",
+    "M.バイソン": "M.Bison", "バイソン": "M.Bison",
+    "C.ヴァイパー": "C.Viper", "ヴァイパー": "C.Viper",
+}
+
+_SC_CHARA_NAMES = {
+    "Ryu", "Ken", "Sagat", "Luke", "Guile", "Chun-Li", "Cammy", "Akuma",
+    "Zangief", "Blanka", "Dhalsim", "E.Honda", "Juri", "Marisa", "JP",
+    "Jamie", "Kimberly", "Lily", "Manon", "Rashid", "Dee_Jay", "Ed",
+    "A.K.I.", "Terry", "Mai", "Elena", "Ingrid", "Alex", "M.Bison",
+    "C.Viper",
+}
+
+
+def _looks_like_sc_input_phrase(text: str) -> bool:
+    """5HP~HP / j.HP~j.HP / [4]6LP / 22P~214P などの SC input 表記。"""
+    if not text:
+        return False
+    if text == "-":
+        return True
+    if re.fullmatch(r'[LMH]?[PK]{1,3}(?:~[LMH]?[PK]{1,3})*', text):
+        return True
+    if re.fullmatch(r'[1-9](?:~[1-9])+', text):
+        return True
+    if re.fullmatch(r'[1-9]\[[1-9]\]', text):
+        return True
+    if re.fullmatch(r'~[LMH][PK]\s*\([A-Za-z ]+\)', text):
+        return True
+    return bool(
+        re.fullmatch(r'[A-Za-z0-9jJ.\[\]{}()/,+~ \-]+', text)
+        and (re.search(r'\d', text) or re.search(r'(?i)j\.', text))
+        and re.search(r'[LPKMH]', text.upper())
+    )
+
+
+def _extract_simple_chara(query: str) -> tuple[str, str, str] | None:
+    """先頭の「キャラ名の…」を検出して (表記, SC名, 残り) を返す。"""
+    names = {**_JP_TO_SC_CHARA, **{name: name for name in _SC_CHARA_NAMES}}
+    for name, sc_name in sorted(names.items(), key=lambda item: -len(item[0])):
+        prefix = f"{name}の"
+        if query.startswith(prefix):
+            return name, sc_name, query[len(prefix):]
+    return None
+
+
+def _extract_simple_move(rest: str) -> str | None:
+    """キャラ名を除いた質問から技名部分を抽出する。"""
+    m = re.match(
+        r'(.+?)(?:'
+        r'の(?:発生|持続|硬直(?:差)?|全体|ガード|ヒット|ダメージ|性能|フレーム)'
+        r'|を|について|は[？?]|$)',
+        rest,
+    )
+    if not m:
+        return None
+    move = m.group(1).strip()
+    return move or None
+
+
+def _deterministic_simple_intent(query: str) -> dict | None:
+    """定型のフレーム/ガード/確反質問を LLM なしで intent 化する。
+
+    Discord bot の主要ユースケースと網羅評価の質問形は、
+    「キャラの技の発生」「キャラの技をガードさせた/した」
+    「キャラの技を○○でガードした後、確定反撃…」に収まる。
+    ここを決定論で処理することで LLM の技名誤訳・input丸めを避ける。
+    """
+    detected = _extract_simple_chara(query)
+    if not detected:
+        return None
+    _, chara, rest = detected
+    move = strip_scenario_phrases(_extract_simple_move(rest))
+    if not move:
+        return None
+
+    if re.search(r'確定反撃|確反|反撃|使える技|提案', query) and 'ガード' in query:
+        intent_type = "punish_check"
+    elif re.search(
+        r'発生|持続|硬直|全体|ガード|ヒット|ダメージ|性能|何F|何フレーム|フレーム',
+        query,
+    ):
+        intent_type = "lookup_move"
+    else:
+        return None
+
+    intent: dict = {
+        "intent_type": intent_type,
+        "chara": chara,
+        "raw_query": query,
+    }
+
+    punisher = None
+    for name, sc_name in sorted(_JP_TO_SC_CHARA.items(), key=lambda item: -len(item[0])):
+        if re.search(rf'{re.escape(name)}でガード', query):
+            punisher = sc_name
+            break
+    if punisher:
+        intent["chara2"] = punisher
+
+    scenario = parse_frame_scenario(query)
+    if scenario:
+        intent["scenario"] = scenario
+
+    if _looks_like_sc_input_phrase(move):
+        intent["input"] = move
+    else:
+        for jp, numpad in _JP_ABBREV_TO_NUMPAD.items():
+            if jp == move:
+                intent["input"] = numpad
+                break
+        if "input" not in intent:
+            intent["move_name"] = move
+
+    return intent
+
 # ============================================================
 # Intent のスキーマ定義
 # ============================================================
@@ -141,6 +272,37 @@ INTENT_SCHEMA = {
         "move_name2": {"type": "string", "description": "比較先の必殺技・SA名 (compare_moves 時)"},
         "field":     {"type": "string", "description": "特定フィールド (startup/block_adv/atk_range 等)"},
         "concept":   {"type": "string", "description": "ゲーム概念名"},
+        "scenario": {
+            "type": "object",
+            "description": "質問に明示された距離・接触持続・状態・視点などの状況条件",
+            "properties": {
+                "distance": {
+                    "type": "string",
+                    "enum": ["point_blank", "close", "mid", "far", "tip", "max_range"],
+                },
+                "distance_value": {"type": "number"},
+                "distance_unit": {"type": "string"},
+                "contact_timing": {
+                    "type": "string",
+                    "enum": ["first_active", "late_active", "last_active", "active_frame"],
+                },
+                "active_frame": {"type": "integer"},
+                "stage_index": {"type": "integer"},
+                "opponent_state": {
+                    "type": "string",
+                    "enum": ["standing", "crouching", "airborne"],
+                },
+                "counter_state": {
+                    "type": "string",
+                    "enum": ["normal", "counter", "punish_counter"],
+                },
+                "defender_burnout": {"type": "boolean"},
+                "drive_rush": {"type": "string", "enum": ["raw", "cancel"]},
+                "corner": {"type": "boolean"},
+                "interaction": {"type": "string", "enum": ["block", "hit"]},
+                "perspective": {"type": "string", "enum": ["attacker", "defender"]},
+            },
+        },
         "raw_query": {"type": "string", "description": "元の質問文"},
     },
     "required": ["intent_type", "raw_query"],
@@ -284,6 +446,11 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
         dict: INTENT_SCHEMA に準拠した Intent。
               最低限 {"intent_type": "...", "raw_query": "..."} を含む。
     """
+    deterministic = _deterministic_simple_intent(query)
+    if deterministic:
+        logger.debug(f"Intent parsed deterministically: {deterministic}")
+        return deterministic
+
     prompt = f'次のSF6に関する質問を解析してください:\n\n{query}'
 
     try:
@@ -296,7 +463,11 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
             )
     except (ValueError, Exception) as e:
         logger.warning(f"Intent parse failed: {e}. Falling back to general_question.")
-        return {"intent_type": "general_question", "raw_query": query}
+        fallback = {"intent_type": "general_question", "raw_query": query}
+        scenario = parse_frame_scenario(query)
+        if scenario:
+            fallback["scenario"] = scenario
+        return fallback
 
     # raw_query が欠けている場合は補完
     result.setdefault("raw_query", query)
@@ -439,6 +610,18 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
                 result["move_name"] = m.group(1)
                 logger.info(f"Extracted English move name: '{m.group(1)}'")
                 break
+
+    # LLM が状況を省略・誤解しても、質問文に明示された条件を決定論抽出で上書きする。
+    # 技名フィールドに条件語が混入した場合もここで除去する。
+    scenario = merge_frame_scenarios(parse_frame_scenario(query), result.get("scenario"))
+    if scenario:
+        result["scenario"] = scenario
+    else:
+        result.pop("scenario", None)
+    if result.get("move_name"):
+        cleaned_move_name = strip_scenario_phrases(result["move_name"])
+        if cleaned_move_name:
+            result["move_name"] = cleaned_move_name
 
     logger.debug(f"Intent parsed: {result}")
     return result

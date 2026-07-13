@@ -7,6 +7,7 @@ __pycache__/
 .mypy_cache/
 docs/*.json
 tests/*_results.json
+tests/*_results.jsonl
 # SAM (MCP デプロイ)
 samconfig-mcp.toml
 .aws-sam/
