@@ -8,6 +8,7 @@
 intent_type → MCP ツール対応:
   lookup_move      → lookup_move(character, move_name)
   punish_check     → check_punish(character, move_name, punisher?)
+  sequence_analysis→ analyze_sequence(character, attacker_sequence, defender action)
   setplay_analysis → compute_setplay(character, move_input)   ※ move_input は numpad/SC入力
   max_combo        → analyze_combo(character, starter_input)
   combo_info       → lookup_move (キャンセル情報を含むため代替)
@@ -195,6 +196,31 @@ def map_intent(intent: dict) -> list[tuple[str, dict]]:
             args["punisher"] = punisher
         return [("check_punish", args)]
 
+    if it == "sequence_analysis":
+        sequence = intent.get("attacker_sequence") or []
+        if not (slug and len(sequence) == 2):
+            return []
+        defender = intent.get("defender_action") or {}
+        args: dict = {
+            "character": slug,
+            "attacker_sequence": sequence,
+            "initial_interaction": intent.get("initial_interaction") or "block",
+        }
+        attacker_timing = intent.get("attacker_timing") or {}
+        if "delay_f" in attacker_timing:
+            args["attacker_delay_f"] = attacker_timing.get("delay_f")
+        if isinstance(defender.get("startup_f"), int):
+            args["defender_startup_f"] = defender["startup_f"]
+        if "delay_f" in defender:
+            args["defender_delay_f"] = defender.get("delay_f")
+        if defender.get("character"):
+            args["defender_character"] = _slug(defender["character"])
+        if defender.get("move"):
+            args["defender_move"] = defender["move"]
+        if intent.get("expected_outcome"):
+            args["expected_outcome"] = intent["expected_outcome"]
+        return [("analyze_sequence", args)]
+
     if it == "setplay_analysis":
         # compute_setplay は SC chara をそのまま解決可。move_input は numpad/SC入力。
         if (chara or slug) and move:
@@ -343,6 +369,26 @@ def _local_move_payload(character: str, query_move_name: str, row: dict) -> dict
 
 def _call_local_tool(name: str, arguments: dict) -> dict | None:
     """API Gateway のレート制限時に使うローカルMCP相当実装。"""
+    if name == "analyze_sequence":
+        from sf6_engine.sequence_analysis import analyze_sequence
+
+        return analyze_sequence(
+            arguments.get("character", ""),
+            arguments.get("attacker_sequence") or [],
+            initial_interaction=arguments.get("initial_interaction") or "block",
+            defender_startup_f=arguments.get("defender_startup_f"),
+            defender_character=arguments.get("defender_character"),
+            defender_move=arguments.get("defender_move"),
+            expected_outcome=arguments.get("expected_outcome"),
+            attacker_delay_f=(
+                arguments["attacker_delay_f"]
+                if "attacker_delay_f" in arguments else 0
+            ),
+            defender_delay_f=(
+                arguments["defender_delay_f"]
+                if "defender_delay_f" in arguments else 0
+            ),
+        )
     if name not in {"lookup_move", "check_punish"}:
         return None
     character = arguments.get("character")
@@ -501,6 +547,9 @@ def result_to_context(tool: str, args: dict, result: dict | None) -> str:
     """
     ch = args.get("character")
     mv = args.get("move_name") or args.get("move_input") or args.get("starter_input")
+    if tool == "analyze_sequence":
+        sequence = args.get("attacker_sequence") or []
+        mv = " -> ".join(sequence) if sequence else "連携"
     # MCP が返す解決後の技名 (SuperCombo 名)。質問の識別子と異なる場合は等値で示し、
     # 「2HK と Tiger Kick は同一技」と LLM が理解できるようにする。
     resolved = (result or {}).get("move_name") or ((result or {}).get("move") or {}).get("move_name")

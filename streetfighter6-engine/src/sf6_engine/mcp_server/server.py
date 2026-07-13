@@ -13,6 +13,7 @@
 公開ツール (ステップ1):
   - lookup_move      : 単一技のフレームデータ照会
   - check_punish     : ガード時の確定反撃判定 (任意で反撃側の確定択を列挙)
+  - analyze_sequence : 連携・最速暴れ・相打ち後の有利と追撃を解析
   - compute_setplay  : KD/ヒット後の起き攻め択計算
   - analyze_combo    : 始動技からの最大コンボ計算 (ビームサーチ)
   - list_moves       : キャラの技名一覧 (技名解決の補助)
@@ -30,6 +31,7 @@ from mcp.server.transport_security import TransportSecuritySettings
 from sf6_engine.db import get_client
 from sf6_engine.frame_data import lookup_frame_data
 from sf6_engine.punish_service import check_punish_data
+from sf6_engine.sequence_analysis import analyze_sequence as analyze_sequence_data
 from sf6_engine.ufd import fetch_ufd_details
 
 # stateless_http + json_response: HTTP transport を AWS Lambda / API Gateway 向けに
@@ -255,6 +257,56 @@ def check_punish(
               (時間+距離を含む確定状態)、``punish_window_f``、候補と検証状態。
     """
     return check_punish_data(character, move_name, punisher, scenario)
+
+
+# ============================================================
+# ツール: analyze_sequence
+# ============================================================
+
+@mcp.tool()
+def analyze_sequence(
+    character: str,
+    attacker_sequence: list[str],
+    initial_interaction: str = "block",
+    defender_startup_f: int | None = None,
+    defender_character: str | None = None,
+    defender_move: str | None = None,
+    expected_outcome: str | None = None,
+    attacker_delay_f: int | None = 0,
+    defender_delay_f: int | None = 0,
+) -> dict:
+    """2技の連携と最速暴れを共通タイムライン上で解析する。
+
+    単発技のフレーム表では答えられない、連携中の同時発生、相打ち後の双方の
+    有利不利、そこから確実につながる追撃を決定論で返す。相手技が未指定なら
+    同じ発生を持つ地上通常技を比較し、単一値を捏造せず範囲と例外を併記する。
+
+    Args:
+        character: 攻撃側キャラのslug (例: ``sagat``)。
+        attacker_sequence: 攻撃側の技列。現在は2技 (例: ``["5MP", "5MP"]``)。
+        initial_interaction: 1技目の結果。``block`` または ``hit``。
+        defender_startup_f: 防御側が最速で出す技の発生。
+        defender_character: 防御側キャラ。特定技を解析するときに指定。
+        defender_move: 防御側の技input/名前。characterと組で指定。
+        expected_outcome: 質問で前提とされた結果 (例: ``trade``)。
+        attacker_delay_f: 2発目の最速入力からの遅らせF。不明ならnull。
+        defender_delay_f: 防御側行動の最速入力からの遅らせF。不明ならnull。
+
+    Returns:
+        dict: 時系列、接触確度、相打ち後の双方の有利差、追撃候補、根拠、
+              決定論生成された ``summary``。
+    """
+    return analyze_sequence_data(
+        character,
+        attacker_sequence,
+        initial_interaction=initial_interaction,
+        defender_startup_f=defender_startup_f,
+        defender_character=defender_character,
+        defender_move=defender_move,
+        expected_outcome=expected_outcome,
+        attacker_delay_f=attacker_delay_f,
+        defender_delay_f=defender_delay_f,
+    )
 
 
 # ============================================================

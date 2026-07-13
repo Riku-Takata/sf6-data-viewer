@@ -10,6 +10,22 @@
 - `python -m sf6_engine.cli ask "ドライブインパクトって何?"` → システム仕様を踏まえた説明を返す
 - `python -m sf6_engine.cli ask "サガットの2HKでパニッシュカウンター取ったらどうなる?"` → 数値+解説を返す
 
+## Post-M1: 連携・相打ち解析 (2026-07-13)
+
+- [x] 2技連携の共通タイムラインと攻撃/防御側ディレイを実装
+- [x] CAPCOM主値+UFD/SC補完とSC hitstun/hitstopを連携解析で統合
+- [x] 相手の発生F指定は区間、キャラ+技指定は個別モデルとして分離
+- [x] 相打ち後の両視点有利差と追撃の timing/spatial/state/confirmed を分離
+- [x] Intent / MCP / Discord / CLI RAGを共通 `sequence_analysis.py` へ接続
+- [x] `sequence_observations` DDL、相手技ID必須の検証、upsertインポーターを実装
+- [x] 不完全な`+7/2MP`報告を未レビュー資料へ降格し、汎用回答から除外
+- [x] unittest 79/79、JSON dry-run 1/1、Supabase実データE2Eを確認
+- [x] 4F地上通常技46件を技別計算し、+6～+12Fの分布と条件付き追撃を確認
+- [ ] Supabaseへ `sequence_analysis_migration.sql` を適用
+- [ ] 相手キャラ+技が特定された実測観測を収集し、レビュー後にupsert
+- [x] AWS MCPを訂正版へ再デプロイし、本番で4F技分布と`Ryu 2LP +9/-9`を確認
+- [ ] UFD GIF geometryと追加実測で相打ち・追撃の到達証明を拡張
+
 ---
 
 ## Phase 1: SuperCombo データの取り込み (12〜16時間)

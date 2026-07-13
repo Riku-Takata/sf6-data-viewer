@@ -31,8 +31,11 @@ Typed Frame Profile Service
 Scenario Evaluator / Punish Service
     │  条件適用値、時間窓、到達証明を別々に判定
     ▼
+Sequence Engine
+    │  2技連携、最速/ディレイ暴れ、相打ち後有利、追撃確度を計算
+    ▼
 Answer Generator
-    │  発生/持続/硬直/両ガード視点は決定論、一般知識はLLM
+    │  コア数値と連携は決定論、一般知識はLLM
     ▼
 CLI 出力
 ```
@@ -128,6 +131,10 @@ UFD由来の詳細を統合プロファイルへ追加する。再取込は既�
 
 ```bash
 PYTHONPATH=src python -m sf6_engine.cli ask "サガットの2HKの発生は?"
+
+# 連携・相打ち後・追撃まで解析
+PYTHONPATH=src python -m sf6_engine.cli ask \
+  "サガットの5MP→5MPに発生4Fで最速暴れすると相打ち後は?"
 ```
 
 **対応している質問タイプ:**
@@ -139,6 +146,7 @@ PYTHONPATH=src python -m sf6_engine.cli ask "サガットの2HKの発生は?"
 | ガード両視点 | 「ガードさせたら?」=攻撃側 / 「ガードしたら?」=防御側 |
 | 状況付き硬直差 | 「ケンの大Kを先端でガードしたら?」「最終持続をガードさせたら?」 |
 | 反撃判定 | 「サガットの2HKガードして反撃できる?」(時間候補と到達確度を分離) |
+| 連携・相打ち | 「5MP→5MPに最速4F暴れした相打ち後は?」(両視点の有利差と追撃) |
 | 比較 | 「サガットとルーク、立ち強Pどっちがリーチ長い?」 |
 | 複数フィールド | 「サガットの2HKでパニカン取ったら何F有利?」 |
 | ゲーム概念 | 「ドライブインパクトって何?」(Phase 2 で精度向上) |
@@ -185,15 +193,19 @@ PYTHONPATH=src python -m sf6_engine.cli lookup sagat "立ち弱P（タイガー�
 | 質問条件の保持 | ✅ | 距離/接触持続/状態/DR/Burnout/画面端/視点をscenario化 |
 | 技名の曖昧性 | ✅ | 複数強度・派生は数値計算せず確認候補を返す |
 | フレーム上の反撃候補 | ✅ | ジャンプ技・連携途中を除外、到達/リソース未検証を明示 |
+| 2技連携・相打ち解析 | ✅ | 両者の遅延、相手技別hitstun分布、完全一致した実測値と追撃確度を分離 |
 | 距離込み確定反撃 | ⚠ | 時間と空間を分離済み。geometry/実測のDB投入は未完了 |
 | ヒット後接続の全条件対応 | ⚠ | キャンセル/距離/空中状態の型拡張が必要 |
 
 追加の条件付きデータモデルは [CONTEXTUAL_FRAME_MODEL.md](docs/CONTEXTUAL_FRAME_MODEL.md) と
 [contextual_frame_model_migration.sql](sql/contextual_frame_model_migration.sql) を参照。
+連携・相打ちモデルは [SEQUENCE_ANALYSIS.md](docs/SEQUENCE_ANALYSIS.md) と
+[sequence_analysis_migration.sql](sql/sequence_analysis_migration.sql) を参照。
 
 ## 次の設計対象
 
 - 追加スキーマ適用と正規技ID/条件付き観測のバックフィル
+- `sequence_analysis_migration.sql` 適用とレビュー済み連携観測のupsert
 - SC `atk_range`、ガード後距離、レビュー済みUFD geometryを使った到達可能性判定
 - パッチ単位のBurnout/DR/カウンター補正ルール投入
 - ヒット有利・キャンセル・チェーン・空中/KD状態を使う接続候補計算
@@ -214,7 +226,7 @@ SF6_MCP_LOCAL_ONLY=1 PYTHONPATH=src ./.venv312/bin/python \
   --summary-only --jsonl '' --concurrency 16
 ```
 
-2026-07-13時点: unittest 58/58、統合監査92,940 assertions、bot 9,728問
+2026-07-13時点: unittest 79/79、統合監査92,940 assertions、bot 9,728問
 （発生/持続/硬直/攻撃側/防御側 各1,790 + 確反778）、すべて0失敗。
 0失敗は保存済み値の型・出所・視点・回答の整合性を示し、数値網羅率100%を意味しない。
 攻撃行の詳細な充足数は `tests/frame_profile_comprehensive_results.json` を参照。

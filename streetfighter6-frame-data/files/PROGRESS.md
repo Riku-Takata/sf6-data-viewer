@@ -7,11 +7,15 @@
 
 ## 🎯 現在のフェーズ
 
-**Milestone**: **状況付きフレーム契約・確反確度分離 ✅ Supabase/AWS本番反映済 (2026-07-13)**
-**現在**: 距離/持続/状態をIntentから保持し、技の曖昧性と条件付き値を計算前に判定する。
-確反は時間窓と到達証明を分離。追加DBスキーマ適用・AWS MCP再デプロイ済み、バックフィル未実施。
-**次**: 正規技ID/条件付き観測をバックフィルし、恒常インポーターへ接続する。
-レビュー済みシステムルールと距離実測を投入後、到達込み確反とヒット後接続へ進む。
+**Milestone**: **決定論的な連携・相打ち・追撃解析 ✅ ローカル/AWS本番反映済 (2026-07-13)**
+**現在**: 2技連携を共通タイムラインで計算し、CAPCOM主値+UFD/SC補完、相手技固有
+hitstun、ディレイ、相打ち後の両視点有利差、追撃確度をIntent/MCP/Discord/RAGで共通化。
+サガット5MP→5MPは、4F地上通常技46件を技別計算して `+6～+12F`。`Ryu 2LP`は
+`+9/-9`、`Sagat 2LP`は`+7/-7`となることを実DB E2E確認済み。
+**次**: `sequence_analysis_migration.sql` をSupabaseへ適用し、相手キャラ+技を記録した
+レビュー可能な実測観測を追加する。
+次段階でUFD GIF geometryと
+追加実測を投入し、相打ち・追撃の到達証明を拡張する。
 
 ## 📊 全体進捗
 
@@ -94,7 +98,7 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 - 派生技の割り込み判定 (フレームギャップ自動計算)
 - パッチ検知時のメール通知 (AWS SNS + SSM)
 
-**現行ローカル実装の検証 (2026-07-13)**: unittest **58/58**、統合監査
+**現行ローカル実装の検証 (2026-07-13)**: unittest **79/79**、統合監査
 **92,940 assertions / 0失敗**、Discord Bot実経路 **9,728/9,728**
 (発生/持続/硬直/攻撃側/防御側 各1,790 + 確反提案・判定保留778)。
 
@@ -106,6 +110,29 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 3. **Web UI** — Slack Bot or 簡易 Web フロントエンド
 
 ## 📝 直近のセッションログ
+
+### 2026-07-13 ★ 連携・相打ち後有利・追撃の決定論解析を実装
+- **Sequence Engine**: 2技連携を共通タイムラインへ配置し、ガード/ヒット後有利、両者の
+  ディレイ、最速暴れ、同時発生、相打ち後の両視点有利差を計算。相手技未指定なら
+  SCの該当発生技群からhitstunモデル区間を返し、単一値を作らない。
+- **ソース統合**: 発生/ガード差等はCAPCOM主値+UFD/SC補完の既存統合プロファイル、
+  `hitstun / blockstun / hitstop / atk_range / notes` はSC補助根拠として合成。パッチ変化で
+  フレーム指紋が変われば旧観測を自動失効する。
+- **自然言語と全経路統合**: `sequence_analysis` Intentを追加。複数キャラ名から攻撃側/暴れ側を分離し、
+  相手技固有の計算に対応。MCP `analyze_sequence`、Discord local/AWS router、CLI RAGを共通化し、
+  最終summaryはLLMに再要約させず数値・視点・確度を保存する。
+- **観測と保証レベル**: `sequence_observations` DDL、スキーマ検証付きJSON、upsertインポーターを追加。
+  観測keyとレビュー条件に相手キャラ+技を必須化。相手技IDのない過去の`+7F / 2MP`報告は
+  未レビュー資料へ降格し、回答から除外した。追撃は timing/spatial/state/confirmed を分離する。
+- **技別計算**: サガット5MPのhitstun 25Fと、SCの4F地上通常技46件それぞれのhitstunから
+  `25 - 相手hitstun - 1`を計算。結果は`+6～+12F`、`Ryu 2LP`は`+9F`、`Sagat 2LP`は`+7F`。
+  `2MP`は時間上44/46技で接続するが、全技共通または距離込みの確定追撃とはしない。
+- **検証**: unittest **79/79**、観測JSON dry-run **1/1**、全ソース統合監査
+  **92,940 assertions / 0失敗**、Discord Bot実経路 **9,728/9,728 / 0失敗**、
+  Supabase実データE2Eで汎用4F技の分布と、`Ryu 2LP`指定時の`+9/-9`を確認。
+- **本番反映**: SAM lint・arm64コンテナbuild後、CloudFormation `sf6-mcp-server` を
+  `UPDATE_COMPLETE`まで更新。ローカルフォールバック無効の本番E2Eで汎用`+6～+12F / 44/46技`と
+  `Ryu 2LP +9/-9 / 2MP猶予2F`を確認。Supabaseの `sequence_analysis_migration.sql` は未適用。
 
 ### 2026-07-13 ★ 状況付きフレーム契約・技同定・確反確度分離を実装
 - **状況を型化**: 距離、接触持続F、段数、相手状態、カウンター、Burnout、DR、
@@ -594,7 +621,8 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 
 ## 🚫 ブロッカー / 懸念
 
-なし
+- 外部反映: Supabase SQL Editorで `streetfighter6-engine/sql/sequence_analysis_migration.sql` を適用する。
+- SQL適用後: `sf6_engine.importers.sequence_observations` を実行し、DB行の読み出しを確認する。
 
 ## 💡 メモ・気づき
 

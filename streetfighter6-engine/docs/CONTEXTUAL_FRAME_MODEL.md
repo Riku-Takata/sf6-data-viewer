@@ -104,6 +104,7 @@ flowchart LR
 | `punish_observations` | 技対技・scenario別の直接確反実測 |
 | `move_transition_observations` | cancel/chain/link/juggle等の合法な技遷移 |
 | `combo_link_observations` | 技A→技B・scenario別の直接コンボ実測 |
+| `sequence_observations` | 複数イベント、相手キャラ+技まで特定した相打ち後有利、確認済み追撃のレビュー済み観測 |
 
 UFD GIFのバイナリは引き続きprivate Storageに置く。GIFが存在するだけでは到達を証明した
 ことにせず、座標系・フレーム同期・抽出方法・confidenceを持つgeometry行を別途登録する。
@@ -125,6 +126,9 @@ UFD GIFのバイナリは引き続きprivate Storageに置く。GIFが存在す�
 - 追加DBマイグレーションと回帰テスト
 - 追加DDLのSupabase適用（10テーブル、適用直後は全テーブル0行）
 - AWS MCP Lambdaへの再デプロイと本番scenario/判定保留スモークテスト
+- 2技連携の共通タイムライン、相打ち後の両視点有利差、追撃確度の分離
+- 連携のIntent/MCP/Discord/RAG統合と、数値をLLMで再生成しない決定論回答
+- `sequence_analysis_migration.sql` とレビュー済み観測インポーターの実装
 
 未完了:
 
@@ -135,6 +139,9 @@ UFD GIFのバイナリは引き続きprivate Storageに置く。GIFが存在す�
 - scenario別のガード後距離・直接確反実測
 - geometry/実測を利用した `confirmed_punishable=true` の解禁
 - cancel/chain/juggle遷移のバックフィルと、scenario対応のヒット後接続サービス
+- `sequence_analysis_migration.sql` のSupabase適用と観測upsert（適用前は同梱JSONにフォールバック）
+
+連携解析の式、観測優先順位、保証境界は `docs/SEQUENCE_ANALYSIS.md` を参照。
 
 ## 検証
 

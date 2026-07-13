@@ -14,7 +14,8 @@ Discord メッセージ
   → MCP クライアント (streamable-http) → AWS MCP サーバ (Bearer 認証)
   → typed frame profile           : CAPCOM主値 + UFD/SC補完 + 両視点 + scenario評価
   → punish_service                : 時間窓と到達確度を分離
-  → generate_answer               : コア数値は決定論、一般質問のみLLM
+  → sequence_analysis             : 連携は共通タイムラインと実測を決定論評価
+  → generate_answer               : 連携は専用summary、一般質問のみLLM
   → Discord に返信
 ```
 
@@ -36,6 +37,7 @@ bot は **Ollama (ローカル) と MCP サーバ (AWS) のみ**に依存。Supa
 |---|---|
 | lookup_move / combo_info | `lookup_move` |
 | punish_check | `check_punish` |
+| sequence_analysis | `analyze_sequence` |
 | setplay_analysis | `compute_setplay` |
 | max_combo | `analyze_combo` |
 | explain_concept | `search_system_docs` |
@@ -80,6 +82,7 @@ bot へのメンション、または `!sf6` プレフィックス:
 @SF6Bot サガットの2HKガードして反撃できる?
 !sf6 ルークの5MPからの最大コンボは?
 !sf6 バーンアウトって何?
+!sf6 サガットの5MP→5MPに発生4Fで最速暴れすると相打ち後は?
 ```
 
 ## 網羅評価
@@ -123,5 +126,6 @@ GPU/CPU リソースのある常時起動ホスト (EC2 等) に Ollama ごと�
 
 - ガード硬直差が範囲/条件別の場合の保証確反と可能確反の分離
 - SCリーチとUFD当たり判定を使う「発生は間に合うが届かない」候補の除外
-- ヒット後のキャンセル・チェーン・空中状態を含む接続候補の決定論化
+- 3技以上、キャンセル・チェーン・空中状態を含む連携/接続の決定論化
+- UFD GIFから校正済みgeometryを生成し、相打ち・追撃の到達判定へ接続
 - AWS本番経路の全件評価はAPI Gatewayレート制限に合わせて分割実行する

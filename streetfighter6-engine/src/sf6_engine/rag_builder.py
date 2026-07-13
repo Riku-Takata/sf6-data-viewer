@@ -1184,7 +1184,7 @@ async def build_context(intent: dict, provider=None) -> str:
     # (special_move_map の日本語ファミリー containment 検索) が
     # クエリ文中の技名 (例: 「…弱ロン・ポワンを食らった時…」) を拾える。
     _MOVE_INTENTS = ("lookup_move", "combo_info", "punish_check",
-                     "setplay_analysis", "max_combo")
+                     "sequence_analysis", "setplay_analysis", "max_combo")
     if chara and not inp and not move_name and intent_type in _MOVE_INTENTS:
         rq = intent.get("raw_query", "")
         if rq:
@@ -1192,6 +1192,29 @@ async def build_context(intent: dict, provider=None) -> str:
             logger.info("move_name 欠落 → raw_query でファミリー検索を試行")
 
     sections: list[str] = []
+
+    # --- sequence_analysis: 連携を共通タイムラインで決定論評価 ---
+    if intent_type == "sequence_analysis":
+        if not chara:
+            return "⚠ 連携を解析するキャラクターが特定できませんでした。"
+        sequence = intent.get("attacker_sequence") or []
+        defender = intent.get("defender_action") or {}
+        from sf6_engine.sequence_analysis import analyze_sequence
+
+        result = analyze_sequence(
+            chara,
+            sequence,
+            initial_interaction=intent.get("initial_interaction") or "block",
+            defender_startup_f=defender.get("startup_f"),
+            defender_character=defender.get("character"),
+            defender_move=defender.get("move"),
+            expected_outcome=intent.get("expected_outcome"),
+            attacker_delay_f=(intent.get("attacker_timing") or {}).get("delay_f", 0),
+            defender_delay_f=defender.get("delay_f", 0),
+        )
+        if not result.get("found"):
+            return f"⚠ {result.get('message') or '連携解析に必要なデータが不足しています。'}"
+        return result["summary"]
 
     # Core frame-data questions use the same deterministic multi-source
     # profile as MCP/Discord.  This keeps CLI and bot source selection
@@ -1755,6 +1778,11 @@ ANSWER_SYSTEM = """\
     - conditional_unresolved / invalid_condition / move_ambiguous は数値を推測せず、確認事項を返す
     - 「フレーム上の反撃候補」は距離・押し戻し・到達を証明していないため、
       「確定反撃」と断定せず、到達未検証の候補として説明する
+18. 【連携解析】がある場合:
+    - 単発技の通常フレームではなく、共通タイムライン、相打ち後有利、確認済み追撃を引用する
+    - 攻撃側+N Fなら防御側-N Fという両視点を併記する
+    - 「確認済み追撃」と単なる「フレーム上の候補」を混同しない
+    - 相手技未指定の注意書きや距離未検証の条件を省略しない
 """
 
 
@@ -2543,6 +2571,13 @@ async def generate_answer(
     Returns:
         str: ユーザーへの回答文字列。
     """
+    # build_context() が生成する連携解析 summary は、共通タイムラインと
+    # レビュー済み観測から既に完成文として決定論生成されている。
+    # LLM に再要約させず、値・視点・確度ラベルを保存する。
+    stripped_context = context.strip()
+    if re.match(r"^【[^\n]+連携解析】(?:\n|$)", stripped_context):
+        return stripped_context
+
     deterministic = _deterministic_frame_answer(query, context)
     if deterministic:
         return _postprocess_answer(deterministic, query, context)

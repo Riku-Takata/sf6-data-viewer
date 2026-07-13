@@ -2,10 +2,10 @@
 
 フロー:
   Discord メッセージ
-    → gemma4 (Ollama) で intent_parser 構造化
+    → intent_parser で構造化 (定型連携は決定論、その他は gemma4)
     → map_intent で MCP ツール選択
     → AWS MCP サーバ経由でツール実行
-    → gemma4 (generate_answer) で日本語回答生成
+    → 連携解析は決定論 summary、それ以外は generate_answer
     → Discord に返信
 
 起動 (engine ルートから):
@@ -62,7 +62,10 @@ _provider = create_provider()
 
 
 # 「特定の技」を対象とするツール (未解決時に聞き返しループの対象になる)
-_MOVE_TOOLS = {"lookup_move", "check_punish", "compute_setplay", "analyze_combo"}
+_MOVE_TOOLS = {
+    "lookup_move", "check_punish", "analyze_sequence",
+    "compute_setplay", "analyze_combo",
+}
 
 
 def _is_unresolved(result: dict | None) -> bool:
@@ -99,10 +102,16 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
     # 3. AWS MCP サーバでツール実行
     contexts: list[str] = []
     move_unresolved = False
+    deterministic_answer: str | None = None
     for tool, args in calls:
         try:
             result = await call_tool(tool, args)
             contexts.append(result_to_context(tool, args, result))
+            if tool == "analyze_sequence" and result:
+                if result.get("summary"):
+                    deterministic_answer = str(result["summary"])
+                elif result.get("message"):
+                    deterministic_answer = str(result["message"])
             if tool in _MOVE_TOOLS and _is_unresolved(result):
                 move_unresolved = True
         except Exception as e:  # noqa: BLE001
@@ -129,8 +138,12 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
             f"教えていただければ今後この呼び方で答えられるようになります。"
         )
 
-    # 4. gemma4 で最終回答生成
-    answer = await generate_answer(question, context, _provider)
+    # 4. 時系列と観測値を返す連携解析は、LLM の言い換えで
+    #    数値や確度が変わらないよう決定論 summary をそのまま返す。
+    if deterministic_answer is not None:
+        answer = deterministic_answer
+    else:
+        answer = await generate_answer(question, context, _provider)
 
     # 5. この質問での LLM トークン消費をログ (コスト単価は env で設定)
     if usage_before is not None:

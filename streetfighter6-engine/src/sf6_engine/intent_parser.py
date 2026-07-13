@@ -5,7 +5,8 @@
 
 出力スキーマ:
   intent_type  : "lookup_move" | "compare_moves" | "explain_concept" |
-                 "punish_check" | "combo_info" | "general_question"
+                 "punish_check" | "combo_info" | "sequence_analysis" |
+                 "general_question"
   chara        : SuperCombo の chara 値 (例: "Sagat", "Ryu")
   chara2       : 比較相手のキャラ (compare_moves 時)
   input        : numpad 表記の技入力 (例: "2HK", "5HP")
@@ -174,6 +175,199 @@ def _extract_simple_chara(query: str) -> tuple[str, str, str] | None:
     return None
 
 
+def _extract_any_chara(query: str) -> tuple[str, str] | None:
+    """Find the first unambiguous character mention anywhere in a query."""
+    mentions = _character_mentions(query)
+    if not mentions:
+        return None
+    return mentions[0][2], mentions[0][3]
+
+
+def _character_mentions(query: str) -> list[tuple[int, int, str, str]]:
+    """Return non-overlapping character mentions with source positions."""
+    names = {**_JP_TO_SC_CHARA, **{name: name for name in _SC_CHARA_NAMES}}
+    matches: list[tuple[int, int, str, str]] = []
+    for name, sc_name in names.items():
+        escaped = re.escape(name)
+        pattern = (
+            rf"(?<![A-Za-z0-9]){escaped}(?![A-Za-z0-9])"
+            if re.fullmatch(r"[A-Za-z0-9._-]+", name)
+            else escaped
+        )
+        for match in re.finditer(pattern, query, re.IGNORECASE):
+            matches.append((match.start(), match.end(), name, sc_name))
+    matches.sort(key=lambda item: (item[0], -(item[1] - item[0])))
+    accepted: list[tuple[int, int, str, str]] = []
+    for candidate in matches:
+        start, end, _, _ = candidate
+        if any(start < other_end and end > other_start for other_start, other_end, _, _ in accepted):
+            continue
+        accepted.append(candidate)
+    return sorted(accepted)
+
+
+def _sequence_move_candidates(text: str) -> list[tuple[int, int, str]]:
+    """Return move tokens as ``(start, length, normalized_input)``."""
+    candidates: list[tuple[int, int, str]] = []
+    for match in _NUMPAD_EXPLICIT.finditer(text):
+        candidates.append((match.start(), len(match.group(1)), match.group(1)))
+    for match in _COMMAND_NUMPAD.finditer(text):
+        candidates.append((match.start(), len(match.group(1)), match.group(1)))
+    for written, normalized in _JP_ABBREV_TO_NUMPAD.items():
+        for match in re.finditer(re.escape(written), text):
+            candidates.append((match.start(), len(written), normalized))
+    # At the same position, retain the longest phrase (立ち中P before 中P).
+    deduped: dict[int, tuple[int, int, str]] = {}
+    for item in candidates:
+        previous = deduped.get(item[0])
+        if previous is None or item[1] > previous[1]:
+            deduped[item[0]] = item
+    return sorted(deduped.values())
+
+
+def _extract_attacker_sequence(query: str) -> list[str]:
+    """Extract ``A -> B`` or ``A x2`` pressure notation from natural text."""
+    for separator in re.finditer(r"(?:→|＞|(?<!-)>(?!-))", query):
+        left = _sequence_move_candidates(query[:separator.start()])
+        right = _sequence_move_candidates(query[separator.end():])
+        if left and right:
+            return [left[-1][2], right[0][2]]
+
+    repeat = re.search(
+        r"(?P<move>(?:[1-9][LMH][PK]|j\.[LMH][PK]|"
+        r"立ち[弱中強大小][PK]|立[弱中強大小][PK]|"
+        r"しゃがみ[弱中強大小][PK]|屈[弱中強大小][PK]))\s*"
+        r"(?:x|×)\s*2",
+        query,
+        re.IGNORECASE,
+    )
+    if repeat:
+        candidates = _sequence_move_candidates(repeat.group("move"))
+        if candidates:
+            return [candidates[0][2], candidates[0][2]]
+    return []
+
+
+def _extract_delay_f(text: str) -> int | None:
+    """Return an explicit delay, 0 for no delay phrase, or None if unspecified."""
+    match = re.search(
+        r"(?:(\d+)\s*F\s*(?:ディレイ|遅らせ)"
+        r"|(?:ディレイ|遅らせ)(?:て|る|た)?\s*(\d+)\s*F)",
+        text,
+        re.IGNORECASE,
+    )
+    if match:
+        return int(match.group(1) or match.group(2))
+    if re.search(r"ディレイ|遅らせ", text, re.IGNORECASE):
+        return None
+    return 0
+
+
+def _deterministic_sequence_intent(query: str) -> dict | None:
+    """Parse pressure/trade questions before the single-move fast path."""
+    sequence = _extract_attacker_sequence(query)
+    if len(sequence) != 2:
+        return None
+    if not re.search(
+        r"連携|暴れ|相打ち|フレームトラップ|その後|繋|つなが|trade|sequence",
+        query,
+        re.IGNORECASE,
+    ):
+        return None
+
+    mentions = _character_mentions(query)
+    separator = re.search(r"(?:→|＞|(?<!-)>(?!-))", query)
+    before_separator = [
+        mention for mention in mentions
+        if separator and mention[0] < separator.start()
+    ]
+    # The character nearest the first move is the pressure attacker. This also
+    # handles "Ryu相手にSagatの5MP -> 5MP" without swapping actors.
+    chara_match = before_separator[-1] if before_separator else (mentions[0] if mentions else None)
+    after_separator = query[separator.end():] if separator else query
+    reversal_marker = re.search(r"暴れ|reversal", after_separator, re.IGNORECASE)
+    right_moves = _sequence_move_candidates(after_separator)
+    second_move_end = (
+        right_moves[0][0] + right_moves[0][1]
+        if right_moves else len(after_separator)
+    )
+    # A delay written before the second move belongs to the attacker. A delay
+    # after that move and adjacent to "暴れ" belongs to the defender.
+    pressure_segment = after_separator[:second_move_end]
+    attacker_delay_f = _extract_delay_f(pressure_segment)
+    if reversal_marker:
+        context_start = min(second_move_end, reversal_marker.start())
+        context_end = min(len(after_separator), reversal_marker.end() + 24)
+        defender_delay_f = _extract_delay_f(after_separator[context_start:context_end])
+    else:
+        defender_delay_f = 0
+    intent: dict = {
+        "intent_type": "sequence_analysis",
+        "attacker_sequence": sequence,
+        "attacker_timing": {
+            "timing": (
+                "delayed_unspecified" if attacker_delay_f is None
+                else "delayed" if attacker_delay_f > 0
+                else "earliest"
+            ),
+            "delay_f": attacker_delay_f,
+        },
+        # Pressure/reversal questions conventionally start after a blocked
+        # attack. Only an explicit hit-state phrase switches this to hit.
+        "initial_interaction": (
+            "hit"
+            if re.search(r"ヒット後|当てた後|食らった後|くらった後", query)
+            else "block"
+        ),
+        "defender_action": {
+            "timing": (
+                "delayed_unspecified" if defender_delay_f is None
+                else "delayed" if defender_delay_f > 0
+                else "earliest"
+            ),
+            "delay_f": defender_delay_f,
+        },
+        "query_targets": ["timeline", "post_interaction_advantage", "followups"],
+        "raw_query": query,
+    }
+    if chara_match:
+        intent["chara"] = chara_match[3]
+
+    defender_mentions = [
+        mention for mention in mentions
+        if not chara_match or mention[:2] != chara_match[:2]
+    ]
+    if chara_match:
+        distinct = [m for m in defender_mentions if m[3] != chara_match[3]]
+        if distinct:
+            defender_mentions = distinct
+    defender_match = next((
+        mention for mention in defender_mentions
+        if separator and mention[0] > separator.end()
+    ), defender_mentions[0] if defender_mentions else None)
+    if defender_match:
+        intent["defender_action"]["character"] = defender_match[3]
+        tail = query[defender_match[1]:defender_match[1] + 40]
+        possessive = re.match(r"\s*の", tail)
+        if possessive:
+            candidates = _sequence_move_candidates(tail[possessive.end():])
+            if candidates:
+                intent["defender_action"]["move"] = candidates[0][2]
+    startup = re.search(
+        r"(?:発生\s*)?(\d+)\s*F(?:の技|技|暴れ|通常技)?",
+        query,
+        re.IGNORECASE,
+    )
+    if startup:
+        intent["defender_action"]["startup_f"] = int(startup.group(1))
+    if re.search(r"相打ち|trade", query, re.IGNORECASE):
+        intent["expected_outcome"] = "trade"
+    scenario = parse_frame_scenario(query)
+    if scenario:
+        intent["scenario"] = scenario
+    return intent
+
+
 def _extract_simple_move(rest: str) -> str | None:
     """キャラ名を除いた質問から技名部分を抽出する。"""
     m = re.match(
@@ -259,6 +453,7 @@ INTENT_SCHEMA = {
                 "explain_concept",  # ゲームシステム説明
                 "punish_check",     # 反撃確認
                 "combo_info",       # コンボ情報 (キャンセル先・DR後フレーム)
+                "sequence_analysis",# 連携・暴れ・相打ち後の状況解析
                 "max_combo",        # 最大コンボ計算 (ダメージ最大のコンボルート)
                 "setplay_analysis", # セットプレイ・起き攻め分析 (KD後の択計算)
                 "general_question", # その他
@@ -270,6 +465,43 @@ INTENT_SCHEMA = {
         "input2":    {"type": "string", "description": "比較先技の numpad 表記"},
         "move_name":  {"type": "string", "description": "必殺技・SAの技名 (例: Tiger Shot, Shoryuken, 波動拳)"},
         "move_name2": {"type": "string", "description": "比較先の必殺技・SA名 (compare_moves 時)"},
+        "attacker_sequence": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "攻撃側が最速で行う技列 (例: [5MP, 5MP])",
+        },
+        "attacker_timing": {
+            "type": "object",
+            "properties": {
+                "timing": {"type": "string"},
+                "delay_f": {"type": ["integer", "null"]},
+            },
+        },
+        "initial_interaction": {
+            "type": "string",
+            "enum": ["block", "hit"],
+        },
+        "defender_action": {
+            "type": "object",
+            "properties": {
+                "timing": {
+                    "type": "string",
+                    "enum": ["earliest", "delayed", "delayed_unspecified", "unspecified"],
+                },
+                "startup_f": {"type": "integer"},
+                "delay_f": {"type": ["integer", "null"]},
+                "character": {"type": "string"},
+                "move": {"type": "string"},
+            },
+        },
+        "expected_outcome": {
+            "type": "string",
+            "enum": ["trade", "hit", "block", "whiff"],
+        },
+        "query_targets": {
+            "type": "array",
+            "items": {"type": "string"},
+        },
         "field":     {"type": "string", "description": "特定フィールド (startup/block_adv/atk_range 等)"},
         "concept":   {"type": "string", "description": "ゲーム概念名"},
         "scenario": {
@@ -379,6 +611,7 @@ SYSTEM_PROMPT = """\
 - 「〜と〜どっちが速い?」「〜と〜を比べると?」→ compare_moves
 - 「ドライブインパクトとは?」「バーンアウトって何?」→ explain_concept
 - 「〜ガードして反撃できる?」「〜は確定反撃?」→ punish_check
+- 「A→Bの連携」「最速暴れすると相打ち?」「相打ち後は何F有利?」→ sequence_analysis
 - 「〜からコンボある?」「〜始動は?」「〜の後に何が繋がる?」「〜をDRキャンセルすると?」「〜をDRキャンセルすると何F?」「DRキャンセル後の有利は?」「コンボ後の有利は?」「ノックダウン後は?」→ combo_info
 - 「〜からの最大コンボは?」「〜始動の最大ダメージは?」「最大コンボを教えて」「〜から何が最も繋がる?」「フルコンボは?」「BnB コンボは?」→ max_combo
 - 「〜ガードして反撃できる?」「〜は確定反撃?」「〜の弱派生前は割り込める?」「〜の派生は真の連携?」「〜は割り込める?」「〜はブロックストリング?」→ punish_check
@@ -446,6 +679,11 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
         dict: INTENT_SCHEMA に準拠した Intent。
               最低限 {"intent_type": "...", "raw_query": "..."} を含む。
     """
+    deterministic = _deterministic_sequence_intent(query)
+    if deterministic:
+        logger.debug(f"Sequence intent parsed deterministically: {deterministic}")
+        return deterministic
+
     deterministic = _deterministic_simple_intent(query)
     if deterministic:
         logger.debug(f"Intent parsed deterministically: {deterministic}")
@@ -476,7 +714,7 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     # intent_type がスキーマ外の値 (例: "punish_adv") の場合は lookup_move にフォールバック
     _VALID_INTENTS = {
         "lookup_move", "compare_moves", "explain_concept",
-        "punish_check", "combo_info", "max_combo",
+        "punish_check", "combo_info", "sequence_analysis", "max_combo",
         "setplay_analysis", "general_question",
     }
     if result.get("intent_type") not in _VALID_INTENTS:

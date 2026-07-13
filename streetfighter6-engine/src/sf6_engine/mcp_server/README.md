@@ -12,6 +12,7 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 |---|---|---|
 | `lookup_move` | 型付き統合フレームプロファイル (全ソース・採用値・両視点・状況評価) | character, move_name, scenario(任意) |
 | `check_punish` | フレーム窓と到達確度を分離した反撃判定 | character, move_name, punisher(任意), scenario(任意) |
+| `analyze_sequence` | 2技連携・最速/ディレイ暴れ・相打ち後有利・追撃確度 | character, attacker_sequence, defender_startup/move, delay |
 | `compute_setplay` | KD/ヒット後の起き攻め択計算 | character, move_input (SC表記 or 技名) |
 | `analyze_combo` | 始動技からの最大コンボ計算 | character, starter_input (SC表記 or 技名), use_dr, drive_bars |
 | `list_moves` | 技一覧 (技名 + SC input。技名解決の補助) | character, keyword(任意, 技名/input 両対応) |
@@ -36,6 +37,12 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 受け取る。技解決が複数強度・派生へ当たる場合は `resolution=ambiguous` として計算を止める。
 `check_punish` は硬直差から `frame_punishable` を返すが、ガード後距離・押し戻し・技の
 到達が未検証なら `confirmed_punishable=null` のままにし、候補を `timing_only` と表示する。
+
+`analyze_sequence` は発生・ガード差に統合プロファイルを使い、SCの技別hitstun/hitstopと
+相手キャラ+技まで一致するレビュー済み観測を補助根拠にする。相手技未指定時は該当技を
+個別計算して分布を返す。同時発生だけで相打ちを断定せず、追撃も距離・
+状態の観測がある場合だけ `combo_confirmed=true` にする。詳細は
+`docs/SEQUENCE_ANALYSIS.md` を参照。
 
 ## ローカル起動 (stdio)
 
@@ -93,3 +100,4 @@ AWS デプロイ (SAM):
 - リーチ/当たり判定を使う到達判定は未統合。候補は「フレーム上・到達未検証」と明示する。
 - `contextual_frame_model_migration.sql` の適用・バックフィル後に、レビュー済みgeometryと
   直接実測を使う `confirmed_punishable=true` を実装する。
+- `sequence_analysis_migration.sql` 適用後にレビュー済み連携観測をDBへupsertする。

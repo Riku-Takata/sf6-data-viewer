@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "observations": [
+    {
+      "observation_key": "sagat|5MP>5MP|after:block|atk-delay:0|def:startup:4|def-char:any|def-move:any|def-delay:0|outcome:trade",
+      "attacker_character_slug": "sagat",
+      "attacker_sequence": [
+        {
+          "input": "5MP",
+          "interaction": "block"
+        },
+        {
+          "input": "5MP",
+          "timing": "earliest",
+          "delay_f": 0
+        }
+      ],
+      "initial_interaction": "block",
+      "defender_profile": {
+        "move_class": "neutral_ground_normal",
+        "startup_f": 4,
+        "timing": "earliest",
+        "delay_f": 0,
+        "exact_move_unspecified": true
+      },
+      "outcome": "trade",
+      "attacker_advantage_f": null,
+      "defender_advantage_f": null,
+      "confirmed_followups": [],
+      "result_state": {
+        "status": "incomplete_defender_identity",
+        "reported_attacker_advantage_f": 7,
+        "reported_defender_advantage_f": -7,
+        "reported_followup": "2MP",
+        "usable_for_exact_answer": false
+      },
+      "conditions": {
+        "both_moves_reach": true,
+        "same_frame_direct_strike_trade": true,
+        "exact_defender_move_required_for_generalization": true,
+        "replay_artifact_pending": true,
+        "frame_fingerprint": {
+          "opener_on_block_f": 2,
+          "pressure_startup_f": 6,
+          "pressure_hitstun_f": 25,
+          "pressure_hitstop_f": 11
+        }
+      },
+      "source": "manual_test",
+      "patch_version": "local-snapshot-2026-07-13",
+      "confidence": 0.5,
+      "reviewed": false,
+      "test_protocol": "Historical project-owner report: one unidentified 4F move produced post-trade Sagat +7F and a 2MP followup. The defender character and move were not recorded, so this row is retained as incomplete evidence and is not usable for an exact answer."
+    }
+  ]
+}
