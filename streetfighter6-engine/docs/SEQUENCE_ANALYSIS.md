@@ -31,7 +31,37 @@ flowchart LR
 SuperComboのアクセス制限を回避するクローラは実装しない。利用条件に従って人手で取得した
 JSON/HTMLスナップショットを既存インポーターで取り込み、取得日・パッチ・根拠を残す。
 
+## 自然言語からの技分解
+
+Intent Parserの責務は、`→ / > / から / の後に / AをBでキャンセル / into` の境界で
+2技を分け、`2中K`や`立ち弱P`の汎用入力表記だけを正規化することである。キャラ固有の
+必殺技名・SA名・派生名は変換表を持たず、不透明な識別子として`lookup_frame_data`へ渡す。
+
+resolverはCAPCOM/UFD/SuperCombo/必殺技マッピングを同じキャラ内で検索する。誤記補正は、
+強度/SA prefixを保存した上で一候補が明確に優位な場合だけ実行する。同名の弱中強や派生が
+残る場合は、自動選択せず強度・コマンドの聞き返しを返す。
+
+## 質問コンテキストの分離
+
+2技連携には、同じ「ガード」でも別の時点を指す値がある。
+
+| 構造化フィールド | 意味 | 使用する値 |
+|---|---|---|
+| `initial_interaction` | 1技目がガード/ヒットされた状態。2技目をいつ開始できるかを決める | 1技目のblockstun/hitstun、cancel/chain/link遷移 |
+| `terminal_state.interaction` | 2技目が実際にガード/ヒットした後の状態 | 2技目の`on_block`/`on_hit` |
+| `query_targets=timeline` | 1技目と2技目の間が連続ガードか、何F空くか | 2技目first active − 防御側行動可能F |
+| `query_targets=terminal_frame_advantage` | 2技目の接触後にどちらが何F有利か | 攻撃側=`on_block/on_hit`、防御側=符号反転 |
+| `query_targets=post_interaction_advantage` | 相打ちなど、両技が接触した後の派生結果 | 実測観測またはhitstun差モデル |
+
+例えば「5LP→弱波掌撃をガードして何F有利？」は、2技目のガード後硬直差を主質問として
+`terminal_frame_advantage`へ送り、技間gapは補足にする。「ガードして」の主体が省略された場合は
+攻撃側・ガード側の両方を返し、明示された場合はその視点を優先する。
+
 ## タイムライン
+
+> この節の式は、1技目を出し切ってから2技目を出す `link` 用である。通常技から必殺技への
+> special/SA/連打cancel、chain、専用派生には適用しない。連続ガード・割り込み解析の遷移モデルは
+> `docs/BLOCKSTRING_ANALYSIS.md` を参照する。
 
 現在は攻撃側2技、1技目のblock/hit、2技目と防御側行動の遅延Fを扱う。
 
@@ -116,9 +146,13 @@ DB移行中でもLambda/Botを壊さないよう、観測JSONローダーを同�
 対応済み:
 
 - 2技のblock/hit連携、攻撃側・防御側それぞれの遅延
+- SuperComboでSpecial cancelが明示された最速の通常技→必殺技。blockstun/hitstunとhitstop終了後を
+  基準に、連続ガード・時間上の割り込み可否を返す
 - 相手を発生Fだけで指定した区間結果と、キャラ+技指定の個別結果
 - 同時発生、相手技別SC hitstun差モデル、追撃の確度分離
 - Intent、CLI/RAG、MCP、Discord Botの共通エンジン化
+- 2技目のガード/ヒット後硬直差と技間gapの分離。質問された終端硬直差を先に回答し、
+  攻撃側・防御側の視点を明示する
 - AWS MCP Lambdaへの反映と、ローカルフォールバック無効の本番E2E検証
 
 未対応:
@@ -126,5 +160,9 @@ DB移行中でもLambda/Botを壊さないよう、観測JSONローダーを同�
 - 3技以上のシーケンス、移動・ジャンプ・飛び道具のイベント
 - armor/invulnerability/throw/projectileの衝突解決
 - UFD GIFの自動geometry抽出とpushbox/カメラ補正
-- cancel窓、chain、juggle、空中高度を含む全追撃の確定
+- 任意cancel窓、juggle、空中高度を含む全追撃の確定
 - 全キャラ・全技組合せの直接実測
+
+現行の `on_block + startup` timelineをcancel連携へ流用してはならない。cancelでは1技目の
+recoveryが打ち切られるため、blockstun、cancel可否、transition開始基準、2技目startupを使う。
+不足時はlinkとして推測せず `transition_unresolved` を返す。

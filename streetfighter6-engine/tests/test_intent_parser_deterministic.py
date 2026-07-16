@@ -77,6 +77,94 @@ class DeterministicIntentParserTest(unittest.TestCase):
                 self.assertEqual(intent["chara"], "Ken")
                 self.assertEqual(intent["input"], expected_input)
 
+    def test_guard_advantage_collection_becomes_typed_move_query(self) -> None:
+        intent = self.parse("ラシードの技の中でガードさせて有利な技は？")
+
+        self.assertEqual(intent["intent_type"], "query_moves")
+        self.assertEqual(intent["chara"], "Rashid")
+        self.assertNotIn("move_name", intent)
+        self.assertNotIn("input", intent)
+        self.assertEqual(
+            intent["move_filter"],
+            {
+                "field": "on_block",
+                "operator": "gt",
+                "value": 0,
+                "perspective": "attacker",
+            },
+        )
+        self.assertEqual(intent["move_scope"], "all")
+
+    def test_move_query_preserves_threshold_and_scope(self) -> None:
+        intent = self.parse("ラシードの通常技でガードさせて+2F以上の技は？")
+
+        self.assertEqual(intent["intent_type"], "query_moves")
+        self.assertEqual(intent["move_scope"], "normal")
+        self.assertEqual(intent["move_filter"]["operator"], "gte")
+        self.assertEqual(intent["move_filter"]["value"], 2)
+
+    def test_single_move_guard_question_does_not_become_collection_query(self) -> None:
+        intent = self.parse("ラシードの5MPをガードさせたら何F有利？")
+
+        self.assertEqual(intent["intent_type"], "lookup_move")
+        self.assertEqual(intent["input"], "5MP")
+
+    def test_ken_jinrai_blockstring_notation_is_structured_without_llm(self) -> None:
+        intent = self.parse("ケンの2中K→中迅雷脚は連続ガード？")
+
+        self.assertEqual(intent["intent_type"], "sequence_analysis")
+        self.assertEqual(intent["chara"], "Ken")
+        self.assertEqual(intent["attacker_sequence"], ["2MK", "中迅雷脚"])
+        self.assertEqual(intent["query_targets"], ["blockstring", "timeline"])
+
+    def test_ken_heavy_jinrai_four_frame_interrupt_is_structured_without_llm(self) -> None:
+        intent = self.parse("ケンの2中K→大迅雷脚は発生4Fの技で割り込める？")
+
+        self.assertEqual(intent["intent_type"], "sequence_analysis")
+        self.assertEqual(intent["attacker_sequence"], ["2MK", "大迅雷脚"])
+        self.assertEqual(intent["defender_action"]["startup_f"], 4)
+        self.assertEqual(intent["query_targets"], ["interrupt", "timeline"])
+
+    def test_character_specific_special_name_is_opaque_to_intent_parser(self) -> None:
+        cases = [
+            ("ブランカのしゃがみ中K→OD エレクトリックサンダーは連ガ？", "Blanka", "2MK", "OD エレクトリックサンダー"),
+            ("春麗の立ち中P→弱 百裂脚は連続ガード？", "Chun-Li", "5MP", "弱 百裂脚"),
+            ("リュウの立ち強P→SA3 真・昇龍拳は連続ガード？", "Ryu", "5HP", "SA3 真・昇龍拳"),
+        ]
+
+        for query, chara, opener, target in cases:
+            with self.subTest(query=query):
+                intent = self.parse(query)
+                self.assertEqual(intent["intent_type"], "sequence_analysis")
+                self.assertEqual(intent["chara"], chara)
+                self.assertEqual(intent["attacker_sequence"], [opener, target])
+
+    def test_natural_language_sequence_connectors_are_supported(self) -> None:
+        cases = [
+            ("リュウの立ち弱Pから弱 波掌撃は連続ガード？", "Ryu", "5LP", "弱 波掌撃"),
+            ("春麗の立ち中Pの後に弱 百裂脚は連ガ？", "Chun-Li", "5MP", "弱 百裂脚"),
+            (
+                "ブランカの2MKをOD エレクトリックサンダーでキャンセルしたら連ガ？",
+                "Blanka", "2MK", "OD エレクトリックサンダー",
+            ),
+            ("Ryuの5LP into 214LPはblockstring?", "Ryu", "5LP", "214LP"),
+        ]
+
+        for query, chara, opener, target in cases:
+            with self.subTest(query=query):
+                intent = self.parse(query)
+                self.assertEqual(intent["intent_type"], "sequence_analysis")
+                self.assertEqual(intent["chara"], chara)
+                self.assertEqual(intent["attacker_sequence"], [opener, target])
+
+    def test_supercombo_composite_target_is_preserved_for_sequence_analysis(self) -> None:
+        intent = self.parse("A.K.I.の5LP→5LP~LPは発生4Fで割り込める？")
+
+        self.assertEqual(intent["intent_type"], "sequence_analysis")
+        self.assertEqual(intent["chara"], "A.K.I.")
+        self.assertEqual(intent["attacker_sequence"], ["5LP", "5LP~LP"])
+        self.assertEqual(intent["defender_action"]["startup_f"], 4)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -10,16 +10,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from sf6_engine.frame_data import (  # noqa: E402
     _best_named_row,
+    _best_unique_fuzzy_named_row,
     _inputs_match,
     _invert_advantage,
     _parse_capcom_active,
     _parse_frame_value,
     _parse_recovery,
     _parse_stage_sequence,
+    _query_scope_matches,
     _resolve_sc_variant_from_family,
     _section_compatible,
     format_frame_profile_context,
     lookup_frame_data,
+    query_frame_data,
 )
 
 
@@ -128,6 +131,25 @@ class FrameParsingTest(unittest.TestCase):
         selected = _best_named_row(rows, "強 スパイラルアロー")
 
         self.assertEqual(selected["move_name"], "強 スパイラルアロー")
+
+    def test_unique_typo_match_preserves_strength_variant(self) -> None:
+        rows = [
+            {"move_name": "弱 波掌撃", "input": "214LP"},
+            {"move_name": "中 波掌撃", "input": "214MP"},
+            {"move_name": "強 波掌撃", "input": "214HP"},
+        ]
+
+        selected = _best_unique_fuzzy_named_row(rows, "弱波衝撃")
+
+        self.assertEqual((selected or {}).get("input"), "214LP")
+
+    def test_fuzzy_match_rejects_ambiguous_short_alias(self) -> None:
+        rows = [
+            {"move_name": "タイガーショット"},
+            {"move_name": "タイガーニー"},
+        ]
+
+        self.assertIsNone(_best_unique_fuzzy_named_row(rows, "タイガー"))
 
     def test_capcom_absolute_active_window_becomes_duration(self) -> None:
         parsed = _parse_capcom_active("12-13")
@@ -269,6 +291,106 @@ class FrameProfileTest(unittest.TestCase):
         self.assertIn("ガード時（防御側・ガードした側）: +5F", context)
         self.assertIn("【ソース差異:硬直】", context)
         self.assertIn("CAPCOM公式注記", context)
+
+
+class FrameQueryTest(unittest.TestCase):
+    def test_ground_normal_scope_excludes_air_normals_in_capcom_normal_section(self) -> None:
+        profile = {
+            "section": "通常技",
+            "move_type": "air_normal",
+            "input": "j.HP",
+            "move_name": "ジャンプ強P",
+        }
+
+        self.assertFalse(_query_scope_matches(profile, "ground_normal"))
+        self.assertTrue(_query_scope_matches(profile, "normal"))
+
+    def query(self, **kwargs) -> dict:
+        def capcom(name: str, section: str, on_block: str) -> dict:
+            return {
+                "character_slug": "ken",
+                "section": section,
+                "move_name": name,
+                "startup": "8",
+                "active": "8",
+                "recovery": "16",
+                "on_hit": "+1",
+                "on_block": on_block,
+                "damage": "500",
+                "patch_date": "2026-05-28",
+            }
+
+        rows = {
+            "capcom": [
+                capcom("立ち中P", "通常技", "+2"),
+                capcom("しゃがみ中K", "通常技", "0"),
+                capcom("強 旋風脚（エアカレント）", "必殺技", "+3"),
+                capcom("条件技", "通常技", "-1~+2"),
+                capcom("通常投げ", "通常投げ", "N/A"),
+            ],
+            "maps": [],
+            "sc": [
+                {
+                    "input": "5MP",
+                    "name": "Standing Medium Punch",
+                    "move_type": "ground_normal",
+                    "block_adv": "-5",
+                    "hit_adv": "+1",
+                },
+                {
+                    "input": "2MK",
+                    "name": "Crouching Medium Kick",
+                    "move_type": "ground_normal",
+                    "block_adv": "0",
+                    "hit_adv": "+1",
+                },
+            ],
+            "ufd": [],
+        }
+        with (
+            patch("sf6_engine.frame_data._resolve_character", return_value=("ken", "Ken")),
+            patch("sf6_engine.frame_data._all_character_rows", return_value=rows),
+        ):
+            return query_frame_data("ken", client=object(), **kwargs)
+
+    def test_query_keeps_official_values_and_separates_conditional_results(self) -> None:
+        result = self.query()
+
+        self.assertTrue(result["found"])
+        self.assertEqual(
+            [item["move_name"] for item in result["matches"]],
+            ["立ち中P"],
+        )
+        self.assertEqual(result["matches"][0]["value"], 2)
+        self.assertEqual(result["matches"][0]["source"], "capcom")
+        self.assertEqual(
+            [item["move_name"] for item in result["conditional_matches"]],
+            ["強 旋風脚（エアカレント）"],
+        )
+        self.assertEqual(
+            [item["move_name"] for item in result["unresolved"]],
+            ["条件技"],
+        )
+        self.assertEqual(result["not_applicable_count"], 1)
+        self.assertIn("【技条件検索】", result["summary"])
+        self.assertIn("条件付きで条件一致", result["summary"])
+
+    def test_query_inverts_for_defender_perspective_and_honors_scope(self) -> None:
+        result = self.query(
+            operator="lt",
+            value=0,
+            perspective="defender",
+            scope="normal",
+        )
+
+        self.assertEqual(
+            [item["move_name"] for item in result["matches"]],
+            ["立ち中P"],
+        )
+        self.assertEqual(result["matches"][0]["value"], -2)
+        self.assertNotIn("強 旋風脚（エアカレント）", [
+            item["move_name"] for item in result["conditional_matches"]
+        ])
 
 
 if __name__ == "__main__":

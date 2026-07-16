@@ -12,10 +12,73 @@
 hitstun、ディレイ、相打ち後の両視点有利差、追撃確度をIntent/MCP/Discord/RAGで共通化。
 サガット5MP→5MPは、4F地上通常技46件を技別計算して `+6～+12F`。`Ryu 2LP`は
 `+9/-9`、`Sagat 2LP`は`+7/-7`となることを実DB E2E確認済み。
-**次**: `sequence_analysis_migration.sql` をSupabaseへ適用し、相手キャラ+技を記録した
-レビュー可能な実測観測を追加する。
-次段階でUFD GIF geometryと
-追加実測を投入し、相打ち・追撃の到達証明を拡張する。
+**追加（ローカル、2026-07-13）**: 技の集合質問を `query_moves` として型付きフレーム条件へ
+正規化し、統合プロファイル上で確定・条件付き・保留を分離して検索する。質問文を別名として
+登録しないガードも追加した。関連unittest 48件は通過済み。
+**本番反映（2026-07-14）**: 全30キャラの同形質問を実データで確認後、`query_moves` を含む
+MCP Lambdaを再デプロイした。CloudFormationは `UPDATE_COMPLETE`、ローカルフォールバックを
+無効化した本番MCPの検索も成功した。
+**追加検証（2026-07-14）**: SCを正解ラベルだけにした独立監査で、CAPCOM由来hitstunは
+基本地上通常技280/289件 (96.89%) 完全一致。Sagat 5MP対4F技は46/46件で`+6～+12F`を
+SC入力なしに再現した。時間派生値のSCランタイム依存廃止は実行可能だが、trade式の`-1F`・
+hitstop相殺・距離/状態は独立実測が必要 (ADR-024 Proposed)。
+**備考再監査（2026-07-14）**: CAPCOM備考1,781/2,357行、属性2,032/2,357行を確認。
+通常技の不一致31セルは公式備考だけで7件完全補正+2件部分補正、UFDの独立条件まで加えると
+15件を説明可能。残り12件は現取得データでSC-only条件、4件は未整合。SCを本番から物理分離し、
+公式fact・備考claim・geometry・独立観測・導出proofへ分けるADR-025をProposedとした。
+**更新型Bot実装（2026-07-14）**: ADR-026の安全な縦切りとして、同一主体・会話の短期context、
+否定/仮説/伝聞/注入のgate、明示「保存する」による本人限定privateメモ、patch/fingerprint完全一致検索、
+証拠+review必須のshared workflowをローカル実装し、追加8件と既存関連62件を通過した。既定は永続化disabled、
+SC依存のglobal alias即時学習もdisabled。Supabase migrationの8テーブルは適用済みで、Bot設定を
+`supabase`+HMACへ有効化し、MCP Lambdaを`UPDATE_COMPLETE`まで再デプロイしてBearer initialize HTTP 200を確認した。
+主体JWT/RLS gateway、180会話golden/holdout、Discord Bot常駐先の特定・再起動は未実施。
+**Storage整理（2026-07-14）**: UFD GIF 773件が4,207,176,129 bytesを使用していた。
+孤児・重複がないことを確認後、復旧用manifestをローカ保存してStorageから全削除。
+DBのStorageパス/ハッシュは0件、UFD元URLは775件保持。今後のGIF保存は `--gifs` 指定時のみ（ADR-027）。
+**SuperCombo利用方針（2026-07-14）**: SuperCombo WikiのCC BY-NC-SA 3.0表示を前提に、
+帰属、ライセンスリンク、改変表示、非営利、ShareAlikeを守って当初通り本番の補助データに使用する。
+ADR-024/025のSC分離提案はADR-028で取り消し、独立監査だけ回帰検証として維持する。
+**連続ガード設計（2026-07-14）**: 現行の2技連携はlink式のみで、cancel連携を誤判定することを確認。
+Ken `2MK -> 236MK` はSC blockstun 16Fと中迅雷startup 16Fでgap 0F、`2MK -> 236HK`は
+25-16=9Fの行動可能時間。link/cancel/chain/専用派生を分けるADR-029と設計書を追加。
+**専用派生ルール実装（2026-07-14）**: `~` を含む全30キャラの入力を個別edgeとして扱う。
+SuperCombo注記に直接書かれたblock gap/true blockstringだけを即時判定し、強度・状態・派生windowが
+明記されないものはlink/cancelへfallbackしない。`source_transition_rules` migrationとレビュー候補
+importerを追加。419候補中71件は直接根拠あり、330件はtiming review待ち、7件はソース値競合。
+ローカル/AWS MCPではA.K.I. 5LP→5LP~LP（3F gap）、豪鬼214HP→214HP~6P（連続ガード）、
+Ken中迅雷→派生（保留）を確認済み。MCP LambdaはUPDATE_COMPLETE。
+**Storage調査の訂正と復元（2026-07-14）**: 削除前の`sf6-html-archive`は60件・
+24,436,612 bytesだけであり、1GB超過警告の直接原因ではなかった。誤って削除したHTMLは
+CAPCOM公式から再取得し、`current/`と`previous/`の各30件（計60件・24,848,282 bytes）として復元。
+`move_snapshots.raw_html_uri` も4,637件を再接続した。Layer 1は元どおり毎回HTMLを
+ローテーション保存する設定へAWS本番を含めて戻した。UFD GIFバケットは意図どおり0件のまま維持する。
+**全キャラ共通の自然言語連携解析（AWS MCP本番反映済み、2026-07-16）**: Intent Parserのキャラ固有必殺技マップと
+個別誤記表を廃止し、技名は不透明なままCAPCOM/UFD/SC統合resolverへ渡す。`→ / から / の後に /
+AをBでキャンセル / into`に対応し、link、special/SA cancel、同一状態の地上弱攻撃chainを別timelineで計算する。
+全30キャラのSC入力2,118件とCAPCOM公式名2,357件は未検出0件、同名の強度省略263件は誤選択せず
+聞き返す。ordered pair 103,073件は70,006件を数値解決、33,145件をscalar不足の理由付き保留とした。
+実DB E2EでRyu `5LP -> 214LP` gap 3F、`5LP -> 2LP` gap -5F、Chun-Li `5MP -> 236LK` gap -10Fを確認した。
+AWS MCPはCloudFormation `UPDATE_COMPLETE`、本番ツールスキーマの`query_targets`公開、
+Ryu `5LP -> 弱波衝撃`=`214LP`/gap 3F、`5LP -> 2LP`=chain/gap -5FをBearer認証付きで確認済み。
+**連携質問の終端硬直差（AWS MCP本番反映済み、2026-07-16）**: 「5LP→弱波衝撃をガードして何F有利？」を
+単なるgap質問として処理していた原因を、1技目の接触、2技目の接触、相打ち後結果の混同に分解した。
+`terminal_frame_advantage`と終端interaction/視点を追加し、実DBで2技目`214LP`の攻撃側-3F・
+ガード側+3Fを主回答、技間gap 3Fを補足として返すことを確認。unittest 129件通過。
+MCP LambdaはCloudFormation `UPDATE_COMPLETE`、認証付き本番E2E成功、デプロイ後エラーログ0件。
+**技名の多表記・未知通称設計（設計のみ、2026-07-16）**: `中ネク`、`弱はしょう`、英語、
+ローマ字はDB由来の公式名/読み/英語formから一意候補を解決し、`下デヨ`のように字面が無関係な
+通称はコマンドを聞く設計をADR-035へ記録。共通read-only resolver、variant優先gate、
+型付きclarification、session-only確認、review済みshared alias、frozen評価gateを定義した。
+実DBではcanonical move/aliasが0件、旧global aliasが2件のため、実装時も先にread-only解決と
+session確認を導入し、旧global UPSERTは再有効化しない。
+**連携回答の結論先行化（ローカル、2026-07-16）**: `blockstring`と`interrupt`を別targetにし、
+連続ガード/割り込みのyes/noとgap/先行Fを1行目へ移動。blockstun、cancel可否、hitstop基準は
+構造化結果へ保持し、単純質問の前段から除外した。Ryu `5LP -> 214LP`は「いいえ、隙間3F」+
+距離注意の2行となることを実DB確認し、unittest 132件が成功。
+**次**: Discord Bot常駐ホストへIntent Parserを配布・再起動して例のメンション質問を再確認する
+（30〜60分）。略称対応に着手する場合は、共通read-only `MoveResolver`とfrozen corpusの縦切りを
+先に実装する（4〜6時間）。その後に`needs_command`のsession確認を接続する（2〜3時間）。
+`source_transition_rules_migration.sql`の71件stageはこれらと独立して継続する。
 
 ## 📊 全体進捗
 
@@ -59,7 +122,7 @@ hitstun、ディレイ、相打ち後の両視点有利差、追撃確度をInte
 
 - エンドポイント: API Gateway (HTTP API, stage prod) → Lambda `sf6-mcp-server`
   URL は CloudFormation 出力 `McpEndpoint` / 認証は SSM `/sf6/mcp/auth-token` の Bearer
-- 公開ツール7種すべて本番疎通確認済 (DB照会 / Bedrock Titan / パッチ状況)
+- 公開ツール8種すべて本番疎通確認済 (DB照会 / Bedrock Titan / パッチ状況 / query_moves)
 - クライアント登録: リモートMCPとして URL + `Authorization: Bearer <token>` を設定すれば利用可
 
 以下は実装時の方針メモ (ADR-017):
@@ -110,6 +173,194 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 3. **Web UI** — Slack Bot or 簡易 Web フロントエンド
 
 ## 📝 直近のセッションログ
+
+### 2026-07-16 ★ 連続ガード・割り込み回答を結論先行へ変更
+- **原因**: `blockstring` summaryが計算入力を順番に説明し、質問への結論を3段落目に置いていた。
+- **Intent**: 連続ガード/gapの`blockstring`と、指定技での`interrupt`を別focusへ分離。
+- **回答**: yes/noまたは判定保留を1行目、距離等の適用範囲を2行目に限定。詳細値はJSONに保持。
+- **検証**: Ryu実DBで`5LP -> 214LP`の2行回答とgap 3F、全unittest 132件成功。AWS反映はこの後実施。
+
+### 2026-07-16 ★ 技名の略称・かな・ローマ字・英語解決を設計
+- **現行監査**: 名前解決が`frame_data`/`rag_builder`/MCP/Discordへ分散し、旧alias登録が
+  variantをfamilyへ拡大して即時global保存する問題を確認。現在は安全上disabled。
+- **DB確認**: `中 タイガーネクサス=214MK`、`弱 波掌撃=214LP`を確認。
+  `canonical_moves=0`、`canonical_move_aliases=0`、旧`move_aliases=2`。
+- **設計**: DB由来検索form、読み/romaji、部分一致の一意性gate、`needs_command`、同一利用者pending、
+  session/private/reviewed sharedの段階公開、precision 99.5%等のrelease gateを定義。
+- **成果物**: `docs/MOVE_ALIAS_RESOLUTION_DESIGN.md`、ADR-035。今回は本格実装・DB変更・AWS反映なし。
+
+### 2026-07-16 ★ 連携質問の終端硬直差を文脈どおり回答
+- **原因**: `initial_interaction`しかなく、`post_interaction_advantage`も相打ち専用だったため、
+  cancel解析が2技目の`on_block/on_hit`を読まずgap summaryで終了していた。
+- **Intent/API**: `terminal_state`と`terminal_frame_advantage`を追加し、曖昧な「ガードして」は両視点、
+  「ガードした側」「攻撃側」は明示視点としてMCPまで保持する。
+- **回答**: 終端硬直差を先頭、連続ガード/gapを補足に変更。Ryu実DBで`214LP`の-3/+3F、gap 3Fを確認。
+- **回帰/本番**: parser/evaluator/router/RAGを含むunittest 129件が成功。MCP Lambdaを再デプロイし、
+  CloudFormation `UPDATE_COMPLETE`、Bearer認証付き本番E2E成功、デプロイ後エラーログ0件を確認。
+
+### 2026-07-16 ★ 全キャラ共通連携解析をAWS MCPへ本番反映
+- **デプロイ**: `sam build --template-file template-mcp.yaml`と`sam deploy` が成功。
+  `sf6-mcp-server` はリソース置換なしでCloudFormation `UPDATE_COMPLETE`。
+- **スキーマ確認**: 認証付き本番MCPの`analyze_sequence` input schemaに`query_targets`があることを確認。
+- **本番E2E**: Ryu `5LP -> 弱波衝撃`は`5LP -> 214LP` / special cancel / gap 3F / `gap_open`、
+  Ryu `5LP -> 2LP`はchain / gap -5F / `true_blockstring`を返した。
+- **運用確認**: デプロイ後のLambdaログにERROR、Traceback、timeoutは0件。
+
+### 2026-07-16 ★ 全キャラ共通の自然言語連携解析へ拡張
+- **汎用技名解決**: sequence parserの迅雷脚強度mapと`波衝撃`個別補正を削除。キャラ固有技名は
+  不透明なまま統合DB resolverへ渡し、強度/SA prefixを保存した一意近似名だけを安全に補正する。
+- **自然文分解**: `→`, `>`, `から`, `の後に`, `AをBでキャンセル`, `into`をLLMなしで
+  `sequence_analysis`へ正規化。連続ガードだけでなく連続ヒット/コンボ質問も初期interactionを分ける。
+- **遷移モデル**: link、special cancel、SA cancel、`Chn`根拠の同一状態地上弱攻撃chainを分離。
+  cancel不可の必殺技/SAは、不可を明示して出し切り後のlinkとして計算。専用`A~B`は従来どおり根拠なしで推測しない。
+- **全件監査**: `tests/sequence_comprehensive_audit.py`を追加。SC入力2,118件とCAPCOM公式名2,357件は
+  未検出0件、曖昧な強度省略名263件は聞き返し、ordered pair 103,073件のうち70,006件を数値解決した。
+- **E2E/回帰**: Ryu `5LP -> 214LP`=gap 3F、Ryu `5LP -> 2LP`=chain/gap -5F、
+  Chun-Li `5MP -> 236LK`=gap -10Fを実DBで確認。関連unittest 91件が通過。
+- **未反映**: ローカル変更のみ。Discord Bot常駐プロセスとAWS MCPへの配布・再起動は未実施。
+
+### 2026-07-14 ★ Storage調査の判断訂正・HTMLアーカイブ復元
+- **判断訂正**: 1GB警告の調査時点でHTMLアーカイブは60件・約24.4MBだけであり、現在の
+  Storage実体による容量超過ではなかった。HTML削除とアーカイブ無効化は不要な変更だった。
+- **復元**: `sf6-frame-scraper`を元のcurrent→previousローテーションへCloudFormation
+  `UPDATE_COMPLETE`まで戻し、全30キャラを2回取得。`current/`・`previous/`各30件、計60件・
+  24,848,282 bytesを再作成した（削除前の過去内容そのものではなく、復元時点のCAPCOM公式HTML）。
+- **参照復元**: NULL化した過去snapshot 2,281件をキャラ別`current/`へ再接続し、既に復元処理で
+  書き戻された2,356件と合わせて`raw_html_uri`は4,637件となった。UFD GIFの削除は維持する。
+
+### 2026-07-14 ★ 全キャラ専用派生edge・レビュー運用の実装
+- **安全な派生判定**: `A~B`を通常link/special cancelとして扱わず、SuperCombo注記に直接ある
+  `Nf blockstring gap` / `true blockstring`だけを`direct_block_note`として実行。強度指定の注記は
+  同系統の他強度へ流用せず、注記なしのKen中迅雷→派生は`transition_unresolved`で止める。
+- **全キャラ候補化**: snapshot全30キャラを監査し、419個のsource-input edgeに正規化。
+  直接根拠71件、要timing review330件、source競合7件、親技不足11件を区別した。
+- **永続化準備**: `source_transition_rules_migration.sql`と`source_transition_rules` importerを追加。
+  DBには`reviewed=false`でのみstageし、runtimeはreview済みexact ruleを最優先、migration未適用時は
+  SuperComboの直接注記ルールへ安全にフォールバックする。
+- **回帰防止と本番**: `Chn`を無条件99F有利にする最大コンボの旧推測を廃止。unittest 66件、
+  SAM validate/build、CloudFormation UPDATE_COMPLETE、認証付き本番MCP4ケースを確認した。
+
+### 2026-07-14 ★ 連続ガード・割り込み解析の実装・AWS MCP更新
+- **実装**: `sequence_analysis` にlinkと最速normal→special cancelの遷移判定を追加。SuperComboの
+  `cancel=Sp`、blockstun/hitstun、統合startupを使い、hitstop終了後を共通0Fとして
+  `true_blockstring` / `interrupt_timing_win` を時間上の結論として返す。遷移根拠がないspecialは
+  link式へfallbackせず保留する。
+- **自然文・経路統一**: `2中K`、中/大迅雷脚、連続ガード、割り込めるをLLMなしでsequence intentに
+  正規化。旧RAGの`abs(block_adv)-startup`派生gap式を削除し、CLI/RAG/MCP/Discord Routerの連携判定を
+  共通serviceへ寄せた。
+- **検証**: unittest 102/102、Ken `2MK -> 236LK/MK/HK` golden、実Supabase経路、Discord Routerの
+  local MCP経路を確認。実データで中迅雷脚はgap 0F（連続ガード）、大迅雷脚はgap 9F・generic 4Fが
+  5F先にactiveとなることを確認した。
+- **全キャラ範囲監査**: SC全2,118行では、29キャラ・257個の通常技がspecial cancelと単一の
+  blockstunを持ち、491個の通常必殺技起点に時間判定を適用できる。Ryu `2MK -> 236LP`も本番MCPで
+  gap 0Fの連続ガードを確認した。一方、`~`を含む専用派生は30キャラ・376行あり、chain/派生windowを
+  別モデル化するまで本機能の対象外とする。
+- **デプロイ**: `sam validate --lint`、arm64 `sam build`、`sf6-mcp-server`のCloudFormation
+  `UPDATE_COMPLETE`を確認。本番MCPの`analyze_sequence(ken, [2MK, 236HK], 4F)`が
+  `gap_open / 9F / interrupt_timing_win`を返すことを検証した。
+- **運用境界**: Discord Botの常駐ホスト定義はリポジトリ/AWS権限内に無いため、Botプロセスへの
+  intent parser更新の配布・再起動はホスト特定後に行う。既存Botが同じMCP URLを呼ぶ連携計算自体は
+  本デプロイで反映済み。
+
+### 2026-07-14 ★ 連続ガード・割り込み解析の現状監査と再設計
+- 現行`sequence_analysis` が1技目のrecovery後を基準とするlink式のみで、cancel、chain、専用派生を区別しないことを確認。
+- Supabase実データでKen 2MKのblockstun 16F / special cancel可、迅雷脚の弱中強startup 12/16/25Fを確認。
+- 標準最速cancelなら弱・中は連続ガード、強はgap 9Fで4F技が時間上5F先にactiveとなる基準ケースを定義。
+- productionのgeneric 4F経路のTypeError、旧RAG gap式、自然文variant解決、遷移観測0行をブロッカーとして記録。
+- `docs/BLOCKSTRING_ANALYSIS.md`、ADR-029、Post-M1タスクを追加。実装とAWSデプロイは未実施。
+
+### 2026-07-14 ★ SuperComboをCC BY-NC-SA 3.0条件下で継続利用
+- SuperCombo Wikiの表示ライセンスを前提に、本番ランタイムの補助データとして維持するADR-028をActive化。
+- 帰属に加え、非営利、ShareAlike、ライセンスリンク、HTML除去・数値正規化・入力変換等の改変表示を必須条件とした。
+- `THIRD_PARTY_DATA.md` とREADMEにSuperCombo Wiki contributorsへの帰属、参照先、ライセンス、改変内容を追加。
+- ADR-024/025のSC分離方針はSupersededとし、独立監査と型付きclaim設計は精度検証として残す。
+
+### 2026-07-14 ★ SC遮断ローカル変更を取り消し
+- `RuntimeSourceClient` と `sc_moves` fail-closed境界、CAPCOM/UFD専用profile、SC依存機能の停止を取り消し、
+  CAPCOM主値 + UFD・SuperCombo補完へ復帰した。コンボ、セットプレイ、連携、技一覧、RAGは従来のSC補助経路を維持する。
+- 本番にはSC遮断版をデプロイしていなかったため、AWS/Discordの稼働状態は変更していない。
+- 関連unittest 90件、Python構文検査、`sam validate --lint` を通過した。
+
+### 2026-07-14 ★ SuperCombo非依存・更新型チャットBotの設計テスト
+- **現行context監査**: 明示的な初回連携は解析できるが、否定、仮説、伝聞、訂正、前ターン照応を
+  含む期待10件中1件だけ一致。関連する既存unittestは42/42通過し、既存機能の回帰ではなく
+  会話知識用schemaとsession stateの不足だと切り分けた。
+- **既存観測の安全性**: 証拠なし・unknown patchのreview済み行を受理し、旧patch/画面端限定観測を
+  条件未指定質問へ採用し、同confidence競合を入力順で選ぶことを3/3プローブで再現した。
+- **提案契約**: 質問/仮説/伝聞の非昇格、明示同意、本人限定検索、人間review、injection隔離、
+  訂正revision、競合保留、patch失効、撤回のテスト専用状態機械を18/18通過した。
+- **設計**: raw会話、typed scenario、claim/evidence/relation/review/consent、eligible viewを分離し、
+  単一Bearer/service-role/public-readを主体付きtoken+RLSへ移す段階設計を策定した。
+- **成果物**: `tests/conversational_knowledge_design_eval.py`、
+  `docs/CONVERSATIONAL_KNOWLEDGE_DESIGN.md`、ADR-026 (Proposed)。本番実装は行っていない。
+
+### 2026-07-14 ★ 更新型チャットBotの安全な縦切り実装
+- **会話compiler**: `conversation_knowledge.py` に会話単位の型付きscenario/candidate、同一主体だけの
+  30分TTL照応、否定訂正、仮説/伝聞/質問の非昇格、HMAC subject key、PII伏せ字を実装した。
+- **保存・検索**: `conversation_service.py` と `knowledge_repository.py` で「記録して」→「保存する」の
+  明示確認、private-first、patch/fingerprint完全一致、撤回、証拠+review後のみsharedを実装した。
+  `sql/conversational_knowledge_migration.sql` はRLS有効・public policyなしで追加したが未適用。
+- **Bot統合**: privateメモは本人へ未検証ラベルを付けて決定論回答の後に表示し、従来のSC依存global alias
+  即時学習は `SF6_ENABLE_LEGACY_SC_ALIAS_LEARNING=1` を明示しない限り無効にした。
+- **検証**: 新規 `test_conversation_knowledge` 8/8、関連する既存テストを含め70/70成功。Discord import smokeも成功。
+  Supabase/AWSへの書込み・migration適用・デプロイは行っていない。
+
+### 2026-07-14 ★ 永続メモ有効化・MCP本番デプロイ
+- **Supabase**: `knowledge_*` 8テーブルの存在を匿名readで確認（全て0件）。Discord Bot設定へ
+  `SF6_KNOWLEDGE_STORE=supabase` と新規HMAC secretを設定し、service repositoryで空検索できることを確認した。
+- **AWS MCP**: `sam validate --lint`、arm64 `sam build`後、`sf6-mcp-server` をデプロイ。
+  CloudFormation `UPDATE_COMPLETE`、Lambda `Active`、Bearer付き`initialize` HTTP 200を確認した。
+- **残る運用境界**: Botを常駐させるAWS定義はなく、deployerにはECS/EC2/App RunnerのList/Describe権限もない。
+  実Botの再起動はホストまたは運用サービスを特定してから行う。主体JWT/RLS gateway・reviewer権限・holdout評価も未完了。
+
+### 2026-07-14 ★ CAPCOM備考/UFDによる不一致再監査とSC非依存設計
+- **公式データinventory**: CAPCOM 2,357行中、備考1,781行 (75.56%)、属性2,032行
+  (86.21%)。明示的な結果別硬直209 claim、無敵453行、空中判定272行、armor67行を確認した。
+- **状態coverage**: 無敵記載は適合率94.6%/再現率74.3%、自身の空中判定100%/71.1%、
+  飛び道具存在は属性`弾`で72.7%/97.4%。一方、数値rangeの再現率0.55%、juggle数値と
+  弾速数値の公式記載は0件で、公式表だけでは復元不能。
+- **不一致31セル**: CAPCOM備考で7件完全補正+2件部分補正。UFDの条件値・notesを加えると
+  計15件の原因を独立に特定。12件は現取得データでSC-only、4件はSC値でも未整合。
+- **原因**: outcome別recovery、接触phase、固定ガード回復、variant identityが中心。
+  距離/無敵/armor/飛び道具/juggle/空中は接触成立・結果状態・branch選択のgateだった。
+- **成果物**: `tests/supercombo_context_audit.py`、`docs/SUPERCOMBO_CONTEXT_AUDIT.md`、
+  ADR-025 (Proposed)。ランタイムコード、DB、AWS本番は未変更。
+
+### 2026-07-14 ★ SuperCombo時間派生値のCAPCOM/UFD独立検証
+- **リーク防止監査**: 全30キャラ・基本地上通常技360件を固定技名変換だけで対応付け、SCは
+  正解ラベルに限定。CAPCOM 2,357 / UFD 1,559 / SC 2,118行を別ソースとして評価した。
+- **結果**: CAPCOM由来hitstunは280/289件 (96.89%)、版整合相当層234/236件 (99.15%)。
+  total 266/268、blockstun 297/317、afterDRHit 297/299。UFD単独hitstunは230/263で、
+  パッチ不明・行内不整合を無条件補完しない方針とした。
+- **相打ちケース**: Sagat 5MPと4F地上通常技46件はCAPCOMだけで46/46完全一致し、
+  `+6～+12F`、Ryu 2LP `+9F`、Sagat 2LP `+7F`を再現した。
+- **境界**: 現行trade式末尾の`-1F`とhitstop相殺はSC由来値の再計算しかなく、実ゲーム真値は
+  未検証。hitstop・距離・状態・notesは基本フレームと分離し、実測/geometryを要求する。
+- **成果物**: `tests/supercombo_inference_audit.py`、`docs/SUPERCOMBO_INFERENCE_AUDIT.md`、
+  ADR-024 (Proposed) を追加。ランタイムコードとAWS本番は未変更。
+
+### 2026-07-14 ★ 全キャラ集合検索を検証し、AWS MCPへ再デプロイ
+- **全キャラ実データ検証**: 30キャラすべてについて「{キャラ}の技の中でガードさせて有利な技は？」を
+  決定論Intent、MCP引数、Supabase実データ検索まで通し、30/30で `query_moves` として成功。
+  各キャラで基準値一致・条件付き一致・保留を含む型付き結果を返した。
+- **デプロイ**: `sam validate --lint`、arm64ローカルビルドを通過後、
+  `sf6-mcp-server` を更新。Docker未起動のためコンテナビルドは使わず、arm64ホストと
+  Python 3.12 arm64ランタイムの一致を確認して通常ビルドを使用した。
+- **本番確認**: CloudFormation `UPDATE_COMPLETE`。ローカルフォールバックを無効化した
+  本番MCPで `query_moves(rashid, on_block > 0, attacker)` が `found=true`、
+  基準値一致3件・条件付き15件・保留20件を返すことを確認。
+
+### 2026-07-13 ★ 技の集合フレーム条件検索と別名学習ガードを実装
+- **Intent/MCP**: 「ラシードの技の中でガードさせて有利な技は？」を、
+  `on_block > 0 / attacker / all` の `query_moves` へLLMなしで正規化。
+  MCP、Discord router、CLI RAGを接続し、summaryはLLMに再要約させない。
+- **検索契約**: `lookup_frame_data()` と同じCAPCOM主値+UFD/SC補完、視点反転、
+  scenario評価を各候補へ適用。確定一致・条件付き一致・範囲/未収録による保留を分離し、
+  ガード不成立を数値検索から除外する。
+- **安全性**: alias聞き返しは明示的な単一技 `move_not_found` に限定し、集合検索0件、
+  キャラ未解決、ツールエラーを登録対象から除外。登録MCPも集合表現を拒否する。
+- **検証**: parser、統合検索、router、決定論回答のunittest **48件**を通過。
+  AWS MCPへのSAM再デプロイとDiscord本番E2Eは未実施。
 
 ### 2026-07-13 ★ 連携・相打ち後有利・追撃の決定論解析を実装
 - **Sequence Engine**: 2技連携を共通タイムラインへ配置し、ガード/ヒット後有利、両者の
@@ -633,6 +884,7 @@ MCP ツールとして公開。ホスト LLM (Claude Desktop / 将来 Bot) が�
 - samconfig.toml はローカルのみ (.gitignore 済み)、雛形は samconfig.toml.example
 - LLM 移行候補: Bedrock Gemma3 12B ≈ $2.70/月 (2,000クエリ), EC2 は常時起動で割高
 - 前ステップF は doc_chunks の Forward/Back Dashing テーブルから全キャラ動的取得 (lru_cache)
+- UFD GIFは773件だけで4.21GB。Botは元URL参照のため、geometry解析時のオンデマンド取得で十分。
 
 ---
 

@@ -4,9 +4,9 @@
 使いやすい構造化 JSON に変換する。
 
 出力スキーマ:
-  intent_type  : "lookup_move" | "compare_moves" | "explain_concept" |
-                 "punish_check" | "combo_info" | "sequence_analysis" |
-                 "general_question"
+  intent_type  : "lookup_move" | "query_moves" | "compare_moves" |
+                 "explain_concept" | "punish_check" | "combo_info" |
+                 "sequence_analysis" | "general_question"
   chara        : SuperCombo の chara 値 (例: "Sagat", "Ryu")
   chara2       : 比較相手のキャラ (compare_moves 時)
   input        : numpad 表記の技入力 (例: "2HK", "5HP")
@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+from typing import Any
 
 from sf6_engine.frame_scenario import (
     merge_frame_scenarios,
@@ -88,6 +89,14 @@ for _s_jp, _s in (('大', 'H'), ('小', 'L')):
     for _b in ('P', 'K'):
         _JP_ABBREV_TO_NUMPAD.setdefault(f'{_s_jp}{_b}', f'5{_s}{_b}')
 
+# 連携質問で使われやすい「2中K」のような方向数字 + 日本語強度表記。
+# 単体の技名抽出には既存の fast path を使うため、これは sequence token の
+# 正規化だけに限定する。
+_JP_NUMPAD_STRENGTH = re.compile(
+    r'(?<![A-Za-z0-9])([1-9])([弱小中強大])([PK])',
+    re.IGNORECASE,
+)
+
 # クエリ中に numpad 表記が明示的に書かれているかを検出するパターン
 # 注: lookbehind/lookahead を英数字に拡張して「623HP」内の「3HP」誤マッチを防止
 _NUMPAD_EXPLICIT = re.compile(
@@ -97,7 +106,8 @@ _NUMPAD_EXPLICIT = re.compile(
     r'|j\.[LMH][PK]'      # ジャンプ技: j.LP, j.HK
     r'|[2-9]{3,}[PK]'     # コマンド技 (強度なし): 236P, 623K, 214K
     r'|DI'
-    r')(?![A-Za-z0-9])'   # 後に英数字がない
+    r')(?![A-Za-z0-9])',  # 後に英数字がない
+    re.IGNORECASE,
 )
 
 # コマンド技の明示表記: 623HP, 236LK, 236KK (OD), 236[LK] (ホールド), 22P, 6KK 等
@@ -108,7 +118,35 @@ _COMMAND_NUMPAD = re.compile(
     r'[1-9]{2,6}\[?(?:[LMH]?[PK]{1,3})\]?'   # 22P, 236LK, 236KK, 236[PP], 63214KK
     r'|[1-9](?:PP|KK|PPP|KKK)'               # 6KK, 4PP, 2KKK
     r')'
-    r'(?![A-Za-z0-9])'
+    r'(?![A-Za-z0-9])',
+    re.IGNORECASE,
+)
+
+# A SuperCombo branch is one executable target, not two independently
+# searchable tokens.  Preserve the entire A~B input before the shorter
+# numpad/command patterns get a chance to select only its prefix.
+_SC_COMPOSITE_SEQUENCE_INPUT = re.compile(
+    r'(?<![A-Za-z0-9])'
+    r'([A-Za-z0-9.\[\]]+(?:~[A-Za-z0-9.\[\]]+(?:\s*\([A-Za-z ]+\))?)+)'
+    r'(?![A-Za-z0-9])',
+    re.IGNORECASE,
+)
+
+_SEQUENCE_SEPARATOR_RE = re.compile(
+    r"(?:→|＞|(?<!-)>(?!-)|の後(?:に)?|から|\binto\b|"
+    r"を(?=[^、,。？?]{1,48}で(?:キャンセル|繋|つな)))",
+    re.IGNORECASE,
+)
+
+# 入力表記ではなく日本語技名で質問された場合は、矢印の直後から質問句の
+# 手前までを不透明な技識別子として統合プロファイルへ渡す。キャラ固有の
+# 技名→コマンド変換や誤記補正はここでは行わず、全技共通のDB resolverへ委ねる。
+_SEQUENCE_MOVE_PHRASE_END = re.compile(
+    r"(?:って(?:いう)?|という|(?:の|を)?連携|"
+    r"(?=で(?:キャンセル|繋|つな))|"
+    r"(?=は?(?:発生\s*\d*\s*F?|連続ガード|連ガ|割り込|ブロックストリング|blockstring|block string))|"
+    r"[、,。？?])",
+    re.IGNORECASE,
 )
 
 # combo_info / max_combo らしさの指標 (これが無いのに当該判定なら誤分類とみなす)
@@ -116,6 +154,19 @@ _COMMAND_NUMPAD = re.compile(
 _COMBO_INDICATORS = re.compile(
     r'コンボ|繋|つなが|つなげ|キャンセル|ルート|始動|派生|ラッシュ|ノックダウン|の後|火力'
 )
+
+# 「技の中で」「どの技」など、単一技ではなくキャラ内の集合を対象にする表現。
+# 単一技 fast path より先に判定しないと、検索条件そのものを move_name にしてしまう。
+_MOVE_QUERY_MARKER = re.compile(
+    r"技(?:の中|のうち|一覧)|(?:どの|どれ).{0,8}技|"
+    r"(?:全部|全て|すべて).{0,8}技|"
+    r"(?:ガード|ブロック).{0,16}(?:有利|不利|五分).{0,8}技|"
+    r"(?:有利|不利|五分).{0,8}技(?:を|は|$)|"
+    r"[+-]?\d+\s*(?:F|フレーム)?\s*(?:以上|以下|未満|超).{0,8}技|"
+    r"(?:プラス|マイナス)フレーム(?:技)?",
+    re.IGNORECASE,
+)
+_MOVE_QUERY_GUARD_RE = re.compile(r"ガード|ブロック|プラスフレーム|マイナスフレーム")
 
 logger = logging.getLogger(__name__)
 
@@ -209,12 +260,24 @@ def _character_mentions(query: str) -> list[tuple[int, int, str, str]]:
 def _sequence_move_candidates(text: str) -> list[tuple[int, int, str]]:
     """Return move tokens as ``(start, length, normalized_input)``."""
     candidates: list[tuple[int, int, str]] = []
+    for match in _SC_COMPOSITE_SEQUENCE_INPUT.finditer(text):
+        candidates.append((match.start(), len(match.group(1)), match.group(1)))
     for match in _NUMPAD_EXPLICIT.finditer(text):
-        candidates.append((match.start(), len(match.group(1)), match.group(1)))
+        value = match.group(1).upper()
+        if value.startswith("J."):
+            value = f"j.{value[2:]}"
+        candidates.append((match.start(), len(match.group(1)), value))
     for match in _COMMAND_NUMPAD.finditer(text):
-        candidates.append((match.start(), len(match.group(1)), match.group(1)))
+        candidates.append((match.start(), len(match.group(1)), match.group(1).upper()))
+    for match in _JP_NUMPAD_STRENGTH.finditer(text):
+        direction, strength, button = match.groups()
+        candidates.append((
+            match.start(),
+            len(match.group(0)),
+            f"{direction}{_STRENGTH_JP[strength]}{button.upper()}",
+        ))
     for written, normalized in _JP_ABBREV_TO_NUMPAD.items():
-        for match in re.finditer(re.escape(written), text):
+        for match in re.finditer(re.escape(written), text, re.IGNORECASE):
             candidates.append((match.start(), len(written), normalized))
     # At the same position, retain the longest phrase (立ち中P before 中P).
     deduped: dict[int, tuple[int, int, str]] = {}
@@ -225,13 +288,70 @@ def _sequence_move_candidates(text: str) -> list[tuple[int, int, str]]:
     return sorted(deduped.values())
 
 
+def _sequence_move_phrase(text: str, *, after_separator: bool) -> str | None:
+    """Extract a free-form move name adjacent to a sequence separator.
+
+    Explicit numpad notation remains the preferred representation. This
+    fallback lets Japanese official names such as ``弱 波掌撃`` reach the
+    existing multi-source resolver instead of forcing the whole question into
+    ``lookup_move``.
+    """
+    phrase = text.strip()
+    if not phrase:
+        return None
+
+    mentions = _character_mentions(phrase)
+    if after_separator:
+        # ``→リュウの2LP`` is accepted, but a later defender mention must not
+        # become the attacker's second move.
+        if mentions and mentions[0][0] == 0:
+            phrase = phrase[mentions[0][1]:].lstrip()
+            phrase = re.sub(r"^の", "", phrase).lstrip()
+    elif mentions:
+        # For the left side, use the text following the character nearest the
+        # arrow (``リュウ相手にサガットの5MP`` → ``5MP``).
+        phrase = phrase[mentions[-1][1]:].lstrip()
+        phrase = re.sub(r"^の", "", phrase).lstrip()
+
+    if after_separator:
+        end = _SEQUENCE_MOVE_PHRASE_END.search(phrase)
+        if end:
+            phrase = phrase[:end.start()]
+    else:
+        # Narrative prefixes are irrelevant when an explicit token was not
+        # found; the last short phrase next to the arrow is the move name.
+        phrase = re.split(r"[、,。？?]", phrase)[-1]
+        phrase = re.sub(r"^.*(?:連携で|使う)", "", phrase)
+
+    phrase = phrase.strip(" \t\r\n・:：/／")
+    phrase = re.sub(r"^(?:(?:\d+\s*F\s*)?(?:ディレイ|遅らせ)(?:て|る|た)?\s*)", "", phrase)
+    phrase = re.sub(r"(?:って|という|の|は)$", "", phrase).strip()
+    # Long prose here means no safe boundary was found. Leave it for the LLM
+    # instead of manufacturing a move identifier.
+    if not phrase or len(phrase) > 48 or re.search(r"連続ガード|割り込|相打ち", phrase):
+        return None
+    return phrase
+
+
 def _extract_attacker_sequence(query: str) -> list[str]:
     """Extract ``A -> B`` or ``A x2`` pressure notation from natural text."""
-    for separator in re.finditer(r"(?:→|＞|(?<!-)>(?!-))", query):
-        left = _sequence_move_candidates(query[:separator.start()])
-        right = _sequence_move_candidates(query[separator.end():])
-        if left and right:
-            return [left[-1][2], right[0][2]]
+    for separator in _SEQUENCE_SEPARATOR_RE.finditer(query):
+        left_text = query[:separator.start()]
+        right_text = query[separator.end():]
+        left = _sequence_move_candidates(left_text)
+
+        # Bound the right side to the phrase immediately following the arrow.
+        # Otherwise a later ``リュウの2LPで暴れ`` could be mistaken for the
+        # attacker's follow-up when that follow-up is a Japanese special name.
+        right_phrase = _sequence_move_phrase(right_text, after_separator=True)
+        right = _sequence_move_candidates(right_phrase or "")
+
+        first = left[-1][2] if left else _sequence_move_phrase(
+            left_text, after_separator=False
+        )
+        second = right[0][2] if right else right_phrase
+        if first and second:
+            return [first, second]
 
     repeat = re.search(
         r"(?P<move>(?:[1-9][LMH][PK]|j\.[LMH][PK]|"
@@ -263,20 +383,64 @@ def _extract_delay_f(text: str) -> int | None:
     return 0
 
 
+def _sequence_terminal_state_request(query: str) -> dict[str, Any] | None:
+    """Return a request about the second move's resulting frame advantage.
+
+    A sequence has two different contact contexts: the first move's contact
+    determines the transition, while the second move's contact determines the
+    final advantage.  Keep them separate instead of overloading
+    ``initial_interaction`` or the trade-only post-interaction result.
+    """
+    if re.search(r"相打ち|trade", query, re.IGNORECASE):
+        return None
+    advantage_question = re.search(
+        r"(?:ガード|ブロック|ヒット|当て)"
+        r".{0,16}(?:何\s*(?:F|フレ|フレーム)|何フレ|有利|不利|硬直差)|"
+        r"(?:何\s*(?:F|フレ|フレーム)|何フレ).{0,12}"
+        r"(?:有利|不利|硬直差)",
+        query,
+        re.IGNORECASE,
+    )
+    if not advantage_question:
+        return None
+    segment = advantage_question.group(0)
+    if re.search(r"ガード|ブロック", segment, re.IGNORECASE):
+        interaction = "block"
+    elif re.search(r"ヒット|当て", segment, re.IGNORECASE):
+        interaction = "hit"
+    else:
+        return None
+    if re.search(r"ガードした側|防御側|相手側", query):
+        perspective = "defender"
+    elif re.search(r"ガードさせた側|攻撃側|技を出した側", query):
+        perspective = "attacker"
+    else:
+        # Colloquial "ガードして何F" can refer to either actor. Returning both
+        # perspectives is safer than silently choosing the wrong sign.
+        perspective = "both"
+    return {
+        "move_index": 1,
+        "interaction": interaction,
+        "perspective": perspective,
+    }
+
+
 def _deterministic_sequence_intent(query: str) -> dict | None:
     """Parse pressure/trade questions before the single-move fast path."""
     sequence = _extract_attacker_sequence(query)
     if len(sequence) != 2:
         return None
     if not re.search(
-        r"連携|暴れ|相打ち|フレームトラップ|その後|繋|つなが|trade|sequence",
+        r"連携|コンボ|連続ヒット|キャンセル|暴れ|相打ち|フレームトラップ|その後|繋|つなが|"
+        r"割り込|連続ガード|連ガ|隙間|ブロックストリング|blockstring|block string|"
+        r"有利|不利|硬直差|何\s*(?:F|フレ|フレーム)|trade|sequence",
         query,
         re.IGNORECASE,
     ):
         return None
 
     mentions = _character_mentions(query)
-    separator = re.search(r"(?:→|＞|(?<!-)>(?!-))", query)
+    separator = _SEQUENCE_SEPARATOR_RE.search(query)
     before_separator = [
         mention for mention in mentions
         if separator and mention[0] < separator.start()
@@ -301,6 +465,7 @@ def _deterministic_sequence_intent(query: str) -> dict | None:
         defender_delay_f = _extract_delay_f(after_separator[context_start:context_end])
     else:
         defender_delay_f = 0
+    terminal_state = _sequence_terminal_state_request(query)
     intent: dict = {
         "intent_type": "sequence_analysis",
         "attacker_sequence": sequence,
@@ -316,7 +481,11 @@ def _deterministic_sequence_intent(query: str) -> dict | None:
         # attack. Only an explicit hit-state phrase switches this to hit.
         "initial_interaction": (
             "hit"
-            if re.search(r"ヒット後|当てた後|食らった後|くらった後", query)
+            if re.search(
+                r"ヒット後|ヒットして|ヒット時|当てた後|食らった後|くらった後|"
+                r"連続ヒット|コンボ(?:になる|に)?|繋がる",
+                query,
+            )
             else "block"
         ),
         "defender_action": {
@@ -327,9 +496,11 @@ def _deterministic_sequence_intent(query: str) -> dict | None:
             ),
             "delay_f": defender_delay_f,
         },
-        "query_targets": ["timeline", "post_interaction_advantage", "followups"],
+        "query_targets": ["timeline"],
         "raw_query": query,
     }
+    if terminal_state:
+        intent["terminal_state"] = terminal_state
     if chara_match:
         intent["chara"] = chara_match[3]
 
@@ -360,8 +531,34 @@ def _deterministic_sequence_intent(query: str) -> dict | None:
     )
     if startup:
         intent["defender_action"]["startup_f"] = int(startup.group(1))
-    if re.search(r"相打ち|trade", query, re.IGNORECASE):
+    trade_requested = bool(re.search(r"相打ち|trade", query, re.IGNORECASE))
+    interrupt_requested = bool(re.search(r"割り込|暴れ", query, re.IGNORECASE))
+    blockstring_requested = bool(re.search(
+        r"連続ガード|連ガ|隙間|ブロックストリング|blockstring|block string",
+        query,
+        re.IGNORECASE,
+    ))
+    if trade_requested:
         intent["expected_outcome"] = "trade"
+        intent["query_targets"] = [
+            "timeline", "post_interaction_advantage", "followups",
+        ]
+    elif terminal_state:
+        intent["query_targets"] = ["terminal_frame_advantage"]
+        if interrupt_requested:
+            intent["query_targets"].append("interrupt")
+        if blockstring_requested:
+            intent["query_targets"].append("blockstring")
+        intent["query_targets"].append("timeline")
+    elif interrupt_requested or blockstring_requested:
+        intent["query_targets"] = []
+        if interrupt_requested:
+            intent["query_targets"].append("interrupt")
+        if blockstring_requested:
+            intent["query_targets"].append("blockstring")
+        intent["query_targets"].append("timeline")
+    elif re.search(r"連続ヒット|コンボ|繋がる", query, re.IGNORECASE):
+        intent["query_targets"] = ["combo_timing", "timeline"]
     scenario = parse_frame_scenario(query)
     if scenario:
         intent["scenario"] = scenario
@@ -382,6 +579,86 @@ def _extract_simple_move(rest: str) -> str | None:
     return move or None
 
 
+def _move_query_operator(rest: str) -> tuple[str, int] | None:
+    """Parse a Japanese comparison phrase into a typed frame predicate."""
+    threshold = re.search(
+        r"([+-]?\d+)\s*(?:F|フレーム)?\s*(以上|以下|未満|超|より(?:大きい|小さい))",
+        rest,
+        re.IGNORECASE,
+    )
+    if threshold:
+        value = int(threshold.group(1))
+        suffix = threshold.group(2)
+        operator = {
+            "以上": "gte",
+            "以下": "lte",
+            "未満": "lt",
+            "超": "gt",
+            "より大きい": "gt",
+            "より小さい": "lt",
+        }[suffix]
+        return operator, value
+    if re.search(r"五分以上|不利(?:で)?はない|不利じゃない", rest):
+        return "gte", 0
+    if re.search(r"(?:五分|イーブン)(?:の|な)?技", rest):
+        return "eq", 0
+    if re.search(r"不利|マイナス", rest):
+        return "lt", 0
+    if re.search(r"有利|プラス", rest):
+        return "gt", 0
+    return None
+
+
+def _deterministic_move_query_intent(query: str) -> dict | None:
+    """Parse character-wide frame filters without treating them as move names."""
+    detected = _extract_simple_chara(query)
+    if not detected:
+        return None
+    _, chara, rest = detected
+    if not (_MOVE_QUERY_MARKER.search(rest) and _MOVE_QUERY_GUARD_RE.search(rest)):
+        return None
+    # Do not steal a conventional single-move question such as
+    # "ケンの5MPをガードさせたら有利？".
+    if _NUMPAD_EXPLICIT.search(rest) or _COMMAND_NUMPAD.search(rest):
+        return None
+    if any(abbrev in rest for abbrev in _JP_ABBREV_TO_NUMPAD):
+        return None
+    predicate = _move_query_operator(rest)
+    if not predicate:
+        return None
+    operator, value = predicate
+    scenario = parse_frame_scenario(query)
+    perspective = (scenario or {}).get("perspective")
+    if perspective not in {"attacker", "defender"}:
+        perspective = "defender" if re.search(r"ガードした側|防御側", rest) else "attacker"
+
+    scope = "all"
+    if re.search(r"地上(?:の)?通常技", rest):
+        scope = "ground_normal"
+    elif "通常技" in rest:
+        scope = "normal"
+    elif "必殺技" in rest:
+        scope = "special"
+    elif re.search(r"スーパーアーツ|\bSA[123]?\b", rest, re.IGNORECASE):
+        scope = "super"
+
+    intent: dict = {
+        "intent_type": "query_moves",
+        "chara": chara,
+        "move_filter": {
+            "field": "on_block",
+            "operator": operator,
+            "value": value,
+            "perspective": perspective,
+        },
+        "move_scope": scope,
+        "raw_query": query,
+    }
+    if scenario:
+        intent["scenario"] = scenario
+    return intent
+
+
 def _deterministic_simple_intent(query: str) -> dict | None:
     """定型のフレーム/ガード/確反質問を LLM なしで intent 化する。
 
@@ -394,6 +671,10 @@ def _deterministic_simple_intent(query: str) -> dict | None:
     if not detected:
         return None
     _, chara, rest = detected
+    # 集合検索は専用 fast path に任せる。未対応の集合条件を単一技名として
+    # 解決しようとすると、別名学習に誤って流れる。
+    if _MOVE_QUERY_MARKER.search(rest):
+        return None
     move = strip_scenario_phrases(_extract_simple_move(rest))
     if not move:
         return None
@@ -449,6 +730,7 @@ INTENT_SCHEMA = {
             "type": "string",
             "enum": [
                 "lookup_move",      # 技の情報照会
+                "query_moves",      # キャラ内の技をフレーム条件で集合検索
                 "compare_moves",    # 技の比較
                 "explain_concept",  # ゲームシステム説明
                 "punish_check",     # 反撃確認
@@ -465,6 +747,20 @@ INTENT_SCHEMA = {
         "input2":    {"type": "string", "description": "比較先技の numpad 表記"},
         "move_name":  {"type": "string", "description": "必殺技・SAの技名 (例: Tiger Shot, Shoryuken, 波動拳)"},
         "move_name2": {"type": "string", "description": "比較先の必殺技・SA名 (compare_moves 時)"},
+        "move_filter": {
+            "type": "object",
+            "description": "query_moves の型付きフレーム条件",
+            "properties": {
+                "field": {"type": "string", "enum": ["on_block"]},
+                "operator": {"type": "string", "enum": ["gt", "gte", "lt", "lte", "eq"]},
+                "value": {"type": "integer"},
+                "perspective": {"type": "string", "enum": ["attacker", "defender"]},
+            },
+        },
+        "move_scope": {
+            "type": "string",
+            "enum": ["all", "normal", "ground_normal", "special", "super"],
+        },
         "attacker_sequence": {
             "type": "array",
             "items": {"type": "string"},
@@ -627,6 +923,14 @@ SYSTEM_PROMPT = """\
 - ダメージ → damage
 - 無敵 → invuln
 
+## 複数技の条件検索 (query_moves)
+- 「ラシードの技の中でガードさせて有利な技は？」のように、キャラ内の複数技を
+  条件で絞る質問は query_moves にする。単一技の move_name/input は設定しない。
+- ガードさせた側の「有利」は move_filter={field:on_block, perspective:attacker,
+  operator:gt, value:0}。0F は五分であり有利ではない。
+- 「五分以上」は operator:gte, value:0。「+2F以上」は operator:gte, value:2。
+- 通常技だけなら move_scope:normal、指定がなければ all。
+
 ## 技入力 (input フィールド) の設定ルール ★最重要★
 - input フィールドに設定できるのは上記「通常技18パターン」に該当する技のみ
 - 以下の場合に input を設定する:
@@ -652,6 +956,7 @@ SYSTEM_PROMPT = """\
 - 「ケンの迅雷脚の弱派生は?」→ {"intent_type": "combo_info", "chara": "Ken", "move_name": "Jinrai Kick"}
 - 「ケンの迅雷脚の弱派生前は割り込める?」→ {"intent_type": "punish_check", "chara": "Ken", "move_name": "Jinrai Kick"}
 - 「ルークの5MPをDRキャンセルすると何F?」→ {"intent_type": "combo_info", "chara": "Luke", "input": "5MP"}
+- 「ラシードの技の中でガードさせて有利な技は？」→ {"intent_type": "query_moves", "chara": "Rashid", "move_filter": {"field": "on_block", "perspective": "attacker", "operator": "gt", "value": 0}, "move_scope": "all"}
 
 ## 悪い例 (絶対にやらないこと)
 - 「波動拳のガード硬直は?」→ input: "5HP" ← これは間違い (波動拳≠5HP)
@@ -684,6 +989,11 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
         logger.debug(f"Sequence intent parsed deterministically: {deterministic}")
         return deterministic
 
+    deterministic = _deterministic_move_query_intent(query)
+    if deterministic:
+        logger.debug(f"Move query intent parsed deterministically: {deterministic}")
+        return deterministic
+
     deterministic = _deterministic_simple_intent(query)
     if deterministic:
         logger.debug(f"Intent parsed deterministically: {deterministic}")
@@ -713,7 +1023,7 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
 
     # intent_type がスキーマ外の値 (例: "punish_adv") の場合は lookup_move にフォールバック
     _VALID_INTENTS = {
-        "lookup_move", "compare_moves", "explain_concept",
+        "lookup_move", "query_moves", "compare_moves", "explain_concept",
         "punish_check", "combo_info", "sequence_analysis", "max_combo",
         "setplay_analysis", "general_question",
     }
@@ -722,6 +1032,32 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
             f"Invalid intent_type '{result['intent_type']}' — falling back to lookup_move"
         )
         result["intent_type"] = "lookup_move"
+
+    # 集合検索では技名/入力を使わない。LLM が検索条件を move_name に詰めても
+    # alias 学習や単一技照会へ流れないよう、型付きフィルタだけを保持する。
+    if result.get("intent_type") == "query_moves":
+        result.pop("move_name", None)
+        result.pop("input", None)
+        move_filter = result.get("move_filter") or {}
+        if move_filter.get("field") != "on_block":
+            move_filter["field"] = "on_block"
+        if move_filter.get("operator") not in {"gt", "gte", "lt", "lte", "eq"}:
+            move_filter["operator"] = "gt"
+        if not isinstance(move_filter.get("value"), int):
+            move_filter["value"] = 0
+        if move_filter.get("perspective") not in {"attacker", "defender"}:
+            scenario = parse_frame_scenario(query)
+            move_filter["perspective"] = (scenario or {}).get("perspective", "attacker")
+        result["move_filter"] = move_filter
+        if result.get("move_scope") not in {"all", "normal", "ground_normal", "special", "super"}:
+            result["move_scope"] = "all"
+        scenario = merge_frame_scenarios(parse_frame_scenario(query), result.get("scenario"))
+        if scenario:
+            result["scenario"] = scenario
+        else:
+            result.pop("scenario", None)
+        logger.debug(f"Move query intent normalized: {result}")
+        return result
 
     # --- ポストプロセス検証 ---
 

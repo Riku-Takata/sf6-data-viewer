@@ -42,11 +42,17 @@ CLI 出力
 
 **データソース:**
 - CAPCOM 公式 (Layer 1 Lambda で自動収集) → 発生/硬直/ダメージ等
-- SuperCombo Wiki → リーチ/パニカン有利/解説テキスト等
+- [SuperCombo Wiki](https://wiki.supercombo.gg/w/Street_Fighter_6) → リーチ/パニカン有利/解説テキスト等
 - Ultimate Frame Data → 実測の全体/持続/着地硬直、キャンセル、パッチメモ、当たり判定GIF
 
 同じ値を1列へ上書きせず、全ソースの生値・取得時点・採用ソースを保持する。
 CAPCOM硬直欄の `全体52` は硬直52Fとは解釈せず、UFD/SCに硬直値があれば補完する。
+
+SuperCombo由来データは
+[CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)
+の条件下で非営利利用する。本プロジェクトではHTML/MediaWikiマークアップ除去、数値正規化、
+入力表記変換、CAPCOM/UFDデータとの統合を行っている。帰属と再利用条件は
+[THIRD_PARTY_DATA.md](THIRD_PARTY_DATA.md) を参照すること。
 
 ## 必要なもの
 
@@ -108,7 +114,7 @@ cp engine_dotenv_example.txt .env
 Supabase Studio の SQL Editor で一度適用する。DDL はこのプロジェクトでは手動運用である。
 
 ```bash
-# ケンだけを検証なしに取り込む（GIFも private Storage に保存）
+# ケンだけを取り込む（GIF本体は保存しない）
 PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --character ken
 
 # 全キャラを取り込む。公開サイトへ負荷を掛けないようページ間を1秒空ける。
@@ -116,14 +122,12 @@ PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --all --delay 
 
 # HTML解析のみの確認（DB/Storageへ書き込まない）
 PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data \
-  --character ken --dry-run --no-gifs --html-path /path/to/ken.html
+  --character ken --dry-run --html-path /path/to/ken.html
 ```
 
-GIF本体は `sf6-ufd-hitboxes` (private bucket) へ保存し、`ufd_moves` には技との対応・
-元URL・ハッシュ・Storageパスを保持する。Botは公式/SuperComboの値を維持したまま、
-UFD由来の詳細を統合プロファイルへ追加する。再取込は既存行/GIFを再利用し、現行ページから
-消えた行だけを同期後に削除する。2026-07-10時点で1,559行、`sc_input` 1,179件、
-取得可能な当たり判定GIF 773件を保存済み (UFD元URLが404の2件を除く)。
+GIF本体は容量が大きいため既定では保存しない。`ufd_moves` には技との対応と
+UFD元URLを保持するため、Botから元GIFは引き続き参照できる。アーカイブが必要な
+場合だけ `--gifs` を明示指定し、private bucket `sf6-ufd-hitboxes` へ保存する。
 
 ## 使い方
 
@@ -144,6 +148,7 @@ PYTHONPATH=src python -m sf6_engine.cli ask \
 | 単一技照会 | 「サガットの2HKの発生は?」 |
 | 持続・硬直 | 「ケンの大Kの持続は?」「硬直は?」 |
 | ガード両視点 | 「ガードさせたら?」=攻撃側 / 「ガードしたら?」=防御側 |
+| 技条件検索 | 「ラシードの技の中でガードさせて有利な技は?」(確定/条件付き/保留を分離) |
 | 状況付き硬直差 | 「ケンの大Kを先端でガードしたら?」「最終持続をガードさせたら?」 |
 | 反撃判定 | 「サガットの2HKガードして反撃できる?」(時間候補と到達確度を分離) |
 | 連携・相打ち | 「5MP→5MPに最速4F暴れした相打ち後は?」(両視点の有利差と追撃) |

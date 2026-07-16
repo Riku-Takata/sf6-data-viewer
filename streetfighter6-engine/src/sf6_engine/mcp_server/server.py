@@ -17,6 +17,7 @@
   - compute_setplay  : KD/ヒット後の起き攻め択計算
   - analyze_combo    : 始動技からの最大コンボ計算 (ビームサーチ)
   - list_moves       : キャラの技名一覧 (技名解決の補助)
+  - query_moves      : キャラ内の技をフレーム条件で集合検索
 """
 from __future__ import annotations
 
@@ -29,7 +30,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 
 from sf6_engine.db import get_client
-from sf6_engine.frame_data import lookup_frame_data
+from sf6_engine.frame_data import lookup_frame_data, query_frame_data
 from sf6_engine.punish_service import check_punish_data
 from sf6_engine.sequence_analysis import analyze_sequence as analyze_sequence_data
 from sf6_engine.ufd import fetch_ufd_details
@@ -274,12 +275,17 @@ def analyze_sequence(
     expected_outcome: str | None = None,
     attacker_delay_f: int | None = 0,
     defender_delay_f: int | None = 0,
+    query_targets: list[str] | None = None,
+    terminal_interaction: str | None = None,
+    terminal_perspective: str = "both",
 ) -> dict:
     """2技の連携と最速暴れを共通タイムライン上で解析する。
 
-    単発技のフレーム表では答えられない、連携中の同時発生、相打ち後の双方の
-    有利不利、そこから確実につながる追撃を決定論で返す。相手技が未指定なら
-    同じ発生を持つ地上通常技を比較し、単一値を捏造せず範囲と例外を併記する。
+    2技とも統合DB resolverで解決する。通常のlinkは硬直差、SuperComboの
+    Special/SA/Chain cancel根拠がtargetと一致する最速連携は、hitstop終了後の
+    blockstun/hitstunを基準にする。後者では ``true_blockstring`` または
+    ``interrupt_timing_win`` を返し、距離・リーチまで確認できない限り時間上の結果と
+    実戦での確定を区別する。相打ち・追撃解析も従来どおり決定論で返す。
 
     Args:
         character: 攻撃側キャラのslug (例: ``sagat``)。
@@ -291,10 +297,13 @@ def analyze_sequence(
         expected_outcome: 質問で前提とされた結果 (例: ``trade``)。
         attacker_delay_f: 2発目の最速入力からの遅らせF。不明ならnull。
         defender_delay_f: 防御側行動の最速入力からの遅らせF。不明ならnull。
+        query_targets: blockstring、combo_timing、timeline等の質問対象。
+        terminal_interaction: 2技目の結果。終端硬直差質問のblock/hit。
+        terminal_perspective: 終端硬直差の回答視点。attacker/defender/both。
 
     Returns:
-        dict: 時系列、接触確度、相打ち後の双方の有利差、追撃候補、根拠、
-              決定論生成された ``summary``。
+        dict: 遷移種別、時系列、blockstring/割り込みの時間判定、接触確度、
+              相打ち後有利・追撃候補（該当時）、根拠、決定論生成された ``summary``。
     """
     return analyze_sequence_data(
         character,
@@ -306,6 +315,9 @@ def analyze_sequence(
         expected_outcome=expected_outcome,
         attacker_delay_f=attacker_delay_f,
         defender_delay_f=defender_delay_f,
+        query_targets=query_targets,
+        terminal_interaction=terminal_interaction,
+        terminal_perspective=terminal_perspective,
     )
 
 
@@ -491,6 +503,51 @@ def list_moves(character: str, keyword: str | None = None) -> dict:
 
 
 # ============================================================
+# ツール: query_moves
+# ============================================================
+
+@mcp.tool()
+def query_moves(
+    character: str,
+    field: str = "on_block",
+    operator: str = "gt",
+    value: int = 0,
+    perspective: str = "attacker",
+    scope: str = "all",
+    scenario: dict | None = None,
+) -> dict:
+    """キャラ内の技を、型付きフレーム条件で検索する。
+
+    例: on_block > 0 を attacker 視点で指定すると、ガードさせて有利な技を
+    検索する。条件付き技と範囲値は通常条件の確定結果と分けて返すため、
+    単純な数値比較で誤って断定しない。
+
+    Args:
+        character: キャラの slug。
+        field: 比較するフレーム項目。現在は on_block。
+        operator: gt / gte / lt / lte / eq。
+        value: 比較基準フレーム。
+        perspective: attacker (技を出した側) または defender。
+        scope: all / normal / ground_normal / special / super。
+        scenario: 任意の条件コンテキスト。
+
+    Returns:
+        matches (通常条件で確定)、conditional_matches (条件付きで成立)、
+        unresolved (条件・範囲のため断定不能) と読みやすい summary。
+        キャラが存在し、該当が0件の場合も found=True を返す。
+    """
+    return query_frame_data(
+        character,
+        field=field,
+        operator=operator,
+        value=value,
+        perspective=perspective,
+        scope=scope,
+        scenario=scenario,
+    )
+
+
+# ============================================================
 # ツール: search_system_docs
 # ============================================================
 
@@ -646,6 +703,11 @@ def get_patch_status() -> dict:
 # alias / SC name の強度prefix (ファミリー正規化用)
 _ALIAS_STRENGTH_RE = re.compile(r'^(弱|中|強|OD|オーバードライブ)\s*')
 _SC_NAME_STRENGTH_RE = re.compile(r'^(LP|MP|HP|LK|MK|HK|OD|EX)\s+')
+_ALIAS_COLLECTION_RE = re.compile(
+    r"技(?:の中|のうち|一覧)|(?:有利|不利|五分).{0,8}技|全(?:部|て)|"
+    r"すべて|プラスフレーム|マイナスフレーム",
+    re.IGNORECASE,
+)
 
 
 @mcp.tool()
@@ -666,6 +728,12 @@ def register_move_alias(character: str, alias: str, move_input: str) -> dict:
         dict: 登録結果。``resolved_move`` (SC技名) / ``alias_family`` (保存した略称) /
               ``registered`` (bool)。move_input が実在しない場合は ``error``。
     """
+    if _ALIAS_COLLECTION_RE.search(alias or ""):
+        return {
+            "error": "集合検索の条件は技名の別名として登録できません。",
+            "registered": False,
+        }
+
     sc_chara = _resolve_sc_chara(character)
     if not sc_chara:
         return {"error": f"キャラクター '{character}' が見つかりません。"}

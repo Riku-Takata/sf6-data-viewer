@@ -12,10 +12,11 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 |---|---|---|
 | `lookup_move` | 型付き統合フレームプロファイル (全ソース・採用値・両視点・状況評価) | character, move_name, scenario(任意) |
 | `check_punish` | フレーム窓と到達確度を分離した反撃判定 | character, move_name, punisher(任意), scenario(任意) |
-| `analyze_sequence` | 2技連携・最速/ディレイ暴れ・相打ち後有利・追撃確度 | character, attacker_sequence, defender_startup/move, delay |
+| `analyze_sequence` | 2技link/special・SA・連打cancel、連続ガード/ヒット、2技目接触後の硬直差、最速暴れ・相打ち後有利 | character, attacker_sequence, interaction, defender, delay, query_targets, terminal_interaction, terminal_perspective |
 | `compute_setplay` | KD/ヒット後の起き攻め択計算 | character, move_input (SC表記 or 技名) |
 | `analyze_combo` | 始動技からの最大コンボ計算 | character, starter_input (SC表記 or 技名), use_dr, drive_bars |
 | `list_moves` | 技一覧 (技名 + SC input。技名解決の補助) | character, keyword(任意, 技名/input 両対応) |
+| `query_moves` | キャラ内の技を型付きフレーム条件で集合検索 | character, field, operator, value, perspective, scope, scenario(任意) |
 | `search_system_docs` | ゲームシステム文書のハイブリッド検索 | query, count, threshold |
 
 `search_system_docs` の埋め込みは AWS Bedrock Titan V2 を使う (Ollama 非依存)。
@@ -38,11 +39,25 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 `check_punish` は硬直差から `frame_punishable` を返すが、ガード後距離・押し戻し・技の
 到達が未検証なら `confirmed_punishable=null` のままにし、候補を `timing_only` と表示する。
 
-`analyze_sequence` は発生・ガード差に統合プロファイルを使い、SCの技別hitstun/hitstopと
-相手キャラ+技まで一致するレビュー済み観測を補助根拠にする。相手技未指定時は該当技を
-個別計算して分布を返す。同時発生だけで相打ちを断定せず、追撃も距離・
-状態の観測がある場合だけ `combo_confirmed=true` にする。詳細は
-`docs/SEQUENCE_ANALYSIS.md` を参照。
+`query_moves` は `list_moves` の文字列フィルタではなく、上記と同じ統合プロファイルに
+型付き条件を適用する。たとえば `on_block / gt / 0 / attacker` は「ガードさせて有利な技」
+を表す。通常条件で確定する `matches`、ホールド等の条件付き `conditional_matches`、
+範囲値・未収録で断定できない `unresolved` を分けて返す。該当技が0件でも、キャラが
+存在する限り `found=true` とし、技名の未解決や別名学習にはつなげない。
+
+`analyze_sequence` はキャラ固有の技名をハードコードせず、2技とも統合技名resolverで解決する。
+linkでは統合プロファイルの発生・硬直差、SuperComboの`Sp`/`SA`/`Chn`根拠がtarget種別と一致する
+最速cancelではblockstun/hitstunとhitstop終了後の共通基準を使う。防御側技がなくても
+`query_targets=blockstring/combo_timing`で行動可能時点と2技目を比較する。`A~B`専用派生は
+通常キャンセルとして推測せず、SuperCombo注記の直接block gap/true blockstring、またはreview済みの
+source-input edgeがあるときだけ判定する。後者は`blockstring.classification`と、指定された防御技に
+対する時間上の勝敗を返す。genericな4F指定はリーチ未検証の `timing_only` であり、実際の割り込み成功は
+断定しない。相打ち・追撃では従来どおり相手キャラ+技まで一致するレビュー済み観測を最優先にする。詳細は
+`docs/SEQUENCE_ANALYSIS.md` と `docs/BLOCKSTRING_ANALYSIS.md` を参照。
+
+`query_targets=terminal_frame_advantage`は、2技目が実際に接触した後の硬直差を返す。
+`terminal_interaction=block/hit`と`terminal_perspective=attacker/defender/both`を併用し、
+技間gapを表す`timeline`や、相打ち後を表す`post_interaction_advantage`とは分離する。
 
 ## ローカル起動 (stdio)
 

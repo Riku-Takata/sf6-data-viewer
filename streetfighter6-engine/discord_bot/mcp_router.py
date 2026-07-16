@@ -12,6 +12,7 @@ intent_type → MCP ツール対応:
   setplay_analysis → compute_setplay(character, move_input)   ※ move_input は numpad/SC入力
   max_combo        → analyze_combo(character, starter_input)
   combo_info       → lookup_move (キャンセル情報を含むため代替)
+  query_moves      → query_moves(character, typed frame filter)
   explain_concept  → search_system_docs(query)
   compare_moves    → lookup_move ×2
   general_question → search_system_docs(query)
@@ -163,6 +164,24 @@ def _move_identifier(intent: dict) -> str | None:
     return move_name
 
 
+def is_alias_learnable_result(tool: str, result: dict | None) -> bool:
+    """未知の単一技だけを別名学習の聞き返し対象にする。
+
+    集合検索の0件、キャラ未解決、通信・ツールエラーを「技名が未知」と扱うと、
+    質問文そのものを alias として永続保存してしまう。そのため統合プロファイルが
+    明示した move_not_found のみを許可する。
+    """
+    if tool not in {"lookup_move", "check_punish"} or not result:
+        return False
+    if result.get("found") is not False:
+        return False
+    resolution = result.get("resolution") or {}
+    return (
+        resolution.get("status") == "not_found"
+        and resolution.get("reason") == "move_not_found"
+    )
+
+
 def map_intent(intent: dict) -> list[tuple[str, dict]]:
     """intent dict を [(tool_name, arguments), ...] に変換する。
 
@@ -219,7 +238,31 @@ def map_intent(intent: dict) -> list[tuple[str, dict]]:
             args["defender_move"] = defender["move"]
         if intent.get("expected_outcome"):
             args["expected_outcome"] = intent["expected_outcome"]
+        if intent.get("query_targets"):
+            args["query_targets"] = intent["query_targets"]
+        terminal_state = intent.get("terminal_state") or {}
+        if terminal_state.get("interaction") in {"block", "hit"}:
+            args["terminal_interaction"] = terminal_state["interaction"]
+            args["terminal_perspective"] = (
+                terminal_state.get("perspective") or "both"
+            )
         return [("analyze_sequence", args)]
+
+    if it == "query_moves":
+        if not slug:
+            return []
+        move_filter = intent.get("move_filter") or {}
+        args: dict = {
+            "character": slug,
+            "field": move_filter.get("field") or "on_block",
+            "operator": move_filter.get("operator") or "gt",
+            "value": move_filter.get("value", 0),
+            "perspective": move_filter.get("perspective") or "attacker",
+            "scope": intent.get("move_scope") or "all",
+        }
+        if scenario:
+            args["scenario"] = scenario
+        return [("query_moves", args)]
 
     if it == "setplay_analysis":
         # compute_setplay は SC chara をそのまま解決可。move_input は numpad/SC入力。
@@ -388,6 +431,21 @@ def _call_local_tool(name: str, arguments: dict) -> dict | None:
                 arguments["defender_delay_f"]
                 if "defender_delay_f" in arguments else 0
             ),
+            query_targets=arguments.get("query_targets"),
+            terminal_interaction=arguments.get("terminal_interaction"),
+            terminal_perspective=arguments.get("terminal_perspective") or "both",
+        )
+    if name == "query_moves":
+        from sf6_engine.frame_data import query_frame_data
+
+        return query_frame_data(
+            arguments.get("character", ""),
+            field=arguments.get("field") or "on_block",
+            operator=arguments.get("operator") or "gt",
+            value=arguments.get("value", 0),
+            perspective=arguments.get("perspective") or "attacker",
+            scope=arguments.get("scope") or "all",
+            scenario=arguments.get("scenario"),
         )
     if name not in {"lookup_move", "check_punish"}:
         return None
@@ -545,6 +603,9 @@ def result_to_context(tool: str, args: dict, result: dict | None) -> str:
     質問で使われた技識別子 (character / move) をヘッダに明示し、MCP が
     SuperCombo 名で返す技 (例: 2HK=Tiger Kick) を LLM が橋渡しできるようにする。
     """
+    if tool == "query_moves" and result and result.get("summary"):
+        return str(result["summary"])
+
     ch = args.get("character")
     mv = args.get("move_name") or args.get("move_input") or args.get("starter_input")
     if tool == "analyze_sequence":

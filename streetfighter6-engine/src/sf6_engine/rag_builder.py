@@ -1211,10 +1211,31 @@ async def build_context(intent: dict, provider=None) -> str:
             expected_outcome=intent.get("expected_outcome"),
             attacker_delay_f=(intent.get("attacker_timing") or {}).get("delay_f", 0),
             defender_delay_f=defender.get("delay_f", 0),
+            query_targets=intent.get("query_targets"),
+            terminal_interaction=(intent.get("terminal_state") or {}).get("interaction"),
+            terminal_perspective=(intent.get("terminal_state") or {}).get("perspective", "both"),
         )
         if not result.get("found"):
             return f"⚠ {result.get('message') or '連携解析に必要なデータが不足しています。'}"
         return result["summary"]
+
+    # --- query_moves: 条件を満たす技の集合を統合プロファイルで決定論検索 ---
+    if intent_type == "query_moves":
+        if not chara:
+            return "⚠ 技を検索するキャラクターが特定できませんでした。"
+        from sf6_engine.frame_data import query_frame_data
+
+        move_filter = intent.get("move_filter") or {}
+        result = query_frame_data(
+            chara,
+            field=move_filter.get("field") or "on_block",
+            operator=move_filter.get("operator") or "gt",
+            value=move_filter.get("value", 0),
+            perspective=move_filter.get("perspective") or "attacker",
+            scope=intent.get("move_scope") or "all",
+            scenario=intent.get("scenario"),
+        )
+        return result.get("summary") or "⚠ 技条件検索の結果を取得できませんでした。"
 
     # Core frame-data questions use the same deterministic multi-source
     # profile as MCP/Discord.  This keeps CLI and bot source selection
@@ -1426,7 +1447,9 @@ async def build_context(intent: dict, provider=None) -> str:
                             follow_ups_hit, '通常ヒット'
                         ))
 
-                # 派生技の表示 (常に表示。割り込み判定は派生キーワードがある場合のみ計算)
+                # 派生技の単体フレームデータ。キャンセル連携の割り込み可否は
+                # 親技の on-block ではなくキャンセル開始と blockstun を使うため、
+                # ここで単体値から隙間を逆算しない。
                 rq = intent.get("raw_query", "")
                 _show_gap = any(kw in rq for kw in ['派生', '割り込', '連携', 'follow', 'blockstring', 'block string'])
                 if True:  # 常に派生技を確認する
@@ -1438,35 +1461,20 @@ async def build_context(intent: dict, provider=None) -> str:
                         'input,name,startup,hit_adv,block_adv,notes'
                     ).eq('chara', sc_chara_val).ilike('input', f'{base_inp}~%').execute()
                     if follow_res.data:
-                        blk_adv_f = sc_row.get('block_adv_f')
-                        hit_adv_f_v = sc_row.get('hit_adv_f')
-                        heading = "【派生技フレームデータと割り込み判定】" if _show_gap else "【派生技フレームデータ】"
+                        heading = "【派生技フレームデータ】"
                         lines = [heading]
+                        if _show_gap:
+                            lines.append(
+                                "割り込み判定には起点技→派生技の連携指定とキャンセル窓が必要です。"
+                                "単体の硬直差では判定しません。"
+                            )
                         for fr in follow_res.data:
-                            raw_st = fr.get('startup', '')
-                            st_m = re.search(r'\d+', str(raw_st))
-                            st_f = int(st_m.group()) if st_m else None
                             lines.append(
                                 f"  {fr['input']} ({fr.get('name','?')}): "
                                 f"発生{fr.get('startup','?')}F "
                                 f"ヒット時{fr.get('hit_adv','?')} "
                                 f"ガード時{fr.get('block_adv','?')}"
                             )
-                            if _show_gap and st_f is not None:
-                                if hit_adv_f_v is not None and hit_adv_f_v > 0:
-                                    gap_hit = st_f - hit_adv_f_v
-                                    lines.append(f"    → ヒット後の隙間: {gap_hit}F" + (
-                                        " (確定連携)" if gap_hit <= 0 else
-                                        f" (発生{gap_hit}F以下で割り込み可 / カウンターヒットに注意)" if gap_hit <= 4 else
-                                        f" (発生{gap_hit}F以下で割り込み可)"
-                                    ))
-                                if blk_adv_f is not None and blk_adv_f < 0:
-                                    gap_blk = abs(blk_adv_f) - st_f
-                                    lines.append(f"    → ガード後の隙間: {gap_blk}F" + (
-                                        " (真の連携 / 割り込み不可)" if gap_blk <= 0 else
-                                        " (3F以下のため事実上割り込み不可)" if gap_blk <= 3 else
-                                        f" (発生{gap_blk}F以下で割り込み可)"
-                                    ))
                             if fr.get('notes'):
                                 lines.append(f"    解説: {fr['notes'][:150]}")
                         sections.append('\n'.join(lines))
@@ -1496,7 +1504,8 @@ async def build_context(intent: dict, provider=None) -> str:
                             f"【反撃判定】ガード時 {_sign(blk)}F → "
                             f"ガードした側が不利のため反撃はできません。"
                         )
-                # 派生技の追加フレームデータ (割り込み判断に必要)
+                # 派生技の追加フレームデータ。単体技の硬直差だけではキャンセル
+                # 連携の割り込み判定はできないため、誤った隙間計算を行わない。
                 rq = intent.get("raw_query", "")
                 if any(kw in rq for kw in ['派生', 'フォロー', '割り込', '繋ぎ', 'follow']):
                     sc_inp = row.get('input', '')
@@ -1511,50 +1520,18 @@ async def build_context(intent: dict, provider=None) -> str:
                             'input,name,startup,hit_adv,block_adv,notes'
                         ).eq('chara', sc_chara_val).ilike('input', f'{base_inp}~%').execute()
                         if follow_res.data:
-                            hit_adv_f  = row.get('hit_adv_f')
-                            block_adv_f = row.get('block_adv_f')
-                            lines = ["【派生技フレームデータと割り込み判定】"]
+                            lines = ["【派生技フレームデータ】"]
+                            lines.append(
+                                "割り込み判定には起点技→派生技の連携指定とキャンセル窓が必要です。"
+                                "単体の硬直差では判定しません。"
+                            )
                             for fr in follow_res.data:
-                                raw_st = fr.get('startup', '')
-                                st_m = re.search(r'\d+', str(raw_st))
-                                st_f = int(st_m.group()) if st_m else None
                                 lines.append(
                                     f"  {fr['input']} ({fr.get('name','?')}): "
                                     f"発生{fr.get('startup','?')}F "
                                     f"ヒット時{fr.get('hit_adv','?')} "
                                     f"ガード時{fr.get('block_adv','?')}"
                                 )
-                                if st_f is not None:
-                                    # ヒット後の隙間計算
-                                    if hit_adv_f is not None and hit_adv_f > 0:
-                                        gap_hit = st_f - hit_adv_f
-                                        if gap_hit <= 0:
-                                            lines.append(f"    → ヒット後: 相手は行動できない (確定連携)")
-                                        elif gap_hit <= 3:
-                                            lines.append(
-                                                f"    → ヒット後の隙間: {gap_hit}F "
-                                                f"(最速技でも当てられない or カウンターヒット確定)"
-                                            )
-                                        else:
-                                            lines.append(
-                                                f"    → ヒット後の隙間: {gap_hit}F "
-                                                f"(発生{gap_hit}F以下の技で割り込み可能)"
-                                            )
-                                    # ガード後の隙間計算
-                                    if block_adv_f is not None and block_adv_f < 0:
-                                        gap_blk = abs(block_adv_f) - st_f
-                                        if gap_blk <= 0:
-                                            lines.append(f"    → ガード後: 真の連携 (割り込み不可)")
-                                        elif gap_blk <= 3:
-                                            lines.append(
-                                                f"    → ガード後の隙間: {gap_blk}F "
-                                                f"(3F以下のため事実上割り込み不可)"
-                                            )
-                                        else:
-                                            lines.append(
-                                                f"    → ガード後の隙間: {gap_blk}F "
-                                                f"(発生{gap_blk}F以下の技で割り込み可能)"
-                                            )
                                 if fr.get('notes'):
                                     lines.append(f"    解説: {fr['notes'][:150]}")
                             sections.append('\n'.join(lines))
@@ -1738,12 +1715,11 @@ ANSWER_SYSTEM = """\
 9. 実戦的なアドバイスは、解説テキスト (解説:) がある場合のみ行う
 10. ハルシネーション厳禁: 根拠のない数値や技名を生成しない
 11. 回答は構造的に (コンボルートには番号や箇条書きを使う)
-12. 【派生技フレームデータ】セクションと「反撃判定」が両方ある場合 (割り込み・フレームトラップ判定):
-    - 親技のヒット有利 (+N) と派生技の発生F を使って「隙間」を計算する
-    - 隙間 = 派生発生F − ヒット有利 (正数なら相手が行動できるフレーム数)
-    - 派生技の notes に "counter-hit any opponent button" があれば「割り込めばカウンターヒットを食らう」と回答する
-    - ガード時の計算: 隙間 = |ガード不利| − 派生発生F (0以下なら真の連携、割り込み不可)
-    - ヒット時・ガード時の両方について言及し、「押せるが〜」「割り込み不可」を明確に述べること
+12. 【派生技フレームデータ】だけからは、キャンセル連携の割り込み可否を計算・断定しないこと:
+    - 親技の on-block / on-hit と派生技の発生を引き算して「隙間」を作ってはいけない
+    - 割り込み判定は【連携解析】のキャンセル開始基準・blockstun/hitstun・派生技発生を優先する
+    - 連携解析が無い場合は、起点技→派生技・ガード/ヒット・防御側の発生を確認して判定保留とする
+    - notes の counter-hit 等は補足情報として引用してよいが、単体値から割り込み可否を推測しない
 13. 「無敵:」フィールドが参照データにある場合、必ずその値 (例: '1-21 Air') を回答に含めること。
     「データに含まれていません」と言ってはいけない — 無敵フレームの行が記述そのものである。
 14. 【セットプレイ分析】セクションがある場合:
@@ -2575,7 +2551,10 @@ async def generate_answer(
     # レビュー済み観測から既に完成文として決定論生成されている。
     # LLM に再要約させず、値・視点・確度ラベルを保存する。
     stripped_context = context.strip()
-    if re.match(r"^【[^\n]+連携解析】(?:\n|$)", stripped_context):
+    if (
+        re.match(r"^【[^\n]+連携[^\n]*解析】(?:\n|$)", stripped_context)
+        or stripped_context.startswith("【技条件検索】")
+    ):
         return stripped_context
 
     deterministic = _deterministic_frame_answer(query, context)

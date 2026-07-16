@@ -10,6 +10,26 @@
 - `python -m sf6_engine.cli ask "ドライブインパクトって何?"` → システム仕様を踏まえた説明を返す
 - `python -m sf6_engine.cli ask "サガットの2HKでパニッシュカウンター取ったらどうなる?"` → 数値+解説を返す
 
+## Post-M1: 技集合のフレーム条件検索 (2026-07-13)
+
+- [x] `query_moves` Intentを追加し、集合条件を単一技名として扱わない
+- [x] CAPCOM/UFD/SuperCombo統合プロファイル上で `on_block` 条件を比較
+- [x] 確定一致・条件付き一致・範囲/未収録の判定保留を分離
+- [x] MCP / Discord router / CLI RAGを接続し、summaryを決定論返却
+- [x] alias聞き返しを明示的な単一技の `move_not_found` だけに限定
+- [x] parser / query service / router / RAG のunittest 48件を通過
+- [x] SAM再デプロイ後、AWS MCP本番経路で集合検索を確認 (2026-07-14)
+
+## Post-M1: 略称・かな・ローマ字・英語の技名解決 (2026-07-16)
+
+- [x] 現行の公式名部分一致、英語ILIKE、fuzzy、旧alias学習、canonical DDLを監査
+- [x] `中ネク / 弱はしょう / English / romaji / 下デヨ`の解決・聞き返し契約を設計
+- [x] read-only resolver、検索form、variant gate、型付きstatus、評価gateを設計文書とADR-035に記録
+- [ ] 既存ソース行を使う共通`MoveResolver`を実装し、全ツールの重複resolverを置換
+- [ ] かな/読み/ローマ字formと部分一致scoreを実装し、frozen corpusでprecision gateを通す
+- [ ] `needs_command`をDiscordの同一利用者pendingへ接続し、確認後に元質問を再実行
+- [ ] `canonical_moves`をバックフィル後、private/review済みshared alias workflowを有効化
+
 ## Post-M1: 連携・相打ち解析 (2026-07-13)
 
 - [x] 2技連携の共通タイムラインと攻撃/防御側ディレイを実装
@@ -24,7 +44,80 @@
 - [ ] Supabaseへ `sequence_analysis_migration.sql` を適用
 - [ ] 相手キャラ+技が特定された実測観測を収集し、レビュー後にupsert
 - [x] AWS MCPを訂正版へ再デプロイし、本番で4F技分布と`Ryu 2LP +9/-9`を確認
-- [ ] UFD GIF geometryと追加実測で相打ち・追撃の到達証明を拡張
+- [ ] UFD元GIFのオンデマンドgeometry解析と追加実測で相打ち・追撃の到達証明を拡張
+
+## Post-M1: 連続ガード・割り込み解析 (2026-07-14)
+
+- [x] 現行link timelineをcancel連携に適用できないことをコードと実DBで監査
+- [x] Ken `2MK blockstun=16`, `236LK/MK/HK startup=12/16/25`をSC/UFDで確認
+- [x] `TransitionProfile`、cancel timeline、確度分離、回答契約をADR-029/設計書に定義
+- [x] production `analyze_sequence` の `_fetch_defender_profiles` 引数不整合を修正
+- [x] 旧`rag_builder` の `abs(block_adv)-startup` gap式を削除し共通serviceへ統一
+- [x] 「2中K」「中/大迅雷脚」「連続ガード/割り込める」のIntent正規化を実装
+- [x] `通常技→日本語必殺技名`を汎用sequence intentへ分解し、キャラ固有技名をハードコードせずDB resolverへ委譲
+- [x] 一意近似名だけを強度/SA prefix保持で補正し、同名の弱中強/ODは聞き返す
+- [x] `→ / > / から / の後に / AをBでキャンセル / into` を決定論分解
+- [x] link/special cancel/SA cancel/同一状態のlight chainを分け、防御技未指定でも連続ガード/連続ヒットを計算
+- [x] cancel不可のnormal-to-special/SAは、不可を明示したうえでafter-recovery linkとして計算
+- [x] Ken `2MK -> 236LK/MK/HK` のgolden test、実DB E2E、更新済みAWS MCP E2Eを確認
+- [x] 全30キャラのSC入力2,118件・CAPCOM公式名2,357件・ordered pair 103,073件を総合監査
+- [x] AWS MCPを再デプロイし、`query_targets`スキーマ、Ryu special cancel/light chainを本番E2E確認
+- [x] 技間gapと2技目ガード/ヒット後硬直差を別targetにし、質問視点を保持して回答
+- [x] Ryu `5LP -> 214LP`で終端`-3/+3F`を主回答、gap 3Fを補足する実DB E2Eを確認
+- [x] AWS MCPへ終端硬直差APIを再デプロイし、Bearer認証付き本番E2Eとエラーログ0件を確認
+- [x] 連続ガード/割り込みtargetを分離し、yes/no・gapを1行目に置く短いsummaryへ変更
+- [x] Ryu `5LP -> 214LP`を「いいえ、隙間3F」の2行回答として実DB確認
+- [ ] 20〜50件のframe-step blind検証でoff-by-one規約を確定
+- [ ] canonical move / transition edgeをバックフィルしpatch失効を接続
+
+## Post-M1: SuperCombo時間派生値の独立検証 (2026-07-14)
+
+> ADR-028によりSuperComboはCC BY-NC-SA 3.0条件下で本番補助ソースとして維持する。
+> 以下の未完了項目はSC排除ゲートではなく、CAPCOM/UFD/SC間の精度・版整合性監査として継続する。
+
+- [x] SCを正解ラベルだけに使い、CAPCOM/UFD値を入力にする全30キャラ監査を実装
+- [x] 基本地上通常技360件を固定技名変換で結合し、フレーム値による対応付けを禁止
+- [x] CAPCOM由来hitstunを289/304件で計算し、280/289件 (96.89%) 完全一致
+- [x] Sagat 5MP対4F地上通常技46件をSC入力なしで46/46完全再現 (`+6～+12F`)
+- [x] total / blockstun / punishAdv / afterDR / perfParryAdv とUFD単独を層別評価
+- [x] hitstop・距離・状態・notesは基本フレームから一意に導けないと分類
+- [x] 監査スクリプト、詳細レポート、Proposed ADR-024を追加
+- [ ] 同一パッチのCAPCOM/UFD/SCスナップショットで再監査
+- [ ] SC読み取り禁止のsource-isolation E2Eを追加し、候補列挙もcanonical IDへ移行
+- [ ] 相手技固定20～50件の実測でtrade offset `0/-1` とhitstop差をblind検証
+- [ ] 検証ゲート通過後にADR-024をActive化し、derived temporal profileを本番へ反映
+
+## Post-M1: CAPCOM備考とSC非依存ランタイム設計 (2026-07-14)
+
+- [x] CAPCOM全2,357行の備考・属性・無敵・armor・空中・飛び道具・juggle候補を棚卸し
+- [x] `N F増加/減少` の結果別硬直claimを決定論抽出し、不一致への補正効果を評価
+- [x] hitstun/blockstun/totalの31不一致セル・24技をCAPCOM/UFD/SC notesまで個別追跡
+- [x] 距離・無敵・armor・飛び道具・juggle・空中状態を時間誤差と接触gateに分離
+- [x] raw snapshot / canonical move / fact / note claim / rule / proof / observationの設計を策定
+- [x] 詳細監査レポート、再実行スクリプト、Proposed ADR-025を追加
+- [ ] CAPCOM raw HTMLとUFD assetをpatch/SHA付きimmutable snapshotへ移行
+- [ ] SC由来`special_move_map`とaliasをCAPCOM command/UFD input/review済みaliasで再構築
+- [ ] 公式備考parserのgolden corpusを作り、実行対象grammarでprecision 100%を確認
+- [ ] SC oracleをproductionと別DBへ分離し、接続不能状態のsource-isolation E2Eを追加
+- [ ] `recovery_by_result / active_segments / contact_phase / variant_state` を型付き実装
+- [ ] geometryとblind trade観測を投入し、ADR-024/025のActivation gateを通す
+
+## Post-M1: 会話から更新する戦術知識基盤 (2026-07-14)
+
+- [x] 現行の単発Intent、Discord会話状態、alias学習、観測、RAG経路を監査
+- [x] 否定・仮説・伝聞・訂正・照応を含む会話contextプローブを実行 (期待一致1/10)
+- [x] `sequence_observations`のreview/patch/conditions/競合安全性を再現 (安全0/3)
+- [x] private/shared、同意、review、訂正、競合、失効、撤回のテスト専用契約を検証 (18/18)
+- [x] identity、conversation、scenario、claim、evidence、review、RLS、削除の設計を策定
+- [x] 180会話+否定minimal pair 120組の評価計画とrelease gateを定義
+- [x] 詳細設計、再実行スクリプト、Proposed ADR-026を追加
+- [ ] ADR-024/025のSC非依存canonical fact基盤とsource-isolation E2Eを先に完成
+- [ ] `DialogueTurnAnalysis`のgolden-dev 90会話、frozen holdout 60会話、challenge 30会話を作成
+- [x] 短期context compilerを実装し、polarity/照応/epistemic gateを単体テストで通す（8/8）
+- [ ] 180会話frozen評価でread-only context compilerのrelease gateを通す
+- [ ] 主体付き短命token、private RLS、consent、export/deleteを実装してからprivate memoryを有効化
+- [ ] evidence/review/conflict workflowとreviewer専用権限を実装してからshared knowledgeを有効化
+- [ ] 連携の決定論回答へlabel付き戦術contextを統合し、SC接続不能E2Eを通す
 
 ---
 

@@ -46,6 +46,15 @@ _FIELD_LABELS = {
     "damage": "ダメージ",
 }
 
+_QUERY_OPERATORS = {"gt", "gte", "lt", "lte", "eq"}
+_QUERY_SCOPES = {"all", "normal", "ground_normal", "special", "super"}
+_QUERY_VARIANT_RE = re.compile(
+    r"ホールド|ため|タメ|エアカレント|air current|windclad|"
+    r"ウィンドクラッド|飲酒|drink(?:\s*level)?|(?:^|\W)lv\.?\s*\d|"
+    r"charged|hold",
+    re.IGNORECASE,
+)
+
 _NORMAL_PREFIXES = {
     "立ち弱p": "5LP", "立ち中p": "5MP", "立ち強p": "5HP",
     "立ち弱k": "5LK", "立ち中k": "5MK", "立ち強k": "5HK",
@@ -129,6 +138,47 @@ def _best_named_row(rows: Iterable[dict[str, Any]], query: str) -> dict[str, Any
         reverse=True,
     )
     return scored[0][1]
+
+
+def _name_variant_prefix(value: str | None) -> str | None:
+    """Return an explicit strength/super prefix used to guard fuzzy matching."""
+    compact = _compact(value)
+    match = re.match(r"^(od|sa[123]|ca|弱|中|強)", compact, re.IGNORECASE)
+    return match.group(1).casefold() if match else None
+
+
+def _best_unique_fuzzy_named_row(
+    rows: Iterable[dict[str, Any]],
+    query: str,
+) -> dict[str, Any] | None:
+    """Resolve a short typo only when one same-variant name clearly wins.
+
+    This is deliberately a last-resort name resolver. It replaces per-move
+    typo dictionaries while refusing ties and strength/SA-prefix changes.
+    """
+    query_compact = _compact(query)
+    if len(query_compact) < 4:
+        return None
+    query_prefix = _name_variant_prefix(query)
+    ranked: list[tuple[float, dict[str, Any]]] = []
+    for row in rows:
+        name = row.get("move_name") or row.get("name")
+        if query_prefix and _name_variant_prefix(name) != query_prefix:
+            continue
+        forms = _name_forms(name)
+        if not forms:
+            continue
+        score = max(
+            SequenceMatcher(None, query_compact, form).ratio()
+            for form in forms
+        )
+        ranked.append((score, row))
+    ranked.sort(key=lambda item: item[0], reverse=True)
+    if not ranked or ranked[0][0] < 0.74:
+        return None
+    if len(ranked) > 1 and ranked[0][0] - ranked[1][0] < 0.12:
+        return None
+    return ranked[0][1]
 
 
 def _resolution_candidate_groups(
@@ -1455,6 +1505,15 @@ def lookup_frame_data(
     cap_direct = _best_named_row(cap_rows, move_query)
     sc_direct = _best_named_row(sc_rows, move_query)
     ufd_direct = _best_named_row(ufd_rows, move_query)
+    fuzzy_source: str | None = None
+    if not cap_direct and not sc_direct and not ufd_direct:
+        cap_direct = _best_unique_fuzzy_named_row(cap_rows, move_query)
+        if cap_direct:
+            fuzzy_source = "CAPCOM公式"
+        else:
+            ufd_direct = _best_unique_fuzzy_named_row(ufd_rows, move_query)
+            if ufd_direct:
+                fuzzy_source = "UFD"
     cap_direct_exact = _is_exact_named_row(cap_direct, move_query)
     sc_direct_exact = _is_exact_named_row(sc_direct, move_query)
     ufd_direct_exact = _is_exact_named_row(ufd_direct, move_query)
@@ -1462,6 +1521,14 @@ def lookup_frame_data(
         ufd_direct_exact and ufd_direct and not ufd_direct.get("sc_input")
     )
     resolution_warnings: list[str] = []
+    if fuzzy_source:
+        matched_name = (
+            (cap_direct or {}).get("move_name")
+            or (ufd_direct or {}).get("move_name")
+        )
+        resolution_warnings.append(
+            f"入力名を{fuzzy_source}の『{matched_name}』へ一意の近似一致で補正しました。"
+        )
     resolution_candidates = _resolution_candidate_groups(
         move_query, cap_rows, sc_rows, ufd_rows, maps
     )
@@ -1785,6 +1852,414 @@ def lookup_frame_data(
         ]))[:12],
         "message": "CAPCOM公式を主値、UFD・SuperComboを補完値として統合しました。",
     }
+
+
+def _query_candidate_identifiers(rows: dict[str, list[dict[str, Any]]]) -> list[str]:
+    """Return exact source identifiers for a character-wide frame query.
+
+    A frame query must enumerate CAPCOM-only, SuperCombo-only, and UFD-only
+    rows.  The identifiers are deliberately not reduced to SC input: one input
+    can represent multiple named condition variants.
+    """
+    identifiers: list[str] = []
+    for row in rows.get("capcom", []):
+        if row.get("move_name"):
+            identifiers.append(str(row["move_name"]))
+    for row in rows.get("ufd", []):
+        identifier = row.get("move_name") or row.get("sc_input")
+        if identifier:
+            identifiers.append(str(identifier))
+    for row in rows.get("sc", []):
+        identifier = row.get("input") or row.get("name")
+        if identifier:
+            identifiers.append(str(identifier))
+    return list(dict.fromkeys(identifiers))
+
+
+def _query_profile_identity(profile: dict[str, Any]) -> tuple[Any, ...]:
+    """Return a variant-preserving identity for deduplicating query results."""
+    source_rows = profile.get("source_rows") or {}
+    return (
+        source_rows.get("capcom_move_name"),
+        source_rows.get("ufd_move_name"),
+        source_rows.get("supercombo_move_name"),
+        profile.get("input"),
+        profile.get("section"),
+    )
+
+
+def _query_scope_matches(profile: dict[str, Any], scope: str) -> bool:
+    """Return whether a resolved profile belongs to the requested move scope."""
+    if scope == "all":
+        return True
+    section = str(profile.get("section") or "").casefold()
+    move_type = str(profile.get("move_type") or "").casefold()
+    if scope == "normal":
+        return (
+            profile.get("section") in {"通常技", "特殊技"}
+            or move_type in {"ground_normal", "air_normal", "air_normal8", "command_normal"}
+        )
+    if scope == "ground_normal":
+        # CAPCOM の「通常技」区分にはジャンプ攻撃も含まれる。SC の move_type や
+        # 入力・名称で空中技と分かる場合は、地上通常技検索から明示的に除外する。
+        input_name = str(profile.get("input") or "").casefold()
+        move_name = str(profile.get("move_name") or "")
+        if (
+            move_type in {"air_normal", "air_normal8"}
+            or section in {"air_normal", "aerial"}
+            or input_name.startswith(("j.", "nj."))
+            or "ジャンプ" in move_name
+        ):
+            return False
+        return profile.get("section") in {"通常技", "特殊技"} or move_type in {
+            "ground_normal", "command_normal"
+        }
+    if scope == "special":
+        return profile.get("section") == "必殺技" or move_type == "special" or section == "special"
+    if scope == "super":
+        return profile.get("section") == "スーパーアーツ" or move_type == "super" or section == "super"
+    return False
+
+
+def _query_compare(left: int, operator: str, right: int) -> bool:
+    """Evaluate a validated numeric query predicate."""
+    if operator == "gt":
+        return left > right
+    if operator == "gte":
+        return left >= right
+    if operator == "lt":
+        return left < right
+    if operator == "lte":
+        return left <= right
+    return left == right
+
+
+def _query_numeric_values(fact: dict[str, Any]) -> list[int]:
+    """Return all numeric values represented by a typed frame fact."""
+    value = fact.get("value")
+    if isinstance(value, int):
+        return [value]
+    minimum, maximum = fact.get("min"), fact.get("max")
+    if isinstance(minimum, int) and isinstance(maximum, int):
+        return [minimum, maximum]
+    return [item for item in fact.get("alternatives") or [] if isinstance(item, int)]
+
+
+def _query_condition_labels(
+    profile: dict[str, Any],
+    fact: dict[str, Any],
+    contextual: dict[str, Any] | None = None,
+) -> list[str]:
+    """Describe why a matching value is not a plain base-value result."""
+    labels: list[str] = []
+    if fact.get("is_range"):
+        labels.append("範囲値")
+    elif fact.get("alternatives"):
+        labels.append("条件別値")
+    elif fact.get("conditional"):
+        labels.append("条件付き値")
+    variants = " ".join(
+        str(value or "")
+        for value in (
+            profile.get("input"),
+            profile.get("move_name"),
+            profile.get("move_name_ja"),
+            profile.get("move_name_en"),
+        )
+    )
+    if _QUERY_VARIANT_RE.search(variants):
+        labels.append("技バリアント")
+    if (contextual or {}).get("status") in {"derived_exact", "condition_selected"}:
+        labels.append("指定条件")
+    return labels
+
+
+def _query_move_item(
+    profile: dict[str, Any],
+    fact: dict[str, Any],
+    *,
+    value: int | None,
+    condition_labels: list[str],
+    reason: str | None = None,
+) -> dict[str, Any]:
+    """Create one stable, JSON-serializable move-query item."""
+    return {
+        "input": profile.get("input"),
+        "move_name": profile.get("move_name"),
+        "section": profile.get("section"),
+        "value": value,
+        "display": fact.get("display") or "データなし",
+        "source": fact.get("source"),
+        "source_label": fact.get("source_label"),
+        "condition_labels": condition_labels,
+        "reason": reason,
+        "_sort_value": value if isinstance(value, int) else (
+            min(_query_numeric_values(fact)) if _query_numeric_values(fact) else None
+        ),
+    }
+
+
+def _query_sort_items(items: list[dict[str, Any]], operator: str) -> None:
+    """Sort query results deterministically without exposing internal ordering."""
+    reverse = operator in {"gt", "gte"}
+    # Stable sorts keep the secondary identifier/name ordering ascending even
+    # when the primary frame value is descending.
+    items.sort(
+        key=lambda item: (str(item.get("input") or ""), str(item.get("move_name") or "")),
+    )
+    items.sort(
+        key=lambda item: item.get("_sort_value") if isinstance(item.get("_sort_value"), int) else 0,
+        reverse=reverse,
+    )
+    for item in items:
+        item.pop("_sort_value", None)
+
+
+def _query_operator_text(operator: str, value: int) -> str:
+    """Format the predicate for a deterministic Japanese summary."""
+    operators = {
+        "gt": "より大きい",
+        "gte": "以上",
+        "lt": "より小さい",
+        "lte": "以下",
+        "eq": "と等しい",
+    }
+    return f"{value:+d}F {operators[operator]}"
+
+
+def _format_move_query_summary(result: dict[str, Any]) -> str:
+    """Render a completed answer for a typed character-wide move query."""
+    character = result.get("character") or "指定キャラ"
+    perspective = result.get("perspective")
+    perspective_label = "攻撃側（ガードさせた側）" if perspective == "attacker" else "防御側（ガードした側）"
+    scope_labels = {
+        "all": "全技",
+        "normal": "通常技・特殊技",
+        "ground_normal": "地上通常技・特殊技",
+        "special": "必殺技",
+        "super": "スーパーアーツ",
+    }
+    lines = [
+        "【技条件検索】",
+        f"{character} の{scope_labels[result['scope']]}を、ガード時の{perspective_label}が "
+        f"{_query_operator_text(result['operator'], result['value'])} で検索しました。",
+    ]
+    # Discord の1メッセージ制限内で、条件付き/保留の注意書きまで必ず見せる。
+    # 完全な構造化リストは matches / conditional_matches に保持する。
+    visible_budget = 12
+
+    def append_items(title: str, items: list[dict[str, Any]], maximum: int) -> None:
+        nonlocal visible_budget
+        lines.append(f"【{title}（{len(items)}件）】")
+        display_count = min(len(items), maximum, visible_budget)
+        for item in items[:display_count]:
+            identifier = item.get("input") or "入力不明"
+            name = item.get("move_name") or "名称不明"
+            source = item.get("source_label") or "出所不明"
+            labels = " / ".join(item.get("condition_labels") or [])
+            suffix = f"（{labels}）" if labels else ""
+            lines.append(f"- {identifier} / {name}: {item['display']} [{source}]{suffix}")
+        visible_budget -= display_count
+        if len(items) > display_count:
+            lines.append(f"- …ほか {len(items) - display_count} 件")
+
+    matches = result.get("matches") or []
+    conditional = result.get("conditional_matches") or []
+    unresolved = result.get("unresolved") or []
+    if matches:
+        append_items("基準値で条件一致", matches, 20)
+    if conditional:
+        append_items("条件付きで条件一致", conditional, 20)
+    if not matches and not conditional:
+        lines.append("該当する技は、現在の収録データにはありません。")
+    if unresolved:
+        lines.append(f"※ {len(unresolved)}件は条件別・範囲・未収録のため、条件一致を確定できません。")
+    if result.get("not_applicable_count"):
+        lines.append(f"※ ガード不成立など対象外の技: {result['not_applicable_count']}件")
+    return "\n".join(lines)
+
+
+def query_frame_data(
+    character: str,
+    *,
+    field: str = "on_block",
+    operator: str = "gt",
+    value: int = 0,
+    perspective: str = "attacker",
+    scope: str = "all",
+    scenario: dict[str, Any] | None = None,
+    limit: int = 100,
+    client=None,
+) -> dict[str, Any]:
+    """Filter one character's moves through the typed frame-data contract.
+
+    This is intentionally separate from ``list_moves``.  It uses the same
+    CAPCOM → UFD → SuperCombo field selection and condition preservation as a
+    single move lookup, then applies a numeric predicate only where the value
+    is valid for the requested scenario and perspective.
+    """
+    if field != "on_block":
+        return {
+            "found": False,
+            "character": character,
+            "error": f"未対応の検索フィールドです: {field}",
+        }
+    if operator not in _QUERY_OPERATORS:
+        return {
+            "found": False,
+            "character": character,
+            "error": f"未対応の比較演算子です: {operator}",
+        }
+    if perspective not in {"attacker", "defender"}:
+        return {
+            "found": False,
+            "character": character,
+            "error": f"視点は attacker または defender を指定してください: {perspective}",
+        }
+    if scope not in _QUERY_SCOPES:
+        return {
+            "found": False,
+            "character": character,
+            "error": f"未対応の技区分です: {scope}",
+        }
+    if not isinstance(value, int):
+        return {
+            "found": False,
+            "character": character,
+            "error": "比較値は整数フレームで指定してください。",
+        }
+    limit = min(max(limit, 1), 100)
+
+    if client is None:
+        bucket = _cache_bucket()
+        resolved_character = _resolve_character_cached(character.casefold(), bucket)
+    else:
+        resolved_character = _resolve_character(client, character)
+    if not resolved_character:
+        return {
+            "found": False,
+            "character": character,
+            "message": f"キャラクター '{character}' が見つかりません。",
+        }
+    slug, sc_chara = resolved_character
+    rows = (
+        _all_character_rows_cached(slug, sc_chara, bucket)
+        if client is None
+        else _all_character_rows(client, slug, sc_chara)
+    )
+
+    matches: list[dict[str, Any]] = []
+    conditional_matches: list[dict[str, Any]] = []
+    unresolved: list[dict[str, Any]] = []
+    not_applicable_count = 0
+    seen: set[tuple[Any, ...]] = set()
+
+    for identifier in _query_candidate_identifiers(rows):
+        lookup = lookup_frame_data(
+            slug,
+            identifier,
+            scenario=scenario,
+            client=client,
+        )
+        if not lookup.get("found") or not lookup.get("move"):
+            continue
+        profile = (lookup["move"] or {}).get("frame_profile") or {}
+        if (profile.get("resolution") or {}).get("status") != "resolved":
+            continue
+        identity = _query_profile_identity(profile)
+        if identity in seen or not _query_scope_matches(profile, scope):
+            continue
+        seen.add(identity)
+
+        reference = (profile.get("block_perspectives") or {}).get(perspective) or {}
+        contextual = (
+            (profile.get("scenario_evaluation") or {})
+            .get("block_perspectives", {})
+            .get(perspective)
+            or {}
+        )
+        if reference.get("semantic") == "not_applicable":
+            not_applicable_count += 1
+            continue
+
+        contextual_status = contextual.get("status")
+        contextual_value = contextual.get("value")
+        if contextual_status in {"source_exact", "derived_exact", "condition_selected"} and isinstance(contextual_value, int):
+            item = _query_move_item(
+                profile,
+                reference,
+                value=contextual_value,
+                condition_labels=_query_condition_labels(profile, reference, contextual),
+            )
+            if _query_compare(contextual_value, operator, value):
+                if item["condition_labels"]:
+                    conditional_matches.append(item)
+                else:
+                    matches.append(item)
+            continue
+
+        # An explicit scenario whose system rule is not modeled must remain
+        # unresolved; falling back to the base value would be incorrect.
+        if contextual.get("required_data") or contextual_status in {
+            "invalid_condition", "move_ambiguous", "data_missing"
+        }:
+            unresolved.append(_query_move_item(
+                profile,
+                reference,
+                value=None,
+                condition_labels=_query_condition_labels(profile, reference, contextual),
+                reason=contextual.get("display") or contextual_status,
+            ))
+            continue
+
+        numeric_values = _query_numeric_values(reference)
+        if not numeric_values:
+            unresolved.append(_query_move_item(
+                profile,
+                reference,
+                value=None,
+                condition_labels=_query_condition_labels(profile, reference, contextual),
+                reason=reference.get("display") or "数値化できないフレーム値",
+            ))
+            continue
+        satisfied = [_query_compare(number, operator, value) for number in numeric_values]
+        if all(satisfied):
+            conditional_matches.append(_query_move_item(
+                profile,
+                reference,
+                value=None,
+                condition_labels=_query_condition_labels(profile, reference, contextual),
+            ))
+        elif any(satisfied):
+            unresolved.append(_query_move_item(
+                profile,
+                reference,
+                value=None,
+                condition_labels=_query_condition_labels(profile, reference, contextual),
+                reason="条件値の一部だけが検索条件に一致",
+            ))
+
+    _query_sort_items(matches, operator)
+    _query_sort_items(conditional_matches, operator)
+    _query_sort_items(unresolved, operator)
+    result: dict[str, Any] = {
+        "found": True,
+        "character": slug,
+        "field": field,
+        "operator": operator,
+        "value": value,
+        "perspective": perspective,
+        "scope": scope,
+        "scenario": normalize_frame_scenario(scenario),
+        "count": len(matches) + len(conditional_matches),
+        "matches": matches[:limit],
+        "conditional_matches": conditional_matches[:limit],
+        "unresolved": unresolved[:limit],
+        "unresolved_count": len(unresolved),
+        "not_applicable_count": not_applicable_count,
+    }
+    result["summary"] = _format_move_query_summary(result)
+    return result
 
 
 def _fact_observation_text(fact: dict[str, Any]) -> str:

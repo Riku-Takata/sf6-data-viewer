@@ -7,6 +7,8 @@ GIF本体はSupabase Storageのprivate bucketへ、DBには対応技とメタデ
 Usage:
   PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --character ken
   PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --all --delay 1.0
+  # GIF archive is opt-in because the assets exceed the Supabase free quota.
+  PYTHONPATH=src python -m sf6_engine.importers.ultimate_frame_data --character ken --gifs
 """
 from __future__ import annotations
 
@@ -450,7 +452,7 @@ def _delete_stale_rows(character_slug: str, retained_keys: set[str]) -> int:
 def import_ultimate_frame_data(
     *,
     characters: list[str],
-    download_gifs: bool = True,
+    download_gifs: bool = False,
     dry_run: bool = False,
     delay: float = 1.0,
     html_path: str | Path | None = None,
@@ -534,7 +536,11 @@ def main() -> None:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--character", choices=UFD_CHARACTER_SLUGS)
     group.add_argument("--all", action="store_true")
-    parser.add_argument("--no-gifs", action="store_true", help="GIF本体をStorageへ保存しない")
+    parser.add_argument(
+        "--gifs",
+        action="store_true",
+        help="GIF本体をStorageへ保存する（容量が大きいため明示指定時のみ）",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--delay", type=float, default=1.0, help="キャラページ間の待機秒数")
     parser.add_argument(
@@ -546,7 +552,7 @@ def main() -> None:
     characters = list(UFD_CHARACTER_SLUGS if args.all else (args.character,))
     result = import_ultimate_frame_data(
         characters=characters,
-        download_gifs=not args.no_gifs,
+        download_gifs=args.gifs,
         dry_run=args.dry_run,
         delay=args.delay,
         html_path=args.html_path,

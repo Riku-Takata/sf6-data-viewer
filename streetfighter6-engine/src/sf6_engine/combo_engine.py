@@ -45,10 +45,10 @@ class MoveNode:
     damage: int                 # 総ダメージ (多段は合算)
     dr_cancelable: bool         # DRキャンセル可能か
     after_dr_hit_f: Optional[int]  # DRキャンセル後の有利F (None = KD or 不明)
-    chain_cancelable: bool = False  # チェーンキャンセル可能か ('Chn' in cancel)
-
-    # チェーンキャンセルは発生フレームに関係なく繋がる仮想有利F
-    CHAIN_ADV: int = 99  # チェーン時の仮想有利フレーム (常に繋がる)
+    # ``Chn`` only establishes a cancellation category.  It does not identify
+    # which target normal is legal, nor its per-state timing window; therefore
+    # the max-combo search never treats it as a universal free link.
+    chain_cancelable: bool = False
 
 
 @dataclass
@@ -106,8 +106,6 @@ class ComboResult:
             )
             if s.adv_before == -1:
                 lines.append(f"     └ 始動技 (コンボの起点)")
-            elif s.adv_before == MoveNode.CHAIN_ADV:
-                lines.append(f"     └ チェーンキャンセル (発生フレーム無関係で繋がる)")
             else:
                 lines.append(
                     f"     └ 繋がる根拠: 直前の有利{s.adv_before}F ≥ 発生{mv.startup_f}F"
@@ -279,6 +277,8 @@ def find_max_combo(
         initial_drive: 開始時のドライブゲージ本数 (デフォルト: 6)。
         max_depth:     最大コンボ深さ。
         beam_width:    ビーム幅 (各ステップで保持する候補数)。
+        first_step_chain: 互換引数。個別チェーンedgeがない限り推測しないため、
+            現在は探索可否を変えない。
 
     Returns:
         最大ダメージの ComboResult、見つからない場合は None。
@@ -315,30 +315,17 @@ def find_max_combo(
             last_input = steps[-1].move.input if steps else starter_input
             expanded = False
 
-            # --- チェーンキャンセルの処理 ---
-            # 直前の技がチェーン可能、または始動技がチェーン可能な場合
-            last_mv_node = steps[-1].move if steps else None
-            chain_mode = (
-                (last_mv_node is not None and last_mv_node.chain_cancelable)
-                or (not steps and first_step_chain)  # 始動技のチェーン
-            )
-            chain_target_types = frozenset({'ground_normal'})  # チェーン対象は地上通常技
-
             for mv in moves:
-                # チェーンモード: 軽量技なら startup チェック不要
-                is_chain = (chain_mode and mv.move_type in chain_target_types
-                            and mv.startup_f <= 6)  # 軽量技はおおむね発生6F以下
-                if not is_chain:
-                    # 通常: フレームが繋がらない技はスキップ
-                    if mv.startup_f > adv:
-                        continue
+                # A Chn flag alone must not make every quick normal connect.
+                # Only a reviewed exact edge can relax this frame-link check.
+                if mv.startup_f > adv:
+                    continue
                 # 直前と同じinputの繰り返しはスキップ
                 if mv.input == last_input and mv.move_type == 'ground_normal':
                     continue
 
                 mv_dmg = dmg + mv.damage
-                # チェーン時は仮想有利を使用してコンテキストに表示
-                effective_adv = MoveNode.CHAIN_ADV if is_chain else adv
+                effective_adv = adv
 
                 # --- 選択肢A: 通常ヒット (DR なし) ---
                 step_no_dr = ComboStep(
@@ -365,7 +352,7 @@ def find_max_combo(
                     new_drive = drive - DRIVE_COST_DR
                     step_dr = ComboStep(
                         move=mv,
-                        adv_before=effective_adv,  # チェーン時は99を表示
+                        adv_before=effective_adv,
                         used_dr=True,
                         adv_after=dr_adv,
                         drive_spent=DRIVE_COST_DR,

@@ -8,6 +8,7 @@ __pycache__/
 docs/*.json
 tests/*_results.json
 tests/*_results.jsonl
+storage_manifests/
 # SAM (MCP デプロイ)
 samconfig-mcp.toml
 .aws-sam/

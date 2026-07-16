@@ -29,10 +29,17 @@ from dotenv import load_dotenv
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
 from sf6_engine.factory import create_provider  # noqa: E402
+from sf6_engine.conversation_knowledge import derive_subject_key, is_save_confirmation  # noqa: E402
+from sf6_engine.conversation_service import ConversationKnowledgeService  # noqa: E402
 from sf6_engine.intent_parser import parse_intent  # noqa: E402
 from sf6_engine.rag_builder import generate_answer  # noqa: E402
 
-from discord_bot.mcp_router import call_tool, map_intent, result_to_context  # noqa: E402
+from discord_bot.mcp_router import (  # noqa: E402
+    call_tool,
+    is_alias_learnable_result,
+    map_intent,
+    result_to_context,
+)
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("sf6_bot")
@@ -40,11 +47,22 @@ logger = logging.getLogger("sf6_bot")
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN", "")
 COMMAND_PREFIX = os.environ.get("SF6_BOT_PREFIX", "!sf6")
 DISCORD_MAX = 1900  # Discord の 2000 字制限に対する安全マージン
+# Legacy alias registration validates against SuperCombo and immediately writes
+# a global family alias.  ADR-026 replaces it with a reviewed canonical alias
+# workflow, so it is opt-in only during migration.
+ENABLE_LEGACY_SC_ALIAS_LEARNING = os.environ.get(
+    "SF6_ENABLE_LEGACY_SC_ALIAS_LEARNING", "0"
+) == "1"
 
 # --- 聞き返し学習ループ (技名未解決 → コマンドを聞いて move_aliases に登録) ---
 PENDING_TTL = 300  # 聞き返しの有効期限 (秒)
 # (channel_id, author_id) → {question, chara, slug, alias, expires}
 _pending: dict[tuple[int, int], dict] = {}
+
+# --- 会話コンテキスト / 本人限定戦術メモ (ADR-026) ---
+# 永続保存は SQL migration + SF6_KNOWLEDGE_STORE=supabase + subject HMAC を
+# 明示設定した時だけ有効。既定では短期会話文脈のみを扱う。
+_knowledge_service = ConversationKnowledgeService()
 
 # ユーザーの返信からコマンド表記を抽出 (236LK / 623HP / j.214KK / [4]6HP / 22P 等)
 _CMD_TOKEN = re.compile(
@@ -61,21 +79,12 @@ client = discord.Client(intents=intents)
 _provider = create_provider()
 
 
-# 「特定の技」を対象とするツール (未解決時に聞き返しループの対象になる)
-_MOVE_TOOLS = {
-    "lookup_move", "check_punish", "analyze_sequence",
-    "compute_setplay", "analyze_combo",
-}
-
-
-def _is_unresolved(result: dict | None) -> bool:
-    """MCP 結果が「技を解決できなかった」ことを示すか。"""
-    if result is None:
-        return False  # 通信エラー等は学習対象にしない
-    return result.get("found") is False or bool(result.get("error"))
-
-
-async def handle_question(question: str, pending_key: tuple[int, int] | None = None) -> str:
+async def handle_question(
+    question: str,
+    pending_key: tuple[int, int] | None = None,
+    conversation_id: str | None = None,
+    subject_key: str | None = None,
+) -> str:
     """1 つの質問を intent 解析 → MCP 実行 → 回答生成まで処理する。
 
     技名が解決できず、キャラは特定できている場合は「コマンドを教えて」と
@@ -89,15 +98,27 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
 
     # 1. gemma4 で intent 構造化
     intent = await parse_intent(question, _provider)
+    knowledge_turn = None
+    if conversation_id and subject_key:
+        knowledge_turn = _knowledge_service.process_turn(
+            text=question,
+            intent=intent,
+            conversation_id=conversation_id,
+            subject_key=subject_key,
+        )
+        intent = knowledge_turn.analysis.resolved_intent
     logger.info("intent: %s", intent)
 
     # 2. MCP ツール選択
     calls = map_intent(intent)
     if not calls:
-        return (
+        answer = (
             "うまく解釈できませんでした。キャラ名と技を含めてみてください。\n"
             "例: `サガットの2HKの発生は?` / `ドライブインパクトって何?`"
         )
+        if knowledge_turn and knowledge_turn.save_message:
+            answer += "\n\n" + knowledge_turn.save_message
+        return answer[:DISCORD_MAX]
 
     # 3. AWS MCP サーバでツール実行
     contexts: list[str] = []
@@ -107,12 +128,12 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
         try:
             result = await call_tool(tool, args)
             contexts.append(result_to_context(tool, args, result))
-            if tool == "analyze_sequence" and result:
+            if tool in {"analyze_sequence", "query_moves"} and result:
                 if result.get("summary"):
                     deterministic_answer = str(result["summary"])
                 elif result.get("message"):
                     deterministic_answer = str(result["message"])
-            if tool in _MOVE_TOOLS and _is_unresolved(result):
+            if is_alias_learnable_result(tool, result):
                 move_unresolved = True
         except Exception as e:  # noqa: BLE001
             logger.exception("MCP call failed: %s %s", tool, args)
@@ -122,7 +143,13 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
     # 3.5. 技名未解決 + キャラ特定済み → コマンドを聞き返して学習につなげる
     chara = intent.get("chara")
     move_ident = intent.get("move_name") or intent.get("input")
-    if move_unresolved and pending_key is not None and chara and move_ident:
+    if (
+        move_unresolved
+        and ENABLE_LEGACY_SC_ALIAS_LEARNING
+        and pending_key is not None
+        and chara
+        and move_ident
+    ):
         from discord_bot.mcp_router import _slug
         _pending[pending_key] = {
             "question": question,
@@ -137,6 +164,11 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
             f"その技のコマンドを教えてください（例: `236LK`、`623HP`）。"
             f"教えていただければ今後この呼び方で答えられるようになります。"
         )
+    if move_unresolved and not ENABLE_LEGACY_SC_ALIAS_LEARNING:
+        return (
+            "技名を一意に解決できませんでした。現在はSuperCombo依存の即時グローバル別名登録を"
+            "無効化しています。正式名またはコマンドを指定してください。"
+        )
 
     # 4. 時系列と観測値を返す連携解析は、LLM の言い換えで
     #    数値や確度が変わらないよう決定論 summary をそのまま返す。
@@ -144,6 +176,14 @@ async def handle_question(question: str, pending_key: tuple[int, int] | None = N
         answer = deterministic_answer
     else:
         answer = await generate_answer(question, context, _provider)
+
+    # Private/shared tactical text is never fed back into the core numeric
+    # answer prompt.  It is displayed separately with provenance so an
+    # unverified user memo cannot overwrite CAPCOM-derived facts.
+    if knowledge_turn and knowledge_turn.private_context:
+        answer += "\n\n" + knowledge_turn.private_context
+    if knowledge_turn and knowledge_turn.save_message:
+        answer += "\n\n" + knowledge_turn.save_message
 
     # 5. この質問での LLM トークン消費をログ (コスト単価は env で設定)
     if usage_before is not None:
@@ -221,6 +261,10 @@ async def on_message(message: discord.Message) -> None:
         return
 
     key = (message.channel.id, message.author.id)
+    persistent_subject = derive_subject_key("discord", message.author.id)
+    subject_key = persistent_subject or f"session:discord:{message.author.id}"
+    persistent_conversation = derive_subject_key("discord-channel", message.channel.id)
+    conversation_id = persistent_conversation or f"session:discord-channel:{message.channel.id}"
 
     # 聞き返しへの返信を優先処理 (プレフィックスなしのコマンド単体も受け付ける)
     pend = _pending.get(key)
@@ -240,13 +284,33 @@ async def on_message(message: discord.Message) -> None:
                 await message.reply(answer, mention_author=False)
                 return
 
+    # An explicit save confirmation is accepted without a command prefix, but
+    # only for the same user and channel that created the pending candidate.
+    if _knowledge_service.has_pending_save(
+        conversation_id=conversation_id,
+        subject_key=subject_key,
+    ) and is_save_confirmation((message.content or "").strip()):
+        async with message.channel.typing():
+            confirmed = _knowledge_service.confirm_pending_save(
+                text=(message.content or "").strip(),
+                conversation_id=conversation_id,
+                subject_key=subject_key,
+            )
+        await message.reply(confirmed.message, mention_author=False)
+        return
+
     question = _extract_question(message)
     if question is None:
         return
 
     async with message.channel.typing():
         try:
-            answer = await handle_question(question, pending_key=key)
+            answer = await handle_question(
+                question,
+                pending_key=key,
+                conversation_id=conversation_id,
+                subject_key=subject_key,
+            )
         except Exception as e:  # noqa: BLE001
             logger.exception("handle_question failed")
             answer = f"エラーが発生しました: {type(e).__name__}"

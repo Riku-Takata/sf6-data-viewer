@@ -32,6 +32,22 @@ class FakeProvider:
 
 
 class GenerateAnswerValidationTest(unittest.TestCase):
+    def test_move_query_summary_is_returned_without_llm_rephrasing(self) -> None:
+        provider = FakeProvider([])
+        context = (
+            "【技条件検索】\n"
+            "rashid の全技を、ガード時の攻撃側（ガードさせた側）が +0F より大きいで検索しました。\n"
+            "【基準値で条件一致（1件）】\n"
+            "- 5MP / 立ち中P: +2F [CAPCOM公式]"
+        )
+
+        answer = asyncio.run(
+            generate_answer("ラシードのガードで有利な技は？", context, provider)
+        )
+
+        self.assertEqual(answer, context)
+        self.assertEqual(provider.calls, 0)
+
     def test_bare_frame_number_is_accepted_for_transcribed_value(self) -> None:
         provider = FakeProvider([{
             TRANSCRIBED_KEY: ["12F"],

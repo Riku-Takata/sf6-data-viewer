@@ -40,27 +40,32 @@ def move(
     input_: str,
     *,
     startup: int,
+    name: str | None = None,
     block: int | None = None,
     hit: int | None = None,
     hitstun: int | None = None,
+    blockstun: int | None = None,
     hitstop: int | None = None,
     notes: str | None = None,
+    move_type: str = "ground_normal",
+    cancel: str | None = None,
 ) -> MoveInteractionProfile:
     return MoveInteractionProfile(
         character=character,
         input=input_,
-        name=input_,
-        move_type="ground_normal",
+        name=name or input_,
+        move_type=move_type,
         startup_f=startup,
         active_f=2,
         recovery_f=10,
         on_block_f=block,
         on_hit_f=hit,
         hitstun_f=hitstun,
-        blockstun_f=None,
+        blockstun_f=blockstun,
         hitstop_f=hitstop,
         atk_range=None,
         notes=notes,
+        cancel_raw=cancel,
     )
 
 
@@ -79,6 +84,28 @@ SAGAT_5LP = move("Sagat", "5LP", startup=5, hitstun=16, hitstop=9)
 DUMMY_4F_17 = move("Dummy", "2LP", startup=4, hitstun=17, hitstop=9)
 DUMMY_4F_18 = move("Dummy", "5LK", startup=4, hitstun=18, hitstop=9)
 RYU_2LP_15 = move("Ryu", "2LP", startup=4, hitstun=15, hitstop=9)
+KEN_2MK = move(
+    "Ken", "2MK", startup=7, block=-6, hit=-2, blockstun=16, hitstop=9,
+    cancel="Sp SA",
+)
+KEN_L_JINRAI = move("Ken", "236LK", startup=12, move_type="special")
+KEN_M_JINRAI = move("Ken", "236MK", startup=16, move_type="special")
+KEN_H_JINRAI = move("Ken", "236HK", startup=25, move_type="special")
+KEN_SA3 = move("Ken", "236236K", startup=7, name="SA3 Shinryu Reppa", move_type="super")
+AKI_5LP = move("A.K.I.", "5LP", startup=4, block=-1, cancel="Chn")
+AKI_5LP_REPEAT = move(
+    "A.K.I.", "5LP~LP", startup=4,
+    notes="3f blockstring gap between hits",
+)
+AKI_5HP = move("A.K.I.", "5HP", startup=9, block=-2, cancel="Chn")
+AKI_5HP_REPEAT = move(
+    "A.K.I.", "5HP~HP", startup=8,
+    notes="Always a true blockstring even at max delay.",
+)
+KEN_JINRAI_FOLLOWUP = move(
+    "Ken", "236K~6LK", startup=6, move_type="special",
+    notes="Follow-up can be input on hit/block/whiff.",
+)
 
 
 class SequenceIntentTest(unittest.TestCase):
@@ -113,8 +140,92 @@ class SequenceIntentTest(unittest.TestCase):
                 "defender_startup_f": 4,
                 "defender_delay_f": 0,
                 "expected_outcome": "trade",
+                "query_targets": ["timeline", "post_interaction_advantage", "followups"],
             },
         )])
+
+    def test_sequence_intent_forwards_requested_timing_targets(self) -> None:
+        intent = asyncio.run(parse_intent(
+            "春麗の立ち中P→弱 百裂脚は連続ガード？",
+            FailingProvider(),
+        ))
+
+        self.assertEqual(map_intent(intent)[0][1]["query_targets"], [
+            "blockstring", "timeline",
+        ])
+
+    def test_terminal_guard_advantage_is_not_treated_as_only_a_gap_question(self) -> None:
+        intent = asyncio.run(parse_intent(
+            "リュウの立ち弱p→弱波衝撃って連携はガードして何フレ有利？",
+            FailingProvider(),
+        ))
+
+        self.assertEqual(intent["intent_type"], "sequence_analysis")
+        self.assertEqual(intent["attacker_sequence"], ["5LP", "弱波衝撃"])
+        self.assertEqual(intent["initial_interaction"], "block")
+        self.assertEqual(intent["query_targets"], [
+            "terminal_frame_advantage", "timeline",
+        ])
+        self.assertEqual(intent["terminal_state"], {
+            "move_index": 1,
+            "interaction": "block",
+            "perspective": "both",
+        })
+        self.assertEqual(map_intent(intent), [(
+            "analyze_sequence",
+            {
+                "character": "ryu",
+                "attacker_sequence": ["5LP", "弱波衝撃"],
+                "initial_interaction": "block",
+                "attacker_delay_f": 0,
+                "defender_delay_f": 0,
+                "query_targets": ["terminal_frame_advantage", "timeline"],
+                "terminal_interaction": "block",
+                "terminal_perspective": "both",
+            },
+        )])
+
+    def test_terminal_guard_advantage_keeps_an_explicit_perspective(self) -> None:
+        intent = asyncio.run(parse_intent(
+            "リュウの立ち弱P→弱波掌撃をガードした側は何F有利？",
+            FailingProvider(),
+        ))
+
+        self.assertEqual(intent["terminal_state"], {
+            "move_index": 1,
+            "interaction": "block",
+            "perspective": "defender",
+        })
+
+    def test_japanese_normal_to_special_blockstring_question_skips_llm(self) -> None:
+        query = "リュウの立ち弱p→弱波衝撃って連携は連続ガードなの？"
+
+        intent = asyncio.run(parse_intent(query, FailingProvider()))
+
+        self.assertEqual(intent["intent_type"], "sequence_analysis")
+        self.assertEqual(intent["chara"], "Ryu")
+        self.assertEqual(intent["attacker_sequence"], ["5LP", "弱波衝撃"])
+        self.assertEqual(intent["initial_interaction"], "block")
+        self.assertEqual(intent["query_targets"], ["blockstring", "timeline"])
+        self.assertEqual(map_intent(intent), [(
+            "analyze_sequence",
+            {
+                "character": "ryu",
+                "attacker_sequence": ["5LP", "弱波衝撃"],
+                "initial_interaction": "block",
+                "attacker_delay_f": 0,
+                "defender_delay_f": 0,
+                "query_targets": ["blockstring", "timeline"],
+            },
+        )])
+
+    def test_arbitrary_official_japanese_special_name_is_kept_for_resolution(self) -> None:
+        intent = asyncio.run(parse_intent(
+            "リュウの立ち弱P→弱 波掌撃は連ガ？",
+            FailingProvider(),
+        ))
+
+        self.assertEqual(intent["attacker_sequence"], ["5LP", "弱 波掌撃"])
 
     def test_attacker_and_exact_defender_are_resolved_from_positions(self) -> None:
         query = (
@@ -247,6 +358,7 @@ class TradeTimelineTest(unittest.TestCase):
         self.assertEqual(result["timeline"]["timing_outcome"], "defender_first")
         self.assertIn("攻撃側は7F目、防御側は6F目", result["summary"])
         self.assertIn("相打ち後の有利差は算出しません", result["summary"])
+
 
     def test_trade_advantage_uses_hitstun_difference_and_frame_convention(self) -> None:
         self.assertEqual(
@@ -407,6 +519,356 @@ class TradeTimelineTest(unittest.TestCase):
         self.assertIsNone(result["evidence"]["reviewed_observation"])
 
 
+class CompositeTransitionRuleTest(unittest.TestCase):
+    def _evaluate(
+        self,
+        opener: MoveInteractionProfile,
+        target: MoveInteractionProfile,
+        defender_startup_f: int | None = 4,
+    ) -> dict:
+        return evaluate_sequence(
+            character_slug="a_ki",
+            sc_character="A.K.I.",
+            attacker_moves=[opener, target],
+            initial_interaction="block",
+            defender_startup_f=defender_startup_f,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+        )
+
+    def test_direct_supercombo_gap_note_is_a_data_driven_chain_rule(self) -> None:
+        result = self._evaluate(AKI_5LP, AKI_5LP_REPEAT)
+
+        self.assertEqual(result["transition"]["type"], "chain")
+        self.assertEqual(result["transition"]["timing_basis"], "direct_block_note")
+        self.assertEqual(result["blockstring"]["classification"], "gap_open")
+        self.assertEqual(result["blockstring"]["gap_f"], 3)
+        self.assertEqual(result["timeline"]["timing_outcome"], "attacker_first")
+        self.assertIn("3f blockstring gap", result["summary"])
+
+    def test_true_blockstring_note_does_not_fabricate_a_negative_gap(self) -> None:
+        result = self._evaluate(AKI_5HP, AKI_5HP_REPEAT)
+
+        self.assertEqual(result["blockstring"]["classification"], "true_blockstring")
+        self.assertIsNone(result["blockstring"]["gap_f"])
+        self.assertEqual(result["blockstring"]["gap_max_f"], 0)
+        self.assertEqual(result["collision"]["outcome"], "true_blockstring")
+        self.assertIn("0F以下", result["summary"])
+
+    def test_composite_without_direct_timing_rule_is_not_treated_as_a_cancel(self) -> None:
+        result = self._evaluate(KEN_M_JINRAI, KEN_JINRAI_FOLLOWUP)
+
+        self.assertEqual(result["status"], "transition_unresolved")
+        self.assertEqual(result["transition"]["type"], "stance_followup")
+        self.assertIn("通常技リンクや必殺技キャンセルの式で代用せず", result["summary"])
+
+
+class CancelBlockstringTest(unittest.TestCase):
+    def test_blockstring_question_leads_with_a_short_direct_answer(self) -> None:
+        opener = move(
+            "Ryu", "5LP", startup=4, block=-1, blockstun=9, cancel="Chn Sp SA",
+        )
+        target = move(
+            "Ryu", "214LP", startup=12, block=-3, move_type="special",
+        )
+
+        result = evaluate_sequence(
+            character_slug="ryu",
+            sc_character="Ryu",
+            attacker_moves=[opener, target],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(
+            result["summary"].splitlines()[0],
+            "いいえ、フレーム上は連続ガードではありません。"
+            "5LP→214LPの技間の隙間は3Fです。",
+        )
+        self.assertLessEqual(len(result["summary"].splitlines()), 2)
+        self.assertNotIn("ブロック硬直", result["summary"])
+        self.assertNotIn("ヒットストップ終了後", result["summary"])
+        self.assertNotIn("指定された発生の防御技", result["summary"])
+
+    def test_true_blockstring_question_also_leads_with_yes(self) -> None:
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[KEN_2MK, KEN_M_JINRAI],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(
+            result["summary"].splitlines()[0],
+            "はい、フレーム上は連続ガードです。技間の隙間は0Fです。",
+        )
+
+    def test_interrupt_question_leads_with_the_requested_yes_or_no(self) -> None:
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[KEN_2MK, KEN_H_JINRAI],
+            initial_interaction="block",
+            defender_startup_f=4,
+            defender_profiles=[DUMMY_4F_17],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["interrupt", "timeline"],
+        )
+
+        self.assertEqual(
+            result["summary"].splitlines()[0],
+            "はい、フレーム上は発生4F技で割り込めます。2発目より5F先に発生します。",
+        )
+        self.assertLessEqual(len(result["summary"].splitlines()), 2)
+
+    def test_terminal_guard_advantage_leads_the_answer_but_keeps_gap_context(self) -> None:
+        opener = move(
+            "Ryu", "5LP", startup=4, block=-1, blockstun=9, cancel="Chn Sp SA",
+        )
+        target = move(
+            "Ryu", "214LP", startup=12, block=-3, move_type="special",
+        )
+
+        result = evaluate_sequence(
+            character_slug="ryu",
+            sc_character="Ryu",
+            attacker_moves=[opener, target],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["terminal_frame_advantage", "timeline"],
+            terminal_interaction="block",
+            terminal_perspective="both",
+        )
+
+        self.assertEqual(result["timeline"]["actionable_gap_f"], 3)
+        self.assertEqual(result["terminal_frame_advantage"], {
+            "status": "resolved",
+            "move_index": 1,
+            "move_input": "214LP",
+            "interaction": "block",
+            "requested_perspective": "both",
+            "attacker_f": -3,
+            "defender_f": 3,
+            "source": None,
+        })
+        self.assertIn("攻撃側（Ryu）が-3F、ガード側が+3F", result["summary"])
+        self.assertIn("技間には3Fの隙間", result["summary"])
+        self.assertNotIn("指定された発生の防御技", result["summary"])
+
+    def test_terminal_advantage_honors_an_explicit_defender_perspective(self) -> None:
+        opener = move(
+            "Ryu", "5LP", startup=4, block=-1, blockstun=9, cancel="Chn Sp SA",
+        )
+        target = move(
+            "Ryu", "214LP", startup=12, block=-3, move_type="special",
+        )
+
+        result = evaluate_sequence(
+            character_slug="ryu",
+            sc_character="Ryu",
+            attacker_moves=[opener, target],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["terminal_frame_advantage", "timeline"],
+            terminal_interaction="block",
+            terminal_perspective="defender",
+        )
+
+        self.assertIn("ガード側が+3Fです", result["summary"])
+        self.assertNotIn("攻撃側（Ryu）が-3F、", result["summary"])
+
+    def test_light_normal_chain_uses_chain_cancel_timing(self) -> None:
+        opener = move(
+            "Ryu", "5LP", startup=4, block=-1, blockstun=9, cancel="Chn Sp SA",
+        )
+        target = move("Ryu", "2LP", startup=4)
+
+        result = evaluate_sequence(
+            character_slug="ryu",
+            sc_character="Ryu",
+            attacker_moves=[opener, target],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(result["transition"]["type"], "cancel")
+        self.assertEqual(result["transition"]["cancel_category"], "chain")
+        self.assertEqual(result["blockstring"]["gap_f"], -5)
+        self.assertEqual(result["blockstring"]["classification"], "true_blockstring")
+        self.assertTrue(result["summary"].startswith("はい、フレーム上は連続ガードです。"))
+
+    def test_install_chain_does_not_leak_into_the_ordinary_move_state(self) -> None:
+        opener = move(
+            "Juri", "5HP (FSE Chain)", startup=10,
+            block=-5, blockstun=22, cancel="Chn Sp SA",
+        )
+        ordinary_target = move("Juri", "2LP", startup=4)
+
+        result = evaluate_sequence(
+            character_slug="juri",
+            sc_character="Juri",
+            attacker_moves=[opener, ordinary_target],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(result["transition"]["type"], "link")
+        self.assertEqual(result["transition"]["timing_reference"], "recovery_end")
+
+    def test_light_jinrai_is_true_blockstring(self) -> None:
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[KEN_2MK, KEN_L_JINRAI],
+            initial_interaction="block",
+            defender_startup_f=4,
+            defender_profiles=[DUMMY_4F_17],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+        )
+
+        self.assertEqual(result["blockstring"]["gap_f"], -4)
+        self.assertEqual(result["blockstring"]["classification"], "true_blockstring")
+        self.assertEqual(result["collision"]["outcome"], "true_blockstring")
+
+    def test_medium_jinrai_is_true_blockstring_without_a_defender_move(self) -> None:
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[KEN_2MK, KEN_M_JINRAI],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+        )
+
+        self.assertEqual(result["transition"]["type"], "cancel")
+        self.assertEqual(result["timeline"]["timing_reference"], "hitstop_end")
+        self.assertEqual(result["blockstring"]["gap_f"], 0)
+        self.assertEqual(result["blockstring"]["classification"], "true_blockstring")
+        self.assertIn("連続ガードです", result["summary"])
+
+    def test_heavy_jinrai_is_timing_interruptible_by_a_generic_four_frame_move(self) -> None:
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[KEN_2MK, KEN_H_JINRAI],
+            initial_interaction="block",
+            defender_startup_f=4,
+            defender_profiles=[DUMMY_4F_17],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+        )
+
+        self.assertEqual(result["blockstring"]["gap_f"], 9)
+        self.assertEqual(result["timeline"]["timing_outcome"], "defender_first")
+        self.assertEqual(result["collision"]["outcome"], "interrupt_timing_win")
+        self.assertIn("より5F先です", result["summary"])
+        self.assertIn("時間上は割り込めます", result["summary"])
+
+    def test_special_without_cancel_evidence_is_an_after_recovery_link(self) -> None:
+        opener = move("Ken", "5HP", startup=8, block=-2, blockstun=14)
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[opener, KEN_M_JINRAI],
+            initial_interaction="block",
+            defender_startup_f=4,
+            defender_profiles=[DUMMY_4F_17],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(result["transition"]["type"], "link")
+        self.assertEqual(result["transition"]["cancel_eligible"], False)
+        self.assertEqual(result["blockstring"]["gap_f"], 18)
+        self.assertEqual(result["blockstring"]["classification"], "gap_open")
+        self.assertIn("キャンセル不可", result["summary"])
+
+    def test_normal_link_blockstring_is_computed_without_defender_move(self) -> None:
+        opener = move("Sagat", "5MP", startup=6, block=2)
+        target = move("Sagat", "5LP", startup=5)
+
+        result = evaluate_sequence(
+            character_slug="sagat",
+            sc_character="Sagat",
+            attacker_moves=[opener, target],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(result["transition"]["type"], "link")
+        self.assertEqual(result["blockstring"]["gap_f"], 3)
+        self.assertEqual(result["blockstring"]["classification"], "gap_open")
+        self.assertIn("隙間は3F", result["summary"])
+
+    def test_super_cancel_uses_the_same_data_driven_timeline(self) -> None:
+        opener = move(
+            "Ken", "5HP", startup=8, block=-2, blockstun=18, cancel="Sp SA3",
+        )
+
+        result = evaluate_sequence(
+            character_slug="ken",
+            sc_character="Ken",
+            attacker_moves=[opener, KEN_SA3],
+            initial_interaction="block",
+            defender_startup_f=None,
+            defender_profiles=[],
+            followup_profiles=[],
+            expected_outcome=None,
+            observations=[],
+            query_targets=["blockstring", "timeline"],
+        )
+
+        self.assertEqual(result["transition"]["type"], "cancel")
+        self.assertEqual(result["transition"]["cancel_category"], "super")
+        self.assertEqual(result["blockstring"]["gap_f"], -11)
+        self.assertEqual(result["blockstring"]["classification"], "true_blockstring")
+
 class GoldenObservationTest(unittest.TestCase):
     def test_bundled_observation_is_retained_as_incomplete_import_data(self) -> None:
         loaded = load_observations()
@@ -517,6 +979,20 @@ class GoldenObservationTest(unittest.TestCase):
         )
 
         answer = asyncio.run(generate_answer("5MP→5MPの相打ち後は？", context, FailingProvider()))
+
+        self.assertEqual(answer, context)
+
+    def test_terminal_advantage_summary_bypasses_answer_llm(self) -> None:
+        context = (
+            "【Ryu / 5LP -> 214LP 連携終端フレーム解析】\n"
+            "2技目をガードさせた後は、攻撃側が-3F、ガード側が+3Fです。"
+        )
+
+        answer = asyncio.run(generate_answer(
+            "立ち弱P→弱波掌撃をガードして何F有利？",
+            context,
+            FailingProvider(),
+        ))
 
         self.assertEqual(answer, context)
 

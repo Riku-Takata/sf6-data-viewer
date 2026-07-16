@@ -9,18 +9,21 @@ MCP を「開発者公開インターフェース」として外部ホストか�
 
 ```
 Discord メッセージ
+  → conversation_knowledge         : 同一ユーザーの短期照応・否定/確度/帰属を型付け
   → intent_parser                 : 技名と距離/持続/状態/視点を分離して構造化
   → map_intent                    : intent → MCP ツール選択
   → MCP クライアント (streamable-http) → AWS MCP サーバ (Bearer 認証)
   → typed frame profile           : CAPCOM主値 + UFD/SC補完 + 両視点 + scenario評価
+  → query_moves                   : 技集合の条件検索（確定/条件付き/判定保留を分離）
   → punish_service                : 時間窓と到達確度を分離
   → sequence_analysis             : 連携は共通タイムラインと実測を決定論評価
   → generate_answer               : 連携は専用summary、一般質問のみLLM
   → Discord に返信
 ```
 
-bot は **Ollama (ローカル) と MCP サーバ (AWS) のみ**に依存。Supabase / Bedrock には
-直接触れない (それらは MCP サーバ側に閉じている)。
+通常のフレーム照会は **Ollama (ローカル) と MCP サーバ (AWS)** だけで完結する。
+ADR-026の本人限定メモを明示的に有効化した場合だけ、Botは専用の非公開テーブルへ
+redacted claimを書き込む。既存のフレーム表やSC文書テーブルには書き込まない。
 
 `lookup_move` はCAPCOM/UFD/SuperComboの全観測値と採用ソースを返す。発生・持続・硬直、
 ガードさせた側 (攻撃側)、ガードした側 (防御側) はLLMを介さず回答し、防御側の値は
@@ -36,6 +39,7 @@ bot は **Ollama (ローカル) と MCP サーバ (AWS) のみ**に依存。Supa
 | intent_type | MCP ツール |
 |---|---|
 | lookup_move / combo_info | `lookup_move` |
+| query_moves | `query_moves` |
 | punish_check | `check_punish` |
 | sequence_analysis | `analyze_sequence` |
 | setplay_analysis | `compute_setplay` |
@@ -70,6 +74,21 @@ cp discord_bot/.env.example discord_bot/.env
 #   OLLAMA_MODEL   = gemma4:e2b 等
 ```
 
+### 本人限定メモを有効にする（任意）
+
+最初は既定の`disabled`のまま起動し、会話照応だけを確認する。永続メモを有効にする場合は、
+Supabase SQL Editorで`sql/conversational_knowledge_migration.sql`を適用してから、次を設定する。
+
+```dotenv
+SF6_KNOWLEDGE_STORE=supabase
+# 十分長いランダム文字列。Discord IDをHMAC化するため、他人と共有しない。
+SF6_KNOWLEDGE_SUBJECT_SECRET=<long-random-secret>
+```
+
+このmigrationは公開read policyを作らない。保存内容はraw会話本文ではなく、SHA-256、
+redacted excerpt、型付きscenario/claimだけである。メモは本人の回答にだけ`あなたの未検証メモ`
+として別表示され、フレームの確定数値を上書きしない。
+
 ### 4. 起動
 ```bash
 PYTHONPATH=src ./.venv312/bin/python -m discord_bot.bot
@@ -83,7 +102,18 @@ bot へのメンション、または `!sf6` プレフィックス:
 !sf6 ルークの5MPからの最大コンボは?
 !sf6 バーンアウトって何?
 !sf6 サガットの5MP→5MPに発生4Fで最速暴れすると相打ち後は?
+!sf6 ラシードの技の中でガードさせて有利な技は?
+
+# 明示確認が必要な本人限定メモ
+!sf6 サガットの5MP→5MPにリュウの2LPで相打ち後、2MPがつながった。記録して
+# Botが確認を返した後、同じチャンネルで5分以内に返信
+保存する
 ```
+
+`たぶん`、`友達が言っていた`、`相打ちしない`は仮説・伝聞・否定として保存され、
+共有事実には昇格しない。共有利用はDiscordからは行わず、別の証拠・review経路が必要である。
+旧来のSuperCombo依存の即時グローバル別名登録は既定で無効であり、移行中だけ
+`SF6_ENABLE_LEGACY_SC_ALIAS_LEARNING=1`で明示的に戻せる。
 
 ## 網羅評価
 

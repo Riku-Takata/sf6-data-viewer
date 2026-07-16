@@ -849,3 +849,673 @@ UFD は補足テキストとして後付けされていた。また、各ソー�
 - **「+2Fの後の6Fと4Fは相打ち」を固定テンプレート化**: パッチ、ディレイ、異なる連携に拡張できないため却下。
 - **同じ発生Fの技は相打ち後も同じとみなす**: hitstun/hitstopが技ごとに異なるため却下。
 - **時間上間に合う追撃をすべて確定コンボと呼ぶ**: 距離・状態・cancel可否を証明していないため却下。
+
+---
+
+## ADR-023: 技の集合質問は別名ではなく型付きフレーム条件として検索する
+
+**Date**: 2026-07-13
+**Status**: Active (ローカル全キャラ検証・AWS MCP本番反映済み)
+
+### Context
+
+「ラシードの技の中でガードさせて有利な技は？」のような質問は、特定の技名を解決する
+質問ではない。従来の単一技fast pathは「技の中でガードさせて有利な技」を move_name として
+`lookup_move` へ渡し、見つからない結果を別名学習の聞き返しへ流していた。その結果、質問条件
+そのものを永続 alias として登録できてしまい、以後の技解決を汚染する危険があった。
+
+単純なSQL整数フィルタも、CAPCOM/UFD/SuperCombo間のフィールド選択、ホールド等の技
+バリアント、範囲値、条件別値、ガード不能を失わせるため、ADR-020/021の型付き統合
+プロファイル契約に反する。
+
+### Decision
+
+1. `query_moves` IntentとMCPツールを追加する。条件は `field / operator / value /
+   perspective / scope / scenario` の型付きフィルタで渡し、単一技の `move_name` と `input` は
+   設定しない。初期対応フィールドは `on_block` とする。
+2. `query_frame_data()` はキャラのCAPCOM・UFD・SuperCombo行を候補として列挙し、各候補に
+   ADR-020の `lookup_frame_data()` と同じ統合・視点反転・scenario評価を適用してから比較する。
+   データベースの正規化済み整数だけで判定しない。
+3. 結果を `matches`（基準条件で確定）、`conditional_matches`（明示された技バリアントまたは
+   全条件値で成立）、`unresolved`（範囲の一部だけ成立・条件未選択・未収録）の3区分にする。
+   ガード不成立は対象外として数値条件に含めない。キャラが存在する0件検索は `found=true` とする。
+4. 条件検索のsummaryは決定論生成し、Discord/CLIの回答段でLLMに再要約させない。
+5. 別名学習の聞き返しは `lookup_move`/`check_punish` が `resolution.status=not_found` かつ
+   `reason=move_not_found` を返した単一技だけに限定する。`register_move_alias` も集合表現を
+   防御的に拒否する。
+
+### Consequences
+
+- 「ガードさせて有利」「通常技で+2F以上」「防御側が不利な必殺技」などを、数値と視点を
+  取り違えずに検索できる。
+- ホールド・強化・条件別の技と範囲値を基準値の結果へ混ぜず、ユーザーへ条件付き/保留を示せる。
+- 集合検索0件、キャラ不明、通信エラーは別名学習を開始しない。
+- 2026-07-13時点で、決定論Intent、統合プロファイル検索、MCP/Discord/CLI RAG接続、
+  別名学習ガードを実装し、関連unittest 48件を通過した。2026-07-14に全30キャラの
+  自然文→Intent→MCP引数→Supabase実データ検索を確認し、SAMでAWS MCPを再デプロイした。
+  CloudFormationは `UPDATE_COMPLETE`、ローカルフォールバックを無効化した本番MCPの
+  `query_moves(rashid, on_block > 0, attacker)` も成功した。
+
+### Alternatives considered
+
+- **質問文を技名として lookup_move に渡す**: 集合条件を解決不能な技名と誤認し、alias汚染を
+  起こすため却下。
+- **list_moves の文字列フィルタ後にフレーム値を比較する**: 条件値と採用ソース、視点反転の
+  契約を回避するため却下。
+- **LLMに全技一覧から選別させる**: 数値比較と条件ラベルが再現不能で、同じ質問の回答が
+  安定しないため却下。
+
+---
+
+## ADR-024: SuperComboの時間派生値を実行時ソースから検証oracleへ移す
+
+**Date**: 2026-07-14
+**Status**: Superseded by ADR-028（独立検証の方法と結果は維持）
+
+### Context
+
+ADR-022の連携解析は、単発フレームの主値にCAPCOMを使う一方、相打ち後有利には
+SuperCombo固有の `hitstun` を使う。SuperComboの手動取得を継続せず情報源を統一できるか、
+SuperComboを正解ラベル、CAPCOM/UFDだけを入力にした独立ベンチマークで確認した。
+
+全30キャラの基本地上通常技360件を、技名からの固定入力変換だけで対応付けた。CAPCOMから
+`hitstun = active + recovery + on_hit` を計算すると、SCスカラーラベル304件中289件を計算でき、
+280/289件 (96.89%) が完全一致した。式の入力値自体が同じ層では234/236件 (99.15%)。
+Sagat 5MPとSC上の4F地上通常技46件の相打ち後ラベルは46/46件一致し、`+6～+12F`、
+Ryu 2LP `+9F`、Sagat 2LP `+7F`をSC値なしで再現した。
+
+一方、UFD単独のhitstun一致は230/263件 (87.45%) で、取得日がパッチ版を保証しないこと、
+行内でtotalとstartup/active/recoveryが一致しない例があることを確認した。また、現行の
+`hitstun差 - 1` とhitstop相殺方針は、SC由来値を同じ式へ戻すテストしかなく、ゲーム内の
+独立観測では未校正である。
+
+### Proposed decision
+
+1. 単純な第1持続接触の直接打撃では、CAPCOMの型付き統合値から `total / hitstun /
+   blockstun / punishAdv / afterDRHit / afterDRBlk / perfParryAdv` を決定論で派生する。
+   条件別硬直、多段、飛び道具、KD、空中・強化状態は適用対象外または区間とする。
+2. SuperComboの上記スカラー列は、対応範囲ではランタイム入力ではなく、オフライン回帰の
+   正解ラベルへ役割変更する。SCテーブルを読むと失敗するsource-isolation testを追加する。
+3. UFDの数値補完は、同一パッチまたは行内フレーム恒等式を確認できた場合だけ採用する。
+   衝突時はCAPCOMを優先し、欠損を無条件にUFDで埋めない。
+4. `hitstop / atkRange / geometry / invuln / armor / projectile / juggle / notes` は時間の
+   基本4項目から生成しない。hitstopはsystem ruleまたは実測、距離は校正済みUFD geometry、
+   戦術解説は文書ソースとして分離する。
+5. 相打ち後式のoffsetとhitstop方針は、相手キャラ+技まで固定した20～50件のフレームステップ
+   実測でblind検証する。完了までは `calculation_model` の保証レベルを維持する。
+6. 本提案をActiveにする条件は、同一パッチの再監査、SC読み取り禁止E2E、例外ルールの型化、
+   相打ち式の独立実測をすべて通過することとする。
+
+### Consequences
+
+- 相打ち後の時間差と追撃タイミングは、対応範囲でCAPCOM中心へ統一できる。
+- SuperComboの手動更新はランタイム必須運用ではなくなり、必要時の回帰検証へ頻度を下げられる。
+- CAPCOM/UFD/SCの版ずれを、推論誤差として誤集計しない監査契約が必要になる。
+- 空間・状態・特殊相互作用・戦術文書は別の観測層として残り、全情報源を一つのフレーム表へ
+  潰すことはしない。
+- 詳細な方法と結果は `streetfighter6-engine/docs/SUPERCOMBO_INFERENCE_AUDIT.md`、再実行は
+  `streetfighter6-engine/tests/supercombo_inference_audit.py` に記録する。
+
+### Alternatives considered
+
+- **SuperComboを即時削除**: hitstop、距離、例外注記、特殊状態の代替がなく、相打ち式自体も
+  未実測なので却下。
+- **UFDで全欠損を埋める**: パッチ識別と行内整合性が不足し、今回の生一致率を下げたため却下。
+- **SC内部の式一致だけで移行判断**: 入力と正解が同じソースになり循環するため却下。
+- **機械学習で例外を補間**: 1F単位の保証と新キャラ・新パッチへの一般化を証明できないため、
+  まず物理式と明示的な例外ルールを優先する。
+
+---
+
+## ADR-025: CAPCOM備考を型付きclaimへ変換し、SuperCombo非依存ランタイムを構築する
+
+**Date**: 2026-07-14
+**Status**: Superseded by ADR-028（監査結果と型付きclaim設計は維持）
+
+### Context
+
+ADR-024では、基本地上通常技の時間派生値をCAPCOMから96.89%再現できることを確認した。
+残る不一致について、CAPCOM公式の備考・属性、UFD、距離、無敵、armor、飛び道具、juggle、
+空中状態、SC戦術notesまで再監査した。
+
+CAPCOM 2,357行中、備考は1,781行 (75.56%)、属性は2,032行 (86.21%) に存在した。
+公式の結果別硬直 `N F増加/減少` は197行・209 claimを決定論抽出できる。通常技の
+hitstun/blockstun/total不一致31セル・24技では、CAPCOM備考だけで7セルを完全補正し2セルを
+部分補正でき、UFDの独立条件まで加えると計15セルの原因を特定できた。12セルは現在の
+取得データではSCだけが条件を持ち、4セルはSC自身の主要値でも未整合だった。
+
+不一致の直接原因は主に結果別recovery、接触phase、固定ガード回復、variant identityである。
+距離・無敵・armor・飛び道具・juggle・空中状態は原則、接触成立と結果状態を選ぶgateであり、
+時間式へ直接加算する値ではない。CAPCOM属性から飛び道具の存在は高coverageで判定できるが、
+数値range、弾速、juggle tupleは公式表だけから一意に復元できない。
+
+### Proposed decision
+
+1. SuperComboをproductionの技同定・検索・推論・説明から切り離し、移行中だけ別DBのoffline
+   oracleとして回帰評価に使う。production credential、schema、build artifact、query logの
+   全てでSC readを禁止する。
+2. `game_versions / source_snapshots / source_records` を追加し、CAPCOM raw HTMLとUFD assetを
+   patch・SHA・parser version付きで不変保存する。計算時はlatestではなくtarget versionを固定する。
+3. canonical技IDをSCのinput、技名、フレームシグネチャから生成しない。CAPCOM公式command、
+   UFD自身のinput、review済みaliasから `canonical_move_versions` を構築する。
+4. 原典値 `move_facts`、備考原文に対応する `note_claims`、review済み `rule_versions`、全入力を
+   追跡する `derived_proofs` を分離する。導出入力が変わればproofをstaleにする。
+5. `recovery_by_result / recovery_trigger / active_segments / contact_phase / variant_state /
+   result_state` を型付きにする。単純hitstun式は、適用predicateが全て成立する場合だけ実行する。
+6. 備考parserはraw spanを保存し、決定論grammarとgolden testを通った狭いclaimだけ
+   `executable=true` にする。LLM抽出結果や曖昧文を直接ruleとして実行しない。
+7. 距離は校正済みgeometry、相打ちoffsetとhitstopは絶対frameの独立観測で補う。patch不一致、
+   branch未選択、証拠競合、適用外状態では推測せず `unresolved + reason_codes` を返す。
+
+### Activation gates
+
+- immutable snapshot、同一patch、SC由来mapping 0件
+- note grammarの監査済み範囲でprecision 100%
+- 全導出値にrule version・input hash・proofがありstale 0件
+- tradeのblind holdoutで採用ruleが0F誤差
+- SCへ接続不能な状態でCLI/MCP/Discord/combo/setplayの全E2E通過
+
+### Consequences
+
+- CAPCOM公式を中心に情報源とpatchを統一しつつ、公式が公開していない数値を捏造しない。
+- SuperComboの手動更新は本番運用から不要になる。独立golden corpusが整えばoffline oracleも廃止できる。
+- 完全なfield parityより、根拠付きの確定値と明示的な保留を優先する。
+- 詳細は `streetfighter6-engine/docs/SUPERCOMBO_CONTEXT_AUDIT.md`、再実行は
+  `streetfighter6-engine/tests/supercombo_context_audit.py` に記録する。
+
+### Alternatives considered
+
+- **CAPCOM備考を全文LLM解釈して即実行**: actor・条件・基準branchを誤ると1F単位の保証がなくなるため却下。
+- **SCの条件値だけ新テーブルへコピー**: 出典を隠した依存が残り、source isolationにならないため却下。
+- **不足range/juggleを多数派defaultで補完**: 高coverageに見えても個別技の真値を証明しないため却下。
+- **SCを本番DBへ残してflagで無効化**: service roleや別経路からのreadを検知できないため却下。
+
+---
+
+## ADR-026: 会話からの「学習」は型付き知識の段階的公開として実装する
+
+**Date**: 2026-07-14
+**Status**: Proposed（会話知識の安全設計は維持。SuperCombo非依存化の前提だけADR-028で取り消し）
+
+### Context
+
+SuperComboをproduction runtimeから外しても、戦術notesが表していた連携結果、距離、狙い、弱点、
+counterplayは有用である。利用者や開発者が会話で報告した状況を保存し、今後の質問へ再利用できれば、
+手動管理された単一Wikiに依存せず知識を更新できる。
+
+しかし現行`parse_intent()`は各発話を単独処理し、Discordの状態は技別名の聞き返しだけである。
+追加プローブでは、否定、仮説、伝聞、訂正、前ターン照応を含む期待10件中1件だけが一致した。
+さらに`sequence_observations`はpatchとconditionsを検索時に照合せず、証拠なし・unknown patchでも
+`reviewed=true`を受理し、同confidenceの競合を入力順で選ぶ。既存表へユーザー投稿を直結できない。
+
+現行MCPは単一Bearer token、Lambdaはservice-role keyを持ち、alias・contextual・sequence表は
+public-readであるため、本人限定メモと共有知識をRLSで分離することもできない。
+
+### Proposed decision
+
+1. 「学習」はモデルのオンラインfine-tuningではなく、会話から抽出した型付き知識をRAGで
+   蓄積・訂正・失効・撤回することと定義する。
+2. `session working memory / confirmed private knowledge / reviewed shared knowledge`を分離する。
+   private保存と共有には別々の明示同意を要求する。
+3. 質問Intentとは別に、speech act、照応、state operation、polarity、epistemic basis、attribution、
+   critical unknownを持つ`DialogueTurnAnalysis`を導入する。LLMは候補抽出だけを行い、保存、権限、
+   review、数値計算を決めない。
+4. raw conversation、typed scenario、knowledge claim、evidence、relation、revision、review、consent、
+   embedding、audit、deletionを別テーブルにする。raw発話をsystem instructionとして扱わない。
+5. workflow (`draft -> clarification -> confirmed_private -> review_pending -> approved_shared`) と
+   validity (`active -> disputed/stale/superseded/withdrawn/deleted`) を分離する。
+6. scenario keyには結果値を含めず、patch、canonical move version、距離、corner、状態、delay等の
+   条件を含める。同条件の異なる結果はconflict setへ入れ、last-write-winsで選ばない。
+7. 公式fact/決定論導出、review済み独立観測、review済み戦術、本人privateメモの順に証拠を分ける。
+   下位claimは上位factを上書きせず、privateメモは本人にだけ未検証と帰属表示する。
+8. 全claimにgame version、canonical move version、依存fact/rule、dependency fingerprintを持たせる。
+   patchまたは依存値が変わればstaleへ落とし、旧行を書き換えず新revisionでcarry-forwardする。
+9. 単一Bearer/service-roleのuser-facing経路を廃止し、主体付き短命tokenとRLSを導入する。
+   ingestion、parser、review、answerを別credentialにし、answer runtimeはeligible viewのSELECTだけを持つ。
+10. 既存`move_aliases`のglobal SC-family UPSERTは廃止し、canonical move versionを指すalias candidateを
+    同じreview経路へ移す。SC文書用`doc_chunks`へユーザー戦術を混在させない。
+11. SuperComboは別環境のoffline oracleに限定し、productionの知識は公式備考、patch整合UFD asset、
+    独立実測、開発者note、同意済みユーザー投稿から構築する。
+12. 実装は、SC非依存事実基盤、read-only context compiler、private memory、review workflow、
+    answer統合の順に段階導入する。各段の安全gateを通すまで次のwrite/public機能を有効化しない。
+
+### Activation gates
+
+- 会話180件+否定minimal pair 120組のfrozen評価を構築する。
+- scenario slot F1 0.97以上、照応exact 0.95以上、polarity F1 0.99以上、epistemic F1 0.95以上。
+- 曖昧時abstention precision 0.99以上、critical unknown recall 0.98以上。
+- cross-user leak、質問/仮説/伝聞の誤昇格、未review global利用、公式上書き、injection write、
+  stale混入、last-write-wins、訂正/削除後残存を全て0件にする。
+- private raw/claim/embedding/asset、review権限、answer read-only credentialのRLS統合テストを全件通す。
+- SC credential/table/artifactへ接続不能な状態で会話保存・検索・回答E2Eを通す。
+
+### Consequences
+
+- `conversation_knowledge.py`、`conversation_service.py`、`knowledge_repository.py`、専用migrationを
+  ローカル実装した。既定repositoryはdisabledであり、raw会話やDiscord IDを永続化しない。
+- Discordには同一会話・同一主体だけの短期照応、明示保存確認、本人限定private表示を統合した。
+  SC依存のglobal alias即時学習は環境変数で明示有効化するまで停止する。
+- migrationは未適用で、AWS/MCPのデプロイも未実施。主体JWT/RLSの統合テストと180件のfrozen評価を
+  通過するまでshared knowledgeは有効化しない。
+- 利用者の戦術報告を、本人メモとして即時に役立てつつ、未検証情報を他人の確定事実へしない。
+- 訂正、反証、撤回、patch更新を履歴付きで反映でき、誰のどの条件の情報かを回答で表示できる。
+- conversation context、identity/RLS、review UI、削除処理が必要となり、単純なvector store追加より
+  実装量は増える。
+- 現行`sequence_observations`は条件・patch・競合照合を修正するまで公開知識の直接保存先に使えない。
+- テスト専用状態機械では、同意、ユーザー分離、review、注入隔離、訂正、競合、失効、撤回の
+  18不変条件を18/18通過した。詳細は`docs/CONVERSATIONAL_KNOWLEDGE_DESIGN.md`、再実行は
+  `tests/conversational_knowledge_design_eval.py`に記録する。
+
+### Alternatives considered
+
+- **ユーザー発話ごとにLLMをfine-tuning**: 削除、patch失効、出典、ユーザー分離を即時反映できず、
+  poisoning除去も困難なため却下。
+- **発話をそのままvector DBへ保存**: 条件、否定、話者、確度、権限を検索時に保証できないため却下。
+- **ユーザー投稿を`sequence_observations`へ直接INSERT**: 現行の条件/patch未照合とreview検証不足により却下。
+- **複数投稿またはconfidence閾値だけで自動公開**: 同一動画転載、sybil、条件違い、伝聞を独立検証と
+  誤認するため却下。
+- **SC戦術notesをproduction知識へコピー**: 出典を隠した依存が残り、SC非依存の目的を満たさないため却下。
+
+---
+
+## ADR-027: UFD GIFはSupabaseに常設保存せず元URLからオンデマンド取得する
+
+**Date**: 2026-07-14
+**Status**: Active
+
+### Context
+
+UFD当たり判定GIF 773件は4,207,176,129 bytes（約3.92 GiB）あり、
+Supabase Storageの1GB枠を大幅に超過した。全オブジェクトが現行DB行から参照され、
+孤児0件、SHA-256重複0件であったため、不要ファイルの整理だけでは解消できない。
+Botはprivate Storageを配信せずUFD元URLを表示しており、GIF本体は現行の回答経路に必須ではない。
+
+### Decision
+
+- UFD GIFは既定でSupabase Storageへ保存しない。インポータの `--gifs` 指定時だけ保存する。
+- `ufd_moves.hitbox_source_url` は保持し、Botと将来のgeometry解析は元URLから参照・一時取得する。
+- 既存773件は技メタデータ、元URL、SHA-256、サイズをローカルmanifestに保存後に削除する。
+- 削除後は無効な `hitbox_storage_path` と `hitbox_sha256` をNULLにし、元URLは残す。
+- 将来、原典消失に備えた全件アーカイブが必要になった場合は、Supabase無料枠ではなく
+  容量に適した別オブジェクトストレージを選定する。
+
+### Consequences
+
+- Supabaseから4.21GB分を解放し、UFD再同期での自動再アップロードを防止する。
+- フレーム回答とUFD元GIFリンクは維持される。
+- geometry解析はネットワークと原典の可用性に依存するため、解析実行時に一時キャッシュと取得失敗の記録が必要になる。
+
+---
+
+## ADR-028: SuperComboをCC BY-NC-SA 3.0の条件に従って本番データソースとして維持する
+
+**Date**: 2026-07-14
+**Status**: Active
+
+### Context
+
+SuperCombo Wikiのデータは、2026-07-14に利用者がサイト表示を確認した
+[Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported](https://creativecommons.org/licenses/by-nc-sa/3.0/)
+（CC BY-NC-SA 3.0）の条件下で利用可能と確認した。ライセンスはクレジット表示だけでなく、
+ライセンスへのリンク、改変の表示、非営利利用、派生データの同一または互換ライセンスによる
+共有を求める。
+
+これまでのADR-024/025では、出典分離と独立検証を強めるためSuperComboを
+offline oracleに限定する案を検討した。しかし、ライセンス条件を満たして利用できるため、
+データの精度・カバレッジと現行機能の維持を優先する。
+
+### Decision
+
+1. SuperCombo Wikiを引き続き production runtimeの補助データソースとして使用する。
+2. CAPCOM公式を主値、UFD / SuperComboを補完値とする現行の出典分離と型付き統合を維持する。
+3. リポジトリと利用者向け配布物に次の帰属情報を表示する。
+   - データソース: SuperCombo Wiki / SuperCombo Wiki contributors
+   - 参照先: https://wiki.supercombo.gg/w/Street_Fighter_6
+   - ライセンス: CC BY-NC-SA 3.0とそのリンク
+   - 改変内容: HTML/MediaWikiマークアップ除去、数値正規化、入力表記変換、CAPCOM/UFDとの統合
+4. SuperCombo由来データとその派生データの利用は非営利に限定する。商用化する場合は、
+   SuperCombo由来データを分離するか、権利者から別途許諾を得るまで公開しない。
+5. SuperCombo由来の改変データを配布する場合はCC BY-NC-SA 3.0または互換ライセンスで提供する。
+   プロジェクトのソフトウェアコード全体にCCライセンスを適用するとは限らず、対象データとコードを区別する。
+6. 取得時はrobots.txt、Cloudflare、レート制限等を回避せず、現行の人手取得・低頻度更新方針を維持する。
+7. 公開前に、対象のSuperComboページと個別メディアに別ライセンス表示がないことを再確認する。
+
+### Consequences
+
+- SC由来の `hitstun / blockstun / hitstop / atk_range / notes`と技名マッピングを引き続き活用できる。
+- ADR-024/025の独立監査はデータ精度とパッチ整合性を検証する回帰テストとして維持する。
+- ライセンス条件の対象はSuperCombo由来データとその派生物であり、CAPCOM/UFD由来データの権利を覆うものではない。
+- この判断は法的助言ではない。利用形態が営利に変わる場合やライセンス範囲が不明な場合は再確認する。
+
+---
+
+## ADR-029: 連続ガードと割り込みは技間遷移種別ごとのタイムラインで判定する
+
+**Date**: 2026-07-14
+**Status**: Active（ADR-033でSA/汎用弱攻撃chainと全技DB解決を追加。DR/個別windowは未対応）
+
+### Context
+
+ユーザーが求める「ケン `2MK -> 中迅雷脚`は連続ガード、`2MK -> 強迅雷脚`は
+4F技で割り込み可能」という回答は、単発のガード硬直差だけでは求められない。
+
+現行`sequence_analysis` は1技目のrecovery後に2技目を出すlinkのみを、
+`attacker_ready = max(0, -on_block)` で評価する。cancelは1技目のrecoveryを打ち切るため、
+この式を使うと中迅雷脚も強迅雷脚も誤判定する。
+
+2026-07-14の実DBには、SuperCombo由来のKen `2MK blockstun=16F`, `cancel=Sp SA`、
+UFD/SCで一致する`236LK=12F`, `236MK=16F`, `236HK=25F`がある。標準的な最速
+special cancelなら、弱は-4F、中は0Fで連続ガード、強は9Fの行動可能時間となる。
+
+同時に次の実装不備も確認した。
+
+- 自然文の「2中K」「中/大迅雷脚」「連続ガード」は決定論sequence intentにならない。
+- `rag_builder` の旧派生gap計算はblockstunでなく `abs(block_adv)-startup` を使う。
+- productionのgeneric 4F経路は `_fetch_defender_profiles()` に未対応引数を渡しTypeErrorになる。
+- `canonical_moves`, `move_transition_observations`, `combo_link_observations` は本番DBで0行である。
+
+### Decision
+
+1. 技Aと技Bの間に遷移種別を必須とし、現時点では `link / cancel` を分離する。`chain /
+   drive_rush_cancel / target_combo / stance_followup / juggle / unknown` は個別根拠の導入時に追加する。
+2. linkは従来のon_block/on_hit式、cancelはblockstun/hitstunとcancel開始基準、chainと専用派生は
+   個別windowで計算する。遷移根拠がない場合は他種別の式へfallbackしない。
+3. cancelの基準式はhitstop終了後を共通基準にし、
+   `target_active = transition_offset + delay + startup`,
+   `defender_actionable = blockstun + scenario_modifier` とする。
+4. `target_active - defender_actionable <= 0` は `true_blockstring`、gapがある場合は指定された
+   防御側技のfirst activeと比較し、`interrupt_timing_win / interrupt_trade_if_reach /
+   frame_trap` を返す。
+5. genericな「4F技」では時間上の割り込み可否までを返す。実際の成功は相手キャラ+技、
+   距離、pushback、当たり判定、無敵/armor/投げ/飛び道具相互作用を評価できた場合だけ
+   `interrupt_confirmed=true` とする。
+6. 遷移根拠はpatch一致のreview済みexact edge、CAPCOM/UFD/SCのcategory rule、
+   SCの専用`A~B` edgeの順に使う。構え・空中・溜め・hit-only等は個別edgeなしに推測しない。
+7. Intentは「2中K/屈中K/2MK」「弱中強大+技名」「連続ガード/割り込める/暴れられる/
+   フレームトラップ/隙間」を決定論正規化する。
+8. 旧`rag_builder` gap計算を廃止し、CLI / MCP / Discord / RAGの全経路を1つの
+   blockstring serviceへ統一する。
+
+### Activation results (2026-07-14)
+
+- [x] productionのgeneric 4F `analyze_sequence` 経路の引数不整合を解消し、実DBと更新済みAWS MCPで確認した。
+- [x] Ken `2MK -> 236LK/MK/HK`のgolden testで、弱/中は連続ガード、強はgap 9F・generic 4Fが5F先にactiveとなることを固定した。
+- [x] 「2中K→中迅雷脚」「2中K→大迅雷脚は発生4Fで割り込める？」をLLMなしで同じ正規技ID・遷移へ解決した。
+- [x] 旧gap式を全回答経路から削除し、special targetの遷移根拠不足時はlinkとして計算せず保留する。
+
+### Remaining gates
+
+- [x] 全キャラの保存済み技名と非composite ordered pairを全件監査し、未検出・曖昧名・scalar欠損を分離した。
+- 20〜50件をトレーニングモードのframe stepでblind検証し、off-by-one規約と0F誤差を確認する。
+- patch変更で遷移edgeまたは依存frame値が変わった場合に旧結果をstale化する。
+
+### Consequences
+
+- 現行データだけでKenの基準ケースの時間判定は実装可能である。
+- 「連続ガード」「押せるが潰される」「相打ち」「割り込み側が先」を混同せず回答できる。
+- SuperComboのblockstun/cancel/notesを活用しつつ、原典値、遷移ルール、距離・状態・実測の確度を分離できる。
+- 詳細設計と検証順序は `streetfighter6-engine/docs/BLOCKSTRING_ANALYSIS.md` を正とする。
+
+---
+
+## ADR-030: 専用派生はsource-input edgeとしてレビューし、直接根拠だけを自動実行する
+
+**Date**: 2026-07-14
+**Status**: Active
+
+### Context
+
+SuperComboの`input`にある`A~B`は、target combo、連打、構え派生、必殺技後派生などを同じ表記で
+含む。2技目の`startup`は派生ボタン入力からの値であり、1技目のblockstun/recoveryやgeneric special
+cancel式にそのまま代入しても、技間の隙間にはならない。特に強度・派生・状態によってwindowが異なる
+ケースでは、`Chn`や同じ入力familyだけから対象技を推測すると誤判定する。
+
+2026-04-26のSuperCombo snapshotを監査すると、30キャラに419個のsource-input edge候補がある。
+注記からblock上の`Nf gap`または`true blockstring`を直接読めるのは71件、派生window等のreviewが
+必要なものは330件、同一edgeの値が競合するものは7件、親技が同snapshotで特定できないものは11件だった。
+
+### Decision
+
+1. `A~B`入力は通常link/special cancelとして評価しない。まず専用edgeとして分類する。
+2. SuperCombo注記がblock上の`Nf blockstring gap`または`true blockstring`を直接述べる場合だけ、
+   `defender_actionable`基準の`direct_block_note`として実行する。`true blockstring`はgap `<= 0`を
+   意味するが、根拠にない負の正確な数値は作らない。
+3. 明示された強度（例: `236HK`）の根拠は、`236MK`/`236LK`へfamily matchで流用しない。generic表記
+   （例: `236K`）だけが同familyの候補となる。
+4. `sql/source_transition_rules_migration.sql`のsource-addressable tableを、canonical move backfill前の
+   永続レビュー先とする。runtimeはpatch付きの`reviewed=true` exact edgeを最優先にする。
+5. `importers/source_transition_rules.py`は全キャラ候補を生成し、直接根拠候補だけを`reviewed=false`で
+   stageできる。未review行、値競合、親技不足、window未収録はruntimeで使わない。
+6. `Chn`はカテゴリ情報に留め、最大コンボ探索で任意の高速通常技を「99F有利で繋がる」とする旧推測を
+   廃止する。review済みhit edgeが導入されるまでは通常のhit advantageのみで探索する。
+
+### Consequences
+
+- A.K.I. `5LP -> 5LP~LP`の3F gap、豪鬼`214HP -> 214HP~6P`の連続ガードのような、直接記載された
+  全キャラの派生情報をBot/MCPで安全に回答できる。
+- Ken `236MK -> 236K~6LK`のように派生入力自体は分かってもblock timingが明記されない連携は、
+  「判定保留」と理由を返す。誤った「連続ガード」または「割り込み可」を出さない。
+- migrationを適用しなくてもdirect-note fallbackで既存Bot/MCPは動作する。migration適用後は、
+  実測でreviewされた例外・patch差分がコード変更なしで優先される。
+- 残る331候補はトレーニングモードframe-step、CAPCOM/UFD根拠、または信頼できる一次資料で
+  reviewする必要がある。自動的な全件確定は行わない。
+
+---
+
+## ADR-031: 生HTMLアーカイブは既定で保存しない
+
+**Date**: 2026-07-14
+**Status**: Superseded by ADR-032
+
+### Context
+
+Supabase Storageの棚卸しでは、過去に削除したUFD GIF 773件が4,207,176,129 bytes、
+現行のCAPCOM生HTMLアーカイブが60件・24,436,612 bytesを占めていた。Botの実行時は
+正規化済みのPostgreSQLデータを読むため、`move_snapshots.raw_html_uri` の生HTMLコピーを必要としない。
+一方、スクレイパーが既定で `current/` と `previous/` を保管し続けると、調査用データが無期限に残り、
+Storage使用量を再び増やす。
+
+### Decision
+
+1. `sf6-html-archive` の全60件を削除し、4,637件の `move_snapshots.raw_html_uri` をNULLにする。
+2. `ARCHIVE_RAW_HTML=false` をLambda/SAMテンプレートの既定値とする。この状態ではStorage APIを呼ばず、
+   新しいsnapshotの `raw_html_uri` はNULLで保存する。
+3. HTML構造の障害調査など必要な期間だけ `ArchiveRawHtml=true` を明示して有効化し、完了後にfalseへ戻して
+   アーカイブを削除する。
+4. 削除前に、オブジェクトのパス・サイズ・時刻とDB参照数をmanifestとしてローカル保存する。
+
+### Consequences
+
+- ランタイムのBot回答やフレームデータの更新処理は影響を受けない。
+- 生HTMLを直接参照するデバッグでは、一時アーカイブまたはローカルで再取得したHTMLが必要になる。
+- Supabaseの使用量はGB時間の請求指標のため、削除後に管理画面の警告が即時に消えるとは限らない。
+
+---
+
+## ADR-032: 生HTMLアーカイブを復元し、原因と無関係な削除を行わない
+
+**Date**: 2026-07-14
+**Status**: Active
+
+### Context
+
+削除前のStorage API棚卸しでは、`sf6-html-archive` は60件・24,436,612 bytesで、
+`sf6-ufd-hitboxes` は0件だった。したがって、HTMLアーカイブは1GB超過警告の直接原因ではない。
+過去に削除したUFD GIF約4.21GBの期間使用量、または管理画面上の別の使用量指標を先に確認すべきであり、
+この時点でHTMLを削除する根拠はなかった。
+
+### Decision
+
+1. ADR-031を取り消し、スクレイパーを従来どおり`current/`→`previous/`のHTMLローテーション保存へ戻す。
+2. CAPCOM公式から全30キャラを2回再取得し、削除した60件のアーカイブ構成を再構築する。
+3. NULL化した過去の`move_snapshots.raw_html_uri`は、同キャラの復元済み`current/{slug}.html`へ再接続する。
+   削除前の過去HTMLは復元不能なため、URIは復元時点の公式ページを指すことを明示する。
+4. 今後Storageを削除する前に、現行オブジェクトサイズ・バケット別内訳・課金期間の使用量を分けて確認し、
+   容量超過の直接原因であることを確認してから実行する。
+
+### Consequences
+
+- `sf6-html-archive`は再び約25MBの調査用アーカイブとして維持される。
+- フレームデータのデバッグ用HTMLと既存snapshot URIは利用可能な状態へ戻る。
+- Storage警告が残る場合でも、現行の24MBアーカイブを原因と断定せず、Supabaseの期間使用量・請求画面を確認する。
+
+---
+
+## ADR-033: 自然言語の2技連携は技名をDB解決し、遷移種別ごとに計算する
+
+**Date**: 2026-07-16
+**Status**: Active
+
+### Context
+
+`sequence_analysis` 自体はDBの技行を使っていたが、Intent Parserには迅雷脚の強度別入力と
+`波衝撃 -> 波掌撃` の個別表が残っていた。そのため、未登録の必殺技名を含む質問は単体技の
+`lookup_move`へ落ち、全キャラ・全技に拡張できなかった。また、防御側技を指定しない
+「連続ガードか」はタイムラインの入力不足となり、`Chn`がある弱攻撃連携を通常linkとして
+処理すると連打キャンセルを誤判定する。
+
+### Decision
+
+1. Intent Parserは、`→ / > / から / の後に / AをBでキャンセル / into` で技を分割し、
+   `2中K`や`立ち弱P`の汎用入力表記だけを正規化する。キャラ固有の必殺技名・SA名・派生名は
+   不透明な技識別子のまま後段へ渡し、ハードコードしない。
+2. 2技はどちらも`lookup_frame_data`のCAPCOM/UFD/SuperCombo/必殺技マッピングで解決する。
+   誤記補正は、同一の強度/SA prefix内で一候補が閾値と次点差を満たす場合だけ許可する。
+   弱中強やODが残る同名技は自動選択せず、強度またはコマンドを聞き返す。
+3. 解決後の遷移は、`link / special cancel / super cancel / light chain / exact composite edge`に
+   分ける。`Sp`、`SA`/`SA1..3`、`Chn`はSuperComboのカテゴリ根拠とし、targetの種別と
+   一致する場合だけキャンセルtimelineを実行する。
+4. generic `Chn` ruleは同じ状態の地上弱攻撃targetに限定する。Feng Shui Engine等の状態付き
+   入力は状慈suffixが一致しない通常技へ流用しない。任意の中/強攻撃やtarget comboを`Chn`だけで
+   接続可能とは推測しない。
+5. 防御側技が未指定でも、防御側の行動可能フレームと2技目のfirst activeから
+   `true_blockstring / true_combo / gap_open` を返す。防御技が指定された場合だけ、そのfirst activeと追加比較する。
+6. cancel根拠のないnormal-to-special/SAはキャンセルとしては否定し、ユーザーが実際に
+   1技目を出し切ってから2技目を最速入力する場合の`after_recovery link`として計算する。
+   「キャンセル不可のため出し切り後」と回答に明記する。
+7. `A~B`の専用派生はADR-030の厳格なedgeルールを維持し、startupだけでlink/cancelに代用しない。
+8. `tests/sequence_comprehensive_audit.py`で全キャラの保存済み入力・公式名とordered pairを定期監査する。
+   入力未検出は失敗、原典に単一値がない場合は理由付き`unresolved`とし、数値を作らない。
+
+### Activation results (2026-07-16)
+
+- SuperCombo入力2,118件とCAPCOM公式技名2,357件は、全30キャラで未検出0件。
+- SuperComboの強度省略名263件は、誤解決せず曖昧性と候補を返した。
+- 非compositeのordered pair 103,073件で遷移分類を実行し、70,006件はtimeline解決、
+  33,145件は空中技・投げ・条件値等のscalar不足を理由に保留した。
+- 実DB E2EでRyu `5LP -> 214LP`はspecial cancel・gap 3F、Ryu `5LP -> 2LP`はlight chain・
+  gap -5F、Chun-Li `5MP -> 236LK`はspecial cancel・gap -10Fと解決した。
+
+### Consequences
+
+- 新キャラや新技はDB取り込み後、Intent Parserの技名辞書を変更せず連携解析の対象になる。
+- 「全技対応」は全保存技を解決・分類することを意味し、原典にblockstun/on_block/startupの
+  単一値がない技に対して数値を捜造することは意味しない。その場合は不足フィールドと条件を明示する。
+- 時間上の連続ガード/連続ヒットと、実際に届くか・無敵で抜けるか・姿勢/状態が適合するかは分離し、
+  距離・pushback・当たり判定・無敵・空中/構え・溜めの注意を回答に残す。
+
+---
+
+## ADR-034: 連携の技間タイミングと2技目接触後の硬直差を分離する
+
+**Date**: 2026-07-16
+**Status**: Active
+
+### Context
+
+「リュウの5LP→弱波掌撃をガードして何F有利？」に対し、技間gap 3Fと連続ガードでないことだけを
+返していた。従来スキーマは1技目の接触を表す`initial_interaction`しか持たず、
+`post_interaction_advantage`は相打ち後のhitstun差を表す用途だった。cancel経路はtimeline専用summaryへ
+短絡するため、解決済み2技目の`on_block=-3`を回答に使えなかった。
+
+### Decision
+
+1. 1技目の接触は`initial_interaction`、2技目の接触は`terminal_state.interaction`として別に保持する。
+2. 技間の隙間/連続ガードは`timeline`または`blockstring`、2技目接触後の通常の硬直差は
+   `terminal_frame_advantage`、相打ち後の派生有利差は`post_interaction_advantage`へ分ける。
+3. `terminal_frame_advantage`は2技目の統合プロファイルの`on_block/on_hit`を攻撃側値とし、
+   防御側値は符号反転して構造化する。値が条件付き・未収録なら単一値を作らず保留する。
+4. 「ガードして何F」の主体が省略された場合は両視点を返す。「ガードした側」「攻撃側」などが
+   明示された場合は、その視点をIntentからMCP、Evaluator、summaryまで保持する。
+5. 回答は質問された終端硬直差を先に出し、技間gap/連続ガード可否と距離等の空間条件を補足する。
+
+### Consequences
+
+- 「2技目をガードした後の有利不利」と「2技目まで強制的にガードさせられるか」を同時に、混同せず説明できる。
+- 技名やキャラ固有分岐は増えず、統合プロファイルに`on_block/on_hit`がある全技へ同じ処理を適用できる。
+- 3技以上へ拡張する場合は`move_index`を固定値ではなく各接触イベントへ一般化する必要がある。
+
+---
+
+## ADR-035: 技名解決をDB由来の多表記検索と型付きコマンド確認へ統合する
+
+**Date**: 2026-07-16
+**Status**: Proposed
+
+### Context
+
+ユーザーは公式名だけでなく、`中ネク`、`弱はしょう`、英語、ローマ字、`下デヨ`のような
+字面が無関係な通称で技を指定する。現行は公式日本語名containment、英語ILIKE、一意fuzzy、
+旧`move_aliases`を持つが、解決処理が複数モジュールへ分散し、かな/読み/ローマ字の共通indexがない。
+
+旧`register_move_alias`は、ユーザーが示した一つのコマンドから強度を除去したSC family aliasを
+即時global UPSERTする。variant固有の通称を全強度へ広げること、誤登録を全利用者へ公開することを
+防げないため、ADR-026により既定無効になっている。実DBの`canonical_moves`と
+`canonical_move_aliases`もまだ0件である。
+
+### Proposed decision
+
+1. `MoveResolver`を単一のread-only serviceとして導入し、単体技、確反、コンボ、セットプレイ、
+   連携の全技を同じ候補生成・一意性判定へ通す。
+2. Intent Parserは技名spanを翻訳せず原文のまま保持し、強度、入力、locale/script hintを分離する。
+3. CAPCOM公式日本語名、UFD/SC英語名、入力、レビュー済みaliasからキャラ別検索formを生成する。
+   NFKC、かな統一、レビュー済み読み、ローマ字、英語tokenを別の根拠種別として保持する。
+4. 部分一致・trigram・編集距離は候補生成にだけ使う。キャラ、variant、最低score、次点差、
+   根拠品質を満たす一候補だけを自動解決する。
+5. 結果を`resolved / needs_confirmation / ambiguous / needs_command / invalid_input`へ型付けする。
+   字面から候補を作れない通称は推測せず、そのキャラのコマンドを聞く。
+6. コマンド返信は同一利用者・同一会話・短いTTLのpending内でexact input検証し、対象技を復唱して
+   確認後に元質問を再実行する。初期段階ではsession内だけで使い、永続化しない。
+7. 一つのvariant確認からfamily aliasを推定しない。global aliasはcanonical move versionを指す
+   review済み行だけをeligible viewへ公開する。
+8. canonical backfill前は既存ソース行を`character + input + variant`で一時group化する。
+   backfill後に名前form indexと`canonical_move_aliases`へ移行し、旧`move_aliases`への新規書き込みを廃止する。
+
+### Consequences
+
+- 新しい公式技・英語名はデータ更新後にコード変更なしで検索対象になる。
+- `中ネク`、`弱はしょう`、英語/ローマ字は一意性とvariant条件を満たす場合だけ解決される。
+- `下デヨ`のような通称は初回にコマンド確認が必要だが、誤った技へのfuzzy解決を避けられる。
+- Botの即時global学習は復活させず、session、private、review済みsharedを段階分離する。
+- 詳細契約と評価計画は`docs/MOVE_ALIAS_RESOLUTION_DESIGN.md`に記録する。
+
+---
+
+## ADR-036: 連携回答は質問の結論を1行目に置く
+
+**Date**: 2026-07-16
+**Status**: Active
+
+### Context
+
+「5LP→弱波掌撃は連続ガードか」というyes/no質問に対し、従来summaryはblockstun、cancel可否、
+hitstop基準、両者の行動可能Fを先に説明し、結論を3段落目に置いていた。計算根拠は正しいが、
+Discordで知りたい回答へ到達するまでが長い。
+
+またIntentの`blockstring` targetが「連続ガード」と「指定技で割り込めるか」を兼用しており、
+質問ごとの結論文を選べなかった。
+
+### Decision
+
+1. sequence query targetを`blockstring / interrupt / combo_timing / terminal_frame_advantage`へ分ける。
+2. 各focus summaryは、`はい / いいえ / 判定できません`と直接結果を1行目に置く。
+3. `blockstring`は連続ガード可否とgap、`interrupt`は指定発生F技の時間上の勝敗を先に返す。
+4. blockstun、startup、transition source、timelineは構造化結果へ保持するが、単純な質問の前段には出さない。
+5. 2行目には距離・pushback・姿勢・無敵等、結論の適用範囲に必要な注意だけを残す。
+6. 終端硬直差と相打ち後結果は既存の専用summaryを維持し、focusを混在させない。
+
+### Consequences
+
+- Ryu `5LP -> 214LP`の連続ガード質問は「いいえ、技間の隙間は3F」と1行目で回答する。
+- Ken `2MK -> 236HK`への4F割り込み質問は「はい、5F先に発生」と1行目で回答する。
+- 詳細根拠はAPIレスポンスから失われず、将来の詳細表示やデバッグで参照できる。
