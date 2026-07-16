@@ -32,6 +32,7 @@ from mcp.server.transport_security import TransportSecuritySettings
 from sf6_engine.db import get_client
 from sf6_engine.frame_data import lookup_frame_data, query_frame_data
 from sf6_engine.punish_service import check_punish_data
+from sf6_engine.pressure_family import analyze_pressure_family
 from sf6_engine.sequence_analysis import analyze_sequence as analyze_sequence_data
 from sf6_engine.ufd import fetch_ufd_details
 
@@ -318,6 +319,35 @@ def analyze_sequence(
         query_targets=query_targets,
         terminal_interaction=terminal_interaction,
         terminal_perspective=terminal_perspective,
+    )
+
+
+@mcp.tool()
+def analyze_sequence_family(
+    character: str,
+    family_move: str,
+    opener: str | None = None,
+    initial_interaction: str = "block",
+    variant_scope: str = "normal",
+) -> dict:
+    """強度違いを持つ必殺技ファミリーを、同じ始動技からまとめて解析する。
+
+    始動技が省略された場合は、レビュー済みの代表連携があるときだけその前提を
+    回答内に明示して使用する。該当する代表連携がない場合は、始動技を聞き返す。
+
+    Args:
+        character: 攻撃側キャラのslug。
+        family_move: 強度を省略した技ファミリー名（例: ``Jinrai Kick``）。
+        opener: 1技目。省略時はレビュー済み代表連携のみ補完する。
+        initial_interaction: 1技目の結果。``block`` または ``hit``。
+        variant_scope: ``normal`` は弱/中/強、``all`` はOD等も含める。
+    """
+    return analyze_pressure_family(
+        character,
+        family_move,
+        opener=opener,
+        initial_interaction=initial_interaction,
+        variant_scope=variant_scope,
     )
 
 

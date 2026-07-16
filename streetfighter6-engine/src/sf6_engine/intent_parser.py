@@ -28,6 +28,7 @@ from sf6_engine.frame_scenario import (
     strip_scenario_phrases,
 )
 from sf6_engine.llm_provider import LLMProvider
+from sf6_engine.pressure_defaults import resolve_reviewed_pressure_default
 
 # 通常技を示す単語パターン (これを含む技名は通常技と判定)
 _NORMAL_MOVE_INDICATORS = re.compile(
@@ -89,9 +90,8 @@ for _s_jp, _s in (('大', 'H'), ('小', 'L')):
     for _b in ('P', 'K'):
         _JP_ABBREV_TO_NUMPAD.setdefault(f'{_s_jp}{_b}', f'5{_s}{_b}')
 
-# 連携質問で使われやすい「2中K」のような方向数字 + 日本語強度表記。
-# 単体の技名抽出には既存の fast path を使うため、これは sequence token の
-# 正規化だけに限定する。
+# 「2中K」のような方向数字 + 日本語強度表記。
+# 単体技と連携の双方で共通の入力表記へ正規化する。
 _JP_NUMPAD_STRENGTH = re.compile(
     r'(?<![A-Za-z0-9])([1-9])([弱小中強大])([PK])',
     re.IGNORECASE,
@@ -167,6 +167,8 @@ _MOVE_QUERY_MARKER = re.compile(
     re.IGNORECASE,
 )
 _MOVE_QUERY_GUARD_RE = re.compile(r"ガード|ブロック|プラスフレーム|マイナスフレーム")
+_INTERRUPTION_RE = re.compile(r"割り込|割れ|暴れ|フレームトラップ", re.IGNORECASE)
+_PUNISH_RE = re.compile(r"確定反撃|確反|反撃|ガード(?:した|して).{0,12}(?:反撃|確反)")
 
 logger = logging.getLogger(__name__)
 
@@ -565,12 +567,46 @@ def _deterministic_sequence_intent(query: str) -> dict | None:
     return intent
 
 
+def _deterministic_pressure_family_intent(query: str) -> dict | None:
+    """Resolve exact, reviewed family shorthand before invoking the LLM.
+
+    This intentionally uses only curated exact forms.  A short word such as
+    ``迅雷`` must not be fuzzy-matched to a super or unrelated move family.
+    """
+    detected = _extract_simple_chara(query)
+    if not detected or not _INTERRUPTION_RE.search(query) or _PUNISH_RE.search(query):
+        return None
+    _name, chara, rest = detected
+    if _extract_attacker_sequence(query):
+        return None
+    match = re.match(r"(.+?)(?:って|とは|は|を|[？?]|$)", rest)
+    if not match:
+        return None
+    family_form = match.group(1).strip()
+    default = resolve_reviewed_pressure_default(chara.lower(), family_form)
+    if not default:
+        return None
+    return {
+        "intent_type": "pressure_family_analysis",
+        "chara": chara,
+        "family_move": default.get("family_move") or family_form,
+        "variant_scope": (
+            "all" if re.search(r"OD|EX|オーバードライブ", query, re.IGNORECASE)
+            else "normal"
+        ),
+        "initial_interaction": default.get("initial_interaction") or "block",
+        "raw_query": query,
+    }
+
+
 def _extract_simple_move(rest: str) -> str | None:
     """キャラ名を除いた質問から技名部分を抽出する。"""
     m = re.match(
         r'(.+?)(?:'
         r'の(?:発生|持続|硬直(?:差)?|全体|ガード|ヒット|ダメージ|性能|フレーム)'
-        r'|を|について|は[？?]|$)',
+        r'|を|について'
+        r'|は(?=(?:発生|持続|硬直(?:差)?|全体|ガード|ヒット|ダメージ|性能|フレーム|何\s*(?:F|フレ|フレーム)))'
+        r'|は[？?]|$)',
         rest,
     )
     if not m:
@@ -710,10 +746,17 @@ def _deterministic_simple_intent(query: str) -> dict | None:
     if _looks_like_sc_input_phrase(move):
         intent["input"] = move
     else:
-        for jp, numpad in _JP_ABBREV_TO_NUMPAD.items():
-            if jp == move:
-                intent["input"] = numpad
-                break
+        jp_numpad = _JP_NUMPAD_STRENGTH.fullmatch(move)
+        if jp_numpad:
+            direction, strength, button = jp_numpad.groups()
+            intent["input"] = (
+                f"{direction}{_STRENGTH_JP[strength]}{button.upper()}"
+            )
+        else:
+            for jp, numpad in _JP_ABBREV_TO_NUMPAD.items():
+                if jp == move:
+                    intent["input"] = numpad
+                    break
         if "input" not in intent:
             intent["move_name"] = move
 
@@ -736,6 +779,7 @@ INTENT_SCHEMA = {
                 "punish_check",     # 反撃確認
                 "combo_info",       # コンボ情報 (キャンセル先・DR後フレーム)
                 "sequence_analysis",# 連携・暴れ・相打ち後の状況解析
+                "pressure_family_analysis", # 強度違いを列挙する曖昧な連携質問
                 "max_combo",        # 最大コンボ計算 (ダメージ最大のコンボルート)
                 "setplay_analysis", # セットプレイ・起き攻め分析 (KD後の択計算)
                 "general_question", # その他
@@ -746,6 +790,12 @@ INTENT_SCHEMA = {
         "input":     {"type": "string", "description": "通常技の numpad 表記 (例: 2HK, 5HP)"},
         "input2":    {"type": "string", "description": "比較先技の numpad 表記"},
         "move_name":  {"type": "string", "description": "必殺技・SAの技名 (例: Tiger Shot, Shoryuken, 波動拳)"},
+        "family_move": {"type": "string", "description": "強度違いをまとめた技ファミリー名 (例: Jinrai Kick)"},
+        "variant_scope": {
+            "type": "string",
+            "enum": ["normal", "all"],
+            "description": "family比較に含めるvariant。normalは弱/中/強、allはOD等も含む。",
+        },
         "move_name2": {"type": "string", "description": "比較先の必殺技・SA名 (compare_moves 時)"},
         "move_filter": {
             "type": "object",
@@ -910,7 +960,10 @@ SYSTEM_PROMPT = """\
 - 「A→Bの連携」「最速暴れすると相打ち?」「相打ち後は何F有利?」→ sequence_analysis
 - 「〜からコンボある?」「〜始動は?」「〜の後に何が繋がる?」「〜をDRキャンセルすると?」「〜をDRキャンセルすると何F?」「DRキャンセル後の有利は?」「コンボ後の有利は?」「ノックダウン後は?」→ combo_info
 - 「〜からの最大コンボは?」「〜始動の最大ダメージは?」「最大コンボを教えて」「〜から何が最も繋がる?」「フルコンボは?」「BnB コンボは?」→ max_combo
-- 「〜ガードして反撃できる?」「〜は確定反撃?」「〜の弱派生前は割り込める?」「〜の派生は真の連携?」「〜は割り込める?」「〜はブロックストリング?」→ punish_check
+- 「〜ガードして反撃できる?」「〜は確定反撃?」→ punish_check
+- 始動技と強度を省略した「ケンの迅雷って割り込める?」のような質問 → pressure_family_analysis。
+  family_moveに技ファミリー名を置き、variant_scopeは通常版のみならnormal、OD込みならall。
+- 「A→Bは割り込める?」「〜の弱派生前は割り込める?」「〜の派生は真の連携?」→ sequence_analysis
 - 「〜のKD後は?」「〜ヒット後の起き攻めは?」「〜からセットプレイは?」「〜の後に前ステップしたら?」「〜の択は?」「ノックダウン後の攻め方は?」「〜でKDした後は?」→ setplay_analysis
 - 上記に当てはまらない → general_question
 
@@ -954,7 +1007,8 @@ SYSTEM_PROMPT = """\
 - 「サガットの5HPのリーチは?」→ {"intent_type": "lookup_move", "chara": "Sagat", "input": "5HP"}
 - 「ケンの中迅雷脚のフレームは?」→ {"intent_type": "lookup_move", "chara": "Ken", "move_name": "Jinrai Kick"}
 - 「ケンの迅雷脚の弱派生は?」→ {"intent_type": "combo_info", "chara": "Ken", "move_name": "Jinrai Kick"}
-- 「ケンの迅雷脚の弱派生前は割り込める?」→ {"intent_type": "punish_check", "chara": "Ken", "move_name": "Jinrai Kick"}
+- 「ケンの迅雷脚の弱派生前は割り込める?」→ {"intent_type": "sequence_analysis", "chara": "Ken", "attacker_sequence": ["迅雷脚", "弱派生"], "query_targets": ["interrupt", "timeline"]}
+- 「ケンの迅雷って割り込める?」→ {"intent_type": "pressure_family_analysis", "chara": "Ken", "family_move": "Jinrai Kick", "variant_scope": "normal"}
 - 「ルークの5MPをDRキャンセルすると何F?」→ {"intent_type": "combo_info", "chara": "Luke", "input": "5MP"}
 - 「ラシードの技の中でガードさせて有利な技は？」→ {"intent_type": "query_moves", "chara": "Rashid", "move_filter": {"field": "on_block", "perspective": "attacker", "operator": "gt", "value": 0}, "move_scope": "all"}
 
@@ -987,6 +1041,11 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     deterministic = _deterministic_sequence_intent(query)
     if deterministic:
         logger.debug(f"Sequence intent parsed deterministically: {deterministic}")
+        return deterministic
+
+    deterministic = _deterministic_pressure_family_intent(query)
+    if deterministic:
+        logger.debug(f"Pressure family intent parsed deterministically: {deterministic}")
         return deterministic
 
     deterministic = _deterministic_move_query_intent(query)
@@ -1024,7 +1083,7 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     # intent_type がスキーマ外の値 (例: "punish_adv") の場合は lookup_move にフォールバック
     _VALID_INTENTS = {
         "lookup_move", "query_moves", "compare_moves", "explain_concept",
-        "punish_check", "combo_info", "sequence_analysis", "max_combo",
+        "punish_check", "combo_info", "sequence_analysis", "pressure_family_analysis", "max_combo",
         "setplay_analysis", "general_question",
     }
     if result.get("intent_type") not in _VALID_INTENTS:
@@ -1196,6 +1255,29 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
         cleaned_move_name = strip_scenario_phrases(result["move_name"])
         if cleaned_move_name:
             result["move_name"] = cleaned_move_name
+
+    # 「割り込める」は、技単体をガードした後の確反ではなく、連携の技間を
+    # 問うことが多い。始動と強度が省略された場合は、単一技のpunish_check
+    # ではなく、familyの各variantを比較する専用intentへ正規化する。
+    # 明示された A→B / 確反は既存の正確な経路を優先する。
+    if (
+        _INTERRUPTION_RE.search(query)
+        and not _PUNISH_RE.search(query)
+        and not _extract_attacker_sequence(query)
+        and result.get("chara")
+        and (result.get("family_move") or result.get("move_name"))
+        and result.get("intent_type") in {
+            "punish_check", "lookup_move", "combo_info", "general_question",
+        }
+    ):
+        result["intent_type"] = "pressure_family_analysis"
+        result["family_move"] = result.get("family_move") or result["move_name"]
+        result["variant_scope"] = (
+            "all" if re.search(r"OD|EX|オーバードライブ", query, re.IGNORECASE)
+            else "normal"
+        )
+        result.pop("move_filter", None)
+        logger.info("Normalized underspecified interruption to pressure family: %s", result)
 
     logger.debug(f"Intent parsed: {result}")
     return result

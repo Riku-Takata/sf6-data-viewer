@@ -1,0 +1,11 @@
+[
+  {
+    "character": "ken",
+    "family_move": "Jinrai Kick",
+    "family_forms": ["jinrai kick", "迅雷", "迅雷脚"],
+    "opener": "2MK",
+    "initial_interaction": "block",
+    "label": "2MKから最速キャンセルした通常ガード時の迅雷脚の入り",
+    "evidence": "reviewed_default"
+  }
+]

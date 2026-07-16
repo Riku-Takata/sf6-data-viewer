@@ -55,6 +55,38 @@ class McpRouterTest(unittest.TestCase):
             [("lookup_move", {"character": "ken", "move_name": "5HK"})],
         )
 
+    def test_direction_number_japanese_strength_keeps_normalized_input(self) -> None:
+        calls = map_intent({
+            "intent_type": "lookup_move",
+            "chara": "Sagat",
+            "input": "2MP",
+            "raw_query": "サガットの2中pは発生何フレ？",
+        })
+
+        self.assertEqual(
+            calls,
+            [("lookup_move", {"character": "sagat", "move_name": "2MP"})],
+        )
+
+    def test_pressure_family_routes_without_overriding_the_resolved_family_name(self) -> None:
+        calls = map_intent({
+            "intent_type": "pressure_family_analysis",
+            "chara": "Ken",
+            "family_move": "Jinrai Kick",
+            "variant_scope": "normal",
+            "raw_query": "ケンの迅雷って割り込める？",
+        })
+
+        self.assertEqual(calls, [(
+            "analyze_sequence_family",
+            {
+                "character": "ken",
+                "family_move": "Jinrai Kick",
+                "initial_interaction": "block",
+                "variant_scope": "normal",
+            },
+        )])
+
     def test_scenario_is_forwarded_without_becoming_part_of_move_name(self) -> None:
         scenario = {
             "schema_version": 1,

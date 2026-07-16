@@ -67,6 +67,13 @@
 - [x] AWS MCPへ終端硬直差APIを再デプロイし、Bearer認証付き本番E2Eとエラーログ0件を確認
 - [x] 連続ガード/割り込みtargetを分離し、yes/no・gapを1行目に置く短いsummaryへ変更
 - [x] Ryu `5LP -> 214LP`を「いいえ、隙間3F」の2行回答として実DB確認
+- [x] 結論先行summaryをAWS MCPへ再デプロイし、認証付き本番E2Eを確認
+- [x] 単体技の`2中P`表記を`2MP`へ正規化し、`は発生何フレ`を技名spanから除外
+- [x] Sagat `2MP`の発生7Fを実DB・AWS MCP・Discord回答生成で確認
+- [x] 強度省略の割り込み質問を`pressure_family_analysis`として分離し、単一技の確反判定へ誤送信しない
+- [x] `analyze_sequence_family`でfamily候補を既存timelineへ個別投入し、弱/中/強を比較する
+- [x] Ken `迅雷`のレビュー済み代表始動`2MK`をdata化し、前提表示付きで通常版を回答する
+- [x] `analyze_sequence_family`をAWS MCPへデプロイし、Discord Bot→本番MCPのE2Eを確認
 - [ ] 20〜50件のframe-step blind検証でoff-by-one規約を確定
 - [ ] canonical move / transition edgeをバックフィルしpatch失効を接続
 

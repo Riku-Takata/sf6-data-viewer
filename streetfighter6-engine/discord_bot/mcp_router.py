@@ -94,7 +94,9 @@ def _raw_move_phrase(raw: str) -> str | None:
     m = re.search(
         r'の(.+?)(?:'
         r'の(?:発生|持続|硬直(?:差)?|全体|ガード|ヒット|ダメージ|性能|フレーム)'
-        r'|を|について|は[？?]|$)',
+        r'|を|について'
+        r'|は(?=(?:発生|持続|硬直(?:差)?|全体|ガード|ヒット|ダメージ|性能|フレーム|何\s*(?:F|フレ|フレーム)))'
+        r'|は[？?]|$)',
         raw,
     )
     if not m:
@@ -129,6 +131,7 @@ def _looks_like_jp_normal_shorthand(text: str) -> bool:
     compact = re.sub(r'\s+', '', text)
     return bool(
         re.fullmatch(r'(?:立ち|しゃがみ|屈|ジャンプ|J)?(?:弱|中|強|小|大)?[PKＰＫ]', compact)
+        or re.fullmatch(r'[1-9][弱小中強大][PKＰＫ]', compact, re.IGNORECASE)
         or compact in {
             "小足", "中足", "大足", "小パン", "中パン", "大パン",
             "小キック", "中キック", "大キック",
@@ -247,6 +250,20 @@ def map_intent(intent: dict) -> list[tuple[str, dict]]:
                 terminal_state.get("perspective") or "both"
             )
         return [("analyze_sequence", args)]
+
+    if it == "pressure_family_analysis":
+        family_move = intent.get("family_move") or intent.get("move_name")
+        if not (slug and family_move):
+            return []
+        args = {
+            "character": slug,
+            "family_move": family_move,
+            "initial_interaction": intent.get("initial_interaction") or "block",
+            "variant_scope": intent.get("variant_scope") or "normal",
+        }
+        if intent.get("opener"):
+            args["opener"] = intent["opener"]
+        return [("analyze_sequence_family", args)]
 
     if it == "query_moves":
         if not slug:
@@ -435,6 +452,16 @@ def _call_local_tool(name: str, arguments: dict) -> dict | None:
             terminal_interaction=arguments.get("terminal_interaction"),
             terminal_perspective=arguments.get("terminal_perspective") or "both",
         )
+    if name == "analyze_sequence_family":
+        from sf6_engine.pressure_family import analyze_pressure_family
+
+        return analyze_pressure_family(
+            arguments.get("character", ""),
+            arguments.get("family_move", ""),
+            opener=arguments.get("opener"),
+            initial_interaction=arguments.get("initial_interaction") or "block",
+            variant_scope=arguments.get("variant_scope") or "normal",
+        )
     if name == "query_moves":
         from sf6_engine.frame_data import query_frame_data
 
@@ -611,6 +638,8 @@ def result_to_context(tool: str, args: dict, result: dict | None) -> str:
     if tool == "analyze_sequence":
         sequence = args.get("attacker_sequence") or []
         mv = " -> ".join(sequence) if sequence else "連携"
+    if tool == "analyze_sequence_family":
+        mv = args.get("family_move") or "技ファミリー"
     # MCP が返す解決後の技名 (SuperCombo 名)。質問の識別子と異なる場合は等値で示し、
     # 「2HK と Tiger Kick は同一技」と LLM が理解できるようにする。
     resolved = (result or {}).get("move_name") or ((result or {}).get("move") or {}).get("move_name")

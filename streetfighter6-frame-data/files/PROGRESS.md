@@ -71,10 +71,22 @@ MCP LambdaはCloudFormation `UPDATE_COMPLETE`、認証付き本番E2E成功、�
 型付きclarification、session-only確認、review済みshared alias、frozen評価gateを定義した。
 実DBではcanonical move/aliasが0件、旧global aliasが2件のため、実装時も先にread-only解決と
 session確認を導入し、旧global UPSERTは再有効化しない。
-**連携回答の結論先行化（ローカル、2026-07-16）**: `blockstring`と`interrupt`を別targetにし、
+**連携回答の結論先行化（AWS MCP本番反映済み、2026-07-16）**: `blockstring`と`interrupt`を別targetにし、
 連続ガード/割り込みのyes/noとgap/先行Fを1行目へ移動。blockstun、cancel可否、hitstop基準は
 構造化結果へ保持し、単純質問の前段から除外した。Ryu `5LP -> 214LP`は「いいえ、隙間3F」+
-距離注意の2行となることを実DB確認し、unittest 132件が成功。
+距離注意の2行となることを実DBと認証付き本番MCPで確認。CloudFormationは`UPDATE_COMPLETE`。
+**方向数字+日本語強度の単体技修正（2026-07-16）**: 「サガットの2中pは発生何フレ？」で
+`は発生何フレ？`まで技名へ混入していた。技spanの`は+質問項目`境界を追加し、`[1-9]+弱中強+P/K`
+を単体技でもSC入力へ正規化、Discord routerが原文で上書きしないよう修正した。Intentは`2MP`、
+実DB/AWS MCPは「しゃがみ中P（ミドルフック）、発生7F」、Discord回答生成はCAPCOM公式7Fを返した。
+unittest 134件が成功。
+**強度省略の割り込み質問（AWS MCP本番反映済み、2026-07-16）**: 「ケンの迅雷って割り込める？」を
+`punish_check`へ送っていた経路を、`pressure_family_analysis`と新MCP `analyze_sequence_family`へ分離した。
+単体resolverの強度曖昧性は保ったまま、family比較時だけ候補を列挙し、各variantを既存
+`analyze_sequence`で計算する。レビュー済みdataにKen `迅雷 -> Jinrai Kick / 2MK`を登録し、
+通常版は弱12F/-4F、中16F/0F、強25F/9F（発生8F以下が時間上先行、9F同時）として前提付きで返す。
+未登録familyは始動技を聞き返す。unittest 140件が成功し、CloudFormation `UPDATE_COMPLETE`と
+認証付きDiscord Bot→AWS MCP E2Eを確認した。
 **次**: Discord Bot常駐ホストへIntent Parserを配布・再起動して例のメンション質問を再確認する
 （30〜60分）。略称対応に着手する場合は、共通read-only `MoveResolver`とfrozen corpusの縦切りを
 先に実装する（4〜6時間）。その後に`needs_command`のsession確認を接続する（2〜3時間）。

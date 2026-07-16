@@ -13,6 +13,7 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 | `lookup_move` | 型付き統合フレームプロファイル (全ソース・採用値・両視点・状況評価) | character, move_name, scenario(任意) |
 | `check_punish` | フレーム窓と到達確度を分離した反撃判定 | character, move_name, punisher(任意), scenario(任意) |
 | `analyze_sequence` | 2技link/special・SA・連打cancel、連続ガード/ヒット、2技目接触後の硬直差、最速暴れ・相打ち後有利 | character, attacker_sequence, interaction, defender, delay, query_targets, terminal_interaction, terminal_perspective |
+| `analyze_sequence_family` | 強度違いを持つ技ファミリーを、同じ始動からまとめて比較 | character, family_move, opener(任意), interaction, variant_scope |
 | `compute_setplay` | KD/ヒット後の起き攻め択計算 | character, move_input (SC表記 or 技名) |
 | `analyze_combo` | 始動技からの最大コンボ計算 | character, starter_input (SC表記 or 技名), use_dr, drive_bars |
 | `list_moves` | 技一覧 (技名 + SC input。技名解決の補助) | character, keyword(任意, 技名/input 両対応) |
@@ -58,6 +59,10 @@ source-input edgeがあるときだけ判定する。後者は`blockstring.class
 `query_targets=terminal_frame_advantage`は、2技目が実際に接触した後の硬直差を返す。
 `terminal_interaction=block/hit`と`terminal_perspective=attacker/defender/both`を併用し、
 技間gapを表す`timeline`や、相打ち後を表す`post_interaction_advantage`とは分離する。
+
+`analyze_sequence_family`は、単一技照会では曖昧として止める弱/中/強などの候補を、比較対象として
+列挙する。始動技が省略された場合は、パッチレビュー済みの`data/pressure_family_defaults.json`に
+一致する場合だけ前提を明示して補完する。一致しなければ推測せず、始動技を聞き返す。
 
 ## ローカル起動 (stdio)
 

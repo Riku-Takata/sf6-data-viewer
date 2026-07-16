@@ -16,6 +16,14 @@ class FailingProvider:
         raise AssertionError("deterministic fast path should not call provider")
 
 
+class StaticProvider:
+    def __init__(self, result: dict) -> None:
+        self.result = result
+
+    async def generate_structured(self, *args, **kwargs) -> dict:
+        return dict(self.result)
+
+
 class DeterministicIntentParserTest(unittest.TestCase):
     def parse(self, query: str) -> dict:
         return asyncio.run(parse_intent(query, FailingProvider()))
@@ -63,6 +71,45 @@ class DeterministicIntentParserTest(unittest.TestCase):
         self.assertEqual(intent["intent_type"], "lookup_move")
         self.assertEqual(intent["chara"], "Ken")
         self.assertEqual(intent["input"], "5HK")
+
+    def test_direction_number_and_japanese_strength_becomes_input(self) -> None:
+        intent = self.parse("サガットの2中pは発生何フレ？")
+
+        self.assertEqual(intent["intent_type"], "lookup_move")
+        self.assertEqual(intent["chara"], "Sagat")
+        self.assertEqual(intent["input"], "2MP")
+        self.assertNotIn("move_name", intent)
+
+    def test_underspecified_interrupt_becomes_pressure_family_analysis(self) -> None:
+        intent = asyncio.run(parse_intent(
+            "ケンの迅雷って割り込める？",
+            StaticProvider({
+                "intent_type": "punish_check",
+                "chara": "Ken",
+                "move_name": "Jinrai Kick",
+                "move_filter": {
+                    "field": "on_block",
+                    "perspective": "attacker",
+                    "operator": "gt",
+                    "value": 0,
+                },
+                "raw_query": "ケンの迅雷って割り込める？",
+            }),
+        ))
+
+        self.assertEqual(intent["intent_type"], "pressure_family_analysis")
+        self.assertEqual(intent["family_move"], "Jinrai Kick")
+        self.assertEqual(intent["variant_scope"], "normal")
+        self.assertNotIn("move_filter", intent)
+
+    def test_reviewed_family_shorthand_is_deterministic_without_llm(self) -> None:
+        intent = self.parse("ケンの迅雷って割り込める？")
+
+        self.assertEqual(intent["intent_type"], "pressure_family_analysis")
+        self.assertEqual(intent["chara"], "Ken")
+        self.assertEqual(intent["family_move"], "Jinrai Kick")
+        self.assertEqual(intent["variant_scope"], "normal")
+        self.assertEqual(intent["initial_interaction"], "block")
 
     def test_active_and_recovery_questions_extract_only_the_move(self) -> None:
         cases = [
