@@ -87,6 +87,12 @@ unittest 134件が成功。
 通常版は弱12F/-4F、中16F/0F、強25F/9F（発生8F以下が時間上先行、9F同時）として前提付きで返す。
 未登録familyは始動技を聞き返す。unittest 140件が成功し、CloudFormation `UPDATE_COMPLETE`と
 認証付きDiscord Bot→AWS MCP E2Eを確認した。
+**実装・運用状態の記録（2026-07-16 14:48 JST）**: 上記の最終表示（結論先行、弱/中/強の個別結果、
+距離等の注意書き）はAWS MCPへ再デプロイ済み。`SF6_MCP_LOCAL_FALLBACK=0`で同一質問を実行し、
+本番MCPまでのE2Eで期待どおりの回答を確認した。実装は`661b1d6`（`main`/`origin/main`）に記録済みで、
+この進捗記録の更新のみが未コミットである。
+一方、実際にDiscordへ応答する常駐Botホストへのコード配布・再起動は、このリポジトリ/AWS権限の範囲外であり、
+ライブのメンションによる最終確認は未完了。
 **次**: Discord Bot常駐ホストへIntent Parserを配布・再起動して例のメンション質問を再確認する
 （30〜60分）。略称対応に着手する場合は、共通read-only `MoveResolver`とfrozen corpusの縦切りを
 先に実装する（4〜6時間）。その後に`needs_command`のsession確認を接続する（2〜3時間）。
