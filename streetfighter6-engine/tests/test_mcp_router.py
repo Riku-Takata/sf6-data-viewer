@@ -87,6 +87,19 @@ class McpRouterTest(unittest.TestCase):
             },
         )])
 
+    def test_matchup_interrupt_overview_routes_attacker_and_defender(self) -> None:
+        calls = map_intent({
+            "intent_type": "matchup_interrupt_overview",
+            "chara": "Ryu",
+            "chara2": "Kimberly",
+            "raw_query": "リュウの主な技に対してキンバリーが割り込める技を教えてください",
+        })
+
+        self.assertEqual(calls, [(
+            "analyze_matchup_interrupt_overview",
+            {"attacker": "ryu", "defender": "kimberly"},
+        )])
+
     def test_scenario_is_forwarded_without_becoming_part_of_move_name(self) -> None:
         scenario = {
             "schema_version": 1,

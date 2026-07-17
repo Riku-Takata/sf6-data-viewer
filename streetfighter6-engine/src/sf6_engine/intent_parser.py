@@ -169,6 +169,11 @@ _MOVE_QUERY_MARKER = re.compile(
 _MOVE_QUERY_GUARD_RE = re.compile(r"ガード|ブロック|プラスフレーム|マイナスフレーム")
 _INTERRUPTION_RE = re.compile(r"割り込|割れ|暴れ|フレームトラップ", re.IGNORECASE)
 _PUNISH_RE = re.compile(r"確定反撃|確反|反撃|ガード(?:した|して).{0,12}(?:反撃|確反)")
+_MATCHUP_INTERRUPT_OVERVIEW_RE = re.compile(
+    r"(?:主な|代表(?:的な)?)\s*技.{0,32}(?:割り込|割れ|暴れ)|"
+    r"(?:割り込|割れ|暴れ).{0,32}(?:主な|代表(?:的な)?)\s*技",
+    re.IGNORECASE,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -599,6 +604,48 @@ def _deterministic_pressure_family_intent(query: str) -> dict | None:
     }
 
 
+def _deterministic_matchup_interrupt_overview_intent(query: str) -> dict | None:
+    """Parse broad two-character interruption questions without LLM guessing.
+
+    A phrase such as ``主な技`` is intentionally not treated as a move name.
+    It can use only curated representative sequence defaults on the tool side.
+    """
+    if (
+        not _MATCHUP_INTERRUPT_OVERVIEW_RE.search(query)
+        or not _INTERRUPTION_RE.search(query)
+        or _PUNISH_RE.search(query)
+        or _extract_attacker_sequence(query)
+    ):
+        return None
+    mentions = _character_mentions(query)
+    if len(mentions) < 2:
+        return None
+
+    attacker_match = next((
+        mention for mention in mentions
+        if re.match(r"\s*の\s*(?:主な|代表(?:的な)?)\s*技", query[mention[1]:])
+    ), None)
+    attacker_match = attacker_match or mentions[0]
+    defender_match = next((
+        mention for mention in mentions
+        if mention != attacker_match
+        and re.match(r"\s*が", query[mention[1]:])
+        and _INTERRUPTION_RE.search(query[mention[1]:])
+    ), None)
+    defender_match = defender_match or next(
+        (mention for mention in mentions if mention != attacker_match),
+        None,
+    )
+    if defender_match is None or defender_match[3] == attacker_match[3]:
+        return None
+    return {
+        "intent_type": "matchup_interrupt_overview",
+        "chara": attacker_match[3],
+        "chara2": defender_match[3],
+        "raw_query": query,
+    }
+
+
 def _extract_simple_move(rest: str) -> str | None:
     """キャラ名を除いた質問から技名部分を抽出する。"""
     m = re.match(
@@ -780,6 +827,7 @@ INTENT_SCHEMA = {
                 "combo_info",       # コンボ情報 (キャンセル先・DR後フレーム)
                 "sequence_analysis",# 連携・暴れ・相打ち後の状況解析
                 "pressure_family_analysis", # 強度違いを列挙する曖昧な連携質問
+                "matchup_interrupt_overview", # 代表連携に対する対戦キャラ別の割り込み候補
                 "max_combo",        # 最大コンボ計算 (ダメージ最大のコンボルート)
                 "setplay_analysis", # セットプレイ・起き攻め分析 (KD後の択計算)
                 "general_question", # その他
@@ -963,6 +1011,8 @@ SYSTEM_PROMPT = """\
 - 「〜ガードして反撃できる?」「〜は確定反撃?」→ punish_check
 - 始動技と強度を省略した「ケンの迅雷って割り込める?」のような質問 → pressure_family_analysis。
   family_moveに技ファミリー名を置き、variant_scopeは通常版のみならnormal、OD込みならall。
+- 「リュウの主な技に対してキンバリーが割り込める技は?」のような、2キャラ指定かつ
+  「主な技」の曖昧な割り込み質問 → matchup_interrupt_overview。charaは攻撃側、chara2は防御側。
 - 「A→Bは割り込める?」「〜の弱派生前は割り込める?」「〜の派生は真の連携?」→ sequence_analysis
 - 「〜のKD後は?」「〜ヒット後の起き攻めは?」「〜からセットプレイは?」「〜の後に前ステップしたら?」「〜の択は?」「ノックダウン後の攻め方は?」「〜でKDした後は?」→ setplay_analysis
 - 上記に当てはまらない → general_question
@@ -1009,6 +1059,7 @@ SYSTEM_PROMPT = """\
 - 「ケンの迅雷脚の弱派生は?」→ {"intent_type": "combo_info", "chara": "Ken", "move_name": "Jinrai Kick"}
 - 「ケンの迅雷脚の弱派生前は割り込める?」→ {"intent_type": "sequence_analysis", "chara": "Ken", "attacker_sequence": ["迅雷脚", "弱派生"], "query_targets": ["interrupt", "timeline"]}
 - 「ケンの迅雷って割り込める?」→ {"intent_type": "pressure_family_analysis", "chara": "Ken", "family_move": "Jinrai Kick", "variant_scope": "normal"}
+- 「リュウの主な技に対してキンバリーが割り込める技は？」→ {"intent_type": "matchup_interrupt_overview", "chara": "Ryu", "chara2": "Kimberly"}
 - 「ルークの5MPをDRキャンセルすると何F?」→ {"intent_type": "combo_info", "chara": "Luke", "input": "5MP"}
 - 「ラシードの技の中でガードさせて有利な技は？」→ {"intent_type": "query_moves", "chara": "Rashid", "move_filter": {"field": "on_block", "perspective": "attacker", "operator": "gt", "value": 0}, "move_scope": "all"}
 
@@ -1041,6 +1092,11 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     deterministic = _deterministic_sequence_intent(query)
     if deterministic:
         logger.debug(f"Sequence intent parsed deterministically: {deterministic}")
+        return deterministic
+
+    deterministic = _deterministic_matchup_interrupt_overview_intent(query)
+    if deterministic:
+        logger.debug(f"Matchup interruption overview parsed deterministically: {deterministic}")
         return deterministic
 
     deterministic = _deterministic_pressure_family_intent(query)
@@ -1083,7 +1139,8 @@ async def parse_intent(query: str, provider: LLMProvider) -> dict:
     # intent_type がスキーマ外の値 (例: "punish_adv") の場合は lookup_move にフォールバック
     _VALID_INTENTS = {
         "lookup_move", "query_moves", "compare_moves", "explain_concept",
-        "punish_check", "combo_info", "sequence_analysis", "pressure_family_analysis", "max_combo",
+        "punish_check", "combo_info", "sequence_analysis", "pressure_family_analysis",
+        "matchup_interrupt_overview", "max_combo",
         "setplay_analysis", "general_question",
     }
     if result.get("intent_type") not in _VALID_INTENTS:

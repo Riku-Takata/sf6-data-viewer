@@ -128,7 +128,12 @@ async def handle_question(
         try:
             result = await call_tool(tool, args)
             contexts.append(result_to_context(tool, args, result))
-            if tool in {"analyze_sequence", "analyze_sequence_family", "query_moves"} and result:
+            if tool in {
+                "analyze_sequence",
+                "analyze_sequence_family",
+                "analyze_matchup_interrupt_overview",
+                "query_moves",
+            } and result:
                 if result.get("summary"):
                     deterministic_answer = str(result["summary"])
                 elif result.get("message"):

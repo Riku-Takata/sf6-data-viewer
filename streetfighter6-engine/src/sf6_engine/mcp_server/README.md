@@ -14,6 +14,7 @@ MCP (Model Context Protocol) ツールとして公開する。自然言語の解
 | `check_punish` | フレーム窓と到達確度を分離した反撃判定 | character, move_name, punisher(任意), scenario(任意) |
 | `analyze_sequence` | 2技link/special・SA・連打cancel、連続ガード/ヒット、2技目接触後の硬直差、最速暴れ・相打ち後有利 | character, attacker_sequence, interaction, defender, delay, query_targets, terminal_interaction, terminal_perspective |
 | `analyze_sequence_family` | 強度違いを持つ技ファミリーを、同じ始動からまとめて比較 | character, family_move, opener(任意), interaction, variant_scope |
+| `analyze_matchup_interrupt_overview` | レビュー済み代表連携ごとに、防御側地上通常技の時間上の割り込み候補を比較 | attacker, defender |
 | `compute_setplay` | KD/ヒット後の起き攻め択計算 | character, move_input (SC表記 or 技名) |
 | `analyze_combo` | 始動技からの最大コンボ計算 | character, starter_input (SC表記 or 技名), use_dr, drive_bars |
 | `list_moves` | 技一覧 (技名 + SC input。技名解決の補助) | character, keyword(任意, 技名/input 両対応) |
@@ -63,6 +64,12 @@ source-input edgeがあるときだけ判定する。後者は`blockstring.class
 `analyze_sequence_family`は、単一技照会では曖昧として止める弱/中/強などの候補を、比較対象として
 列挙する。始動技が省略された場合は、パッチレビュー済みの`data/pressure_family_defaults.json`に
 一致する場合だけ前提を明示して補完する。一致しなければ推測せず、始動技を聞き返す。
+
+`analyze_matchup_interrupt_overview`は「リュウの主な技に対してキンバリーが割り込める技」のような
+対戦カード指定の概観質問用である。「主な技」を利用率から推測せず、攻撃側の数値化できる
+地上通常技→通常版必殺技キャンセルを全件走査し、既存のcancel timelineで比較する。
+防御側は地上通常技を最速入力した場合だけを時間比較し、`startup < gap`を候補として優先表示する。
+距離、pushback、姿勢、無敵、OD/必殺技は含めない。数値化できない連携は除外数として返す。
 
 ## ローカル起動 (stdio)
 

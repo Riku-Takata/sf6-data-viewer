@@ -93,6 +93,14 @@ unittest 134件が成功。
 この進捗記録の更新のみが未コミットである。
 一方、実際にDiscordへ応答する常駐Botホストへのコード配布・再起動は、このリポジトリ/AWS権限の範囲外であり、
 ライブのメンションによる最終確認は未完了。
+**曖昧な対戦カード割り込み質問（AWS MCP本番反映済み、2026-07-16）**: 「リュウの主な技に対して
+キンバリーが割り込める技を教えてください」を`matchup_interrupt_overview`としてLLM前に決定論分類する。
+「主な技」は利用率として推測せず、数値化できる全キャラの通常技→通常版必殺技cancelを既存の
+cancel timelineで一括比較する。防御側の地上通常技を`startup < gap`で時間比較し、割り込める連携だけを
+優先表示する。実DBのRyu対Kimberlyは144組を走査して29組を抽出し、`5LP→214MK`（gap 5F）へ
+Kimberly `2LP`（4F）が1F先行することを詳細`analyze_sequence`でも照合した。距離・pushback・姿勢・
+無敵・OD/必殺技は個別連携へ分離する。キャラ固有設定なしのKen対Ryuも192組/42件を確認した。
+unittest 145件、CloudFormation `UPDATE_COMPLETE`、`SF6_MCP_LOCAL_FALLBACK=0`のBot→本番MCP E2Eを確認した。
 **次**: Discord Bot常駐ホストへIntent Parserを配布・再起動して例のメンション質問を再確認する
 （30〜60分）。略称対応に着手する場合は、共通read-only `MoveResolver`とfrozen corpusの縦切りを
 先に実装する（4〜6時間）。その後に`needs_command`のsession確認を接続する（2〜3時間）。

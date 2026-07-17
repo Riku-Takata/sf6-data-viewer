@@ -9,6 +9,7 @@ intent_type → MCP ツール対応:
   lookup_move      → lookup_move(character, move_name)
   punish_check     → check_punish(character, move_name, punisher?)
   sequence_analysis→ analyze_sequence(character, attacker_sequence, defender action)
+  matchup_interrupt_overview → analyze_matchup_interrupt_overview(attacker, defender)
   setplay_analysis → compute_setplay(character, move_input)   ※ move_input は numpad/SC入力
   max_combo        → analyze_combo(character, starter_input)
   combo_info       → lookup_move (キャンセル情報を含むため代替)
@@ -265,6 +266,15 @@ def map_intent(intent: dict) -> list[tuple[str, dict]]:
             args["opener"] = intent["opener"]
         return [("analyze_sequence_family", args)]
 
+    if it == "matchup_interrupt_overview":
+        defender = _slug(intent.get("chara2"))
+        if slug and defender:
+            return [(
+                "analyze_matchup_interrupt_overview",
+                {"attacker": slug, "defender": defender},
+            )]
+        return []
+
     if it == "query_moves":
         if not slug:
             return []
@@ -462,6 +472,13 @@ def _call_local_tool(name: str, arguments: dict) -> dict | None:
             initial_interaction=arguments.get("initial_interaction") or "block",
             variant_scope=arguments.get("variant_scope") or "normal",
         )
+    if name == "analyze_matchup_interrupt_overview":
+        from sf6_engine.matchup_interrupt import analyze_matchup_interrupt_overview
+
+        return analyze_matchup_interrupt_overview(
+            arguments.get("attacker", ""),
+            arguments.get("defender", ""),
+        )
     if name == "query_moves":
         from sf6_engine.frame_data import query_frame_data
 
@@ -640,6 +657,9 @@ def result_to_context(tool: str, args: dict, result: dict | None) -> str:
         mv = " -> ".join(sequence) if sequence else "連携"
     if tool == "analyze_sequence_family":
         mv = args.get("family_move") or "技ファミリー"
+    if tool == "analyze_matchup_interrupt_overview":
+        ch = args.get("attacker")
+        mv = f"対 {args.get('defender') or '?'} の代表連携"
     # MCP が返す解決後の技名 (SuperCombo 名)。質問の識別子と異なる場合は等値で示し、
     # 「2HK と Tiger Kick は同一技」と LLM が理解できるようにする。
     resolved = (result or {}).get("move_name") or ((result or {}).get("move") or {}).get("move_name")

@@ -46,6 +46,8 @@ _SC_MOVE_COLUMNS = (
     "hitstun,blockstun,hitstop,atk_range,cancel,notes"
 )
 _GROUND_NEUTRAL_INPUT = re.compile(r"^[1-9][LMH][PK]$")
+_OVERDRIVE_INPUT = re.compile(r"(?:PP|KK)$", re.IGNORECASE)
+_OVERDRIVE_NAME = re.compile(r"(?:^|\s)(?:OD|EX)\b|オーバードライブ", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -329,6 +331,124 @@ def _fetch_defender_profiles(
     for profile in profiles:
         unique[(profile.character, profile.input)] = profile
     return list(unique.values())
+
+
+def list_ground_normal_profiles(
+    character: str,
+    *,
+    client: Any | None = None,
+) -> list[MoveInteractionProfile]:
+    """Return a character's neutral ground normals with adopted startup values.
+
+    This is deliberately narrower than a full move list.  A generic
+    ``割り込める技`` question can safely compare the startup of ground normals,
+    while specials, OD moves, invulnerability and reach require a separately
+    specified sequence and spatial assumptions.
+    """
+    sb = client or get_client()
+    character_slug, sc_character = _resolve_sc_character(character, sb)
+    rows = (
+        sb.table("sc_moves")
+        .select(_SC_MOVE_COLUMNS)
+        .eq("chara", sc_character)
+        .eq("move_type", "ground_normal")
+        .limit(300)
+        .execute()
+        .data
+        or []
+    )
+    profile_rows = {
+        str(row.get("input") or ""): row
+        for row in rows
+        if _GROUND_NEUTRAL_INPUT.fullmatch(str(row.get("input") or ""))
+    }
+    profiles: list[MoveInteractionProfile] = []
+    for input_, row in sorted(profile_rows.items()):
+        profile = _apply_integrated_frame_profile(
+            _profile_from_row(row),
+            lookup_frame_data(character_slug, input_, client=client),
+        )
+        if isinstance(profile.startup_f, int):
+            profiles.append(profile)
+    return sorted(profiles, key=lambda profile: (int(profile.startup_f or 999), profile.input))
+
+
+def _is_normal_special(profile: MoveInteractionProfile) -> bool:
+    """Return whether the special is a standard (not OD/air-only) attack."""
+    if str(profile.move_type or "").casefold() != "special":
+        return False
+    if profile.input.casefold().startswith("j."):
+        return False
+    if _OVERDRIVE_INPUT.search(profile.input) or _OVERDRIVE_NAME.search(profile.name or ""):
+        return False
+    return isinstance(profile.startup_f, int) and isinstance(profile.on_block_f, int)
+
+
+def enumerate_special_cancel_timelines(
+    character: str,
+    *,
+    client: Any | None = None,
+) -> list[dict[str, Any]]:
+    """Enumerate scalar normal→normal-special cancel timelines for one character.
+
+    This is the broad counterpart to :func:`analyze_sequence`.  It reuses the
+    same cancel timeline evaluator but reads and resolves each move profile
+    once, so a matchup overview can cover every character without issuing one
+    full sequence query per Cartesian pair.  It intentionally excludes OD,
+    air-only and non-attacking specials; those require an explicit question.
+    """
+    sb = client or get_client()
+    character_slug, sc_character = _resolve_sc_character(character, sb)
+    rows = (
+        sb.table("sc_moves")
+        .select(_SC_MOVE_COLUMNS)
+        .eq("chara", sc_character)
+        .limit(500)
+        .execute()
+        .data
+        or []
+    )
+    row_by_input = {
+        str(row.get("input") or ""): row
+        for row in rows
+        if row.get("input")
+    }
+    profiles: dict[str, MoveInteractionProfile] = {}
+    for input_, row in row_by_input.items():
+        profiles[input_] = _apply_integrated_frame_profile(
+            _profile_from_row(row),
+            lookup_frame_data(character_slug, input_, client=client),
+        )
+
+    openers = [
+        profile for profile in profiles.values()
+        if (
+            str(profile.move_type or "").casefold() == "ground_normal"
+            and _GROUND_NEUTRAL_INPUT.fullmatch(profile.input)
+            and re.search(r"(?:^|\s)Sp(?:\s|$)", profile.cancel_raw or "", re.IGNORECASE)
+            and isinstance(profile.blockstun_f, int)
+        )
+    ]
+    followups = [profile for profile in profiles.values() if _is_normal_special(profile)]
+    timelines: list[dict[str, Any]] = []
+    for opener in openers:
+        for followup in followups:
+            timeline = _cancel_timeline(
+                opener,
+                followup,
+                "block",
+                None,
+                0,
+                0,
+            )
+            if timeline.get("status") != "resolved":
+                continue
+            timelines.append({
+                "opener": opener,
+                "followup": followup,
+                "timeline": timeline,
+            })
+    return timelines
 
 
 def _fetch_followup_profiles(

@@ -74,6 +74,8 @@
 - [x] `analyze_sequence_family`でfamily候補を既存timelineへ個別投入し、弱/中/強を比較する
 - [x] Ken `迅雷`のレビュー済み代表始動`2MK`をdata化し、前提表示付きで通常版を回答する
 - [x] `analyze_sequence_family`をAWS MCPへデプロイし、Discord Bot→本番MCPのE2Eを確認
+- [x] 2キャラ+「主な技」+割り込みの曖昧質問を`matchup_interrupt_overview`へ決定論分岐
+- [x] 全キャラの通常技→通常版必殺技cancelと防御側地上通常技を既存timelineで比較し、AWS MCP本番E2Eを確認
 - [ ] Discord Bot常駐ホストへfamily Intent/Router更新を配布・再起動し、実メンションで確認
 - [ ] 20〜50件のframe-step blind検証でoff-by-one規約を確定
 - [ ] canonical move / transition edgeをバックフィルしpatch失効を接続

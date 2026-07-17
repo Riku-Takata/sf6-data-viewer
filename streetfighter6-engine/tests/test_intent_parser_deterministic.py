@@ -111,6 +111,13 @@ class DeterministicIntentParserTest(unittest.TestCase):
         self.assertEqual(intent["variant_scope"], "normal")
         self.assertEqual(intent["initial_interaction"], "block")
 
+    def test_broad_matchup_interrupt_question_is_deterministic(self) -> None:
+        intent = self.parse("リュウの主な技に対してキンバリーが割り込める技を教えてください")
+
+        self.assertEqual(intent["intent_type"], "matchup_interrupt_overview")
+        self.assertEqual(intent["chara"], "Ryu")
+        self.assertEqual(intent["chara2"], "Kimberly")
+
     def test_active_and_recovery_questions_extract_only_the_move(self) -> None:
         cases = [
             ("ケンの大Kの持続は？", "5HK"),

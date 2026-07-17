@@ -31,6 +31,9 @@ from mcp.server.transport_security import TransportSecuritySettings
 
 from sf6_engine.db import get_client
 from sf6_engine.frame_data import lookup_frame_data, query_frame_data
+from sf6_engine.matchup_interrupt import (
+    analyze_matchup_interrupt_overview as analyze_matchup_interrupt_overview_data,
+)
 from sf6_engine.punish_service import check_punish_data
 from sf6_engine.pressure_family import analyze_pressure_family
 from sf6_engine.sequence_analysis import analyze_sequence as analyze_sequence_data
@@ -349,6 +352,21 @@ def analyze_sequence_family(
         initial_interaction=initial_interaction,
         variant_scope=variant_scope,
     )
+
+
+@mcp.tool()
+def analyze_matchup_interrupt_overview(attacker: str, defender: str) -> dict:
+    """通常技→通常版必殺技キャンセルから、防御側の割り込み候補を一覧化する。
+
+    「主な技」は使用率から推測せず、数値化できる地上通常技→通常版必殺技キャンセルを
+    全件比較する。各結果はフレーム時系列だけの候補であり、距離・pushback・姿勢・無敵と
+    OD/必殺技は含めない。具体的な連携が指定された質問は ``analyze_sequence`` を使う。
+
+    Args:
+        attacker: 攻撃側キャラのslug。
+        defender: 防御側キャラのslug。
+    """
+    return analyze_matchup_interrupt_overview_data(attacker, defender)
 
 
 # ============================================================
